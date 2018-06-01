@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Campeonatos</title>
+    </h:head>
+    <h:body>
+        <f:event type="preRenderView" listener="#{campeonatoBean.listarInicio()}" />
+        <h:form id="frm1">
+              
+            <p:commandButton value="Nuevo Campeonato" oncomplete="PF('wdgDatos').show();" actionListener="#{campeonatoBean.setAccion('Registrar')}" update=":dlgDatos"/>
+
+            <p:dataTable id="data" value="#{campeonatoBean.listaCampeonato}" var="campeonato" >
+                <p:column headerText="id">
+                    <p:outputLabel value="#{campeonato.idCampeonato}"/>
+                </p:column>
+                <p:column headerText="Campeonato">
+                    <p:outputLabel value="#{campeonato.nombreCampeonato}"/>
+                </p:column>
+                <p:column headerText="Ver Grupos">
+                    <p:commandLink value="Ver Grupos" action="#{campeonatoBean.verGruposCampeonato(campeonato)}" update="data"/>
+                </p:column>
+                <p:column headerText="Modificar">
+                    <p:commandLink value="Modificar" actionListener="#{campeonatoBean.leerID(campeonato)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos"/>
+                </p:column>
+                <p:column headerText="Eliminar">
+                    <p:commandLink value="Eliminar" actionListener="#{campeonatoBean.eliminar(campeonato)}" update="data"/>
+                </p:column>              
+            </p:dataTable>
+        </h:form>
+        
+        <p:dialog header="Registrar o Modificar Campeonatos" widgetVar="wdgDatos" id="dlgDatos">
+            <h:form>
+                <p:outputLabel value="Nombre Campeonato"/>
+                <p:inputText  value="#{campeonatoBean.campeonato.nombreCampeonato}"/>
+                
+                <p:commandButton value="#{campeonatoBean.accion}"  actionListener="#{campeonatoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
+                <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+

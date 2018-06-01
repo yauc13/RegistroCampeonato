@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <f:event type="preRenderView" listener="#{equipoBean.listarInicio()}" />
+        
+        <h:form>
+            <p:dataTable id="data" value="#{equipoBean.listaEquipo}" var="equipo" >
+                <p:column headerText="Equipo A">
+                    <p:inputText />
+                </p:column>
+                <p:column headerText="gol A">
+                    <p:outputLabel value="#{equipo.nombreEquipo}"/>
+                </p:column>
+                <p:column headerText="Gol B">
+                    <p:inputText />
+                </p:column>
+                <p:column headerText="Equipo B">
+                    
+                </p:column>
+                
+            </p:dataTable>
+        </h:form>
+        
+        <h:form id="frm1">
+            <p:outputLabel value="Equipo A"/>
+            <p:dataTable id="data" value="#{equipoBean.listaEquipo}" var="equipo" >
+                <p:column headerText="No">
+                    <p:inputText />
+                </p:column>
+                <p:column headerText="Jugador">
+                    <p:outputLabel value="#{equipo.nombreEquipo}"/>
+                </p:column>
+                <p:column headerText="Gol">
+                    <p:inputText />
+                </p:column>
+                <p:column headerText="Ama">
+                    
+                </p:column>
+                
+            </p:dataTable>
+        </h:form>
+        
+        
+        <h:form id="frm2">
+            <p:outputLabel value="Equipo B"/>
+            <p:dataTable id="data" value="#{equipoBean.listaEquipo}" var="equipo" >
+                <p:column headerText="No">
+                    <p:inputText />
+                </p:column>
+                <p:column headerText="Jugador">
+                    <p:outputLabel value="#{equipo.nombreEquipo}"/>
+                </p:column>
+                <p:column headerText="Gol">
+                    <p:inputText />
+                </p:column>
+                <p:column headerText="Ama">
+                    
+                </p:column>
+                
+            </p:dataTable>
+        </h:form>
+      
+    </h:body>
+</html>
+

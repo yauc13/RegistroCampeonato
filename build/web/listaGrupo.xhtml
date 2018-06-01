@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <f:event type="preRenderView" listener="#{grupoBean.listarInicio()}" />
+        <h:form id="frm1">
+            
+            <p:commandButton value="Nuevo Grupo" oncomplete="PF('wdgDatos').show();" actionListener="#{grupoBean.setAccion('Registrar')}" update=":dlgDatos"/>
+            <p:outputLabel value="#{grupoBean.campeonato.idCampeonato}"/>
+            <p:outputLabel value="#{grupoBean.campeonato.nombreCampeonato}"/>
+            <p:dataTable id="data" value="#{grupoBean.listaGrupo}" var="grupo" >
+                <p:column headerText="id">
+                    <p:outputLabel value="#{grupo.idGrupo}"/>
+                </p:column>
+                <p:column headerText="Grupo">
+                    <p:outputLabel value="#{grupo.nombreGrupo}"/>
+                </p:column>
+                <p:column headerText="Ver Grupos">
+                    <p:commandLink value="Ver Equipos" action="#{grupoBean.verEquiposGrupos(grupo)}" update="data"/>
+                </p:column>
+                <p:column headerText="Modificar">
+                    <p:commandLink value="Modificar" actionListener="#{grupoBean.leerID(grupo)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos"/>
+                </p:column>
+                <p:column headerText="Eliminar">
+                    <p:commandLink value="Eliminar" actionListener="#{grupoBean.eliminar(grupo)}" update="data"/>
+                </p:column>              
+            </p:dataTable>
+        </h:form>
+        
+        <p:dialog header="Registrar o Modificar Grupos" widgetVar="wdgDatos" id="dlgDatos">
+            <h:form>
+                <p:outputLabel value="Nombre Grupo"/>
+                <p:inputText  value="#{grupoBean.grupo.nombreGrupo}"/>
+                
+                <p:commandButton value="#{grupoBean.accion}"  actionListener="#{grupoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
+                <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+

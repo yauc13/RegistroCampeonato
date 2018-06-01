@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <f:event type="preRenderView" listener="#{jugadorBean.listarInicio()}" />
+        <h:form id="frm1">
+
+            <p:commandButton value="Nuevo Jugador" oncomplete="PF('wdgDatos').show();" actionListener="#{jugadorBean.setAccion('Registrar')}" update=":dlgDatos"/>
+            <p:outputLabel value="#{jugadorBean.campeonato.idCampeonato}"/> 
+            <p:outputLabel value="#{jugadorBean.campeonato.nombreCampeonato}"/> 
+            <p:outputLabel value="#{jugadorBean.grupo.idGrupo}"/> 
+            <p:outputLabel value="#{jugadorBean.grupo.nombreGrupo}"/>             
+            <p:outputLabel value="#{jugadorBean.equipo.idEquipo}"/> 
+            <p:outputLabel value="#{jugadorBean.equipo.nombreEquipo}"/>             
+           
+            <p:dataTable id="data" value="#{jugadorBean.listaJugador}" var="jugador" >
+                <p:column headerText="id">
+                    <p:outputLabel value="#{jugador.idJugador}"/>
+                </p:column>
+                <p:column headerText="Jugador">
+                    <p:outputLabel value="#{jugador.nombreJugador}"/>
+                </p:column>
+                   
+                <p:column headerText="Modificar">
+                    <p:commandLink value="Modificar" actionListener="#{jugadorBean.leerID(jugador)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos"/>
+                </p:column>
+                <p:column headerText="Eliminar">
+                    <p:commandLink value="Eliminar" actionListener="#{jugadorBean.eliminar(jugador)}" update="data"  disabled="#{jugadorBean.habilitarPermisos()}"/>
+                </p:column>
+                
+            </p:dataTable>
+        </h:form>
+        
+        <p:dialog header="Registrar o Modificar Jugadors" widgetVar="wdgDatos" id="dlgDatos">
+            <h:form>
+                <p:outputLabel value="Nombre Jugador"/>
+                <p:inputText  value="#{jugadorBean.jugador.nombreJugador}"/>
+                
+                <p:commandButton value="#{jugadorBean.accion}"  actionListener="#{jugadorBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
+                <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
+            </h:form>
+        </p:dialog>
+        
+        
+    </h:body>
+</html>
+

@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <f:event type="preRenderView" listener="#{equipoBean.listarInicio()}" />
+        <h:form id="frm1">
+              
+            <p:commandButton value="Nueva Jornada" oncomplete="PF('wdgDatos').show();" actionListener="#{equipoBean.setAccion('Registrar')}" update=":dlgDatos"/>
+            
+            <p:commandButton value="Salir" icon="ui-icon-power" action="#{usuarioBean.cerrarSesion()}" /> 
+           
+            <p:dataTable id="data" value="#{equipoBean.listaEquipo}" var="equipo" >
+                <p:column headerText="id">
+                    <p:outputLabel value="#{equipo.idEquipo}"/>
+                </p:column>
+                <p:column headerText="Equipo">
+                    <p:outputLabel value="#{equipo.nombreEquipo}"/>
+                </p:column>
+                <p:column headerText="Modificar">
+                    <p:commandLink value="Modificar" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos"/>
+                </p:column>
+                <p:column headerText="Eliminar">
+                    <p:commandLink value="Eliminar" actionListener="#{equipoBean.eliminar(equipo)}" update="data"/>
+                </p:column>
+                
+            </p:dataTable>
+        </h:form>
+        
+        <p:dialog header="Registrar o Modificar Equipos" widgetVar="wdgDatos" id="dlgDatos">
+            <h:form>
+                <p:outputLabel value="Nombre"/>
+                <p:inputText  value="#{equipoBean.equipo.nombreEquipo}"/>
+                
+                <p:commandButton value="#{equipoBean.accion}"  actionListener="#{equipoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
+                <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+

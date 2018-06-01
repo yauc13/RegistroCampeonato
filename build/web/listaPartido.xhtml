@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <f:event type="preRenderView" listener="#{partidoBean.listarInicio()}" />
+        <h:form id="frm2">
+              
+            <p:commandButton value="Nuevo" oncomplete="PF('wdgDatos').show();" actionListener="#{partidoBean.setAccion('Registrar')}" update=":dlgDatos"/>
+            
+            
+           
+            <p:dataTable id="data" value="#{partidoBean.listaPartido}" var="partido" >
+                <p:column headerText="id">
+                    <p:outputLabel value="#{partido.idPartido}"/>
+                </p:column>
+                <p:column headerText="idEquipoA">
+                    <p:outputLabel value="#{partido.idEquipoA}"/>
+                </p:column>
+                <p:column headerText="golA">
+                    <p:outputLabel value="#{partido.golA}"/>
+                </p:column>
+                <p:column headerText="idEquipoB">
+                    <p:outputLabel value="#{partido.idEquipoB}"/>
+                </p:column>
+                <p:column headerText="golB">
+                    <p:outputLabel value="#{partido.golB}"/>
+                </p:column>
+                <p:column headerText="Modificar">
+                    <p:commandLink value="Modificar" actionListener="#{partidoBean.leerID(partido)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos"/>
+                </p:column>
+                <p:column headerText="Eliminar">
+                    <p:commandLink value="Eliminar" actionListener="#{partidoBean.eliminar(partido)}" update="data"/>
+                </p:column>
+                
+            </p:dataTable>
+        </h:form>
+        
+        <p:dialog header="Registrar o Modificar Equipos" widgetVar="wdgDatos" id="dlgDatos">
+            <h:form>
+                <p:outputLabel value="Equipo A"/>
+                <p:inputText  value="#{partidoBean.partido.idEquipoA}"/>
+                <p:outputLabel value="gol A"/>
+                <p:inputText  value="#{partidoBean.partido.golA}"/>
+                <p:outputLabel value="Equipo B"/>
+                <p:inputText  value="#{partidoBean.partido.idEquipoB}"/>                
+                <p:outputLabel value="gol B"/>
+                <p:inputText  value="#{partidoBean.partido.golB}"/>
+                
+                <p:commandButton value="#{partidoBean.accion}"  actionListener="#{partidoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm2:data"/>
+                <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+
