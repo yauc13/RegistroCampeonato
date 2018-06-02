@@ -9,6 +9,7 @@ import com.fut.dao.GrupoDao;
 import com.fut.model.Campeonato;
 
 import com.fut.model.Grupo;
+import com.fut.model.Usuario;
 import java.io.Serializable;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import javax.faces.context.FacesContext;
 public class GrupoBean implements Serializable{
     private Grupo grupo = new Grupo();
     private Campeonato campeonato = new Campeonato();
+    private Usuario usuario = new Usuario();
     private List<Grupo> listaGrupo;
     private String accion;
     
@@ -129,6 +131,7 @@ public class GrupoBean implements Serializable{
     try{
         if(this.isPostBack() == false){
         dao = new GrupoDao();
+        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         listaGrupo = dao.listar(camp);
@@ -142,6 +145,7 @@ public class GrupoBean implements Serializable{
     GrupoDao dao;
     try{
         dao = new GrupoDao();
+        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         listaGrupo = dao.listar(camp);
@@ -183,6 +187,16 @@ public class GrupoBean implements Serializable{
         throw e;
     }   
     }
-    
+
+    public String habilitarPermisos(Campeonato camp){
+        String bol;
+        if(camp.getIdUsuario() != usuario.getIdUsuario()){
+            bol = "true";
+        }else{
+            bol = "false";
+        }
+    return bol;
+    }
+        
 
 }
