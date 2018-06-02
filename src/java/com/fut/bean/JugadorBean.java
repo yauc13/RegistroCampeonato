@@ -109,6 +109,7 @@ public class JugadorBean implements Serializable{
     public void registrar() throws Exception {
     JugadorDao dao;
     try{
+       
         dao = new JugadorDao();
         this.jugador.setIdEquipoJugador(equipo.getIdEquipo());
         dao.registrar(jugador);
@@ -145,7 +146,10 @@ public class JugadorBean implements Serializable{
         grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         //Equipo camp = (Equipo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("equipo");
+        
         listaJugador = dao.listar(equipo);
+        
+        
         }
     }catch(Exception e){   
         throw e;
@@ -160,7 +164,9 @@ public class JugadorBean implements Serializable{
         //Equipo camp = (Equipo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("equipo");
         grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
+        
         listaJugador = dao.listar(equipo);
+       
     
     }catch(Exception e){   
         throw e;

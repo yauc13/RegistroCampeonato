@@ -164,12 +164,12 @@ public class EquipoBean implements Serializable{
             this.accion = "Modificar";
     }
     
-     public String verJugadoresEquipo() throws Exception {
+     public String verJugadoresEquipo(Equipo equip) throws Exception {
     
     String direccion = null;
     try{
         //sirve para pasar datos entres los beans
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("equipo", equipo);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("equipo", equip);
         direccion = "listaJugador?faces-redirect=true";
         
     }catch(Exception e){  
