@@ -7,6 +7,7 @@ package com.fut.bean;
 
 import com.fut.dao.CampeonatoDao;
 import com.fut.model.Campeonato;
+import com.fut.model.Usuario;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -25,8 +26,21 @@ import javax.faces.context.FacesContext;
 
 public class CampeonatoBean implements Serializable{
     private Campeonato campeonato = new Campeonato();
+    private Usuario usuario = new Usuario();
     private List<Campeonato> listaCampeonato;
+    private String loginUsuario;
     private String accion;
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
+    
+    
 
     public Campeonato getCampeonato() {
         return campeonato;
@@ -55,7 +69,7 @@ public class CampeonatoBean implements Serializable{
     
     
     
-        public void operar() throws Exception{
+    public void operar() throws Exception{
     switch(accion){
         case "Registrar":
             this.registrar();
@@ -78,6 +92,8 @@ public class CampeonatoBean implements Serializable{
     
     try{
         dao = new CampeonatoDao();
+        
+        this.campeonato.setIdUsuario(usuario.getIdUsuario());
         dao.registrar(campeonato);
         this.listar();
     }catch(Exception e){  
@@ -124,6 +140,7 @@ public class CampeonatoBean implements Serializable{
     try{
         if(this.isPostBack() == false){
         dao = new CampeonatoDao();
+        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         listaCampeonato = dao.listar();
         }
     }catch(Exception e){   
@@ -135,6 +152,7 @@ public class CampeonatoBean implements Serializable{
     CampeonatoDao dao;
     try{
         dao = new CampeonatoDao();
+        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         listaCampeonato = dao.listar();
         
     }catch(Exception e){   
@@ -159,6 +177,16 @@ public class CampeonatoBean implements Serializable{
     }catch(Exception e){  
         throw e;
     }   
+    }
+    
+    public String habilitarPermisos(Campeonato camp){
+        String bol;
+        if(camp.getIdUsuario() != usuario.getIdUsuario()){
+            bol = "true";
+        }else{
+            bol = "false";
+        }
+    return bol;
     }
     
 }

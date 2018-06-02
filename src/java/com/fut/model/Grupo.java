@@ -15,6 +15,17 @@ public class Grupo implements Serializable{
     int idGrupo;
     String nombreGrupo;
     int idCampeonato;
+    int idUsuario;
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    
+    
 
     public int getIdGrupo() {
         return idGrupo;

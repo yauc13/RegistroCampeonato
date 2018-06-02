@@ -7,6 +7,8 @@ package com.fut.dao;
 
 import com.fut.model.Equipo;
 import com.fut.model.Jugador;
+
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -21,10 +23,12 @@ public class JugadorDao extends Dao {
         boolean reg = false;
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO jugador (nombreJugador,idEquipoJugador) values(?,?)");
+            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO jugador (nombreJugador,fechaNacimiento,golJugador,idEquipoJugador,idUsuario) values(?,?,?,?,?)");
             st.setString(1, cam.getNombreJugador());
-            
-            st.setInt(2, cam.getIdEquipoJugador());
+            st.setString(2, cam.getFechaNacimiento());
+            st.setInt(3, cam.getGolJugador());
+            st.setInt(4, cam.getIdEquipoJugador());
+            st.setInt(5, cam.getIdUsuario());
             
             st.executeUpdate();
             reg = true;
@@ -44,7 +48,7 @@ public class JugadorDao extends Dao {
             
             try{
                 this.Conectar();
-                PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,idEquipoJugador FROM jugador WHERE idEquipoJugador = ?");
+                PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
                 st.setInt(1, camp.getIdEquipo());
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -52,7 +56,9 @@ public class JugadorDao extends Dao {
                     Jugador cam = new Jugador();
                     cam.setIdJugador(rs.getInt("idJugador"));
                     cam.setNombreJugador(rs.getString("nombreJugador"));
+                    cam.setFechaNacimiento(rs.getString("fechaNacimiento"));
                     cam.setIdEquipoJugador(rs.getInt("idEquipoJugador"));
+                    cam.setIdUsuario(rs.getInt("idUsuario"));
 
                     lista.add(cam);
                 
@@ -71,7 +77,7 @@ public class JugadorDao extends Dao {
         ResultSet rs;
             try{
                 this.Conectar();
-                PreparedStatement st = this.getCn().prepareStatement("SELECT idJugador, nombreJugador FROM jugador WHERE idJugador = ?");
+                PreparedStatement st = this.getCn().prepareStatement("SELECT idJugador, nombreJugador,idUsuario FROM jugador WHERE idJugador = ?");
                 st.setInt(1, cam.getIdJugador());
                 
                 rs = st.executeQuery();
@@ -79,6 +85,7 @@ public class JugadorDao extends Dao {
                     usus = new Jugador();
                     usus.setIdJugador(rs.getInt("idJugador"));
                     usus.setNombreJugador(rs.getString("nombreJugador"));
+                    usus.setIdUsuario(rs.getInt("idUsuario"));
                                        
                 }
                 

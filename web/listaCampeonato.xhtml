@@ -12,7 +12,8 @@
         <h:form id="frm1">
               
             <p:commandButton value="Nuevo Campeonato" oncomplete="PF('wdgDatos').show();" actionListener="#{campeonatoBean.setAccion('Registrar')}" update=":dlgDatos"/>
-
+            <p:outputLabel value="#{campeonatoBean.usuario.idUsuario}"/>
+            <p:outputLabel value="#{campeonatoBean.usuario.loginUsuario}"/>
             <p:dataTable id="data" value="#{campeonatoBean.listaCampeonato}" var="campeonato" >
                 <p:column headerText="id">
                     <p:outputLabel value="#{campeonato.idCampeonato}"/>
@@ -20,14 +21,17 @@
                 <p:column headerText="Campeonato">
                     <p:outputLabel value="#{campeonato.nombreCampeonato}"/>
                 </p:column>
+                <p:column headerText="Creador">
+                    <p:outputLabel value="#{campeonato.idUsuario}"/>
+                </p:column>                
                 <p:column headerText="Ver Grupos">
                     <p:commandLink value="Ver Grupos" action="#{campeonatoBean.verGruposCampeonato(campeonato)}" update="data"/>
                 </p:column>
                 <p:column headerText="Modificar">
-                    <p:commandLink value="Modificar" actionListener="#{campeonatoBean.leerID(campeonato)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos"/>
+                    <p:commandLink value="Modificar" actionListener="#{campeonatoBean.leerID(campeonato)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonato)}"/>
                 </p:column>
                 <p:column headerText="Eliminar">
-                    <p:commandLink value="Eliminar" actionListener="#{campeonatoBean.eliminar(campeonato)}" update="data"/>
+                    <p:commandLink value="Eliminar" actionListener="#{campeonatoBean.eliminar(campeonato)}" update="data" disabled="#{campeonatoBean.habilitarPermisos(campeonato)}"/>
                 </p:column>              
             </p:dataTable>
         </h:form>

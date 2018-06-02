@@ -6,6 +6,11 @@
 package com.fut.model;
 
 import java.io.Serializable;
+import java.util.Date;
+
+
+
+
 
 /**
  *
@@ -17,6 +22,17 @@ public class Jugador implements Serializable{
     String fechaNacimiento;
     int golJugador;
     int idEquipoJugador;
+    int idUsuario;
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    
+        
 
     public String getFechaNacimiento() {
         return fechaNacimiento;

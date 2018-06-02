@@ -8,6 +8,37 @@
     </h:head>
     <h:body>
         <h:form>
+        <p:messages autoUpdate="true" showDetail="true"/>
+            <h:panelGrid columns="2">
+                <p:outputLabel for="txtUsuario" value="Usuario"/>
+                <p:inputText id="txtUsuario" required="true" value="#{usuarioBean.usuario.loginUsuario}"/>
+                <p:outputLabel for="txtClave" value="Clave"/>
+                <p:password id="txtClave" required="true" value="#{usuarioBean.usuario.passwordUsuario}"/>                
+                <h:column/>
+                <p:commandButton icon="ui-icon-key" value="Iniciar Sesion" action="#{usuarioBean.iniciarSesion()}" />                
+            </h:panelGrid>
+            <p:separator/>
+           
+        </h:form>
+        
+        <h:form>
+            <p:commandLink value="Registrarse" action="registro?faces-redirect=true" />
+            <p:separator/>
+        </h:form>
+        <h:form>
+            <p:outputLabel value="Usuario por defecto"/>
+           <h:panelGrid columns="2">
+                <p:outputLabel value=" Login: admin"/>
+                <p:outputLabel value=" password: admin"/>
+                <p:outputLabel value=" Login: editor"/>
+                <p:outputLabel value=" password: editor"/> 
+                <p:outputLabel value=" Login: eliminador"/>
+                <p:outputLabel value=" password: eliminador"/>
+            </h:panelGrid>
+            
+        </h:form>
+         
+        <h:form>
             <p:commandLink value="Ver Campeonatos" action="listaCampeonato?faces-redirect=true" />
         </h:form>
     </h:body>

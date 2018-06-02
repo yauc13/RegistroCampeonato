@@ -13,6 +13,17 @@ public class Jornada {
     int idJornada;
     String nombreJornada;   
     int idPartidoJornada;
+    int idUsuario;
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    
+    
 
     public int getIdJornada() {
         return idJornada;

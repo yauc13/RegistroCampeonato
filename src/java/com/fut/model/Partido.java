@@ -16,6 +16,17 @@ public class Partido {
     int idGrupo;
     int golA;
     int golB;
+    int idUsuario;
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    
+        
 
     public int getGolA() {
         return golA;

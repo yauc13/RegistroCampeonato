@@ -22,7 +22,7 @@ public class EquipoDao extends Dao {
         boolean reg = false;
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO equipo (nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo) values(?,?,?,?,?,?,?)");
+            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO equipo (nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario) values(?,?,?,?,?,?,?,?)");
             st.setString(1, cam.getNombreEquipo());
             st.setInt(2, cam.getPgEquipo());
             st.setInt(3, cam.getPeEquipo());
@@ -30,6 +30,7 @@ public class EquipoDao extends Dao {
             st.setInt(5, cam.getGfEquipo());
             st.setInt(6, cam.getGcEquipo());
             st.setInt(7, cam.getIdGrupoEquipo());
+            st.setInt(8, cam.getIdUsuario());
             
             st.executeUpdate();
             reg = true;
@@ -49,7 +50,7 @@ public class EquipoDao extends Dao {
             
             try{
                 this.Conectar();
-                PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo FROM equipo WHERE idGrupoEquipo = ?");
+                PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
                 st.setInt(1, camp.getIdGrupo());
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -57,6 +58,7 @@ public class EquipoDao extends Dao {
                     Equipo cam = new Equipo();
                     cam.setIdEquipo(rs.getInt("idEquipo"));
                     cam.setNombreEquipo(rs.getString("nombreEquipo"));
+                    cam.setIdUsuario(rs.getInt("idUsuario"));
                     
                     
                     
@@ -77,7 +79,7 @@ public class EquipoDao extends Dao {
         ResultSet rs;
             try{
                 this.Conectar();
-                PreparedStatement st = this.getCn().prepareStatement("SELECT idEquipo, nombreEquipo FROM equipo WHERE idEquipo = ?");
+                PreparedStatement st = this.getCn().prepareStatement("SELECT idEquipo, nombreEquipo,idUsuario FROM equipo WHERE idEquipo = ?");
                 st.setInt(1, cam.getIdEquipo());
                 
                 rs = st.executeQuery();
@@ -85,7 +87,7 @@ public class EquipoDao extends Dao {
                     usus = new Equipo();
                     usus.setIdEquipo(rs.getInt("idEquipo"));
                     usus.setNombreEquipo(rs.getString("nombreEquipo"));
-                                       
+                    usus.setIdUsuario(rs.getInt("idUsuario"));                   
                 }
                 
             }catch(Exception e){

@@ -20,6 +20,17 @@ public class Equipo implements Serializable{
     int gfEquipo;
     int gcEquipo;
     int idGrupoEquipo;
+    int idUsuario;
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    
+    
 
     public int getPgEquipo() {
         return pgEquipo;

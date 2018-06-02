@@ -21,9 +21,10 @@ public class GrupoDao extends Dao {
         boolean reg = false;
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO grupo (nombreGrupo,idCampeonato) values(?,?)");
+            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO grupo (nombreGrupo,idCampeonato,idUsuario) values(?,?,?)");
             st.setString(1, cam.getNombreGrupo());
             st.setInt(2, cam.getIdCampeonato());
+            st.setInt(3, cam.getIdUsuario());
             
             st.executeUpdate();
             reg = true;
@@ -41,7 +42,7 @@ public class GrupoDao extends Dao {
             
             try{
                 this.Conectar();
-                PreparedStatement st = this.getCn().prepareCall("SELECT idGrupo, nombreGrupo FROM grupo WHERE idCampeonato = ?");
+                PreparedStatement st = this.getCn().prepareCall("SELECT idGrupo, nombreGrupo,idUsuario FROM grupo WHERE idCampeonato = ?");
                 st.setInt(1, camp.getIdCampeonato());
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -49,6 +50,7 @@ public class GrupoDao extends Dao {
                     Grupo cam = new Grupo();
                     cam.setIdGrupo(rs.getInt("idGrupo"));
                     cam.setNombreGrupo(rs.getString("nombreGrupo"));
+                    cam.setIdUsuario(rs.getInt("idUsuario"));
                     
                     
                     
@@ -69,7 +71,7 @@ public class GrupoDao extends Dao {
         ResultSet rs;
             try{
                 this.Conectar();
-                PreparedStatement st = this.getCn().prepareStatement("SELECT idGrupo, nombreGrupo FROM grupo WHERE idGrupo = ?");
+                PreparedStatement st = this.getCn().prepareStatement("SELECT idGrupo, nombreGrupo, idUsuario FROM grupo WHERE idGrupo = ?");
                 st.setInt(1, cam.getIdGrupo());
                 st.setString(2, cam.getNombreGrupo());
                 rs = st.executeQuery();
@@ -77,6 +79,7 @@ public class GrupoDao extends Dao {
                     usus = new Grupo();
                     usus.setIdGrupo(rs.getInt("idGrupo"));
                     usus.setNombreGrupo(rs.getString("nombreGrupo"));
+                    usus.setIdUsuario(rs.getInt("idUsuario"));
                                        
                 }
                 
@@ -94,7 +97,7 @@ public class GrupoDao extends Dao {
         
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("UPDATE usuario SET passwordUsuario = ? WHERE idUsuario = ?");
+            PreparedStatement st = this.getCn().prepareStatement("UPDATE grupo SET nombreGrupo = ? WHERE idGrupo = ?");
             st.setString(1, cam.getNombreGrupo());                      
             st.setInt(2, cam.getIdGrupo());          
             st.executeUpdate();
@@ -109,7 +112,7 @@ public class GrupoDao extends Dao {
         
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM usuario  WHERE idUsuario = ?");
+            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM grupo  WHERE idGrupo = ?");
             st.setInt(1, cam.getIdGrupo());          
             st.executeUpdate();
         }catch(Exception e){

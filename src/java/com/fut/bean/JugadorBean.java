@@ -11,6 +11,7 @@ import com.fut.model.Equipo;
 import com.fut.model.Grupo;
 import com.fut.model.Jugador;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -31,7 +32,18 @@ public class JugadorBean implements Serializable{
     private Campeonato campeonato = new Campeonato();
     private List<Jugador> listaJugador;
     private String accion;
+    private Date fechaNacimiento;
 
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+    
+
+    
     public Campeonato getCampeonato() {
         return campeonato;
     }
@@ -112,6 +124,7 @@ public class JugadorBean implements Serializable{
        
         dao = new JugadorDao();
         this.jugador.setIdEquipoJugador(equipo.getIdEquipo());
+        this.jugador.setFechaNacimiento(fechaNacimiento.toString());
         dao.registrar(jugador);
         this.listar();
     }catch(Exception e){  
