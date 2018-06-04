@@ -10,6 +10,7 @@ import com.fut.model.Campeonato;
 
 import com.fut.model.Equipo;
 import com.fut.model.Grupo;
+import com.fut.model.Usuario;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -30,9 +31,20 @@ public class EquipoBean implements Serializable{
     private Equipo equipo = new Equipo();
     private Grupo grupo = new Grupo();
     private Campeonato campeonato = new Campeonato();
+    private Usuario usuario = new Usuario();
     private List<Equipo> listaEquipo;
     private String accion;
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    
+    
     public Campeonato getCampeonato() {
         return campeonato;
     }
@@ -104,6 +116,7 @@ public class EquipoBean implements Serializable{
     try{
         dao = new EquipoDao();
         this.equipo.setIdGrupoEquipo(grupo.getIdGrupo());
+        this.equipo.setIdUsuario(usuario.getIdUsuario());
         dao.registrar(equipo);
         this.listar();
     }catch(Exception e){  
@@ -136,6 +149,7 @@ public class EquipoBean implements Serializable{
         dao = new EquipoDao();
         grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
+        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         //Grupo camp = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         listaEquipo = dao.listar(grupo);
         }
@@ -151,6 +165,7 @@ public class EquipoBean implements Serializable{
         grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         Grupo camp = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
+        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         listaEquipo = dao.listar(camp);
     
     }catch(Exception e){   
@@ -191,14 +206,32 @@ public class EquipoBean implements Serializable{
     }   
     }
     
-    public String habilitarPermisos(){
-        String bol;
-        if(campeonato.getIdCampeonato()== 1){
-            bol = "true";
-        }else{
-            bol = "false";
-        }
+   public String habilitarPermisos(Equipo camp, int i){
+        String bol=null;
+       switch (i){
+           case 1:
+               //habilitar eliminar y editar
+               if(camp.getIdUsuario() == usuario.getIdUsuario() || "Administrador".equals(usuario.getRolUsuario())){
+                    bol = "false";
+                }else{
+                    bol = "true";
+                }
+               break;
+               
+            case 2:
+                          
+                //habilitar boton nuevo
+               if("Club".equals(usuario.getRolUsuario()) || "Administrador".equals(usuario.getRolUsuario())){
+                    bol = "false";
+                }else{
+                    bol = "true";
+                }
+               break;
+       
+       }
+        
     return bol;
     }
+    
     
 }

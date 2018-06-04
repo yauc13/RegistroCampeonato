@@ -11,7 +11,9 @@
         <f:event type="preRenderView" listener="#{equipoBean.listarInicio()}" />
         <h:form id="frm1">
 
-            <p:commandButton value="Nuevo Equipo" oncomplete="PF('wdgDatos').show();" actionListener="#{equipoBean.setAccion('Registrar')}" update=":dlgDatos"/>
+            <p:commandButton value="Nuevo Equipo" oncomplete="PF('wdgDatos').show();" actionListener="#{equipoBean.setAccion('Registrar')}" update=":dlgDatos"  disabled="#{equipoBean.habilitarPermisos(equipoBean.equipo,2)}"/>
+            <p:outputLabel value="#{equipoBean.usuario.idUsuario}"/>
+            <p:outputLabel value="#{equipoBean.usuario.loginUsuario}"/>
             <p:outputLabel value="#{equipoBean.campeonato.idCampeonato}"/> 
             <p:outputLabel value="#{equipoBean.campeonato.nombreCampeonato}"/> 
             <p:outputLabel value="#{equipoBean.grupo.idGrupo}"/> 
@@ -25,14 +27,17 @@
                 <p:column headerText="Equipo">
                     <p:outputLabel value="#{equipo.nombreEquipo}"/>
                 </p:column>
+                <p:column headerText="Creador">
+                    <p:outputLabel value="#{equipo.idUsuario}"/>
+                </p:column> 
                 <p:column headerText="Ver Jugadores">
                     <p:commandLink value="Ver Jugadores" action="#{equipoBean.verJugadoresEquipo(equipo)}" update="data"/>
                 </p:column>    
                 <p:column headerText="Modificar">
-                    <p:commandLink value="Modificar" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos"/>
+                    <p:commandLink value="Modificar" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
                 </p:column>
                 <p:column headerText="Eliminar">
-                    <p:commandLink value="Eliminar" actionListener="#{equipoBean.eliminar(equipo)}" update="data"  disabled="#{equipoBean.habilitarPermisos()}"/>
+                    <p:commandLink value="Eliminar" actionListener="#{equipoBean.eliminar(equipo)}" update="data"   disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
                 </p:column>
                 
             </p:dataTable>

@@ -11,7 +11,7 @@
         <f:event type="preRenderView" listener="#{campeonatoBean.listarInicio()}" />
         <h:form id="frm1">
               
-            <p:commandButton value="Nuevo Campeonato" oncomplete="PF('wdgDatos').show();" actionListener="#{campeonatoBean.setAccion('Registrar')}" update=":dlgDatos"/>
+            <p:commandButton value="Nuevo Campeonato" oncomplete="PF('wdgDatos').show();" actionListener="#{campeonatoBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"/>
             <p:outputLabel value="#{campeonatoBean.usuario.idUsuario}"/>
             <p:outputLabel value="#{campeonatoBean.usuario.loginUsuario}"/>
             <p:dataTable id="data" value="#{campeonatoBean.listaCampeonato}" var="campeonato" >
@@ -28,10 +28,10 @@
                     <p:commandLink value="Ver Grupos" action="#{campeonatoBean.verGruposCampeonato(campeonato)}" update="data"/>
                 </p:column>
                 <p:column headerText="Modificar">
-                    <p:commandLink value="Modificar" actionListener="#{campeonatoBean.leerID(campeonato)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonato)}"/>
+                    <p:commandLink value="Modificar" actionListener="#{campeonatoBean.leerID(campeonato)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonato,1)}"/>
                 </p:column>
                 <p:column headerText="Eliminar">
-                    <p:commandLink value="Eliminar" actionListener="#{campeonatoBean.eliminar(campeonato)}" update="data" disabled="#{campeonatoBean.habilitarPermisos(campeonato)}"/>
+                    <p:commandLink value="Eliminar" actionListener="#{campeonatoBean.eliminar(campeonato)}" update="data" disabled="#{campeonatoBean.habilitarPermisos(campeonato,1)}"/>
                 </p:column>              
             </p:dataTable>
         </h:form>

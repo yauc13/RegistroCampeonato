@@ -32,6 +32,16 @@ public class GrupoBean implements Serializable{
     private Usuario usuario = new Usuario();
     private List<Grupo> listaGrupo;
     private String accion;
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
+    
     
 
     public Grupo getGrupo() {
@@ -188,13 +198,30 @@ public class GrupoBean implements Serializable{
     }   
     }
 
-    public String habilitarPermisos(Campeonato camp){
-        String bol;
-        if(camp.getIdUsuario() != usuario.getIdUsuario()){
-            bol = "true";
-        }else{
-            bol = "false";
-        }
+    public String habilitarPermisos(Campeonato camp, int i){
+        String bol = null;
+       switch (i){
+           case 1:
+               //habilitar eliminar y editar
+               if(camp.getIdUsuario() == usuario.getIdUsuario() || "Administrador".equals(usuario.getRolUsuario())){
+                    bol = "false";
+                }else{
+                    bol = "true";
+                }
+               break;
+               
+            case 2:
+                          
+                //habilitar boton nuevo
+               if("Organizador".equals(usuario.getRolUsuario()) || "Administrador".equals(usuario.getRolUsuario())){
+                    bol = "false";
+                }else{
+                    bol = "true";
+                }
+               break;
+       
+       }
+        
     return bol;
     }
         
