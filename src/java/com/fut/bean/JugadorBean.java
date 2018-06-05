@@ -131,6 +131,7 @@ public class JugadorBean implements Serializable{
     this.jugador.setIdJugador(0);
     this.jugador.setNombreJugador("");
     this.jugador.setFechaNacimiento("");
+    this.fechaNacimiento = null;
     }
     
     public void registrar() throws Exception {
@@ -153,6 +154,7 @@ public class JugadorBean implements Serializable{
     try{
         dao = new JugadorDao();
         dao.modificar(jugador);
+        
         this.listar();
     }catch(Exception e){  
         throw e;

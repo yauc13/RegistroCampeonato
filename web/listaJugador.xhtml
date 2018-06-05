@@ -51,7 +51,7 @@
                 <p:outputLabel for="txtNombre" value="Nombre Jugador"/>
                 <p:inputText id="txtNombre" required="true" value="#{jugadorBean.jugador.nombreJugador}"/>
                 <p:outputLabel for="calendar" value="Fecha de Nacimiento"/>
-                <p:calendar id="calendar" required="true" value="#{jugadorBean.jugador.fechaNacimiento}"  />
+                <p:calendar id="calendar" required="true" value="#{jugadorBean.fechaNacimiento}"  />
                 <p:commandButton value="#{jugadorBean.accion}"  actionListener="#{jugadorBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
                 <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
             </h:form>
