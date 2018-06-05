@@ -112,6 +112,7 @@ public class GrupoBean implements Serializable{
         dao = new GrupoDao();
         //Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         this.grupo.setIdCampeonato(campeonato.getIdCampeonato());
+        this.grupo.setIdUsuario(usuario.getIdUsuario());
         dao.registrar(grupo);
         this.listar();
     }catch(Exception e){  

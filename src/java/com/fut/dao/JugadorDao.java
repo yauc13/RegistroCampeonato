@@ -24,7 +24,7 @@ public class JugadorDao extends Dao {
         try{
             this.Conectar();
             //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO jugador (nombreJugador,fechaNacimiento,golJugador,idEquipoJugador,idUsuario) values(?,?,?,?,?)");
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.jugador (\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\") values(?,?,?,?,?)");
+            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.jugador (\"nombreJugador\",\"fechaNacimiento\",\"golJugador\",\"idEquipoJugador\",\"idUsuario\") values(?,?,?,?,?)");
             st.setString(1, cam.getNombreJugador());
             st.setString(2, cam.getFechaNacimiento());
             st.setInt(3, cam.getGolJugador());

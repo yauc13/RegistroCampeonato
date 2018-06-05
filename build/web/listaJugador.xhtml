@@ -15,7 +15,7 @@
         <f:event type="preRenderView" listener="#{jugadorBean.listarInicio()}" />
         <h:form id="frm1">
 
-            <p:commandButton value="Nuevo Jugador" oncomplete="PF('wdgDatos').show();" actionListener="#{jugadorBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{jugadorBean.habilitarPermisos(jugadorBean.jugador,1)}"/>
+            <p:commandButton value="Nuevo Jugador" oncomplete="PF('wdgDatos').show();" actionListener="#{jugadorBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{jugadorBean.habilitarPermisos(jugadorBean.jugador,2)}"/>
              
             <p:outputLabel value="#{jugadorBean.campeonato.nombreCampeonato}/"/> 
             
@@ -30,9 +30,7 @@
                 <p:column headerText="Jugador">
                     <p:outputLabel value="#{jugador.nombreJugador}"/>
                 </p:column>
-                <p:column headerText="F. Naci">
-                    <p:outputLabel value="#{jugador.fechaNacimiento}"/>                    
-                </p:column>
+                
                 <p:column headerText="Creador">
                     <p:outputLabel value="#{jugador.idUsuario}"/>
                 </p:column> 
@@ -53,7 +51,7 @@
                 <p:outputLabel for="txtNombre" value="Nombre Jugador"/>
                 <p:inputText id="txtNombre" required="true" value="#{jugadorBean.jugador.nombreJugador}"/>
                 <p:outputLabel for="calendar" value="Fecha de Nacimiento"/>
-                <p:calendar id="calendar" required="true" value="#{jugadorBean.fechaNacimiento}"  />
+                <p:calendar id="calendar" required="true" value="#{jugadorBean.jugador.fechaNacimiento}"  />
                 <p:commandButton value="#{jugadorBean.accion}"  actionListener="#{jugadorBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
                 <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
             </h:form>

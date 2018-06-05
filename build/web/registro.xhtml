@@ -24,6 +24,13 @@
                 <h:column/>
                 <p:commandButton icon="ui-icon-check" value="Registrar"  action="#{usuarioBean.registrar()}" />                
             </h:panelGrid>
+            <p:separator/>
+            
+            
+        </h:form>
+        <h:form>
+            <p:outputLabel value="Si esta registrado, ya puede iniciar sesion "/>
+             <p:commandLink value="Iniciar Sesion" action="index?faces-redirect=true" />
         </h:form>
     </h:body>
 </html>

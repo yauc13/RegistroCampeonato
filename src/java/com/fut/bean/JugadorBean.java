@@ -130,6 +130,7 @@ public class JugadorBean implements Serializable{
     public void limpiar(){
     this.jugador.setIdJugador(0);
     this.jugador.setNombreJugador("");
+    this.jugador.setFechaNacimiento("");
     }
     
     public void registrar() throws Exception {
@@ -250,7 +251,7 @@ public class JugadorBean implements Serializable{
                
             case 2:                         
                 //habilitar boton nuevo
-               if("Club".equals(usuario.getRolUsuario()) || "Administrador".equals(usuario.getRolUsuario())){
+               if(equipo.getIdUsuario() == usuario.getIdUsuario() || "Administrador".equals(usuario.getRolUsuario())){
                     bol = "false";
                 }else{
                     bol = "true";

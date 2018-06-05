@@ -29,6 +29,11 @@ public class UsuarioBean implements Serializable{
     private List<Usuario> listaUsuario;
     
     private String accion;
+    
+
+
+    
+    
 
     public Usuario getUsuario() {
         return usuario;
@@ -121,9 +126,9 @@ public class UsuarioBean implements Serializable{
     this.usuario.setRolUsuario("");
     }
     
-    public String registrar() throws Exception {
+    public void registrar() throws Exception {
     UsuarioDao dao;
-    String direc = null;
+    String direc = "true";
     try{
         
         dao = new UsuarioDao();
@@ -133,8 +138,9 @@ public class UsuarioBean implements Serializable{
         }else{
             boolean reg = dao.registrar(usuario);
             if(reg == true){
-                //FacesContext.getCurrentInstance().addMessage("iniciarSesion",new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Inicio sesion exitoso") );
-                direc = "index?faces-redirect=true";
+                FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Registro exitoso") );
+                
+                direc = "false";
             }else{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Error al Registrar"));
             }
@@ -143,7 +149,7 @@ public class UsuarioBean implements Serializable{
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Error al Registrar"));
         throw e;
     }   
-    return direc;
+    
     }
     
     public void modificar() throws Exception {
@@ -186,6 +192,38 @@ public class UsuarioBean implements Serializable{
         throw e;
     }   
     }
+    
+    
+    public String habilitarPermisos(int i){
+        String bol=null;
+       switch (i){
+           case 1:
+               //habilitar eliminar y editar
+               if( "Administrador".equals(usuario.getRolUsuario())){
+                    bol = "false";
+                }else{
+                    bol = "true";
+                }
+               break;
+               
+            case 2:
+                          
+                //habilitar boton nuevo
+               if("Organizador".equals(usuario.getRolUsuario()) || "Administrador".equals(usuario.getRolUsuario())){
+                    bol = "false";
+                }else{
+                    bol = "true";
+                }
+               break;
+            case 3:
+                
+                break;
+       
+       }
+        
+    return bol;
+    }
+    
     
         
 }
