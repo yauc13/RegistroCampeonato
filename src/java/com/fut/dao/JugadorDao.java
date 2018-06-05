@@ -23,7 +23,8 @@ public class JugadorDao extends Dao {
         boolean reg = false;
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO jugador (nombreJugador,fechaNacimiento,golJugador,idEquipoJugador,idUsuario) values(?,?,?,?,?)");
+            //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO jugador (nombreJugador,fechaNacimiento,golJugador,idEquipoJugador,idUsuario) values(?,?,?,?,?)");
+            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.jugador (\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\") values(?,?,?,?,?)");
             st.setString(1, cam.getNombreJugador());
             st.setString(2, cam.getFechaNacimiento());
             st.setInt(3, cam.getGolJugador());
@@ -48,7 +49,8 @@ public class JugadorDao extends Dao {
             
             try{
                 this.Conectar();
-                PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
+                //PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idJugador\",\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\" FROM public.jugador WHERE \"idEquipoJugador\" = ?");
                 st.setInt(1, camp.getIdEquipo());
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -77,7 +79,8 @@ public class JugadorDao extends Dao {
         ResultSet rs;
             try{
                 this.Conectar();
-                PreparedStatement st = this.getCn().prepareStatement("SELECT idJugador, nombreJugador,idUsuario FROM jugador WHERE idJugador = ?");
+                //PreparedStatement st = this.getCn().prepareStatement("SELECT idJugador, nombreJugador,idUsuario FROM jugador WHERE idJugador = ?");
+                PreparedStatement st = this.getCn().prepareStatement("SELECT \"idJugador\", \"nombreJugador\",\"idUsuario\" FROM public.jugador WHERE \"idJugador\" = ?");
                 st.setInt(1, cam.getIdJugador());
                 
                 rs = st.executeQuery();
@@ -103,7 +106,8 @@ public class JugadorDao extends Dao {
         
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("UPDATE jugador SET nombreJugador = ? WHERE idJugador = ?");
+            //PreparedStatement st = this.getCn().prepareStatement("UPDATE jugador SET nombreJugador = ? WHERE idJugador = ?");
+            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.jugador SET \"nombreJugador\" = ? WHERE \"idJugador\" = ?");
             st.setString(1, cam.getNombreJugador());                      
             st.setInt(2, cam.getIdJugador());          
             st.executeUpdate();
@@ -118,7 +122,8 @@ public class JugadorDao extends Dao {
         
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM jugador  WHERE idJugador = ?");
+            //PreparedStatement st = this.getCn().prepareStatement("DELETE FROM jugador  WHERE idJugador = ?");
+            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.jugador  WHERE \"idJugador\" = ?");
             st.setInt(1, cam.getIdJugador());          
             st.executeUpdate();
         }catch(Exception e){
