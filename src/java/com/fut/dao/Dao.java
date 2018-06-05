@@ -25,8 +25,9 @@ public class Dao {
     
     public void Conectar() {
     try{
-        Class.forName("com.mysql.jdbc.Driver");
-        cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/torneo?user=root&password=");
+        Class.forName("org.postgresql.Driver");
+       // cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/torneo?user=root&password=");
+        cn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/torneo?user=postgres&password=admin");
     }catch (Exception e){
         System.out.println("EXCEPTION CONEXION DB");
     }

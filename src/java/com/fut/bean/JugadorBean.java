@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
@@ -24,7 +25,7 @@ import javax.faces.context.FacesContext;
  */
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 
 public class JugadorBean implements Serializable{
     private Jugador jugador = new Jugador();
@@ -138,6 +139,7 @@ public class JugadorBean implements Serializable{
         dao = new JugadorDao();
         this.jugador.setIdEquipoJugador(equipo.getIdEquipo());
         this.jugador.setFechaNacimiento(fechaNacimiento.toString());
+        this.jugador.setIdUsuario(usuario.getIdUsuario());
         dao.registrar(jugador);
         this.listar();
     }catch(Exception e){  
@@ -234,7 +236,7 @@ public class JugadorBean implements Serializable{
     }   
     }
     
-   public String habilitarPermisos(Equipo camp, int i){
+   public String habilitarPermisos(Jugador camp, int i){
         String bol=null;
        switch (i){
            case 1:

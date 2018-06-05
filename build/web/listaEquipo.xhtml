@@ -3,21 +3,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
+        
+         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
+            <ui:define name="content">
+        
         <f:event type="preRenderView" listener="#{equipoBean.listarInicio()}" />
         <h:form id="frm1">
 
             <p:commandButton value="Nuevo Equipo" oncomplete="PF('wdgDatos').show();" actionListener="#{equipoBean.setAccion('Registrar')}" update=":dlgDatos"  disabled="#{equipoBean.habilitarPermisos(equipoBean.equipo,2)}"/>
-            <p:outputLabel value="#{equipoBean.usuario.idUsuario}"/>
-            <p:outputLabel value="#{equipoBean.usuario.loginUsuario}"/>
-            <p:outputLabel value="#{equipoBean.campeonato.idCampeonato}"/> 
-            <p:outputLabel value="#{equipoBean.campeonato.nombreCampeonato}"/> 
-            <p:outputLabel value="#{equipoBean.grupo.idGrupo}"/> 
-            <p:outputLabel value="#{equipoBean.grupo.nombreGrupo}"/>             
+            
+            
+            <p:outputLabel value="#{equipoBean.campeonato.nombreCampeonato}/"/> 
+            
+            <p:outputLabel value="#{equipoBean.grupo.nombreGrupo}/"/>             
             
            
             <p:dataTable id="data" value="#{equipoBean.listaEquipo}" var="equipo" >
@@ -45,14 +49,17 @@
         
         <p:dialog header="Registrar o Modificar Equipos" widgetVar="wdgDatos" id="dlgDatos">
             <h:form>
-                <p:outputLabel value="Nombre Equipo"/>
-                <p:inputText  value="#{equipoBean.equipo.nombreEquipo}"/>
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <p:outputLabel value="Nombre Equipo" for="txtNombre"/>
+                <p:inputText id="txtNombre" required="true" value="#{equipoBean.equipo.nombreEquipo}"/>
                 
                 <p:commandButton value="#{equipoBean.accion}"  actionListener="#{equipoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
                 <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
             </h:form>
         </p:dialog>
-        
+        </ui:define>
+            
+        </ui:composition>
         
         
     </h:body>

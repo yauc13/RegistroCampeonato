@@ -7,10 +7,14 @@ package com.fut.bean;
 
 import com.fut.dao.UsuarioDao;
 import com.fut.model.Usuario;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
@@ -19,7 +23,7 @@ import javax.faces.context.FacesContext;
  * @author DIANA G
  */
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class UsuarioBean implements Serializable{
     private Usuario usuario = new Usuario();
     private List<Usuario> listaUsuario;
@@ -52,6 +56,8 @@ public class UsuarioBean implements Serializable{
     
 
     
+    
+    
     public String iniciarSesion() throws Exception{
         String redireccion = null;
         UsuarioDao dao;
@@ -61,6 +67,7 @@ public class UsuarioBean implements Serializable{
             if(u !=null){
                 this.usuario = u;
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", u);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "inicion sesion"));
                redireccion = "listaCampeonato?faces-redirect=true";
                
             }else{
@@ -75,8 +82,23 @@ public class UsuarioBean implements Serializable{
     
     public String cerrarSesion(){
         String redireccion = "index?faces-redirect=true";
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         this.limpiar();
         return redireccion;
+    }
+    
+    public void verificarSesion(){
+        
+        try {
+        Usuario us = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        if(us == null){
+            
+                FacesContext.getCurrentInstance().getExternalContext().redirect("./../permisos.xhtml");
+            
+        }
+        } catch (IOException ex) {
+                Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }
     
     public void operar() throws Exception{
@@ -111,6 +133,7 @@ public class UsuarioBean implements Serializable{
         }else{
             boolean reg = dao.registrar(usuario);
             if(reg == true){
+                //FacesContext.getCurrentInstance().addMessage("iniciarSesion",new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Inicio sesion exitoso") );
                 direc = "index?faces-redirect=true";
             }else{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Error al Registrar"));

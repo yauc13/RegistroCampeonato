@@ -3,21 +3,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
+        <ui:composition template="./WEB-INF/template/plantilla.xhtml">
+            <ui:define name="content">
+        
         <f:event type="preRenderView" listener="#{jugadorBean.listarInicio()}" />
         <h:form id="frm1">
 
-            <p:commandButton value="Nuevo Jugador" oncomplete="PF('wdgDatos').show();" actionListener="#{jugadorBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{equipoBean.habilitarPermisos(equipoBean.campeonato,1)}"/>
-            <p:outputLabel value="#{jugadorBean.campeonato.idCampeonato}"/> 
-            <p:outputLabel value="#{jugadorBean.campeonato.nombreCampeonato}"/> 
-            <p:outputLabel value="#{jugadorBean.grupo.idGrupo}"/> 
-            <p:outputLabel value="#{jugadorBean.grupo.nombreGrupo}"/>             
-            <p:outputLabel value="#{jugadorBean.equipo.idEquipo}"/> 
-            <p:outputLabel value="#{jugadorBean.equipo.nombreEquipo}"/>             
+            <p:commandButton value="Nuevo Jugador" oncomplete="PF('wdgDatos').show();" actionListener="#{jugadorBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{jugadorBean.habilitarPermisos(jugadorBean.jugador,1)}"/>
+             
+            <p:outputLabel value="#{jugadorBean.campeonato.nombreCampeonato}/"/> 
+            
+            <p:outputLabel value="#{jugadorBean.grupo.nombreGrupo}/"/>             
+            
+            <p:outputLabel value="#{jugadorBean.equipo.nombreEquipo}/"/>             
            
             <p:dataTable id="data" value="#{jugadorBean.listaJugador}" var="jugador" >
                 <p:column headerText="id">
@@ -27,15 +31,17 @@
                     <p:outputLabel value="#{jugador.nombreJugador}"/>
                 </p:column>
                 <p:column headerText="F. Naci">
-                    <p:outputLabel value="#{jugador.fechaNacimiento}"/>
-                    
+                    <p:outputLabel value="#{jugador.fechaNacimiento}"/>                    
                 </p:column>
+                <p:column headerText="Creador">
+                    <p:outputLabel value="#{jugador.idUsuario}"/>
+                </p:column> 
                    
                 <p:column headerText="Modificar">
-                    <p:commandLink value="Modificar" actionListener="#{jugadorBean.leerID(jugador)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{equipoBean.habilitarPermisos(equipoBean.campeonato,1)}"/>
+                    <p:commandLink value="Modificar" actionListener="#{jugadorBean.leerID(jugador)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{jugadorBean.habilitarPermisos(jugador,1)}"/>
                 </p:column>
                 <p:column headerText="Eliminar">
-                    <p:commandLink value="Eliminar" actionListener="#{jugadorBean.eliminar(jugador)}" update="data"  disabled="#{equipoBean.habilitarPermisos(equipoBean.campeonato,1)}"/>
+                    <p:commandLink value="Eliminar" actionListener="#{jugadorBean.eliminar(jugador)}" update="data"  disabled="#{jugadorBean.habilitarPermisos(jugador,1)}"/>
                 </p:column>
                 
             </p:dataTable>
@@ -43,15 +49,18 @@
         
         <p:dialog header="Registrar o Modificar Jugadors" widgetVar="wdgDatos" id="dlgDatos">
             <h:form>
-                <p:outputLabel value="Nombre Jugador"/>
-                <p:inputText  value="#{jugadorBean.jugador.nombreJugador}"/>
-                <p:outputLabel value="Fecha de Nacimiento"/>
-                <p:calendar value="#{jugadorBean.fechaNacimiento}"  />
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <p:outputLabel for="txtNombre" value="Nombre Jugador"/>
+                <p:inputText id="txtNombre" required="true" value="#{jugadorBean.jugador.nombreJugador}"/>
+                <p:outputLabel for="calendar" value="Fecha de Nacimiento"/>
+                <p:calendar id="calendar" required="true" value="#{jugadorBean.fechaNacimiento}"  />
                 <p:commandButton value="#{jugadorBean.accion}"  actionListener="#{jugadorBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
                 <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
             </h:form>
         </p:dialog>
-        
+        </ui:define>
+            
+        </ui:composition>
         
     </h:body>
 </html>

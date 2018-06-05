@@ -8,7 +8,8 @@
     </h:head>
     <h:body>
         <h:form>
-        <p:messages autoUpdate="true" showDetail="true"/>
+        <p:growl autoUpdate="true" showDetail="true"/>
+        
             <h:panelGrid columns="2">
                 <p:outputLabel for="txtUsuario" value="Usuario"/>
                 <p:inputText id="txtUsuario" required="true" value="#{usuarioBean.usuario.loginUsuario}"/>
@@ -26,20 +27,24 @@
             <p:separator/>
         </h:form>
         <h:form>
-            <p:outputLabel value="Usuario por defecto"/>
+            <p:outputLabel value="Tipo Roles"/>
            <h:panelGrid columns="2">
-                <p:outputLabel value=" Login: admin"/>
-                <p:outputLabel value=" password: admin"/>
-                <p:outputLabel value=" Login: editor"/>
-                <p:outputLabel value=" password: editor"/> 
-                <p:outputLabel value=" Login: eliminador"/>
-                <p:outputLabel value=" password: eliminador"/>
+                <p:outputLabel value=" Administrador:"/>
+                <p:outputLabel value=" tiene control total de la aplicacion"/>
+                <p:outputLabel value=" Organizador: "/>
+                <p:outputLabel value=" puede crear campeonatos y sus respectivos grupos, puede  editarlos y eliminarlos solo los creados por el. los creados por otros usuarios solo los podra observar "/> 
+                <p:outputLabel value=" Club"/>
+                <p:outputLabel value=" puede crear equipos y sus respectivos jugadores, puede  editar y eliminar solo los creados por el. los creados por otros usuarios solo los podra observar "/>
             </h:panelGrid>
-            
+             <p:separator/>
+            <p:outputLabel value="Nota: al cerrar sesion, e intentar ir atras, la aplicacion no permite el ingreso. tiene que volver a usar las credenciales"/>
+            <p:outputLabel value=", igual pasa si intenta ingresar directamente con url...(clik Ver Campeonatos)"/>
+             <p:separator/>
         </h:form>
          
         <h:form>
             <p:commandLink value="Ver Campeonatos" action="listaCampeonato?faces-redirect=true" />
+             
         </h:form>
     </h:body>
 </html>
