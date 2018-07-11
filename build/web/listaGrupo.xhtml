@@ -31,6 +31,9 @@
                 <p:column headerText="Ver Grupos">
                     <p:commandLink value="Ver Equipos" action="#{grupoBean.verEquiposGrupos(grupo)}" update="data"/>
                 </p:column>
+                <p:column headerText="Ver Partidos">
+                    <p:commandLink value="Ver Partidos" action="#{grupoBean.verPartidosGrupo(grupo)}" update="data" />
+                </p:column>
                 <p:column headerText="Modificar">
                     <p:commandLink value="Modificar" actionListener="#{grupoBean.leerID(grupo)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{grupoBean.habilitarPermisos(grupoBean.campeonato,1)}"/>
                 </p:column>

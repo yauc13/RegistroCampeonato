@@ -11,15 +11,15 @@
         <f:event type="preRenderView" listener="#{equipoBean.listarInicio()}" />
         
         <h:form>
-            <p:dataTable id="data" value="#{equipoBean.listaEquipo}" var="equipo" >
+            <p:dataTable id="data" value="#{partidoBean.listaPartido}" var="partido" >
                 <p:column headerText="Equipo A">
                     <p:inputText />
                 </p:column>
-                <p:column headerText="gol A">
-                    <p:outputLabel value="#{equipo.nombreEquipo}"/>
+                <p:column headerText="Gol A">
+                    <p:outputLabel value=""/>
                 </p:column>
                 <p:column headerText="Gol B">
-                    <p:inputText />
+                    <p:outputLabel value=""/>
                 </p:column>
                 <p:column headerText="Equipo B">
                     

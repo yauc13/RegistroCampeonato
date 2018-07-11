@@ -187,7 +187,20 @@ public class GrupoBean implements Serializable{
     return direccion;
     }
     
-
+     public String verPartidosGrupo(Grupo grup) throws Exception {
+    
+    String direccion = null;
+    try{
+        //sirve para pasar datos entres los beans
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("grupo", grup);
+        direccion = "listaPartido?faces-redirect=true";
+        
+    }catch(Exception e){  
+        throw e;
+    }   
+    return direccion;
+    }
+    
    
     public void eliminar(Grupo usu) throws Exception {
     GrupoDao dao;

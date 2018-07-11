@@ -5,12 +5,14 @@
  */
 package com.fut.bean;
 
+import com.fut.dao.EquipoDao;
 import com.fut.dao.PartidoDao;
+import com.fut.model.Equipo;
 import com.fut.model.Grupo;
 import com.fut.model.Partido;
+import com.fut.model.Usuario;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -26,10 +28,16 @@ import javax.faces.context.FacesContext;
 public class PartidoBean implements Serializable{
     private Partido partido = new Partido();
     private Grupo grupo = new Grupo();
+    private Usuario usuario = new Usuario();
     private List<Partido> listaPartido;
+    private Partido verPartido;
     private String accion;
+    private Equipo equipoA;
+    private Equipo equipoB;
+    
 
     public Partido getPartido() {
+        
         return partido;
     }
 
@@ -62,8 +70,28 @@ public class PartidoBean implements Serializable{
     public void setAccion(String accion) {
         this.accion = accion;
     }
-
     
+    
+          
+
+    public String verPartido(Partido u) throws Exception {
+    
+    String direccion = null;
+    try{
+        //sirve para pasar datos entre los beans
+        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("verPartido", u);
+        this.verPartido = u;
+        EquipoDao equipoDao = new EquipoDao();
+        this.equipoA = equipoDao.leerID(u.getIdEquipoA());
+        this.equipoB = equipoDao.leerID(u.getIdEquipoB());
+        direccion = "planillaPartido?faces-redirect=true";
+        
+        
+    }catch(Exception e){  
+        throw e;
+    }   
+    return direccion;
+    }    
     
     
     
@@ -89,6 +117,8 @@ public class PartidoBean implements Serializable{
     PartidoDao dao;
     try{
         dao = new PartidoDao();
+        this.partido.setIdGrupo(grupo.getIdGrupo());
+        this.partido.setIdUsuario(usuario.getIdUsuario());
         dao.registrar(partido);
         this.listar();
     }catch(Exception e){  
@@ -120,6 +150,8 @@ public class PartidoBean implements Serializable{
         if(this.isPostBack() == false){
         dao = new PartidoDao();
         Grupo camp = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         listaPartido = dao.listar(camp);
         }
     }catch(Exception e){   
@@ -131,8 +163,10 @@ public class PartidoBean implements Serializable{
     PartidoDao dao;
     try{
         dao = new PartidoDao();
-        Grupo camp = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
-        listaPartido = dao.listar(camp);
+        Grupo u = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        listaPartido = dao.listar(u);
     
     }catch(Exception e){   
         throw e;

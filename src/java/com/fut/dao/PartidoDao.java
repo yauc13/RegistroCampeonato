@@ -21,12 +21,14 @@ public class PartidoDao extends Dao{
         boolean reg = false;
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO partido (idEquipoA,idEquipoB,golA,golB,idGrupo) values(?,?,?,?,?)");
+            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.partido (\"idEquipoA\",\"idEquipoB\",\"idGrupo\",\"golA\",\"golB\",\"idUsuario\") values(?,?,?,?,?,?)");
             st.setInt(1, cam.getIdEquipoA());
             st.setInt(2, cam.getIdEquipoB());
-            st.setInt(3, cam.getGolA());
-            st.setInt(4, cam.getGolB());
-            st.setInt(5, cam.getIdGrupo());
+            st.setInt(3, cam.getIdGrupo());
+            st.setInt(4, cam.getGolA());
+            st.setInt(5, cam.getGolB());
+            st.setInt(6, cam.getIdUsuario());
+            
           
             
             st.executeUpdate();
@@ -47,7 +49,7 @@ public class PartidoDao extends Dao{
             
             try{
                 this.Conectar();
-                PreparedStatement st = this.getCn().prepareCall("SELECT idPartido,idEquipoA,idEquipoB,golA,golB,idGrupo FROM partido WHERE idGrupo = ?");
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\",\"idGrupo\" FROM public.partido WHERE \"idGrupo\" = ?");
                 st.setInt(1, camp.getIdGrupo());
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -79,7 +81,7 @@ public class PartidoDao extends Dao{
         ResultSet rs;
             try{
                 this.Conectar();
-                PreparedStatement st = this.getCn().prepareStatement("SELECT idPartido,idEquipoA,idEquipoB,golA,golB,idGrupo FROM partido WHERE idPartido = ?");
+                PreparedStatement st = this.getCn().prepareStatement("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\",\"idGrupo\" FROM public.partido WHERE \"idPartido\" = ?");
                 st.setInt(1, cam.getIdPartido());
                
                 rs = st.executeQuery();
@@ -128,7 +130,7 @@ public class PartidoDao extends Dao{
         
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM equipo  WHERE idPartido = ?");
+            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM partido  WHERE idPartido = ?");
             st.setInt(1, cam.getIdPartido());          
             st.executeUpdate();
         }catch(Exception e){
