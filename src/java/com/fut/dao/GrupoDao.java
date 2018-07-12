@@ -68,15 +68,15 @@ public class GrupoDao extends Dao {
         return lista;   
     }
     
-    public Grupo leerID(Grupo cam) throws Exception{
+    public Grupo leerID(int idGrupo) throws Exception{
         Grupo usus = null;
         ResultSet rs;
             try{
                 this.Conectar();
                 //PreparedStatement st = this.getCn().prepareStatement("SELECT idGrupo, nombreGrupo, idUsuario FROM grupo WHERE idGrupo = ?");
                 PreparedStatement st = this.getCn().prepareStatement("SELECT \"idGrupo\", \"nombreGrupo\", \"idUsuario\" FROM public.grupo WHERE \"idGrupo\" = ?");
-                st.setInt(1, cam.getIdGrupo());
-                st.setString(2, cam.getNombreGrupo());
+                st.setInt(1, idGrupo);
+                
                 rs = st.executeQuery();
                 while(rs.next()){
                     usus = new Grupo();

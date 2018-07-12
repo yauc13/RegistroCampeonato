@@ -25,7 +25,7 @@
                     <p:outputLabel value="#{partido.idEquipoA}"/>
                 </p:column>
                 <p:column headerText="EquipoA">
-                    <p:outputLabel value="#{partidoBean.nombreEquipoA(partido)}"/>
+                    <p:outputLabel value="#{partido.equipoA.nombreEquipo}"/>
                 </p:column>
                 <p:column headerText="golA">
                     <p:outputLabel value="#{partido.golA}"/>
@@ -34,7 +34,7 @@
                     <p:outputLabel value="#{partido.idEquipoB}"/>
                 </p:column>
                 <p:column headerText="EquipoB">
-                    <p:outputLabel value="#{partidoBean.nombreEquipoB(partido)}"/>
+                    <p:outputLabel value="#{partido.equipoB.nombreEquipo}"/>
                 </p:column>
                 <p:column headerText="golB">
                     <p:outputLabel value="#{partido.golB}"/>
@@ -42,8 +42,8 @@
                 <p:column headerText="Modificar">
                     <p:commandLink value="Modificar" actionListener="#{partidoBean.leerID(partido)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos"/>
                 </p:column>
-                <p:column headerText="Eliminar">
-                    <p:commandLink value="Eliminar" actionListener="#{partidoBean.eliminar(partido)}" update="data"/>
+                <p:column headerText="Grupo">
+                    <p:outputLabel value="#{partido.grupo.nombreGrupo}"/>
                 </p:column>
                 
             </p:dataTable>

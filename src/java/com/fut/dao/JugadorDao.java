@@ -74,14 +74,14 @@ public class JugadorDao extends Dao {
         return lista;   
     }
     
-    public Jugador leerID(Jugador cam) throws Exception{
+    public Jugador leerID(int idJugador) throws Exception{
         Jugador usus = null;
         ResultSet rs;
             try{
                 this.Conectar();
                 //PreparedStatement st = this.getCn().prepareStatement("SELECT idJugador, nombreJugador,idUsuario FROM jugador WHERE idJugador = ?");
                 PreparedStatement st = this.getCn().prepareStatement("SELECT \"idJugador\", \"nombreJugador\",\"idUsuario\" FROM public.jugador WHERE \"idJugador\" = ?");
-                st.setInt(1, cam.getIdJugador());
+                st.setInt(1, idJugador);
                 
                 rs = st.executeQuery();
                 while(rs.next()){

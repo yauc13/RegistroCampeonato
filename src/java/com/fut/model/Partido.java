@@ -17,6 +17,12 @@ public class Partido {
     int golA;
     int golB;
     int idUsuario;
+    Grupo grupo;
+    Equipo equipoA;
+    Equipo equipoB;
+    Gol [] golEA;
+    Gol [] golEB;
+    
 
     public int getIdUsuario() {
         return idUsuario;
@@ -76,6 +82,46 @@ public class Partido {
 
     public void setIdGrupo(int idGrupo) {
         this.idGrupo = idGrupo;
+    }
+
+    public Equipo getEquipoA() {
+        return equipoA;
+    }
+
+    public void setEquipoA(Equipo equipoA) {
+        this.equipoA = equipoA;
+    }
+
+    public Equipo getEquipoB() {
+        return equipoB;
+    }
+
+    public void setEquipoB(Equipo equipoB) {
+        this.equipoB = equipoB;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+
+    public Gol[] getGolEA() {
+        return golEA;
+    }
+
+    public void setGolEA(Gol[] golEA) {
+        this.golEA = golEA;
+    }
+
+    public Gol[] getGolEB() {
+        return golEB;
+    }
+
+    public void setGolEB(Gol[] golEB) {
+        this.golEB = golEB;
     }
 
 
