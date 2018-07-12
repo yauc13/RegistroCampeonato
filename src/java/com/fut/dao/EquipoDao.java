@@ -76,6 +76,38 @@ public class EquipoDao extends Dao {
         return lista;   
     }
     
+        public List<Equipo> listarEquipoB(Grupo camp, int idEquipoA) throws Exception{
+            List<Equipo> lista;
+            ResultSet rs;
+            
+            try{
+                this.Conectar();
+                //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idEquipo\", \"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idGrupoEquipo\" = ? AND \"idEquipo\" != ?");
+                st.setInt(1, camp.getIdGrupo());
+                st.setInt(2, idEquipoA);
+                rs = st.executeQuery();
+                lista = new ArrayList();
+                while(rs.next()){
+                    Equipo cam = new Equipo();
+                    cam.setIdEquipo(rs.getInt("idEquipo"));
+                    cam.setNombreEquipo(rs.getString("nombreEquipo"));
+                    cam.setIdUsuario(rs.getInt("idUsuario"));
+                    
+                    
+                    
+                    lista.add(cam);
+                
+                }
+            }catch(Exception e){
+                throw e;
+            }finally{
+                this.Cerrar();
+            }
+        
+        return lista;   
+    }
+    
     public Equipo leerID(int idEquipo) throws Exception{
         Equipo usus = null;
         ResultSet rs;

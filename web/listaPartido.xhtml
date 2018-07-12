@@ -16,17 +16,25 @@
             
            
             <p:dataTable id="data" value="#{partidoBean.listaPartido}" var="partido" >
+                
+                
                 <p:column headerText="id">
                     <p:outputLabel value="#{partido.idPartido}"/>
                 </p:column>
                 <p:column headerText="idEquipoA">
                     <p:outputLabel value="#{partido.idEquipoA}"/>
                 </p:column>
+                <p:column headerText="EquipoA">
+                    <p:outputLabel value="#{partidoBean.nombreEquipoA(partido)}"/>
+                </p:column>
                 <p:column headerText="golA">
                     <p:outputLabel value="#{partido.golA}"/>
                 </p:column>
                 <p:column headerText="idEquipoB">
                     <p:outputLabel value="#{partido.idEquipoB}"/>
+                </p:column>
+                <p:column headerText="EquipoB">
+                    <p:outputLabel value="#{partidoBean.nombreEquipoB(partido)}"/>
                 </p:column>
                 <p:column headerText="golB">
                     <p:outputLabel value="#{partido.golB}"/>
@@ -44,13 +52,20 @@
         <p:dialog header="Registrar o Modificar Partidos" widgetVar="wdgDatos" id="dlgDatos">
             <h:form>
                 <p:outputLabel value="Equipo A"/>
-                <p:inputText  value="#{partidoBean.partido.idEquipoA}"/>
-                <p:outputLabel value="gol A"/>
-                <p:inputText  value="#{partidoBean.partido.golA}"/>
+                
+                <p:selectOneMenu  value="#{partidoBean.codEquipoA}">
+                        <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
+                        <f:selectItems value="#{partidoBean.selectItemOneEquipo}"/>
+                        <p:ajax update="selectEB"/>
+                </p:selectOneMenu>
+                
                 <p:outputLabel value="Equipo B"/>
-                <p:inputText  value="#{partidoBean.partido.idEquipoB}"/>                
-                <p:outputLabel value="gol B"/>
-                <p:inputText  value="#{partidoBean.partido.golB}"/>
+                <p:selectOneMenu   id="selectEB" value="#{partidoBean.codEquipoB}">
+                        <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
+                        <f:selectItems value="#{partidoBean.selectItemOneEquipoB}"/>
+                        
+                </p:selectOneMenu>              
+                
                 
                 <p:commandButton value="#{partidoBean.accion}"  actionListener="#{partidoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm2:data"/>
                 <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 

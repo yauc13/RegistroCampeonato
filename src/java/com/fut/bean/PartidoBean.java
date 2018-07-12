@@ -12,10 +12,14 @@ import com.fut.model.Grupo;
 import com.fut.model.Partido;
 import com.fut.model.Usuario;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -30,12 +34,35 @@ public class PartidoBean implements Serializable{
     private Grupo grupo = new Grupo();
     private Usuario usuario = new Usuario();
     private List<Partido> listaPartido;
+    
+    private List<SelectItem> selectItemOneEquipo;
+    private List<SelectItem> selectItemOneEquipoB;
+    private String codEquipoA;
+    private String codEquipoB;
     private Partido verPartido;
     private String accion;
     private Equipo equipoA;
     private Equipo equipoB;
+
+    public String getCodEquipoA() {
+        return codEquipoA;
+    }
+
+    public void setCodEquipoA(String codEquipoA) {
+        this.codEquipoA = codEquipoA;
+    }
+
+    public String getCodEquipoB() {
+        return codEquipoB;
+    }
+
+    public void setCodEquipoB(String codEquipoB) {
+        this.codEquipoB = codEquipoB;
+    }
     
 
+    
+    
     public Partido getPartido() {
         
         return partido;
@@ -70,6 +97,121 @@ public class PartidoBean implements Serializable{
     public void setAccion(String accion) {
         this.accion = accion;
     }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<SelectItem> getSelectItemOneEquipo() {
+        try {
+            this.selectItemOneEquipo = new ArrayList<SelectItem>();
+            EquipoDao dao = new EquipoDao();
+            List<Equipo> listEquipo = dao.listar(grupo);
+            selectItemOneEquipo.clear();
+            for (Equipo p:listEquipo){
+            SelectItem selectItem = new SelectItem(p.getIdEquipo(), p.getNombreEquipo());
+            selectItemOneEquipo.add(selectItem);
+            }                              
+        } catch (Exception ex) {
+            Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+        return selectItemOneEquipo;
+    }
+
+    public void setSelectItemOneEquipo(List<SelectItem> selectItemOneEquipo) {
+        this.selectItemOneEquipo = selectItemOneEquipo;
+    }
+
+    public List<SelectItem> getSelectItemOneEquipoB() {
+        List<Equipo> listEquipoFinal;
+        try {
+            this.selectItemOneEquipoB = new ArrayList<SelectItem>();
+            EquipoDao dao = new EquipoDao();
+            PartidoDao daoPartido = new PartidoDao();
+            
+            List<Equipo> listEquipo = dao.listarEquipoB(grupo,Integer.parseInt(codEquipoA));
+            List<Partido> listPartido = daoPartido.listarPartidosEquipo(grupo,Integer.parseInt(codEquipoA));
+            
+            selectItemOneEquipoB.clear();
+            int listEquipoRivales [];
+            int [] idEquRival; 
+            listEquipoFinal = new ArrayList<>();
+            
+            if(listPartido.size()>0){
+                idEquRival= new int[listPartido.size()];
+                for(Partido par:listPartido){
+                    
+                    if(par.getIdEquipoA()==Integer.parseInt(codEquipoA)){
+                        idEquRival[listPartido.indexOf(par)]=par.getIdEquipoB();
+                        
+                    }else if(par.getIdEquipoB()==Integer.parseInt(codEquipoA)){
+                        idEquRival[listPartido.indexOf(par)]=par.getIdEquipoA();
+                    }               
+                } 
+ 
+                for (Equipo equ:listEquipo){
+                    int indice= listEquipo.indexOf(equ);
+
+                    int indRival=0;
+                        for(int i=0; i<idEquRival.length;i++){    
+                            if(idEquRival[i]==equ.getIdEquipo()){                            
+                                indRival++;     
+                            }
+                        }                    
+                        if(indRival==0){
+                        listEquipoFinal.add(equ); 
+                        }
+                }
+            }else{                
+                  listEquipoFinal = listEquipo;                 
+            }
+            
+            for (Equipo p:listEquipoFinal){                
+                SelectItem selectItem = new SelectItem(p.getIdEquipo(), p.getNombreEquipo());
+                selectItemOneEquipoB.add(selectItem);
+                }
+                                                    
+        } catch (Exception ex) {
+            Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+        return selectItemOneEquipoB;
+    }
+
+    public void setSelectItemOneEquipoB(List<SelectItem> selectItemOneEquipoB) {
+        this.selectItemOneEquipoB = selectItemOneEquipoB;
+    }
+
+    
+    
+    
+    public Partido getVerPartido() {
+        return verPartido;
+    }
+
+    public void setVerPartido(Partido verPartido) {
+        this.verPartido = verPartido;
+    }
+
+    public Equipo getEquipoA() {        
+        return equipoA;
+    }
+
+    public void setEquipoA(Equipo equipoA) {
+        this.equipoA = equipoA;
+    }
+
+    public Equipo getEquipoB() {
+        return equipoB;
+    }
+
+    public void setEquipoB(Equipo equipoB) {
+        this.equipoB = equipoB;
+    }
+    
     
     
           
@@ -93,7 +235,43 @@ public class PartidoBean implements Serializable{
     return direccion;
     }    
     
+    public String nombreEquipoA(Partido u) throws Exception {
+    String nombreEquipo;
     
+    try{
+        //sirve para pasar datos entre los beans
+        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("verPartido", u);
+        System.out.println("id partido = "+u.getIdPartido());
+        EquipoDao equipoDao = new EquipoDao();
+        this.equipoA = equipoDao.leerID(u.getIdEquipoA());
+        //this.equipoB = equipoDao.leerID(u.getIdEquipoB());
+        nombreEquipo = this.equipoA.getNombreEquipo();
+        
+        
+    }catch(Exception e){  
+        throw e;
+    }   
+    return nombreEquipo;
+    }
+    
+     public String nombreEquipoB(Partido u) throws Exception {
+    String nombreEquipo;
+    
+    try{
+        //sirve para pasar datos entre los beans
+        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("verPartido", u);
+        System.out.println("id partido = "+u.getIdPartido());
+        EquipoDao equipoDao = new EquipoDao();
+        //this.equipoA = equipoDao.leerID(u.getIdEquipoA());
+        this.equipoB = equipoDao.leerID(u.getIdEquipoB());
+        nombreEquipo = this.equipoB.getNombreEquipo();
+        
+        
+    }catch(Exception e){  
+        throw e;
+    }   
+    return nombreEquipo;
+    }   
     
     public void operar() throws Exception{
         switch(accion){
@@ -119,6 +297,8 @@ public class PartidoBean implements Serializable{
         dao = new PartidoDao();
         this.partido.setIdGrupo(grupo.getIdGrupo());
         this.partido.setIdUsuario(usuario.getIdUsuario());
+        this.partido.setIdEquipoA(Integer.parseInt(this.codEquipoA));
+        this.partido.setIdEquipoB(Integer.parseInt(this.codEquipoB));
         dao.registrar(partido);
         this.listar();
     }catch(Exception e){  

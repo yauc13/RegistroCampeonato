@@ -2,6 +2,13 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/web/listaGrupo.xhtml</file>
+            <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/web/registro.xhtml</file>
+            <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/web/listaPartido.xhtml</file>
+            <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/src/java/com/fut/bean/PartidoBean.java</file>
+            <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/src/java/com/fut/dao/PartidoDao.java</file>
+            <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/src/java/com/fut/dao/EquipoDao.java</file>
+        </group>
     </open-files>
 </project-private>

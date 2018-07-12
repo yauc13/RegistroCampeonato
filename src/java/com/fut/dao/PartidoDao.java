@@ -76,6 +76,42 @@ public class PartidoDao extends Dao{
         return lista;   
     }
     
+    public List<Partido> listarPartidosEquipo(Grupo camp, int idEquipo) throws Exception{
+            List<Partido> lista;
+            ResultSet rs;
+            
+            try{
+                this.Conectar();
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\",\"idGrupo\" FROM public.partido WHERE \"idGrupo\" = ? AND \"idEquipoA\"=? OR \"idEquipoB\"=?");
+                st.setInt(1, camp.getIdGrupo());
+                st.setInt(2, idEquipo);
+                st.setInt(3, idEquipo);
+                
+                rs = st.executeQuery();
+                lista = new ArrayList();
+                while(rs.next()){
+                    Partido cam = new Partido();
+                    cam.setIdPartido(rs.getInt("idPartido"));
+                    cam.setIdEquipoA(rs.getInt("idEquipoA"));
+                    cam.setIdEquipoB(rs.getInt("idEquipoB"));
+                    cam.setGolA(rs.getInt("golA"));
+                    cam.setGolB(rs.getInt("golB"));
+                    cam.setIdGrupo(rs.getInt("idGrupo"));
+                    
+                    
+                    
+                    lista.add(cam);
+                
+                }
+            }catch(Exception e){
+                throw e;
+            }finally{
+                this.Cerrar();
+            }
+        
+        return lista;   
+    }
+    
     public Partido leerID(Partido cam) throws Exception{
         Partido usus = null;
         ResultSet rs;
