@@ -42,6 +42,9 @@
                 <p:column headerText="Modificar">
                     <p:commandLink value="Modificar" actionListener="#{partidoBean.leerID(partido)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos"/>
                 </p:column>
+                <p:column headerText="Editar Planilla">
+                    <p:commandLink value="Editar Planilla" action="#{partidoBean.editarPlanilla(partido)}" update="data"/>
+                </p:column>
                 <p:column headerText="Grupo">
                     <p:outputLabel value="#{partido.grupo.nombreGrupo}"/>
                 </p:column>

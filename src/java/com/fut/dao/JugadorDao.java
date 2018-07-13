@@ -74,6 +74,37 @@ public class JugadorDao extends Dao {
         return lista;   
     }
     
+        public List<Jugador> listarJugadoresEquipo(Equipo camp) throws Exception{
+            List<Jugador> lista;
+            ResultSet rs;
+            
+            try{
+                this.Conectar();
+                //PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idJugador\",\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\" FROM public.jugador WHERE \"idEquipoJugador\" = ?");
+                st.setInt(1, camp.getIdEquipo());
+                rs = st.executeQuery();
+                lista = new ArrayList();
+                while(rs.next()){
+                    Jugador cam = new Jugador();
+                    cam.setIdJugador(rs.getInt("idJugador"));
+                    cam.setNombreJugador(rs.getString("nombreJugador"));
+                    cam.setFechaNacimiento(rs.getString("fechaNacimiento"));
+                    cam.setIdEquipoJugador(rs.getInt("idEquipoJugador"));
+                    cam.setIdUsuario(rs.getInt("idUsuario"));
+
+                    lista.add(cam);
+                
+                }
+            }catch(Exception e){
+                throw e;
+            }finally{
+                this.Cerrar();
+            }
+        
+        return lista;   
+    }
+    
     public Jugador leerID(int idJugador) throws Exception{
         Jugador usus = null;
         ResultSet rs;

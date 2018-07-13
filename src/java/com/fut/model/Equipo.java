@@ -21,6 +21,7 @@ public class Equipo implements Serializable{
     int gcEquipo;
     int idGrupoEquipo;
     int idUsuario;
+    Jugador [] jugadoresEquipo;
 
     public int getIdUsuario() {
         return idUsuario;
@@ -96,6 +97,14 @@ public class Equipo implements Serializable{
 
     public void setIdGrupoEquipo(int idGrupoEquipo) {
         this.idGrupoEquipo = idGrupoEquipo;
+    }
+
+    public Jugador[] getJugadoresEquipo() {
+        return jugadoresEquipo;
+    }
+
+    public void setJugadoresEquipo(Jugador[] jugadoresEquipo) {
+        this.jugadoresEquipo = jugadoresEquipo;
     }
 
     

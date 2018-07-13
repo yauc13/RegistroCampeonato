@@ -6,9 +6,13 @@
 package com.fut.bean;
 
 import com.fut.dao.EquipoDao;
+import com.fut.dao.GolDao;
+import com.fut.dao.JugadorDao;
 import com.fut.dao.PartidoDao;
 import com.fut.model.Equipo;
+import com.fut.model.Gol;
 import com.fut.model.Grupo;
+import com.fut.model.Jugador;
 import com.fut.model.Partido;
 import com.fut.model.Usuario;
 import java.io.Serializable;
@@ -34,6 +38,10 @@ public class PartidoBean implements Serializable{
     private Grupo grupo = new Grupo();
     private Usuario usuario = new Usuario();
     private List<Partido> listaPartido;
+    private List<Jugador> listaJugadoresA;
+    private List<Jugador> listaJugadoresB;
+    private List<Gol> listaGolesA;
+    private List<Gol> listaGolesB;
     
     private List<SelectItem> selectItemOneEquipo;
     private List<SelectItem> selectItemOneEquipoB;
@@ -44,7 +52,197 @@ public class PartidoBean implements Serializable{
     private Equipo equipoA;
     private Equipo equipoB;
 
-    public String getCodEquipoA() {
+
+    
+          
+
+    public String verPartido(Partido u) throws Exception {
+    
+    String direccion = null;
+    try{
+        //sirve para pasar datos entre los beans
+        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("verPartido", u);
+        this.verPartido = u;
+        EquipoDao equipoDao = new EquipoDao();
+        this.equipoA = equipoDao.leerID(u.getIdEquipoA());
+        this.equipoB = equipoDao.leerID(u.getIdEquipoB());
+        direccion = "planillaPartido?faces-redirect=true";
+        
+        
+    }catch(Exception e){  
+        throw e;
+    }   
+    return direccion;
+    }    
+    
+  
+    
+    public void operar() throws Exception{
+        switch(accion){
+            case "Registrar":
+                this.registrar();
+                this.limpiar();
+                break;
+            case "Modificar":
+                this.modificar();
+                this.limpiar();
+                break;
+        }
+    }
+    
+    public void limpiar(){
+    this.partido.setIdPartido(0);
+    
+    }
+    
+    public void registrar() throws Exception {
+    PartidoDao dao;
+    try{
+        dao = new PartidoDao();
+        this.partido.setIdGrupo(grupo.getIdGrupo());
+        this.partido.setIdUsuario(usuario.getIdUsuario());
+        this.partido.setIdEquipoA(Integer.parseInt(this.codEquipoA));
+        this.partido.setIdEquipoB(Integer.parseInt(this.codEquipoB));
+        dao.registrar(partido);
+        this.listar();
+    }catch(Exception e){  
+        throw e;
+    }
+    }
+    
+    public void modificar() throws Exception {
+    PartidoDao dao;
+    try{
+        dao = new PartidoDao();
+        dao.modificar(partido);
+        this.listar();
+    }catch(Exception e){  
+        throw e;
+    }   
+    }
+    
+    
+ private boolean isPostBack(){
+        boolean rta;
+        rta= FacesContext.getCurrentInstance().isPostback();
+        return rta;
+    }
+    
+    public void listarInicio() throws Exception{
+    PartidoDao dao;
+    try{
+        if(this.isPostBack() == false){
+        dao = new PartidoDao();
+        Grupo camp = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        
+        listaPartido = dao.listar(camp);
+        }
+    }catch(Exception e){   
+        throw e;
+    }
+    }
+    
+    public void listar() throws Exception{
+    PartidoDao dao;
+    try{
+        dao = new PartidoDao();
+        Grupo u = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        listaPartido = dao.listar(u);
+    
+    }catch(Exception e){   
+        throw e;
+    }
+    }
+    
+    public void listarPlanillas() throws Exception{
+    PartidoDao dao;
+    try{
+        if(this.isPostBack() == false){
+        dao = new PartidoDao();
+        Grupo camp = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        partido = (Partido) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("partido");
+        
+        JugadorDao jugadorDao = new JugadorDao();       
+        listaJugadoresA = jugadorDao.listarJugadoresEquipo(partido.getEquipoA());
+        listaJugadoresB = jugadorDao.listarJugadoresEquipo(partido.getEquipoB());
+        
+        
+        }
+    }catch(Exception e){   
+        throw e;
+    }
+    }
+    
+    public void anotarGol(Jugador jug, Equipo equ, Partido par){
+        GolDao golDao = new GolDao();
+        Gol gol = new Gol();
+        gol.setJugador(jug);
+        gol.setEquipo(equ);
+        gol.setPartido(par);
+        try {
+            golDao.registrar(gol);
+        } catch (Exception ex) {
+            Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    public void leerID (Partido usu) throws Exception{
+            this.partido = usu; 
+            this.accion = "Modificar";
+    }
+    
+    public String editarPlanilla(Partido par) throws Exception {
+    
+    String direccion = null;
+    try{
+        //sirve para pasar datos entres los beans
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("partido", par);
+        direccion = "planillaPartido?faces-redirect=true";
+        
+    }catch(Exception e){  
+        throw e;
+    }   
+    return direccion;
+    }
+    
+
+   
+    public void eliminar(Partido usu) throws Exception {
+    PartidoDao dao;
+    try{
+        dao = new PartidoDao();
+        dao.eliminar(usu);
+        this.listar();
+    }catch(Exception e){  
+        throw e;
+    }   
+    }
+    
+
+    public List<Jugador> getListaJugadoresA() {
+        return listaJugadoresA;
+    }
+
+    public void setListaJugadoresA(List<Jugador> listaJugadoresA) {
+        this.listaJugadoresA = listaJugadoresA;
+    }
+
+    public List<Jugador> getListaJugadoresB() {
+        return listaJugadoresB;
+    }
+
+    public void setListaJugadoresB(List<Jugador> listaJugadoresB) {
+        this.listaJugadoresB = listaJugadoresB;
+    }
+    
+        public String getCodEquipoA() {
         return codEquipoA;
     }
 
@@ -211,179 +409,42 @@ public class PartidoBean implements Serializable{
     public void setEquipoB(Equipo equipoB) {
         this.equipoB = equipoB;
     }
-    
-    
-    
-          
 
-    public String verPartido(Partido u) throws Exception {
-    
-    String direccion = null;
-    try{
-        //sirve para pasar datos entre los beans
-        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("verPartido", u);
-        this.verPartido = u;
-        EquipoDao equipoDao = new EquipoDao();
-        this.equipoA = equipoDao.leerID(u.getIdEquipoA());
-        this.equipoB = equipoDao.leerID(u.getIdEquipoB());
-        direccion = "planillaPartido?faces-redirect=true";
+    public List<Gol> getListaGolesA() {
+        partido = (Partido) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("partido");
         
-        
-    }catch(Exception e){  
-        throw e;
-    }   
-    return direccion;
-    }    
-    
-    public String nombreEquipoA(Partido u) throws Exception {
-    String nombreEquipo;
-    
-    try{
-        //sirve para pasar datos entre los beans
-        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("verPartido", u);
-        System.out.println("id partido = "+u.getIdPartido());
-        EquipoDao equipoDao = new EquipoDao();
-        this.equipoA = equipoDao.leerID(u.getIdEquipoA());
-        //this.equipoB = equipoDao.leerID(u.getIdEquipoB());
-        nombreEquipo = this.equipoA.getNombreEquipo();
-        
-        
-    }catch(Exception e){  
-        throw e;
-    }   
-    return nombreEquipo;
-    }
-    
-     public String nombreEquipoB(Partido u) throws Exception {
-    String nombreEquipo;
-    
-    try{
-        //sirve para pasar datos entre los beans
-        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("verPartido", u);
-        System.out.println("id partido = "+u.getIdPartido());
-        EquipoDao equipoDao = new EquipoDao();
-        //this.equipoA = equipoDao.leerID(u.getIdEquipoA());
-        this.equipoB = equipoDao.leerID(u.getIdEquipoB());
-        nombreEquipo = this.equipoB.getNombreEquipo();
-        
-        
-    }catch(Exception e){  
-        throw e;
-    }   
-    return nombreEquipo;
-    }   
-    
-    public void operar() throws Exception{
-        switch(accion){
-            case "Registrar":
-                this.registrar();
-                this.limpiar();
-                break;
-            case "Modificar":
-                this.modificar();
-                this.limpiar();
-                break;
+        GolDao golDao = new GolDao();       
+        try {
+            listaGolesA = golDao.listarGolesPartidoEquipo(partido, partido.getEquipoA());
+        } catch (Exception ex) {
+            Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    public void limpiar(){
-    this.partido.setIdPartido(0);
-    
-    }
-    
-    public void registrar() throws Exception {
-    PartidoDao dao;
-    try{
-        dao = new PartidoDao();
-        this.partido.setIdGrupo(grupo.getIdGrupo());
-        this.partido.setIdUsuario(usuario.getIdUsuario());
-        this.partido.setIdEquipoA(Integer.parseInt(this.codEquipoA));
-        this.partido.setIdEquipoB(Integer.parseInt(this.codEquipoB));
-        dao.registrar(partido);
-        this.listar();
-    }catch(Exception e){  
-        throw e;
-    }
-    }
-    
-    public void modificar() throws Exception {
-    PartidoDao dao;
-    try{
-        dao = new PartidoDao();
-        dao.modificar(partido);
-        this.listar();
-    }catch(Exception e){  
-        throw e;
-    }   
-    }
-    
-    
- private boolean isPostBack(){
-        boolean rta;
-        rta= FacesContext.getCurrentInstance().isPostback();
-        return rta;
-    }
-    
-    public void listarInicio() throws Exception{
-    PartidoDao dao;
-    try{
-        if(this.isPostBack() == false){
-        dao = new PartidoDao();
-        Grupo camp = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
-        grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
-        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        listaPartido = dao.listar(camp);
-        }
-    }catch(Exception e){   
-        throw e;
-    }
-    }
-    
-    public void listar() throws Exception{
-    PartidoDao dao;
-    try{
-        dao = new PartidoDao();
-        Grupo u = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
-        grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
-        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        listaPartido = dao.listar(u);
-    
-    }catch(Exception e){   
-        throw e;
-    }
-    }
-    
-    
-    public void leerID (Partido usu) throws Exception{
-            this.partido = usu; 
-            this.accion = "Modificar";
-    }
-    
-     public String verPartidosGrupos() throws Exception {
-    
-    String direccion = null;
-    try{
-        //sirve para pasar datos entres los beans
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("partido", partido);
-        direccion = "listaGrupo?faces-redirect=true";
         
-    }catch(Exception e){  
-        throw e;
-    }   
-    return direccion;
+        return listaGolesA;
     }
-    
 
-   
-    public void eliminar(Partido usu) throws Exception {
-    PartidoDao dao;
-    try{
-        dao = new PartidoDao();
-        dao.eliminar(usu);
-        this.listar();
-    }catch(Exception e){  
-        throw e;
-    }   
+    public void setListaGolesA(List<Gol> listaGolesA) {
+        this.listaGolesA = listaGolesA;
     }
+
+    public List<Gol> getListaGolesB() {
+        partido = (Partido) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("partido");
+        
+        GolDao golDao = new GolDao();       
+        try {
+            listaGolesB = golDao.listarGolesPartidoEquipo(partido, partido.getEquipoB());
+        } catch (Exception ex) {
+            Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listaGolesB;
+    }
+
+    public void setListaGolesB(List<Gol> listaGolesB) {
+        this.listaGolesB = listaGolesB;
+    }
+    
+    
+    
+    
      
 }

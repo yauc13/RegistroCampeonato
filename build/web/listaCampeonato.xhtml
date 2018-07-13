@@ -15,9 +15,12 @@
                 
             
         <f:event type="preRenderView" listener="#{campeonatoBean.listarInicio()}" />
+        
+
         <h:form id="frm1">
+
               
-            <p:commandButton value="Nuevo Campeonato" oncomplete="PF('wdgDatos').show();" actionListener="#{campeonatoBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"/>
+            <p:commandButton  value="Nuevo Campeonato" oncomplete="PF('wdgDatos').show();" actionListener="#{campeonatoBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"/>
             
             <p:dataTable id="data" value="#{campeonatoBean.listaCampeonato}" var="campeonato" >
                 <p:column headerText="id">

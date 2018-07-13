@@ -8,6 +8,7 @@ package com.fut.dao;
 import com.fut.model.Equipo;
 import com.fut.model.Grupo;
 import com.fut.model.Partido;
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -29,9 +30,7 @@ public class PartidoDao extends Dao{
             st.setInt(4, cam.getGolA());
             st.setInt(5, cam.getGolB());
             st.setInt(6, cam.getIdUsuario());
-            
-          
-            
+
             st.executeUpdate();
             reg = true;
         }catch(Exception e){
@@ -178,6 +177,23 @@ public class PartidoDao extends Dao{
             st.setInt(5, cam.getIdGrupo());
             st.setInt(3, cam.getIdPartido());  
             st.executeUpdate();
+            
+                        
+            List<Integer> idGolEA;
+            idGolEA = new ArrayList<>();             
+            for(int i=0; i<cam.getGolEA().length;i++){
+                idGolEA.add(cam.getGolEA()[i].getIdGol());
+            }
+            st.setArray(7, (Array) idGolEA);
+            
+            List<Integer> idGolEB;
+            idGolEB = new ArrayList<>();             
+            for(int i=0; i<cam.getGolEB().length;i++){
+                idGolEB.add(cam.getGolEB()[i].getIdGol());
+            }
+            st.setArray(8, (Array) idGolEB);
+
+            
         }catch(Exception e){
             throw e;
         }finally{

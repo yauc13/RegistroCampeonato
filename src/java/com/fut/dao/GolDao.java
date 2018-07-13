@@ -19,6 +19,7 @@ import java.util.List;
  * @author DIANA G
  */
 public class GolDao extends Dao{
+    
     public boolean registrar(Gol cam) throws Exception{
         boolean reg = false;
         try{
@@ -86,6 +87,45 @@ public class GolDao extends Dao{
                 this.Conectar();
                 PreparedStatement st = this.getCn().prepareCall("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idEquipo\" = ?");
                 st.setInt(1, equi.getIdEquipo());
+                rs = st.executeQuery();
+                lista = new ArrayList();
+                while(rs.next()){
+                    Gol cam = new Gol();
+                    cam.setIdGol(rs.getInt("idGol"));
+                    
+                    JugadorDao jugadorDao = new JugadorDao();
+                    Jugador jugador = jugadorDao.leerID(rs.getInt("idJugador"));
+                    cam.setJugador(jugador);
+                    
+                    EquipoDao equipoDao = new EquipoDao();
+                    Equipo equipo = equipoDao.leerID(rs.getInt("idEquipo"));
+                    cam.setEquipo(equipo);
+                    
+                    PartidoDao partidoDao = new PartidoDao();
+                    Partido partido = partidoDao.leerID(rs.getInt("idPartido"));
+                    cam.setPartido(partido);
+                 
+                    lista.add(cam);
+                
+                }
+            }catch(Exception e){
+                throw e;
+            }finally{
+                this.Cerrar();
+            }
+        
+        return lista;    
+    }
+    
+        public List<Gol> listarGolesPartidoEquipo(Partido par, Equipo equ) throws Exception{
+            List<Gol> lista;
+            ResultSet rs;
+            
+            try{
+                this.Conectar();
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idPartido\" = ? AND \"idEquipo\" = ?");
+                st.setInt(1, par.getIdPartido());
+                st.setInt(2, equ.getIdEquipo());
                 rs = st.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
