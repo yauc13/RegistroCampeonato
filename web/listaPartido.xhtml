@@ -7,8 +7,9 @@
     <h:head>
         <title>Facelet Title</title>
     </h:head>
-    <h:body>
+    <h:body id="idBodypartido">
         <f:event type="preRenderView" listener="#{partidoBean.listarInicio()}" />
+       
         <h:form id="frm2">
               
             <p:commandButton value="Nuevo" oncomplete="PF('wdgDatos').show();" actionListener="#{partidoBean.setAccion('Registrar')}" update=":dlgDatos"/>
@@ -43,7 +44,11 @@
                     <p:commandLink value="Modificar" actionListener="#{partidoBean.leerID(partido)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos"/>
                 </p:column>
                 <p:column headerText="Editar Planilla">
-                    <p:commandLink value="Editar Planilla" action="#{partidoBean.editarPlanilla(partido)}" update="data"/>
+                    <p:commandLink  id="linkEPlanilla" value="Editar Planilla" action="#{partidoBean.editarPlanilla(partido)}" update="data"/>
+                    <p:blockUI  block="idBodypartido" trigger="linkEPlanilla">
+                        Cargando...<br/>
+                        <p:graphicImage value="/resources/imagen/Loading_icon.gif"/>
+                    </p:blockUI>
                 </p:column>
                 <p:column headerText="Grupo">
                     <p:outputLabel value="#{partido.grupo.nombreGrupo}"/>
@@ -74,6 +79,8 @@
                 <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
             </h:form>
         </p:dialog>
+                    
+       
     </h:body>
 </html>
 

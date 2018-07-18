@@ -158,7 +158,7 @@ public class PartidoBean implements Serializable{
     }
     }
     
-    public void listarPlanillas() throws Exception{
+    public void listarPlanillasInicio() throws Exception{
     PartidoDao dao;
     try{
         if(this.isPostBack() == false){
@@ -179,6 +179,25 @@ public class PartidoBean implements Serializable{
     }
     }
     
+        public void listarPlanillas() throws Exception{
+    PartidoDao dao;
+    try{
+       
+        dao = new PartidoDao();
+        Grupo camp = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        partido = (Partido) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("partido");
+        
+        JugadorDao jugadorDao = new JugadorDao();       
+        listaJugadoresA = jugadorDao.listarJugadoresEquipo(partido.getEquipoA());
+        listaJugadoresB = jugadorDao.listarJugadoresEquipo(partido.getEquipoB());
+  
+    }catch(Exception e){   
+        throw e;
+    }
+    }
+    
     public void anotarGol(Jugador jug, Equipo equ, Partido par){
         GolDao golDao = new GolDao();
         Gol gol = new Gol();
@@ -187,6 +206,7 @@ public class PartidoBean implements Serializable{
         gol.setPartido(par);
         try {
             golDao.registrar(gol);
+            this.listarPlanillas();
         } catch (Exception ex) {
             Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
         }

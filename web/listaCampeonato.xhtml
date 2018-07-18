@@ -8,7 +8,7 @@
     <h:head>
         <title>Campeonatos</title>
     </h:head>
-    <h:body>
+    <h:body id="idBody">
         
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
@@ -50,7 +50,11 @@
                 <p:outputLabel value="Nombre Campeonato" for="txtNombre"/>
                 <p:inputText id="txtNombre" required="true" value="#{campeonatoBean.campeonato.nombreCampeonato}"/>
                 
-                <p:commandButton value="#{campeonatoBean.accion}"  actionListener="#{campeonatoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
+                <p:commandButton  id="btnRegistrar" value="#{campeonatoBean.accion}"  actionListener="#{campeonatoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
+                <p:blockUI   block="btnRegistrar"  trigger="btnRegistrar">
+                        Cargando...<br/>
+                        <p:graphicImage value="/resources/imagen/cargando.gif"/>
+                </p:blockUI>
                 <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
             </h:form>
         </p:dialog>

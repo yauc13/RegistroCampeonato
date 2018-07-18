@@ -7,12 +7,12 @@
     <h:head>
         <title>Facelet Title</title>
     </h:head>
-    <h:body>
-        <f:event type="preRenderView" listener="#{partidoBean.listarPlanillas()}" />
+    <h:body id="idBody">
+        <f:event type="preRenderView" listener="#{partidoBean.listarPlanillasInicio()}" />
         
         
-        <h:form>
-            <h:panelGrid columns="2">
+        <h:form id="frmMarcador">
+            <h:panelGrid columns="2" id="panel">
             <p:dataTable id="dataGolesA" value="#{partidoBean.listaGolesA}" var="golesA" >         
                 <p:column headerText="Goles Equipo A: #{partidoBean.partido.equipoA.nombreEquipo} #{partidoBean.listaGolesA.size()}">
                     <p:outputLabel value="#{golesA.jugador.nombreJugador}"/>
@@ -25,9 +25,11 @@
                 </p:column>               
             </p:dataTable>  
             </h:panelGrid>
+            
+           
         </h:form>  
         
-        <h:panelGrid columns="2">
+        <h:panelGrid  id="panelGridPlanilla" columns="2">
         <h:form id="frm1">
             
             <p:outputLabel value="Equipo A: #{partidoBean.partido.equipoA.nombreEquipo}"/>
@@ -39,15 +41,23 @@
                     <p:outputLabel value="#{jugadorA.nombreJugador}"/>
                 </p:column>
                 <p:column headerText="Gol">
-                    <p:commandButton value="Gol +"  actionListener="#{partidoBean.anotarGol(jugadorA, partidoBean.partido.equipoA, partidoBean.partido)}" />
+                    <p:commandButton  id="btnGolA" value="Gol +" update="frmMarcador:panel" actionListener="#{partidoBean.anotarGol(jugadorA, partidoBean.partido.equipoA, partidoBean.partido)}" />
+                    <p:blockUI  block="idBody" trigger="btnGolA">
+                        GOOOOL...<br/>
+                        <p:graphicImage value="/resources/imagen/jugadorBalon.gif"/>
+                    </p:blockUI>
                 </p:column>
                 <p:column headerText="Ama">
                     
                 </p:column>
+              
+           
                 
             </p:dataTable>
-           
+            
+            
         </h:form>
+              
         
         
         <h:form id="frm2">
@@ -62,7 +72,11 @@
                     <p:outputLabel value="#{jugadorB.nombreJugador}"/>
                 </p:column>
                 <p:column headerText="Gol">
-                    <p:commandButton value="Gol +"  actionListener="#{partidoBean.anotarGol(jugadorB, partidoBean.partido.equipoB, partidoBean.partido)}"/>
+                    <p:commandButton value="Gol +" id="btnGolB" update="frmMarcador:panel"  actionListener="#{partidoBean.anotarGol(jugadorB, partidoBean.partido.equipoB, partidoBean.partido)}"/>
+                    <p:blockUI  block="idBody"  trigger="btnGolB">
+                        GOOOOL...<br/>
+                        <p:graphicImage value="/resources/imagen/balonjugadorverde.gif"/>
+                    </p:blockUI>
                 </p:column>
                 <p:column headerText="Ama">
                     

@@ -8,7 +8,7 @@
     <h:head>
         <title>Facelet Title</title>
     </h:head>
-    <h:body>
+    <h:body id="idBody1">
         
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
@@ -32,7 +32,11 @@
                     <p:commandLink value="Ver Equipos" action="#{grupoBean.verEquiposGrupos(grupo)}" update="data"/>
                 </p:column>
                 <p:column headerText="Ver Partidos">
-                    <p:commandLink value="Ver Partidos" action="#{grupoBean.verPartidosGrupo(grupo)}" update="data" />
+                    <p:commandLink id="linkVPartidos" value="Ver Partidos" action="#{grupoBean.verPartidosGrupo(grupo)}" update="data" />
+                    <p:blockUI   block="frm1"  trigger="linkVPartidos">
+                        Cargando...<br/>
+                        <p:graphicImage value="/resources/imagen/jugadorBalon.gif"/>
+                </p:blockUI>
                 </p:column>
                 <p:column headerText="Modificar">
                     <p:commandLink value="Modificar" actionListener="#{grupoBean.leerID(grupo)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{grupoBean.habilitarPermisos(grupoBean.campeonato,1)}"/>
