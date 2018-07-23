@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:head>
+        <meta charset="UTF-8"></meta>
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"></meta>
+        <title>HIGEA</title>
+        <!--        <link rel="stylesheet" type="text/css" href="resources/css/stylesSite.css"></link>-->
+        <link rel="stylesheet" href="resources/css/bootstrap.min.css"></link>
+        <link rel="stylesheet" href="resources/css/styleHome.css"></link>
+        <link rel="stylesheet" href="resources/css/styleAccordion.css"></link>
+        <link rel = "shortcut icon" href="resources/icons/IconoHigea.png" type="image/x-icon"></link>
+        <link type="text/javascript" href="resources/js/jsAccordion.js"></link>
+
+        <meta charset="utf-8" />
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            #map {
+                height: 60%;
+                width: 60%;
+                margin: 3%;
+                margin-left: 20%;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+
+        <c:if test="#{!loginBean.dto.logged}" >
+            <script type="text/javascript">
+                window.location = "index.html";
+            </script>
+        </c:if>
+        <c:if test="#{loginBean.dto.logged}">
+            <header>
+                <!--esta seccion es del banner pricipal para las imagenes fijas -->
+                <!--                <div id="banner" class="container-fluid banner">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <img src="resources/images/ImgCategoria2.png" alt="" class="img-responsive banner-img1"></img>		 	
+                                        </div>
+                                        <div class="col-md-12">
+                                            <img src="resources/images/ImgCategoria1.png" alt="" class="img-responsive banner-img2"></img>	 	
+                                        </div>
+                                    </div>
+                                </div>-->
+
+                <div id="banner" class="container-fluid banner">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                        </div>
+                        <div class="col-md-12">
+                            <img src="resources/images/ImgCategoria5.png" alt="" class="img-responsive banner-img3"></img>	 	
+                        </div>
+                    </div>
+                </div>
+            </header> <!-- fin header -->
+
+            <div class="banner2">
+                <div id="top" class="top">
+                    <ui:include  src="menu.xhtml" />
+                </div>  
+
+            </div>
+
+
+            <script>
+                // Note: This example requires that you consent to location sharing when
+                // prompted by your browser. If you see the error "The Geolocation service
+                // failed.", it means you probably did not give permission for the browser to
+                // locate you.
+
+                function initMap() {
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                        center: {lat: 2, lng: -72},
+                        zoom: 13
+                    });
+                    var infoWindow = new google.maps.InfoWindow({map: map});
+
+                    // Try HTML5 geolocation.
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            var pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+
+                            infoWindow.setPosition(pos);
+                            infoWindow.setContent('Usted se encuentra aqui.');
+                            map.setCenter(pos);
+
+
+                        }, function () {
+                            handleLocationError(true, infoWindow, map.getCenter());
+                        });
+                    } else {
+                        // Browser doesn't support Geolocation
+                        handleLocationError(false, infoWindow, map.getCenter());
+                    }
+                }
+
+                function handlePointClick(event) {
+                    document.getElementById('lat').value = event.latLng.lat();
+                    document.getElementById('lng').value = event.latLng.lng();
+                }
+
+                function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent(browserHasGeolocation ?
+                            'Error: The Geolocation service failed.' :
+                            'Error: Your browser doesn\'t support geolocation.');
+                }
+
+            </script>
+            <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" defer="" >
+            </script>
+
+            <div id="map"></div> 
+
+            <div class="row">
+                <div id="left" class="col-xs-4 col-sm-3 col-md-2">
+                    <ui:insert name="left"></ui:insert>
+                </div>
+                <div id="content" class="col-xs-7 col-sm-8 col-md-9">
+
+                    <ui:insert name="content">
+                        <div id="banner" class="container-fluid banner space3">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <img src="resources/images/HigeaMarcaAgua2.png" alt="" class="img-responsive sizeHigeaMarcaAgua"></img>		 	
+                                </div>
+                            </div>
+                        </div>  
+                    </ui:insert>
+                </div>  
+            </div>
+
+
+
+        </c:if>
+    </h:body>
+</html>

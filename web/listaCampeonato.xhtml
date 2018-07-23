@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-        <title>Campeonatos</title>
+        <title>Campeonato</title>
     </h:head>
     <h:body id="idBody">
         
@@ -15,7 +15,17 @@
                 
             
         <f:event type="preRenderView" listener="#{campeonatoBean.listarInicio()}" />
-        
+        <p:dialog modal="true" widgetVar="statusDialog1" header="Cargando..." draggable="false" closable="false" resizable="false">
+            <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
+        </p:dialog>
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialog1').show();
+            }
+            function stop() {
+                PF('statusDialog1').hide();
+            }
+        </script>
 
         <h:form id="frm1">
 
@@ -33,7 +43,9 @@
                     <p:outputLabel value="#{campeonato.idUsuario}"/>
                 </p:column>                
                 <p:column headerText="Ver Grupos">
-                    <p:commandLink value="Ver Grupos" action="#{campeonatoBean.verGruposCampeonato(campeonato)}" update="data"/>
+                    <p:commandLink value="Ver Grupos" action="#{campeonatoBean.verGruposCampeonato(campeonato)}" update="data"
+                                   ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                   />
                 </p:column>
                 <p:column headerText="Modificar">
                     <p:commandLink value="Modificar" actionListener="#{campeonatoBean.leerID(campeonato)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonato,1)}"/>
@@ -42,6 +54,20 @@
                     <p:commandLink value="Eliminar" actionListener="#{campeonatoBean.eliminar(campeonato)}" update="data" disabled="#{campeonatoBean.habilitarPermisos(campeonato,1)}"/>
                 </p:column>              
             </p:dataTable>
+            
+            <p:dataGrid var="campeonato" value="#{campeonatoBean.listaCampeonato}" columns="2" >
+                <p:column>
+                    <p:panel header="#{campeonato.nombreCampeonato}">
+                        <h:panelGrid columns="1">
+                            <p:graphicImage value="/resources/imagen/jugadorBalon.gif" height="50" width="50"/>
+                        
+                            <p:commandLink value="Ver Grupos" action="#{campeonatoBean.verGruposCampeonato(campeonato)}" />
+                
+                        </h:panelGrid>
+                    </p:panel>
+                </p:column>
+            </p:dataGrid>
+            
         </h:form>
         
         <p:dialog header="Registrar o Modificar Campeonatos" widgetVar="wdgDatos" id="dlgDatos">
@@ -51,10 +77,7 @@
                 <p:inputText id="txtNombre" required="true" value="#{campeonatoBean.campeonato.nombreCampeonato}"/>
                 
                 <p:commandButton  id="btnRegistrar" value="#{campeonatoBean.accion}"  actionListener="#{campeonatoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
-                <p:blockUI   block="btnRegistrar"  trigger="btnRegistrar">
-                        Cargando...<br/>
-                        <p:graphicImage value="/resources/imagen/cargando.gif"/>
-                </p:blockUI>
+                
                 <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
             </h:form>
         </p:dialog>

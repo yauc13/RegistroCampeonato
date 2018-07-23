@@ -7,6 +7,11 @@
         <title>index</title>
     </h:head>
     <h:body>
+        
+    <p:dialog modal="true" widgetVar="statusDialogIndex" header="Cargando..." draggable="false" closable="false" resizable="false">
+        <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
+    </p:dialog>
+        
         <h:form>
         <p:growl autoUpdate="true" showDetail="true"/>
         
@@ -16,7 +21,9 @@
                 <p:outputLabel for="txtClave" value="Clave"/>
                 <p:password id="txtClave" required="true" value="#{usuarioBean.usuario.passwordUsuario}"/>                
                 <h:column/>
-                <p:commandButton icon="ui-icon-key" value="Iniciar Sesion" action="#{usuarioBean.iniciarSesion()}" />                
+                <p:commandButton icon="ui-icon-key" value="Iniciar Sesion" action="#{usuarioBean.iniciarSesion()}"
+                                 ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                 />                
             </h:panelGrid>
             <p:separator/>
            
@@ -43,9 +50,22 @@
         </h:form>
          
         <h:form>
+            <h:panelGrid columns="1">
             <p:commandLink value="Ver Campeonatos" action="listaCampeonato?faces-redirect=true" />
-             
+            <p:commandLink value="Ver index ips" action="indexIPS?faces-redirect=true" />
+            <p:commandLink value="Mostrar Imagen" action="mostrarImagen?faces-redirect=true" />
+            </h:panelGrid>
         </h:form>
+        
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialogIndex').show();
+            }
+            function stop() {
+                PF('statusDialogIndex').hide();
+            }
+        </script>
+        
     </h:body>
 </html>
 

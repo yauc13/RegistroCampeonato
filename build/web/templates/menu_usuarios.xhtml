@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html" 
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:body styleClass="bodyPage">
+        <h:form>
+            <div class="col-md-2 col-md-offset-2 col-sm-4">
+                <div class="dropdown">
+                    <ul class="nav_menu">
+                        <li> <p:commandLink action="configuration_human_resources_users?faces-redirect=true" 
+                                            ajax="false"
+                                            class="botonLink colorBFBFBF"
+                                            value="Usuarios">
+                            </p:commandLink></li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4">
+                <div class="dropdown">
+                    <ul class="nav_menu">
+                        <li> <p:commandLink action="roles?faces-redirect=true" 
+                                            ajax="false"
+                                            class="botonLink colorBFBFBF"
+                                            value="Roles">
+                            </p:commandLink></li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4">
+                <div class="dropdown">
+                    <ul class="nav_menu">
+                        <li> <p:commandLink action="usersdel?faces-redirect=true" 
+                                            ajax="false"
+                                            class="botonLink colorBFBFBF"
+                                            value="Usuarios eliminados">
+                            </p:commandLink></li>
+                    </ul>
+
+                </div>
+            </div>
+
+        </h:form>
+
+    </h:body>
+
+</html>

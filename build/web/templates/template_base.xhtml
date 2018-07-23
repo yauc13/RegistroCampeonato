@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Template para las paginas de inicio, index (login), recuperar contraseña
+y cerrar sesión
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:head>
+        <meta charset="UTF-8"></meta>
+        <ui:insert name="title"/>
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"></meta>
+        <meta name="google-site-verification" content="7hFaItqXLAgIdYTZeFl7qm4QSNGcKIfo0Bms6BsfQj0" />        
+        <link rel="stylesheet" type="text/css" href="resources/css/styleIndex.css"></link>
+        <link rel="stylesheet" type="text/css" href="resources/css/animate.css"></link>
+        <link rel = "shortcut icon" href="resources/icons/iconoEPIONE.png" type="image/x-icon"></link>
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+        <ui:insert name="head"/>
+        <ui:insert name="script_head"/>
+    </h:head>
+
+    <h:body class="roboto">
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <p:dialog style=" opacity: 20%; border: none; background: transparent; box-shadow: none"  widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">            
+            <p:graphicImage width="100" id="loadImages" value="/resources/images/loading.gif"/>
+        </p:dialog>
+
+        <c:if test="#{loginBean.validateSessionActive()}" >
+            <script type="text/javascript">
+                window.location = "home.html";
+            </script>
+        </c:if>
+
+        <ui:insert name="content"/>
+
+    </h:body>
+
+
+
+</html>

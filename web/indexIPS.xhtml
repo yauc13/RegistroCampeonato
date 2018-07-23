@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/template_base.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        <title>${msg.index_title}</title>
+    </ui:define>
+    <ui:define name="head">
+        <link rel="stylesheet" type="text/css" href="resources/css/bootstrap.min.css"></link>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="text-center container space20">
+            <div class="container-fluid imgLogin animated pulse">
+                <img class="" src="resources/images/MarcaEPIONE.png"> </img>
+            </div>
+            <div class="container-fluid">
+                <h:form id="grid" class="form-inline">
+                    <p:growl id="message" autoUpdate="true" showDetail="true"/>
+                    <p:panel style="background-color: transparent; border: none;" id="login" rendered="#{!loginBean.dto.showHq}">
+                        <label class="sr-only" for="identification">${msg.index_inp_identification}</label>                    
+                        <p:inputText placeholder="${msg.index_inp_identification}" class="form-control" id="identificacion"
+                                     value="#{loginBean.dto.cedula}"/>
+                        <label class="sr-only" for="password-user">${msg.index_inp_password}</label>
+                        <p:password placeholder="${msg.index_inp_password}" class="form-control" id="password-user"                    
+                                    value="#{loginBean.dto.password}"/>
+                        <p:commandButton id="btnlogin"
+                                         update="grid"
+                                         value="${msg.index_btn_enter}" 
+                                         action="#{loginBean.validate()}"
+                                         class="btn btn-primary colorVerde"/>
+                        <p:commandButton value="${msg.index_btn_enter}" rendered="false"
+                                         action="#{loginBean.readExcel()}"
+                                         styleClass="displayOpcion"
+                                         class="btn btn-primary"/>
+                        <div class="row form-inline">
+                            <div class="text-left col-md-offset-5">
+                                <a href="forget_password.html" class="help-block colorBlanco"><em>${msg.index_lnk_remember_pass}</em></a>
+                            </div>
+                        </div>
+                    </p:panel>
+                    <p:panel style="background-color: transparent; border: none;" id="ip" rendered="#{loginBean.dto.showHq}">
+
+                        <h:selectOneMenu title="Sedes" 
+                                         value="#{loginBean.dto.objHeadQ}" 
+                                         styleClass="displayOpcion"
+                                         converter="genericConverter"
+                                         class="form-control">
+                            <f:selectItem itemLabel="#{msg.selectHq}" 
+                                          itemValue="#{null}" />
+                            <f:selectItems value="#{loginBean.dto.listHeadQ}" 
+                                           var="hq" 
+                                           itemLabel="#{hq.name}" 
+                                           itemValue="#{hq}" 
+                                           />
+                            <p:ajax listener="#{loginBean.loadTeam}" update="id_team" />
+                        </h:selectOneMenu>
+                        <h:selectOneMenu title="Equipos" 
+                                         id="id_team"
+                                         value="#{loginBean.dto.idTeam}" 
+                                         styleClass="displayOpcion"
+
+                                         class="form-control">
+                            <f:selectItem itemLabel="#{msg.selectTeam}" 
+                                          itemValue="0" />
+                            <f:selectItems value="#{loginBean.dto.listTeam}" 
+                                           var="team" 
+                                           itemLabel="#{team.nameTeam}" 
+                                           itemValue="#{team.idTeam}"/>
+                        </h:selectOneMenu>
+                        <p:commandButton id="btnsave"
+                                         update="grid"
+                                         value="#{msg.save_off_line}"
+                                         action="#{loginBean.save()}"
+                                         class="btn btn-primary colorVerde"/>
+
+
+
+                    </p:panel>
+
+
+                    <p:panel style="background-color: transparent; border: none;" id="enterprises" rendered="false">
+                        <div class="row form-inline space1">
+                            <div class="text-center">
+                                <h:outputText style="color: white;" value="${msg.home_access_to_enterprise_by_user}" class="lead" />
+                            </div>
+                        </div>
+                        <h:selectOneMenu 
+                            value="#{loginBean.dto.schema_selected}"
+                            styleClass="displayOpcion"
+                            class="form-control space1">
+                            <f:selectItems var="ees" 
+                                           value="#{loginBean.dto.lstEnterprise}" 
+                                           itemValue="#{ees.schema_enterprise}" 
+                                           itemLabel="#{ees.business_name_enterprise}" />
+                        </h:selectOneMenu>
+                        <p:commandButton value="${msg.index_btn_enter}" 
+                                         action="#{loginBean.validateEnterprise()}"
+                                         styleClass="displayOpcion"
+                                         class="btn btn-primary"/>
+                        
+
+                    </p:panel>
+
+
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
+
+
+
+
+
+

@@ -9,6 +9,19 @@
     </h:head>
     <h:body id="idBodypartido">
         <f:event type="preRenderView" listener="#{partidoBean.listarInicio()}" />
+        <p:dialog modal="true" widgetVar="statusDialogPartido" header="Cargando..." draggable="false" closable="false" resizable="false">
+            <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
+        </p:dialog>
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialogPartido').show();
+            }
+            function stop() {
+                PF('statusDialogPartido').hide();
+            }
+        </script>
+        
+       
        
         <h:form id="frm2">
               
@@ -44,11 +57,10 @@
                     <p:commandLink value="Modificar" actionListener="#{partidoBean.leerID(partido)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos"/>
                 </p:column>
                 <p:column headerText="Editar Planilla">
-                    <p:commandLink  id="linkEPlanilla" value="Editar Planilla" action="#{partidoBean.editarPlanilla(partido)}" update="data"/>
-                    <p:blockUI  block="idBodypartido" trigger="linkEPlanilla">
-                        Cargando...<br/>
-                        <p:graphicImage value="/resources/imagen/Loading_icon.gif"/>
-                    </p:blockUI>
+                    <p:commandLink  id="linkEPlanilla" value="Editar Planilla" action="#{partidoBean.editarPlanilla(partido)}" update="data"
+                                    ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                    />
+                    
                 </p:column>
                 <p:column headerText="Grupo">
                     <p:outputLabel value="#{partido.grupo.nombreGrupo}"/>
@@ -80,7 +92,7 @@
             </h:form>
         </p:dialog>
                     
-       
+
     </h:body>
 </html>
 

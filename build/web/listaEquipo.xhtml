@@ -14,6 +14,18 @@
             <ui:define name="content">
         
         <f:event type="preRenderView" listener="#{equipoBean.listarInicio()}" />
+        <p:dialog modal="true" widgetVar="statusDialogEquipo" header="Cargando..." draggable="false" closable="false" resizable="false">
+            <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
+        </p:dialog>
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialogEquipo').show();
+            }
+            function stop() {
+                PF('statusDialogEquipo').hide();
+            }
+        </script>
+        
         <h:form id="frm1">
 
             <p:commandButton value="Nuevo Equipo" oncomplete="PF('wdgDatos').show();" actionListener="#{equipoBean.setAccion('Registrar')}" update=":dlgDatos"  disabled="#{equipoBean.habilitarPermisos(equipoBean.equipo,2)}"/>
@@ -35,7 +47,9 @@
                     <p:outputLabel value="#{equipo.idUsuario}"/>
                 </p:column> 
                 <p:column headerText="Ver Jugadores">
-                    <p:commandLink value="Ver Jugadores" action="#{equipoBean.verJugadoresEquipo(equipo)}" update="data"/>
+                    <p:commandLink value="Ver Jugadores" action="#{equipoBean.verJugadoresEquipo(equipo)}" update="data"
+                                   ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                   />
                 </p:column>    
                 <p:column headerText="Modificar">
                     <p:commandLink value="Modificar" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>

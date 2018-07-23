@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+        <meta name="description" content=""></meta>
+        <meta name="author" content=""></meta>
+        <meta charset="UTF-8"></meta>
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"></meta>
+        <link rel="stylesheet" href="resources/css/bootstrap.min.css"></link>
+        <link rel="stylesheet" href="resources/css/styleHome.css"></link> 
+        <link rel="stylesheet" href="resources/css/tooltips.css"></link>
+        <link rel="stylesheet" href="resources/css/styleAccordion.css"></link>
+
+        <link href="resources/css/font-awesome.min.css" rel="stylesheet"></link>
+        <link href="resources/css/animate.min.css" rel="stylesheet"></link>
+        <link href="resources/css/owl.carousel.css" rel="stylesheet"></link>
+        <link href="resources/css/owl.transitions.css" rel="stylesheet"></link>
+        <link href="resources/css/prettyPhoto.css" rel="stylesheet"></link>
+        <link href="resources/css/main.css" rel="stylesheet"></link>
+        <link href="resources/css/hamburguer.css" rel="stylesheet"></link>
+        <link rel = "shortcut icon" href="resources/icons/iconoEPIONE.png" type="image/x-icon"></link>
+
+        <ui:insert name="titlePage"></ui:insert>
+        
+        
+        
+    </h:head>
+
+    <h:body>
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <p:dialog style=" opacity: 20%; border: none; background: transparent; box-shadow: none"  widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">            
+            <p:graphicImage width="100" id="loadImages" value="/resources/images/loading.gif"/>
+        </p:dialog>
+
+        <c:if test="#{!loginBean.validateSessionActive()}" >
+            <script type="text/javascript">
+                window.location = "index.html";
+            </script>
+        </c:if>
+        <p:idleMonitor timeout="600000" onidle="PF('dlg').show()" />        
+        <p:dialog header="Control de sesión" widgetVar="dlg" modal="true" resizable="false" responsive="true" closable="false" draggable="false">
+            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank" columnClasses="ui-grid-col-12">
+                <h:outputLabel value="La sesión ha caducado, por favor, inicie sesión de nuevo!" />                
+                <f:facet name="footer">
+                    <h:form>
+                        <p:commandLink action="#{loginBean.logout()}">                        
+                            <p:commandButton title="Aceptar" class="btn text-center col-md-offset-5"/>
+                        </p:commandLink>
+                    </h:form>
+                </f:facet>  
+            </p:panelGrid>
+        </p:dialog>
+        <c:if test="#{loginBean.dto.logged}">
+            <div class="row">
+                <div class="container-fluid banner">
+                    <div id="top" class="top">
+                        <ui:insert name="top"/>
+                    </div>  
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="">
+                    <div id="top" class="top">
+                        <ui:insert name="menu_epione"/>
+                        <!--el area del menu -->
+                    </div>  
+                </div>
+            </div>
+            <div class="row">
+                <div id="content" class="col-xs-12 col-sm-12 col-md-12">
+                    <ui:insert name="content">
+
+
+                    </ui:insert>
+                </div>
+
+            </div>
+
+
+        </c:if>
+
+        <script type="text/javascript" src="resources/js/hamburguer.js" language="javascript"></script>
+        <script type="text/javascript" src="resources/js/bootstrap.min.js" language="javascript"></script>
+
+        <!-- <script type="text/javascript" src="../resources/js/owl.carousel.min.js" language="javascript"></script>
+         <script type="text/javascript" src="../resources/js/mousescroll.js" language="javascript"></script>
+         <script type="text/javascript" src="../resources/js/smoothscroll.js" language="javascript"></script>
+         <script type="text/javascript" src="../resources/js/jquery.prettyPhoto.js" language="javascript"></script>
+         <script type="text/javascript" src="../resources/js/jquery.isotope.min.js" language="javascript"></script>
+         <script type="text/javascript" src="../resources/js/jquery.inview.min.js" language="javascript"></script>
+         <script type="text/javascript" src="../resources/js/wow.min.js" language="javascript"></script>
+         <script type="text/javascript" src="../resources/js/main.js" language="javascript"></script>
+        -->
+
+    </h:body>
+</html>

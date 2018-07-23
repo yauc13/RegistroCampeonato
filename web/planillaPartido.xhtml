@@ -9,7 +9,17 @@
     </h:head>
     <h:body id="idBody">
         <f:event type="preRenderView" listener="#{partidoBean.listarPlanillasInicio()}" />
-        
+        <p:dialog modal="true" widgetVar="statusDialogPlanilla" header="Cargando..." draggable="false" closable="false" resizable="false">
+            <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
+        </p:dialog>
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialogPlanilla').show();
+            }
+            function stop() {
+                PF('statusDialogPlanilla').hide();
+            }
+        </script>
         
         <h:form id="frmMarcador">
             <h:panelGrid columns="2" id="panel">
@@ -41,11 +51,10 @@
                     <p:outputLabel value="#{jugadorA.nombreJugador}"/>
                 </p:column>
                 <p:column headerText="Gol">
-                    <p:commandButton  id="btnGolA" value="Gol +" update="frmMarcador:panel" actionListener="#{partidoBean.anotarGol(jugadorA, partidoBean.partido.equipoA, partidoBean.partido)}" />
-                    <p:blockUI  block="idBody" trigger="btnGolA">
-                        GOOOOL...<br/>
-                        <p:graphicImage value="/resources/imagen/jugadorBalon.gif"/>
-                    </p:blockUI>
+                    <p:commandButton  id="btnGolA" value="Gol +" update="frmMarcador:panel" actionListener="#{partidoBean.anotarGol(jugadorA, partidoBean.partido.equipoA, partidoBean.partido)}" 
+                                      ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                      />
+                    
                 </p:column>
                 <p:column headerText="Ama">
                     
@@ -72,11 +81,10 @@
                     <p:outputLabel value="#{jugadorB.nombreJugador}"/>
                 </p:column>
                 <p:column headerText="Gol">
-                    <p:commandButton value="Gol +" id="btnGolB" update="frmMarcador:panel"  actionListener="#{partidoBean.anotarGol(jugadorB, partidoBean.partido.equipoB, partidoBean.partido)}"/>
-                    <p:blockUI  block="idBody"  trigger="btnGolB">
-                        GOOOOL...<br/>
-                        <p:graphicImage value="/resources/imagen/balonjugadorverde.gif"/>
-                    </p:blockUI>
+                    <p:commandButton value="Gol +" id="btnGolB" update="frmMarcador:panel"  actionListener="#{partidoBean.anotarGol(jugadorB, partidoBean.partido.equipoB, partidoBean.partido)}"
+                                     ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                     />
+                    
                 </p:column>
                 <p:column headerText="Ama">
                     
