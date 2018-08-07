@@ -87,7 +87,9 @@
                 </p:selectOneMenu>              
                 
                 
-                <p:commandButton value="#{partidoBean.accion}"  actionListener="#{partidoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm2:data"/>
+                <p:commandButton value="#{partidoBean.accion}"  actionListener="#{partidoBean.operar()}"
+                                 oncomplete="PF('wdgDatos').hide();" update=":frm2:data"
+                                 ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"/>
                 <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
             </h:form>
         </p:dialog>

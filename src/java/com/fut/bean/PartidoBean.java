@@ -232,6 +232,21 @@ public class PartidoBean implements Serializable{
     return direccion;
     }
     
+    public String finalizarPartido() throws Exception{
+        String direccion;
+        PartidoDao dao;
+        try{
+            dao = new PartidoDao();
+            partido.setGolA(listaGolesA.size());
+            partido.setGolB(listaGolesB.size());
+            dao.finalizarPartido(partido);
+            direccion = "vistaGrupo?faces-redirect=true";
+        }catch(Exception e){  
+            throw e;
+        }
+        return direccion;
+    }
+    
 
    
     public void eliminar(Partido usu) throws Exception {

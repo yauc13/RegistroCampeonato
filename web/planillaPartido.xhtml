@@ -10,7 +10,7 @@
     <h:body id="idBody">
         <f:event type="preRenderView" listener="#{partidoBean.listarPlanillasInicio()}" />
         <p:dialog modal="true" widgetVar="statusDialogPlanilla" header="Cargando..." draggable="false" closable="false" resizable="false">
-            <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
+            <p:graphicImage value="/resources/imagen/gol_celeste.gif"  width="180" height="180"/>
         </p:dialog>
         <script type="text/javascript">
             function start() {
@@ -93,6 +93,11 @@
             </p:dataTable>           
         </h:form>
       </h:panelGrid>
+        <h:form>
+            <p:commandButton value="Finalizar Partido" action="#{partidoBean.finalizarPartido()}"
+                                     ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                     />
+        </h:form>
     </h:body>
 </html>
 

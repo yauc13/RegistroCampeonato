@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./WEB-INF/template/plantilla.xhtml">
+            <ui:define name="content">
+                
+                <f:event type="preRenderView" listener="#{grupoBean.listarPosicionesGrupo()}" />
+                
+        <h:form>
+            <p:outputLabel value="#{grupoBean.campeonato.nombreCampeonato}/"/>
+            <p:outputLabel value="#{grupoBean.grupo.nombreGrupo}/"/>
+            <h:panelGrid columns="2">
+                <p:column>
+                    <p:panel header="" >
+                        <h:panelGrid columns="1">
+                            <p:graphicImage value="/resources/imagen/jugadorBalon.gif" height="50" width="50"/>
+                        
+                            <p:column headerText="Ver Equipos">
+                            <p:commandLink value="Ver Equipos" action="#{grupoBean.verEquiposGrupos()}" 
+                                   ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                   />
+                            </p:column>
+                
+                        </h:panelGrid>
+                    </p:panel>
+                </p:column>
+                <p:column>
+                    <p:panel header="" >
+                        <h:panelGrid columns="1">
+                            <p:graphicImage value="/resources/imagen/jugadorBalon.gif" height="50" width="50"/>
+                        
+                            <p:column headerText="Ver Partidos">
+                            
+                            <p:commandLink value="Ver Partidos" action="#{grupoBean.verPartidosGrupo()}"   
+                                   ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                   />
+                    
+                            </p:column>
+                
+                        </h:panelGrid>
+                    </p:panel>
+                </p:column>  
+           </h:panelGrid> 
+        </h:form>                
+                
+        <h:form>
+            <p:dataTable id="data" value="#{grupoBean.listaPosiciones}" var="tablaEquipo" >
+                <p:column headerText="pos">
+                    <p:outputLabel value=""/>
+                </p:column>
+                <p:column headerText="Equipo">
+                    <p:outputLabel value="#{tablaEquipo.nombre}"/>
+                </p:column>
+                <p:column headerText="Puntos">
+                    <p:outputLabel value="#{tablaEquipo.puntos}"/>
+                </p:column> 
+                <p:column headerText="DG">
+                    <p:outputLabel value="#{tablaEquipo.DF}"/>
+                </p:column>
+                <p:column headerText="GF">
+                    <p:outputLabel value="#{tablaEquipo.GF}"/>
+                </p:column>
+                <p:column headerText="GC">
+                    <p:outputLabel value="#{tablaEquipo.GC}"/>
+                </p:column>
+                <p:column headerText="PG">
+                    <p:outputLabel value="#{tablaEquipo.PG}"/>
+                </p:column>
+                <p:column headerText="PE">
+                    <p:outputLabel value="#{tablaEquipo.PE}"/>
+                </p:column>
+                <p:column headerText="PP">
+                    <p:outputLabel value="#{tablaEquipo.PP}"/>
+                </p:column>              
+            </p:dataTable>        
+        </h:form>        
+                
+                
+                
+        <p:dialog modal="true" widgetVar="statusDialogVistaGrupo" header="Cargando..." draggable="false" closable="false" resizable="false">
+            <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
+        </p:dialog>
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialogVistaGrupo').show();
+            }
+            function stop() {
+                PF('statusDialogVistaGrupo').hide();
+            }
+        </script>
+                
+            </ui:define>           
+        </ui:composition>
+    </h:body>
+</html>
+

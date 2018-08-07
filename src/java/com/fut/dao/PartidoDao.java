@@ -8,11 +8,15 @@ package com.fut.dao;
 import com.fut.model.Equipo;
 import com.fut.model.Grupo;
 import com.fut.model.Partido;
+import com.fut.model.TablaEquipos;
 import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,13 +27,11 @@ public class PartidoDao extends Dao{
         boolean reg = false;
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.partido (\"idEquipoA\",\"idEquipoB\",\"idGrupo\",\"golA\",\"golB\",\"idUsuario\") values(?,?,?,?,?,?)");
+            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.partido (\"idEquipoA\",\"idEquipoB\",\"idGrupo\",\"idUsuario\") values(?,?,?,?)");
             st.setInt(1, cam.getIdEquipoA());
             st.setInt(2, cam.getIdEquipoB());
             st.setInt(3, cam.getIdGrupo());
-            st.setInt(4, cam.getGolA());
-            st.setInt(5, cam.getGolB());
-            st.setInt(6, cam.getIdUsuario());
+            st.setInt(4, cam.getIdUsuario());
 
             st.executeUpdate();
             reg = true;
@@ -163,6 +165,72 @@ public class PartidoDao extends Dao{
             return usus;
     }
     
+    public List<TablaEquipos> listarTablaPosiciones(Grupo grup) throws SQLException, Exception{
+        List<TablaEquipos> lista = null;
+            ResultSet rs;
+        List<Equipo> listEquipo = null;
+        EquipoDao equipoDao = new EquipoDao();
+        
+        try {
+            listEquipo = equipoDao.listar(grup); //se llena la lista de los equipos del grupo
+        } catch (Exception ex) {
+            Logger.getLogger(PartidoDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
+            lista = new ArrayList();
+            try{
+                this.Conectar();
+                //se recorre la lista de equipos del grupo
+                for(Equipo e: listEquipo){
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\" FROM public.partido WHERE (\"golA\">-1 OR \"golA\">-1)AND( \"idEquipoA\"=? OR \"idEquipoB\"=?)");
+                //st.setInt(1, grup.getIdGrupo());
+                st.setInt(1, e.getIdEquipo());
+                st.setInt(2, e.getIdEquipo());
+                
+                rs = st.executeQuery();
+                
+                TablaEquipos tablaEqui= new TablaEquipos();
+                System.out.println(e.getNombreEquipo());
+                while(rs.next()){
+                    Partido cam = new Partido();
+                    cam.setIdPartido(rs.getInt("idPartido"));
+                    cam.setIdEquipoA(rs.getInt("idEquipoA"));
+                    cam.setIdEquipoB(rs.getInt("idEquipoB"));
+                    cam.setGolA(rs.getInt("golA"));
+                    cam.setGolB(rs.getInt("golB"));
+                    //cam.setIdGrupo(rs.getInt("idGrupo"));
+                    TablaEquipos tab = new TablaEquipos();
+                    System.out.println("partido id:"+cam.getIdPartido()+"idA: "+cam.getIdEquipoA()+"golA:"+cam.getGolA()+" golB:"+cam.getGolB()+"idB:"+cam.getIdEquipoB());
+                    int [] vPuntosPart = tab.calcularPuntosPartido(cam, e.getIdEquipo());
+                    System.out.println("partidos jugados: "+vPuntosPart[4]);
+                   
+                   tablaEqui.setPuntos(tablaEqui.getPuntos()+vPuntosPart[0]);
+                   tablaEqui.setDF(tablaEqui.getDF()+vPuntosPart[1]);
+                   tablaEqui.setGF(tablaEqui.getGF()+vPuntosPart[2]);
+                   tablaEqui.setGC(tablaEqui.getGC()+vPuntosPart[3]);
+                   tablaEqui.setPJ(tablaEqui.getPJ()+vPuntosPart[4]);
+                   tablaEqui.setPG(tablaEqui.getPG()+vPuntosPart[5]);
+                   tablaEqui.setPE(tablaEqui.getPE()+vPuntosPart[6]);
+                   tablaEqui.setPP(tablaEqui.getPP()+vPuntosPart[7]); 
+                   System.out.println("puntos partido: "+vPuntosPart[0]);
+                   System.out.println(tablaEqui.getNombre()+lista.size());
+                }
+                
+                //tablaEqui.setProm(tablaEqui.getPuntos()/tablaEqui.getPJ());
+                tablaEqui.setNombre(e.getNombreEquipo());
+                lista.add(tablaEqui);
+                
+                System.out.println(tablaEqui.getNombre()+lista.size());
+                }
+            }catch(SQLException e){
+                throw e;
+            }finally{
+                this.Cerrar();
+            }
+        
+        return lista;   
+    }
+    
         
     
     public void modificar(Partido cam) throws Exception{
@@ -175,7 +243,7 @@ public class PartidoDao extends Dao{
             st.setInt(3, cam.getGolA());  
             st.setInt(4, cam.getGolB());  
             st.setInt(5, cam.getIdGrupo());
-            st.setInt(3, cam.getIdPartido());  
+            st.setInt(6, cam.getIdPartido());  
             st.executeUpdate();
             
                         
@@ -193,6 +261,24 @@ public class PartidoDao extends Dao{
             }
             st.setArray(8, (Array) idGolEB);
 
+            
+        }catch(Exception e){
+            throw e;
+        }finally{
+        this.Cerrar();
+        }
+    }
+    
+        public void finalizarPartido(Partido cam) throws Exception{
+        
+        try{
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.partido SET \"golA\" = ?,\"golB\" = ? WHERE \"idPartido\" = ?");           
+            st.setInt(1, cam.getGolA());  
+            st.setInt(2, cam.getGolB()); 
+            st.setInt(3, cam.getIdPartido());
+             
+            st.executeUpdate();
             
         }catch(Exception e){
             throw e;

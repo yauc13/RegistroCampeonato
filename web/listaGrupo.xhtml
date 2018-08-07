@@ -10,6 +10,7 @@
     </h:head>
     <h:body id="idBody1">
         
+        
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
         
@@ -27,8 +28,18 @@
         </script>
         
         
+            <div> 
+                <h:form >
+                    
+                        <p:commandLink value="Inicio  " action="listaCampeonato?faces-redirect=true" style="text-decoration: none"/>
+                        <p:commandLink value="#{grupoBean.campeonato.nombreCampeonato}" action="listaGrupo?faces-redirect=true" style="text-decoration: none"/>
+                     
+                </h:form>
+            </div>
+        
         <h:form id="frm1">
-            
+        
+
             <p:commandButton value="Nuevo Grupo" oncomplete="PF('wdgDatos').show();" actionListener="#{grupoBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{grupoBean.habilitarPermisos(grupoBean.campeonato,1)}"/>
             <p:outputLabel value="#{grupoBean.campeonato.nombreCampeonato}/"/>
             <p:dataTable id="data" value="#{grupoBean.listaGrupo}" var="grupo" >
@@ -42,12 +53,12 @@
                     <p:outputLabel value="#{grupo.idUsuario}"/>
                 </p:column> 
                 <p:column headerText="Ver Grupos">
-                    <p:commandLink value="Ver Equipos" action="#{grupoBean.verEquiposGrupos(grupo)}" update="data"
+                    <p:commandLink value="Ver Equipos" action="#{grupoBean.verGrupo(grup)}" update="data"
                                    ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
                                    />
                 </p:column>
                 <p:column headerText="Ver Partidos">
-                    <p:commandLink id="linkVPartidos" value="Ver Partidos" action="#{grupoBean.verPartidosGrupo(grupo)}"  update="data" 
+                    <p:commandLink id="linkVPartidos" value="Ver Partidos" action="#{grupoBean.verGrupo(grup)}"  update="data" 
                                    ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
                                    />
                     
@@ -59,20 +70,23 @@
                     <p:commandLink value="Eliminar" actionListener="#{grupoBean.eliminar(grupo)}" update="data" disabled="#{grupoBean.habilitarPermisos(grupoBean.campeonato,1)}"/>
                 </p:column>              
             </p:dataTable>
-            
+        </h:form>
+        
+        <h:form>
             <p:dataGrid var="grupo" value="#{grupoBean.listaGrupo}" columns="3" >
                 <p:column >
                     <p:panel header="#{grupo.nombreGrupo}" >
                         <h:panelGrid columns="1">
                             <p:graphicImage value="/resources/imagen/jugadorBalon.gif" height="50" width="50"/>
                         
-                            <p:commandLink id="linkVPartidos" value="Ver Partidos"  action="#{grupoBean.verPartidosGrupo(grupo)}"  />
+                            <p:commandLink  value="Ver Grupo" action="#{grupoBean.verGrupo(grupo)}" 
+                                            ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"/>
                 
                         </h:panelGrid>
                     </p:panel>
                 </p:column>
             </p:dataGrid>
-            
+        </h:form>   
             <h:outputText value="Content: " />
             <h:outputLink id="content" value="#">
                 <h:outputText value="PrimeFaces" />
@@ -81,7 +95,7 @@
                 <p:graphicImage value="/resources/imagen/balonjugadorverde.gif" height="50" width="50"/>
             </p:tooltip>
             
-        </h:form>
+        
         
         <p:dialog header="Registrar o Modificar Grupos" widgetVar="wdgDatos" id="dlgDatos">
             <h:form>

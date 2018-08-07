@@ -6,12 +6,17 @@
 package com.fut.bean;
 
 import com.fut.dao.GrupoDao;
+import com.fut.dao.PartidoDao;
 import com.fut.model.Campeonato;
+import com.fut.model.Equipo;
 
 import com.fut.model.Grupo;
+import com.fut.model.TablaEquipos;
 import com.fut.model.Usuario;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -32,55 +37,10 @@ public class GrupoBean implements Serializable{
     private Campeonato campeonato = new Campeonato();
     private Usuario usuario = new Usuario();
     private List<Grupo> listaGrupo;
+    private List<TablaEquipos> listaPosiciones;
     private String accion;
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-    
-    
-    
-
-    public Grupo getGrupo() {
-        return grupo;
-    }
-
-    public void setGrupo(Grupo grupo) {
-        this.grupo = grupo;
-    }
-
-    public Campeonato getCampeonato() {
-        return campeonato;
-    }
-
-    public void setCampeonato(Campeonato campeonato) {
-        this.campeonato = campeonato;
-    }
-
-
-
-    public List<Grupo> getListaGrupo() {
-        return listaGrupo;
-    }
-
-    public void setListaGrupo(List<Grupo> listaGrupo) {
-        this.listaGrupo = listaGrupo;
-    }
-
-    public String getAccion() {
-        return accion;
-    }
-
-    public void setAccion(String accion) {
-        this.accion = accion;
-    }
-
-    
-    
+   
     
     public int verIdCampeonato(){
         Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
@@ -173,12 +133,12 @@ public class GrupoBean implements Serializable{
             this.accion = "Modificar";
     }
     
-     public String verEquiposGrupos(Grupo grup) throws Exception {
+    public String verEquiposGrupos() throws Exception {
     
     String direccion = null;
     try{
         //sirve para pasar datos entres los beans
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("grupo", grup);
+        grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         direccion = "listaEquipo?faces-redirect=true";
         
     }catch(Exception e){  
@@ -187,12 +147,26 @@ public class GrupoBean implements Serializable{
     return direccion;
     }
     
-     public String verPartidosGrupo(Grupo grup) throws Exception {
+    public String verGrupo(Grupo grup) throws Exception {
     
     String direccion = null;
     try{
         //sirve para pasar datos entres los beans
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("grupo", grup);
+        direccion = "vistaGrupo?faces-redirect=true";
+        
+    }catch(Exception e){  
+        throw e;
+    }   
+    return direccion;
+    }
+    
+     public String verPartidosGrupo() throws Exception {
+    
+    String direccion = null;
+    try{
+        //sirve para pasar datos entres los beans
+        grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         direccion = "listaPartido?faces-redirect=true";
         
     }catch(Exception e){  
@@ -239,6 +213,76 @@ public class GrupoBean implements Serializable{
         
     return bol;
     }
+    
+    public void  listarPosicionesGrupo(){
+        PartidoDao partidoDao= new PartidoDao();
+        try { 
+            grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+            listaPosiciones= partidoDao.listarTablaPosiciones(grupo);
+        } catch (Exception ex) {
+            Logger.getLogger(GrupoBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+
+   
+    
+     public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public List<TablaEquipos> getListaPosiciones() {
+        return listaPosiciones;
+    }
+
+    public void setListaPosiciones(List<TablaEquipos> listaPosiciones) {
+        this.listaPosiciones = listaPosiciones;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
+    
+    
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+
+    public Campeonato getCampeonato() {
+        return campeonato;
+    }
+
+    public void setCampeonato(Campeonato campeonato) {
+        this.campeonato = campeonato;
+    }
+
+
+
+    public List<Grupo> getListaGrupo() {
+        return listaGrupo;
+    }
+
+    public void setListaGrupo(List<Grupo> listaGrupo) {
+        this.listaGrupo = listaGrupo;
+    }
+
+    public String getAccion() {
+        return accion;
+    }
+
+    public void setAccion(String accion) {
+        this.accion = accion;
+    }
+
+    
+    
+    
         
 
 }
