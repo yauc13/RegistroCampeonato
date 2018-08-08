@@ -5,6 +5,7 @@
  */
 package com.fut.bean;
 
+import com.fut.dao.EquipoDao;
 import com.fut.dao.GrupoDao;
 import com.fut.dao.PartidoDao;
 import com.fut.model.Campeonato;
@@ -38,6 +39,7 @@ public class GrupoBean implements Serializable{
     private Usuario usuario = new Usuario();
     private List<Grupo> listaGrupo;
     private List<TablaEquipos> listaPosiciones;
+    private List<Equipo> listaEquipos;
     private String accion;
 
    
@@ -278,6 +280,20 @@ public class GrupoBean implements Serializable{
 
     public void setAccion(String accion) {
         this.accion = accion;
+    }
+
+    public List<Equipo> getListaEquipos(Grupo gru) {
+        EquipoDao equipoDao = new EquipoDao();
+        try {
+            listaEquipos = equipoDao.listar(gru);
+        } catch (Exception ex) {
+            Logger.getLogger(GrupoBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listaEquipos;
+    }
+
+    public void setListaEquipos(List<Equipo> listaEquipos) {
+        this.listaEquipos = listaEquipos;
     }
 
     

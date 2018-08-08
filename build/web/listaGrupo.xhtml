@@ -79,6 +79,11 @@
                         <h:panelGrid columns="1">
                             <p:graphicImage value="/resources/imagen/jugadorBalon.gif" height="50" width="50"/>
                         
+                            <p:dataTable var="equi" value="#{grupoBean.getListaEquipos(grupo)}">
+                                <p:column headerText="Equipos">
+                                    <p:outputLabel value="#{equi.nombreEquipo}"/>
+                                </p:column>
+                            </p:dataTable>
                             <p:commandLink  value="Ver Grupo" action="#{grupoBean.verGrupo(grupo)}" 
                                             ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"/>
                 

@@ -99,7 +99,7 @@ public class UsuarioBean implements Serializable{
         if(us == null){
             
                 FacesContext.getCurrentInstance().getExternalContext().redirect("./../permisos.xhtml");
-            
+            //FacesContext.getCurrentInstance().getExternalContext().redirect("permisos?faces-redirect=true");
         }
         } catch (IOException ex) {
                 Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);

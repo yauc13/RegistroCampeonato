@@ -37,13 +37,13 @@ public class TablaEquipos {
             }
         }else if(par.getIdEquipoB()==idEquipo){
             if(par.getGolA()>par.getGolB()){
-                datosEquipo = llenarvector(0,par.getGolB()-par.getGolA(),par.getGolA(),par.getGolB(),1,0,0,1);
+                datosEquipo = llenarvector(0,par.getGolB()-par.getGolA(),par.getGolB(),par.getGolA(),1,0,0,1);
             }
             if(par.getGolA()==par.getGolB()){
-                datosEquipo = llenarvector(1,par.getGolB()-par.getGolA(),par.getGolA(),par.getGolB(),1,0,1,0);
+                datosEquipo = llenarvector(1,par.getGolB()-par.getGolA(),par.getGolB(),par.getGolA(),1,0,1,0);
             }
             if(par.getGolA()<par.getGolB()){
-                datosEquipo = llenarvector(3,par.getGolB()-par.getGolA(),par.getGolA(),par.getGolB(),1,1,0,0);
+                datosEquipo = llenarvector(3,par.getGolB()-par.getGolA(),par.getGolB(),par.getGolA(),1,1,0,0);
             }
         }
         

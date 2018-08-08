@@ -5,8 +5,10 @@
         <group>
             <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/web/vistaGrupo.xhtml</file>
             <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/src/java/com/fut/model/TablaEquipos.java</file>
+            <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/web/listaGrupo.xhtml</file>
             <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/web/listaPartido.xhtml</file>
             <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/src/java/com/fut/bean/PartidoBean.java</file>
+            <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/src/java/com/fut/bean/UsuarioBean.java</file>
             <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/src/java/com/fut/bean/GrupoBean.java</file>
             <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/src/java/com/fut/dao/PartidoDao.java</file>
             <file>file:/D:/Ejecutables/Proyectos/RegistroCampeonato/web/index.xhtml</file>

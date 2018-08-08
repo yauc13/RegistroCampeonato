@@ -51,7 +51,7 @@ public class PartidoDao extends Dao{
             
             try{
                 this.Conectar();
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\",\"idGrupo\" FROM public.partido WHERE \"idGrupo\" = ?");
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\",\"idGrupo\" FROM public.partido WHERE \"idGrupo\" = ? ORDER BY \"idPartido\" ASC");
                 st.setInt(1, camp.getIdGrupo());
                 rs = st.executeQuery();
                 lista = new ArrayList();
