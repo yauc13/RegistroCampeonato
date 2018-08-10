@@ -5,11 +5,14 @@
  */
 package com.fut.model;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  *
  * @author DIANA G
  */
-public class TablaEquipos {
+public class TablaEquipos implements Comparable<TablaEquipos>{
     private String Nombre;
     private int puntos;
     private int DF;
@@ -64,6 +67,21 @@ public class TablaEquipos {
         return vector;
     }
     
+        public void ordenarTabla(List<TablaEquipos> tabla){
+        Collections.sort(tabla);
+    }
+    
+    
+            @Override
+    public int compareTo(TablaEquipos o) {
+        if (puntos < o.puntos) {
+                return -1;
+            }
+            if (puntos > o.puntos) {
+                return 1;
+            }
+            return 0;
+    }
     
 
     public String getNombre() {
@@ -147,6 +165,8 @@ public class TablaEquipos {
     public void setPJ(int PJ) {
         this.PJ = PJ;
     }
+
+  
     
     
     
