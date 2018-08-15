@@ -11,6 +11,8 @@ import com.fut.model.Equipo;
 import com.fut.model.Grupo;
 import com.fut.model.Jugador;
 import com.fut.model.Usuario;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +20,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -36,6 +41,15 @@ public class JugadorBean implements Serializable{
     private List<Jugador> listaJugador;
     private String accion;
     private Date fechaNacimiento;
+    private StreamedContent imageJugador;
+    
+
+    public JugadorBean() {
+        InputStream dbStream = null;
+        imageJugador = new DefaultStreamedContent(dbStream, "image/jpeg");
+    }
+    
+    
 
     public Usuario getUsuario() {
         return usuario;
@@ -109,6 +123,31 @@ public class JugadorBean implements Serializable{
     public void setAccion(String accion) {
         this.accion = accion;
     }
+
+    public StreamedContent getImageJugador() throws Exception {
+        FacesContext context = FacesContext.getCurrentInstance();
+ 
+		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+			return new DefaultStreamedContent();
+		}
+ 
+		else {
+ 
+			String id = context.getExternalContext().getRequestParameterMap().get("pid");
+ 
+			byte[] image = new JugadorDao().traerImageByte(id);
+ 
+			return new DefaultStreamedContent(new ByteArrayInputStream(image));
+ 
+		}
+        
+    }
+
+    public void setImageJugador(StreamedContent imageJugador) {
+        this.imageJugador = imageJugador;
+    }
+    
+    
 
     
     

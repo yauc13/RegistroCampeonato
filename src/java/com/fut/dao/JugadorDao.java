@@ -104,6 +104,29 @@ public class JugadorDao extends Dao {
         
         return lista;   
     }
+        public byte[] traerImageByte(String productId) throws Exception {
+            ResultSet rs;
+		
+		
+		byte[] productImage = null;
+ 
+		try {
+                    this.Conectar();
+		PreparedStatement st = this.getCn().prepareCall("SELECT \"fotoJugador\" FROM public.jugador WHERE \"idJugador\"=?");
+		st.setString(1, productId);
+		rs = st.executeQuery();
+ 
+		while (rs.next()) {
+			productImage = rs.getBytes("fotoJugador");
+		}
+		} catch (Exception e) {
+			System.out.println(e);
+			System.exit(0);
+		}finally{
+                this.Cerrar();
+            }
+		return productImage;
+	}
     
     public Jugador leerID(int idJugador) throws Exception{
         Jugador usus = null;

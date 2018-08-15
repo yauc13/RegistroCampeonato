@@ -6,13 +6,14 @@
 package com.fut.model;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  *
- * @author DIANA G
+ * @author YeisonUrrea
  */
-public class TablaEquipos implements Comparable<TablaEquipos>{
+public class TablaEquipos {
     private String Nombre;
     private int puntos;
     private int DF;
@@ -68,20 +69,31 @@ public class TablaEquipos implements Comparable<TablaEquipos>{
     }
     
         public void ordenarTabla(List<TablaEquipos> tabla){
-        Collections.sort(tabla);
+        //Collections.sort(tabla);
+        Collections.sort(tabla, new Comparator<TablaEquipos>() {
+                @Override
+                public int compare(TablaEquipos b, TablaEquipos a) {
+                    //int resultado = a.getApellido1().compareTo(b.getApellido1());
+                    int resultado = a.puntos-b.puntos;
+                    if (resultado != 0 ) {
+                        return resultado;
+                    }
+                    resultado = a.DF-b.DF;
+                    if (resultado != 0 ) {
+                        return resultado;
+                    }
+                    resultado = a.GF-b.GF;
+                    if (resultado != 0 ) {
+                        return resultado;
+                    } else {                        
+                        return (int) (a.prom-b.prom);
+                   }
+                }
+            });
     }
     
     
-            @Override
-    public int compareTo(TablaEquipos o) {
-        if (puntos < o.puntos) {
-                return -1;
-            }
-            if (puntos > o.puntos) {
-                return 1;
-            }
-            return 0;
-    }
+
     
 
     public String getNombre() {

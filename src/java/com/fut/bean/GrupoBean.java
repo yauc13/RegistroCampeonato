@@ -218,7 +218,8 @@ public class GrupoBean implements Serializable{
     
     public void  listarPosicionesGrupo(){
         PartidoDao partidoDao= new PartidoDao();
-        try { 
+        try {
+            //listaPosiciones.clear();
             grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
             listaPosiciones= partidoDao.listarTablaPosiciones(grupo);
         } catch (Exception ex) {

@@ -27,6 +27,11 @@
                 <p:column headerText="id">
                     <p:outputLabel value="#{jugador.idJugador}"/>
                 </p:column>
+                <p:column headerText="Foto">
+                    <p:graphicImage value="#{productBean.productImage}">
+                    <f:param name="pid" value="#{jugador.idJugador}" />
+                    </p:graphicImage>
+                </p:column>
                 <p:column headerText="Jugador">
                     <p:outputLabel value="#{jugador.nombreJugador}"/>
                 </p:column>

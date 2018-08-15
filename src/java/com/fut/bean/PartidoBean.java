@@ -137,7 +137,7 @@ public class PartidoBean implements Serializable{
         grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         
-        listaPartido = dao.listar(camp);
+        listaPartido = dao.listarJoin(camp);
         }
     }catch(Exception e){   
         throw e;
@@ -151,7 +151,7 @@ public class PartidoBean implements Serializable{
         Grupo u = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        listaPartido = dao.listar(u);
+        listaPartido = dao.listarJoin(u);
     
     }catch(Exception e){   
         throw e;
@@ -450,7 +450,7 @@ public class PartidoBean implements Serializable{
         
         GolDao golDao = new GolDao();       
         try {
-            listaGolesA = golDao.listarGolesPartidoEquipo(partido, partido.getEquipoA());
+            listaGolesA = golDao.listarGolesPartidoEquipoJoin(partido, partido.getEquipoA());
         } catch (Exception ex) {
             Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -467,7 +467,7 @@ public class PartidoBean implements Serializable{
         
         GolDao golDao = new GolDao();       
         try {
-            listaGolesB = golDao.listarGolesPartidoEquipo(partido, partido.getEquipoB());
+            listaGolesB = golDao.listarGolesPartidoEquipoJoin(partido, partido.getEquipoB());
         } catch (Exception ex) {
             Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
         }

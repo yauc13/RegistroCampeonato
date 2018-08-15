@@ -117,7 +117,7 @@ public class GolDao extends Dao{
         return lista;    
     }
     
-        public List<Gol> listarGolesPartidoEquipo(Partido par, Equipo equ) throws Exception{
+     public List<Gol> listarGolesPartidoEquipo(Partido par, Equipo equ) throws Exception{
             List<Gol> lista;
             ResultSet rs;
             
@@ -144,6 +144,49 @@ public class GolDao extends Dao{
                     Partido partido = partidoDao.leerID(rs.getInt("idPartido"));
                     cam.setPartido(partido);
                  
+                    lista.add(cam);
+                
+                }
+            }catch(Exception e){
+                throw e;
+            }finally{
+                this.Cerrar();
+            }
+        
+        return lista;    
+    }
+    
+        public List<Gol> listarGolesPartidoEquipoJoin(Partido par, Equipo equ) throws Exception{
+            List<Gol> lista;
+            ResultSet rs;
+            
+            try{
+                this.Conectar();
+                PreparedStatement st = this.getCn().prepareCall("SELECT gol.\"idGol\", gol.\"idJugador\", gol.\"idEquipo\", gol.\"idPartido\""
+                                                                + ",equ.\"nombreEquipo\", jug.\"nombreJugador\"\n" +
+                                                                "FROM public.gol gol\n" +
+                                                                "INNER JOIN public.equipo equ\n" +
+                                                                "ON(gol.\"idEquipo\" = equ.\"idEquipo\")\n" +
+                                                                "INNER JOIN public.jugador jug\n" +
+                                                                "ON(gol.\"idJugador\" = jug.\"idJugador\""
+                                                                + " AND gol.\"idPartido\" = ? AND gol.\"idEquipo\"= ?)"
+                                                                + "ORDER BY gol.\"idGol\" ASC");
+                st.setInt(1, par.getIdPartido());
+                st.setInt(2, equ.getIdEquipo());
+                rs = st.executeQuery();
+                lista = new ArrayList();
+                while(rs.next()){
+                    Gol cam = new Gol();
+                    cam.setIdGol(rs.getInt("idGol"));
+                    
+                    Jugador jugador = new Jugador();
+                    jugador.setNombreJugador(rs.getString(6));
+                    cam.setJugador(jugador);
+                    
+                    Equipo equipo = new Equipo(); 
+                    equipo.setNombreEquipo(rs.getString(5));
+                    cam.setEquipo(equipo);
+
                     lista.add(cam);
                 
                 }
