@@ -13,8 +13,18 @@
 
         
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
+            
+            
+            
             <ui:define name="content">
-                
+        <div id="miga">
+            <h:form>
+                <p:breadCrumb> 
+                    <p:menuitem value="Campeonatos" url="#" />     
+                    <p:menuitem value="Campeonatos" url="#" />   
+                </p:breadCrumb>
+            </h:form>
+        </div>       
             
         <f:event type="preRenderView" listener="#{campeonatoBean.listarInicio()}" />
         <p:dialog modal="true" widgetVar="statusDialog1" header="Cargando..." draggable="false" closable="false" resizable="false">

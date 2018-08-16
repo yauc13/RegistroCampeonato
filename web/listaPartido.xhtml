@@ -20,7 +20,15 @@
                 PF('statusDialogPartido').hide();
             }
         </script>
-        
+        <div id="miga">
+                <h:form>
+                    <p:breadCrumb> 
+                        <p:menuitem value="Campeonatos" url="#" />     
+                        <p:menuitem value="#{grupoBean.campeonato.nombreCampeonato}" action="#{campeonatoBean.verGruposCampeonato(grupoBean.campeonato)}" />   
+                        <p:menuitem value="#{partidoBean.grupo.nombreGrupo}"  action="#{grupoBean.verGrupo(partidoBean.grupo)}"  />
+                    </p:breadCrumb>
+                </h:form>
+        </div>
        
        
         <h:form id="frm2">

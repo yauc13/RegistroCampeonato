@@ -13,8 +13,7 @@
         
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
-        
-        <f:event type="preRenderView" listener="#{grupoBean.listarInicio()}" />
+  <f:event type="preRenderView" listener="#{grupoBean.listarInicio()}" />
         <p:dialog modal="true" widgetVar="statusDialogGrupo" header="Cargando..." draggable="false" closable="false" resizable="false">
             <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
         </p:dialog>
@@ -26,6 +25,15 @@
                 PF('statusDialogGrupo').hide();
             }
         </script>
+  
+            <div id="miga">
+                <h:form>
+                    <p:breadCrumb> 
+                        <p:menuitem value="Campeonatos" url="#" />     
+                        <p:menuitem value="#{grupoBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(grupoBean.campeonato)}"/>   
+                    </p:breadCrumb>
+                </h:form>
+            </div> 
         
         
             <div> 

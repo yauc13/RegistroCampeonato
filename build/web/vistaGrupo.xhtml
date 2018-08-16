@@ -11,8 +11,15 @@
     <h:body>
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
-                
-                <f:event type="preRenderView" listener="#{grupoBean.listarPosicionesGrupo()}" />
+        <f:event type="preRenderView" listener="#{grupoBean.listarPosicionesGrupo()}" />
+        <div id="miga">
+                <h:form>
+                    <p:breadCrumb> 
+                        <p:menuitem value="Campeonatos" url="#" />     
+                        <p:menuitem value="#{grupoBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(grupoBean.campeonato)}"/>                          
+                    </p:breadCrumb>
+                </h:form>
+        </div>
                 
         <h:form>
             <p:outputLabel value="#{grupoBean.campeonato.nombreCampeonato}/"/>
