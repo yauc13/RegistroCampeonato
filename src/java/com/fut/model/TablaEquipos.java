@@ -86,7 +86,7 @@ public class TablaEquipos {
                     if (resultado != 0 ) {
                         return resultado;
                     } else {                        
-                        return (int) (a.prom-b.prom);
+                        return 0;
                    }
                 }
             });

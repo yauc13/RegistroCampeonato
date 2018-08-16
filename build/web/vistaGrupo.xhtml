@@ -54,7 +54,7 @@
         <h:form>
             <p:dataTable id="data" value="#{grupoBean.listaPosiciones}" var="tablaEquipo" >
                 <p:column headerText="pos">
-                    <p:outputLabel value=""/>
+                    <p:outputLabel value="#{grupoBean.listaPosiciones.indexOf(tablaEquipo)+1}"/>
                 </p:column>
                 <p:column headerText="Equipo">
                     <p:outputLabel value="#{tablaEquipo.nombre}"/>
