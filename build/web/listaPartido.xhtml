@@ -25,11 +25,20 @@
        
         <h:form id="frm2">
               
-            <p:commandButton value="Nuevo" oncomplete="PF('wdgDatos').show();" actionListener="#{partidoBean.setAccion('Registrar')}" update=":dlgDatos"/>
+            <p:commandButton value="Nuevo" oncomplete="PF('wdgDatos').show();" 
+                             actionListener="#{partidoBean.setAccion('Registrar')}" update=":dlgDatos"/>
             
-            
+            <style type="text/css">
+                .colored {
+                  background-color: #76D7C4;
+                  color: #000000;
+                  
+                  
+                }
+            </style>
            
-            <p:dataTable id="data" value="#{partidoBean.listaPartido}" var="partido" >
+            <p:dataTable id="data" value="#{partidoBean.listaPartido}" var="partido"  
+                         rowStyleClass="#{partido.estadoPartido le 'Finalizado' ? 'colored' : ''}" >
                 
                 
                 <p:column headerText="id">
@@ -53,8 +62,8 @@
                 <p:column headerText="golB">
                     <p:outputLabel value="#{partido.golB}"/>
                 </p:column>
-                <p:column headerText="Modificar">
-                    <p:commandLink value="Modificar" actionListener="#{partidoBean.leerID(partido)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos"/>
+                <p:column headerText="Estado">
+                    <p:outputLabel value="#{partido.estadoPartido}"/>
                 </p:column>
                 <p:column headerText="Editar Planilla">
                     <p:commandLink  id="linkEPlanilla" value="Editar Planilla" action="#{partidoBean.editarPlanilla(partido)}" update="data"

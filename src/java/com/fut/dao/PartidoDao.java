@@ -27,11 +27,12 @@ public class PartidoDao extends Dao{
         boolean reg = false;
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.partido (\"idEquipoA\",\"idEquipoB\",\"idGrupo\",\"idUsuario\") values(?,?,?,?)");
+            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.partido (\"idEquipoA\",\"idEquipoB\",\"idGrupo\",\"idUsuario\",\"estadoPartido\") values(?,?,?,?,?)");
             st.setInt(1, cam.getIdEquipoA());
             st.setInt(2, cam.getIdEquipoB());
             st.setInt(3, cam.getIdGrupo());
             st.setInt(4, cam.getIdUsuario());
+            st.setString(5, "Por Jugar");
 
             st.executeUpdate();
             reg = true;
@@ -49,7 +50,8 @@ public class PartidoDao extends Dao{
             
             try{
                 this.Conectar();
-                PreparedStatement st = this.getCn().prepareCall("SELECT pa.\"idPartido\", pa.\"idEquipoA\", pa.\"idEquipoB\", pa.\"golA\", pa.\"golB\", pa.\"idGrupo\", ea.\"nombreEquipo\", eb.\"nombreEquipo\"\n" +
+                PreparedStatement st = this.getCn().prepareCall("SELECT pa.\"idPartido\", pa.\"idEquipoA\", pa.\"idEquipoB\", pa.\"golA\", "
+                                                                 + "pa.\"golB\", pa.\"idGrupo\", ea.\"nombreEquipo\", eb.\"nombreEquipo\", pa.\"estadoPartido\"\n" +
                                                                 "FROM  public.partido pa\n" +
                                                                 " INNER JOIN public.equipo ea\n" +
                                                                 "ON (pa.\"idEquipoA\" = ea.\"idEquipo\")\n" +
@@ -69,6 +71,7 @@ public class PartidoDao extends Dao{
                     cam.setGolA(rs.getInt(4));
                     cam.setGolB(rs.getInt(5));
                     cam.setIdGrupo(rs.getInt(6));
+                    cam.setEstadoPartido(rs.getString(9));
                     
                     Equipo equipoA = new Equipo();
                     equipoA.setIdEquipo(rs.getInt(2));
@@ -328,10 +331,11 @@ public class PartidoDao extends Dao{
         
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.partido SET \"golA\" = ?,\"golB\" = ? WHERE \"idPartido\" = ?");           
+            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.partido SET \"golA\" = ?,\"golB\" = ?,\"estadoPartido\" = ? WHERE \"idPartido\" = ?");           
             st.setInt(1, cam.getGolA());  
             st.setInt(2, cam.getGolB()); 
-            st.setInt(3, cam.getIdPartido());
+            st.setString(3, "Finalizado"); 
+            st.setInt(4, cam.getIdPartido());
              
             st.executeUpdate();
             

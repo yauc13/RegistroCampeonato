@@ -49,10 +49,17 @@
                     </p:panel>
                 </p:column>  
            </h:panelGrid> 
-        </h:form>                
+        </h:form> 
+            <style type="text/css">
+                .colored {
+                  background-color: #DFF69D;
+                  color: #000000;
+                }
+            </style>
                 
         <h:form>
-            <p:dataTable id="data" value="#{grupoBean.listaPosiciones}" var="tablaEquipo" >
+            <p:dataTable id="data" value="#{grupoBean.listaPosiciones}" var="tablaEquipo"
+                         rowStyleClass="#{grupoBean.listaPosiciones.indexOf(tablaEquipo)+1 le 2 ? 'colored' : ''}" >
                 <p:column headerText="pos">
                     <p:outputLabel value="#{grupoBean.listaPosiciones.indexOf(tablaEquipo)+1}"/>
                 </p:column>

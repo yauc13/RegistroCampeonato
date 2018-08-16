@@ -22,6 +22,7 @@ public class Partido {
     Equipo equipoB;
     Gol [] golEA;
     Gol [] golEB;
+    private String estadoPartido;
     
 
     public int getIdUsuario() {
@@ -122,6 +123,14 @@ public class Partido {
 
     public void setGolEB(Gol[] golEB) {
         this.golEB = golEB;
+    }
+
+    public String getEstadoPartido() {
+        return estadoPartido;
+    }
+
+    public void setEstadoPartido(String estadoPartido) {
+        this.estadoPartido = estadoPartido;
     }
 
 
