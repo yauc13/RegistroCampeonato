@@ -11,6 +11,7 @@ import com.fut.model.Jugador;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,16 +25,17 @@ public class JugadorDao extends Dao {
         try{
             this.Conectar();
             //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO jugador (nombreJugador,fechaNacimiento,golJugador,idEquipoJugador,idUsuario) values(?,?,?,?,?)");
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.jugador (\"nombreJugador\",\"fechaNacimiento\",\"golJugador\",\"idEquipoJugador\",\"idUsuario\") values(?,?,?,?,?)");
+            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.jugador (\"nombreJugador\",\"fechaNacimiento\",\"golJugador\",\"idEquipoJugador\",\"idUsuario\",\"fotoJugador\") values(?,?,?,?,?,?)");
             st.setString(1, cam.getNombreJugador());
             st.setString(2, cam.getFechaNacimiento());
             st.setInt(3, cam.getGolJugador());
             st.setInt(4, cam.getIdEquipoJugador());
             st.setInt(5, cam.getIdUsuario());
+            st.setString(6, cam.getFotoJugador());
             
             st.executeUpdate();
             reg = true;
-        }catch(Exception e){
+        }catch(SQLException e){
             throw e;
         }finally{
         this.Cerrar();
@@ -50,7 +52,7 @@ public class JugadorDao extends Dao {
             try{
                 this.Conectar();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idJugador\",\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\" FROM public.jugador WHERE \"idEquipoJugador\" = ?");
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idJugador\",\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\", \"fotoJugador\" FROM public.jugador WHERE \"idEquipoJugador\" = ?");
                 st.setInt(1, camp.getIdEquipo());
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -61,11 +63,12 @@ public class JugadorDao extends Dao {
                     cam.setFechaNacimiento(rs.getString("fechaNacimiento"));
                     cam.setIdEquipoJugador(rs.getInt("idEquipoJugador"));
                     cam.setIdUsuario(rs.getInt("idUsuario"));
+                    cam.setFotoJugador(rs.getString("fotoJugador"));
 
                     lista.add(cam);
                 
                 }
-            }catch(Exception e){
+            }catch(SQLException e){
                 throw e;
             }finally{
                 this.Cerrar();

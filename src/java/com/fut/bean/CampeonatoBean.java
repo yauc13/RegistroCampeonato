@@ -95,7 +95,14 @@ public class CampeonatoBean implements Serializable{
         dao = new CampeonatoDao();
         
         this.campeonato.setIdUsuario(usuario.getIdUsuario());
-        dao.registrar(campeonato);
+        boolean reg= dao.registrar(campeonato);
+        if(reg){
+            
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Campeonato creado");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear");
+        FacesContext.getCurrentInstance().addMessage(null, message);}
         this.listar();
     }catch(Exception e){  
         throw e;
@@ -107,7 +114,13 @@ public class CampeonatoBean implements Serializable{
     try{
         
         dao = new CampeonatoDao();
-        dao.modificar(campeonato);
+        boolean reg = dao.modificar(campeonato);
+        if(reg){
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Campeonato Modificado");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo modificar");
+        FacesContext.getCurrentInstance().addMessage(null, message);}
         this.listar();
     }catch(Exception e){  
         throw e;
@@ -169,11 +182,17 @@ public class CampeonatoBean implements Serializable{
     
 
    
-    public void eliminar(Campeonato usu) throws Exception {
+    public void eliminar() throws Exception {
     CampeonatoDao dao;
     try{
         dao = new CampeonatoDao();
-        dao.eliminar(usu);
+        boolean reg =dao.eliminar(campeonato);
+        if(reg){
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Campeonato Eliminado");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo Eliminar", "porque tiene grupos creados");
+        FacesContext.getCurrentInstance().addMessage(null, message);}
         this.listar();
     }catch(Exception e){  
         throw e;

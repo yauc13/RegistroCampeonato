@@ -14,6 +14,7 @@ import com.fut.model.Usuario;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -21,8 +22,10 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -41,12 +44,32 @@ public class JugadorBean implements Serializable{
     private List<Jugador> listaJugador;
     private String accion;
     private Date fechaNacimiento;
-    private StreamedContent imageJugador;
+    private String imageJugador; //imagen txt base64
+    private UploadedFile imgFile; //file para la imagen del jugador
     
 
     public JugadorBean() {
         InputStream dbStream = null;
-        imageJugador = new DefaultStreamedContent(dbStream, "image/jpeg");
+        
+    }
+    
+    public String getImageJugador() {
+        return imageJugador;
+    }
+
+    public void setImageJugador(String imageJugador) {
+        this.imageJugador = imageJugador;
+    }
+    
+    public void handleFileUpload(FileUploadEvent event) {
+        //impl.handleFileUpload(event, dto);
+        //dto.setImgFile(event.getFile());
+        imgFile =event.getFile();
+       
+        // Reading a Image file from file system
+        byte imageData[] = imgFile.getContents();
+        imageJugador = Base64.getEncoder().encodeToString(imageData);
+         
     }
     
     
@@ -124,35 +147,6 @@ public class JugadorBean implements Serializable{
         this.accion = accion;
     }
 
-    public StreamedContent getImageJugador() throws Exception {
-        FacesContext context = FacesContext.getCurrentInstance();
- 
-		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
-			return new DefaultStreamedContent();
-		}
- 
-		else {
- 
-			String id = context.getExternalContext().getRequestParameterMap().get("pid");
- 
-			byte[] image = new JugadorDao().traerImageByte(id);
- 
-			return new DefaultStreamedContent(new ByteArrayInputStream(image));
- 
-		}
-        
-    }
-
-    public void setImageJugador(StreamedContent imageJugador) {
-        this.imageJugador = imageJugador;
-    }
-    
-    
-
-    
-    
-    
-    
     public void operar() throws Exception{
         switch(accion){
             case "Registrar":
@@ -171,6 +165,8 @@ public class JugadorBean implements Serializable{
     this.jugador.setNombreJugador("");
     this.jugador.setFechaNacimiento("");
     this.fechaNacimiento = null;
+    this.jugador.setFotoJugador("");
+    this.imgFile = null;
     }
     
     public void registrar() throws Exception {
@@ -181,6 +177,7 @@ public class JugadorBean implements Serializable{
         this.jugador.setIdEquipoJugador(equipo.getIdEquipo());
         this.jugador.setFechaNacimiento(fechaNacimiento.toString());
         this.jugador.setIdUsuario(usuario.getIdUsuario());
+        this.jugador.setFotoJugador(imageJugador);
         dao.registrar(jugador);
         this.listar();
     }catch(Exception e){  
@@ -301,5 +298,16 @@ public class JugadorBean implements Serializable{
        }     
     return bol;
     }
+
+    public UploadedFile getImgFile() {
+        return imgFile;
+    }
+
+    public void setImgFile(UploadedFile imgFile) {
+        this.imgFile = imgFile;
+    }
+   
+   
+    
     
 }

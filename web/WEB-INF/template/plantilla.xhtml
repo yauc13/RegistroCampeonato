@@ -22,7 +22,8 @@
                     <p:menubar>
                         <p:menuitem  value="Login: #{usuarioBean.usuario.loginUsuario}"/>
                         <f:facet name="options" >
-                            <p:commandButton  value="Cerrar" action="#{usuarioBean.cerrarSesion()}"/>
+                            <p:commandButton  value="Cerrar" action="#{usuarioBean.cerrarSesion()}"
+                                              icon="ui-icon-close"/>
                         </f:facet>
                        
                     </p:menubar>  
@@ -39,6 +40,34 @@
         <div id="bottom">
             <ui:insert name="bottom"></ui:insert>
         </div>
+        
+        <style>
+                    body {
+                        background-image: url("resources/imagen/estadiochampions.jpg");
+                        background-repeat: no-repeat;
+                        background-size: 100%;
+                        
+                    }
+
+                   
+
+                    tr:hover {
+                        background-color: inactivecaptiontext;
+                        opacity: 0.5;
+                        cursor: pointer;
+                    }
+                    
+                    .opciones{
+                        background-color: rgba(0,0, 0, 0.05);
+                    }
+                    .divmiga{
+                      background-color: rgba(0,0, 0, 0.05);  
+                    }
+                    .datatable{
+                        background-color: rgba(0,0, 0, 0.05);  
+                    }
+
+                </style>
 
     </h:body>
 

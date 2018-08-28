@@ -29,7 +29,7 @@
             <div id="miga">
                 <h:form>
                     <p:breadCrumb> 
-                        <p:menuitem value="Campeonatos" url="#" />     
+                        <p:menuitem value="Campeonatos" action="#{campeonatoBean.listarInicio()}"/>     
                         <p:menuitem value="#{grupoBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(grupoBean.campeonato)}"/>   
                     </p:breadCrumb>
                 </h:form>

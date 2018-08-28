@@ -8,8 +8,11 @@ package com.fut.dao;
 import com.fut.model.Campeonato;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -91,8 +94,8 @@ public class CampeonatoDao extends Dao{
     
         
     
-    public void modificar(Campeonato cam) throws Exception{
-        
+    public boolean modificar(Campeonato cam) throws Exception{
+        boolean reg;
         try{
             this.Conectar();
             //PreparedStatement st = this.getCn().prepareStatement("UPDATE campeonato SET nombreCampeonato = ? WHERE idCampeonato = ?");
@@ -100,25 +103,34 @@ public class CampeonatoDao extends Dao{
             st.setString(1, cam.getNombreCampeonato());                      
             st.setInt(2, cam.getIdCampeonato());          
             st.executeUpdate();
-        }catch(Exception e){
+            reg = true;
+        }catch(SQLException e){
+            reg =false;
             throw e;
         }finally{
         this.Cerrar();
         }
+        return reg;
     }
     
-    public void eliminar(Campeonato cam) throws Exception{
-        
+    public boolean eliminar(Campeonato cam){
+        boolean reg=false;
         try{
             this.Conectar();
             //PreparedStatement st = this.getCn().prepareStatement("DELETE FROM campeonato  WHERE idCampeonato = ?");
             PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.campeonato  WHERE \"idCampeonato\" = ?");
             st.setInt(1, cam.getIdCampeonato());          
-            st.executeUpdate();
-        }catch(Exception e){
-            throw e;
+            st.executeUpdate();           
+            reg = true;
+        }catch(SQLException e){            
+            
         }finally{
-        this.Cerrar();
+            try {
+                this.Cerrar();
+            } catch (Exception ex) {
+                Logger.getLogger(CampeonatoDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        return reg;
     }
 }

@@ -28,9 +28,12 @@
                     <p:outputLabel value="#{jugador.idJugador}"/>
                 </p:column>
                 <p:column headerText="Foto">
-                    <p:graphicImage value="#{productBean.productImage}">
-                    <f:param name="pid" value="#{jugador.idJugador}" />
-                    </p:graphicImage>
+                    <p:panel id="image_file_ver" 
+                                             visible="#{jugador.fotoJugador != '' and jugador.fotoJugador != null}"
+                                             style="border: none; padding: 0;"
+                                             styleClass="custompanel">
+                                        <img style="width: 100px; height: 100px;" src="data:image/png;base64,#{jugador.fotoJugador}" />
+                      </p:panel>
                 </p:column>
                 <p:column headerText="Jugador">
                     <p:outputLabel value="#{jugador.nombreJugador}"/>
@@ -53,6 +56,16 @@
         <p:dialog header="Registrar o Modificar Jugadors" widgetVar="wdgDatos" id="dlgDatos">
             <h:form>
                 <p:growl autoUpdate="true" showDetail="true"/>
+                <div class="col-md-6 paddingRight30">
+                                <div class="row space1">
+                                    <p:panel id="image_file_ver" 
+                                             visible="#{jugadorBean.jugador.fotoJugador != '' and jugadorBean.jugador.fotoJugador != null}"
+                                             style="border: none; padding: 0;"
+                                             styleClass="custompanel">
+                                        <img style="width: 100px; height: 100px;" src="data:image/png;base64,#{jugadorBean.jugador.fotoJugador}" />
+                                    </p:panel>
+                                </div>
+                            </div>
                 <p:outputLabel for="txtNombre" value="Nombre Jugador"/>
                 <p:inputText id="txtNombre" required="true" value="#{jugadorBean.jugador.nombreJugador}"/>
                 <p:outputLabel for="calendar" value="Fecha de Nacimiento"/>
@@ -61,6 +74,37 @@
                     <p:calendar id="calendar" navigator="true" pattern="yyyy-MM-dd" locale="pt"
                                 required="true" styleClass="dateTimeField"  value="#{jugadorBean.fechaNacimiento}"/>
                 </div>
+                <div class="row space1">
+                            <p:outputLabel value="Foto " />
+                            <p:fileUpload fileUploadListener="#{jugadorBean.handleFileUpload}"
+                                          update="image_file"
+                                          mode="advanced"
+                                          fileLimit="1" 
+                                          dragDropSupport="true"
+                                          label="Escoger imagen" 
+                                          invalidFileMessage="error al cargar" 
+                                          invalidSizeMessage="archivo muy grande" 
+                                          uploadLabel="uploaded" 
+                                          fileLimitMessage="subir un archivo a la vez"
+                                          validatorMessage="Debe subir un archivo para poder continuar con el proceso" required="true" 
+                                          
+                                          sizeLimit="209715200"
+                                          allowTypes="/(\.|\/)(gif|jpe?g|png|jpg)$/"
+                                          styleClass="upload-view-button"
+                                          />
+                            
+                        </div>
+                 <div class="col-md-6 paddingRight30">
+                                <div class="row space1">
+                                    <p:panel id="image_file" 
+                                             visible="#{jugadorBean.imageJugador != '' and jugadorBean.imageJugador != null}"
+                                             style="border: none; padding: 0;"
+                                             styleClass="custompanel">
+                                        <img style="width: 100px; height: 100px;" src="data:image/png;base64,#{jugadorBean.imageJugador}" />
+                                    </p:panel>
+                                </div>
+                            </div>
+                
                 <p:commandButton value="#{jugadorBean.accion}"  actionListener="#{jugadorBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
                 <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
             </h:form>

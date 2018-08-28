@@ -23,6 +23,17 @@ public class Jugador implements Serializable{
     int golJugador;
     int idEquipoJugador;
     int idUsuario;
+    private String fotoJugador;
+
+    public String getFotoJugador() {
+        return fotoJugador;
+    }
+
+    public void setFotoJugador(String fotoJugador) {
+        this.fotoJugador = fotoJugador;
+    }
+    
+    
 
     public int getIdUsuario() {
         return idUsuario;

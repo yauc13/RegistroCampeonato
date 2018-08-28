@@ -16,6 +16,7 @@ public class Grupo implements Serializable{
     String nombreGrupo;
     int idCampeonato;
     int idUsuario;
+    int numClasificados;
 
     public int getIdUsuario() {
         return idUsuario;
@@ -49,6 +50,14 @@ public class Grupo implements Serializable{
 
     public void setIdCampeonato(int idCampeonato) {
         this.idCampeonato = idCampeonato;
+    }
+
+    public int getNumClasificados() {
+        return numClasificados;
+    }
+
+    public void setNumClasificados(int numClasificados) {
+        this.numClasificados = numClasificados;
     }
     
     
