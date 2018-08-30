@@ -81,32 +81,32 @@
         </h:form>
         
         <h:form>
-            <p:dataGrid var="grupo" value="#{grupoBean.listaGrupo}" columns="3" >
-                <p:column >
-                    <p:panel header="#{grupo.nombreGrupo}" >
-                        <h:panelGrid columns="1">
-                            <p:graphicImage value="/resources/imagen/jugadorBalon.gif" height="50" width="50"/>
-                        
-                            <p:dataTable var="equi" value="#{grupoBean.getListaEquipos(grupo)}">
-                                <p:column headerText="Equipos">
+            <p:panel id="basic" header="#{grupoBean.campeonato.nombreCampeonato}" >
+            <p:dataGrid var="grupo" value="#{grupoBean.listaGrupo}" columns="5">
+                
+                <p:panelGrid columns="1" style=" align-content:  center">
+
+                            <f:facet name="header">
+                                
+                                <p:commandButton   value="#{grupo.nombreGrupo}" action="#{grupoBean.verGrupo(grupo)}" 
+                                ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                title="Ver Equipos del Grupo"
+                                />
+                            </f:facet>
+                    <p:dataTable var="equi" value="#{grupoBean.getListaEquipos(grupo)}" style=" align-content:  center">
+                                <p:column width="30%">
                                     <p:outputLabel value="#{equi.nombreEquipo}"/>
                                 </p:column>
                             </p:dataTable>
-                            <p:commandLink  value="Ver Grupo" action="#{grupoBean.verGrupo(grupo)}" 
-                                            ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"/>
+                    
+
+                    </p:panelGrid>
                 
-                        </h:panelGrid>
-                    </p:panel>
-                </p:column>
             </p:dataGrid>
+                </p:panel>
         </h:form>   
-            <h:outputText value="Content: " />
-            <h:outputLink id="content" value="#">
-                <h:outputText value="PrimeFaces" />
-            </h:outputLink>
-            <p:tooltip id="toolTipContent" for="content" position="bottom">
-                <p:graphicImage value="/resources/imagen/balonjugadorverde.gif" height="50" width="50"/>
-            </p:tooltip>
+            
+            
             
         
         

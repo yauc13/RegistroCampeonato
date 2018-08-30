@@ -12,6 +12,9 @@
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
         <f:event type="preRenderView" listener="#{grupoBean.listarPosicionesGrupo()}" />
+         <f:event type="preRenderView" listener="#{partidoBean.listarInicio()}" />
+         
+         <f:event type="preRenderView" listener="#{equipoBean.listarInicio()}" />
         <div id="miga">
                 <h:form>
                     <p:breadCrumb> 
@@ -63,44 +66,192 @@
                   color: #000000;
                 }
             </style>
-                
-        <h:form>
-            <p:dataTable id="data" value="#{grupoBean.listaPosiciones}" var="tablaEquipo"
-                         rowStyleClass="#{grupoBean.listaPosiciones.indexOf(tablaEquipo)+1 le 2 ? 'colored' : ''}" >
-                <p:column headerText="pos">
-                    <p:outputLabel value="#{grupoBean.listaPosiciones.indexOf(tablaEquipo)+1}"/>
+                       
+        <h:form>     
+        <p:tabView>
+            
+        <p:tab title="Tabla de Posiciones">
+            <h:panelGrid columns="2" cellpadding="10">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+                <p:dataTable id="data" value="#{grupoBean.listaPosiciones}" var="tablaEquipo"
+                         rowStyleClass="#{grupoBean.listaPosiciones.indexOf(tablaEquipo)+1 le 2 ? 'colored' : ''}" 
+                          >
+                    <f:facet name="header">
+                    <p:outputLabel value="Tabla de Posiciones #{partidoBean.grupo.nombreGrupo}"/>
+                        </f:facet>
+                    <p:column headerText="pos" width="5%">
+                    <p:outputLabel value="#{grupoBean.listaPosiciones.indexOf(tablaEquipo)+1}" />
                 </p:column>
-                <p:column headerText="Equipo">
+                    <p:column headerText="Equipo" width="50%">
                     <p:outputLabel value="#{tablaEquipo.nombre}"/>
                 </p:column>
-                <p:column headerText="Puntos">
-                    <p:outputLabel value="#{tablaEquipo.puntos}"/>
+                    <p:column headerText="Puntos" width="6%">
+                    <p:outputLabel value="#{tablaEquipo.puntos}" />
                 </p:column> 
-                <p:column headerText="DG">
+                <p:column headerText="DG" width="6%">
                     <p:outputLabel value="#{tablaEquipo.DF}"/>
                 </p:column>
-                <p:column headerText="GF">
+                <p:column headerText="GF" width="6%">
                     <p:outputLabel value="#{tablaEquipo.GF}"/>
                 </p:column>
-                <p:column headerText="GC">
+                <p:column headerText="GC" width="6%">
                     <p:outputLabel value="#{tablaEquipo.GC}"/>
                 </p:column>
-                <p:column headerText="PJ">
+                <p:column headerText="PJ" width="6%">
                     <p:outputLabel value="#{tablaEquipo.PJ}"/>
                 </p:column>
-                <p:column headerText="PG">
+                <p:column headerText="PG" width="6%">
                     <p:outputLabel value="#{tablaEquipo.PG}"/>
                 </p:column>
-                <p:column headerText="PE">
+                <p:column headerText="PE" width="6%">
                     <p:outputLabel value="#{tablaEquipo.PE}"/>
                 </p:column>
-                <p:column headerText="PP">
+                <p:column headerText="PP" width="6%">
                     <p:outputLabel value="#{tablaEquipo.PP}"/>
                 </p:column>              
-            </p:dataTable>        
-        </h:form>        
+            </p:dataTable> 
+                    </div>
+            </h:panelGrid>
+        </p:tab>
+            
+        <p:tab title="Partidos"  >
+            <h:panelGrid columns="2" cellpadding="10">
+                        <h:form id="frm2">
+              
+            <p:commandButton value="Nuevo" oncomplete="PF('wdgDatos').show();" 
+                             actionListener="#{partidoBean.setAccion('Registrar')}" update=":dlgDatos"/>
+            
+            <style type="text/css">
+                .colored {
+                  background-color: #76D7C4;
+                  color: #000000;
+                  
+                  
+                }
+            </style>
+           
+            <p:dataTable id="data" value="#{partidoBean.listaPartido}" var="partido"  
+                         rowStyleClass="#{partido.estadoPartido le 'Finalizado' ? 'colored' : ''}" 
+                         emptyMessage="hoal">
+                <f:facet name="header">
+                    <p:outputLabel value="Partidos #{partidoBean.grupo.nombreGrupo}"/>
+                        </f:facet>
                 
                 
+                <p:column headerText="id">
+                    <p:outputLabel value="#{partido.idPartido}"/>
+                </p:column>
+                <p:column headerText="idEquipoA">
+                    <p:outputLabel value="#{partido.idEquipoA}"/>
+                </p:column>
+                <p:column headerText="EquipoA">
+                    <p:outputLabel value="#{partido.equipoA.nombreEquipo}"/>
+                </p:column>
+                <p:column headerText="golA">
+                    <p:outputLabel value="#{partido.golA}"/>
+                </p:column>
+                <p:column headerText="idEquipoB">
+                    <p:outputLabel value="#{partido.idEquipoB}"/>
+                </p:column>
+                <p:column headerText="EquipoB">
+                    <p:outputLabel value="#{partido.equipoB.nombreEquipo}"/>
+                </p:column>
+                <p:column headerText="golB">
+                    <p:outputLabel value="#{partido.golB}"/>
+                </p:column>
+                <p:column headerText="Estado">
+                    <p:outputLabel value="#{partido.estadoPartido}"/>
+                </p:column>
+                <p:column headerText="Editar">
+                    <p:commandLink  id="linkEPlanilla" value="Planilla" action="#{partidoBean.editarPlanilla(partido)}" update="data"
+                                    onclick="PrimeFaces.monitorDownload(start, stop);"
+                                    />                   
+                </p:column>    
+            </p:dataTable>
+        </h:form>
+            </h:panelGrid>          
+        </p:tab>
+            
+        <p:tab title="Equipos">
+            <h:panelGrid columns="2" cellpadding="10">
+               <h:form id="frmEqu">
+
+            <p:commandButton value="Nuevo Equipo" oncomplete="PF('wdgDatosEqu').show();" actionListener="#{equipoBean.setAccion('Registrar')}" update=":dlgDatosEqu"  disabled="#{equipoBean.habilitarPermisos(equipoBean.equipo,2)}"/>
+            
+            
+            <p:outputLabel value="#{equipoBean.campeonato.nombreCampeonato}/"/> 
+            
+            <p:outputLabel value="#{equipoBean.grupo.nombreGrupo}/"/>             
+            
+           
+            <p:dataTable id="dataEqu" value="#{equipoBean.listaEquipo}" var="equipo" >
+                <p:column headerText="id">
+                    <p:outputLabel value="#{equipo.idEquipo}"/>
+                </p:column>
+                <p:column headerText="Equipo">
+                    <p:outputLabel value="#{equipo.nombreEquipo}"/>
+                </p:column>
+                <p:column headerText="Creador">
+                    <p:outputLabel value="#{equipo.idUsuario}"/>
+                </p:column> 
+                <p:column headerText="Ver Jugadores">
+                    <p:commandLink value="Ver Jugadores" action="#{equipoBean.verJugadoresEquipo(equipo)}" update="dataEqu"
+                                   ajax="true" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                   />
+                </p:column>    
+                <p:column headerText="Modificar">
+                    <p:commandLink value="Modificar" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatosEqu').show();" update=":dlgDatosEqu" disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
+                </p:column>
+                <p:column headerText="Eliminar">
+                    <p:commandLink value="Eliminar" actionListener="#{equipoBean.eliminar(equipo)}" update="dataEqu"   disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
+                </p:column>
+                
+            </p:dataTable>
+        </h:form>
+        
+            </h:panelGrid>
+        </p:tab>
+    </p:tabView> 
+            </h:form> 
+        
+        
+        <p:dialog header="Registrar o Modificar Partidos" widgetVar="wdgDatos" id="dlgDatos">
+            <h:form>
+                <p:outputLabel value="Equipo A"/>
+                
+                <p:selectOneMenu  value="#{partidoBean.codEquipoA}">
+                        <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
+                        <f:selectItems value="#{partidoBean.selectItemOneEquipo}"/>
+                        <p:ajax update="selectEB"/>
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="Equipo B"/>
+                <p:selectOneMenu   id="selectEB" value="#{partidoBean.codEquipoB}">
+                        <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
+                        <f:selectItems value="#{partidoBean.selectItemOneEquipoB}"/>
+                        
+                </p:selectOneMenu>              
+                
+                
+                <p:commandButton value="#{partidoBean.accion}"  actionListener="#{partidoBean.operar()}"
+                                 oncomplete="PF('wdgDatos').hide();" update=":frm2:data"
+                                 ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"/>
+                <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
+            </h:form>
+        </p:dialog>
+         
+         
+        <p:dialog header="Registrar o Modificar Equipos" widgetVar="wdgDatosEqu" id="dlgDatosEqu">
+            <h:form>
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <p:outputLabel value="Nombre Equipo" for="txtNombre"/>
+                <p:inputText id="txtNombre" required="true" value="#{equipoBean.equipo.nombreEquipo}"/>
+                
+                <p:commandButton value="#{equipoBean.accion}"  actionListener="#{equipoBean.operar()}" oncomplete="PF('wdgDatosEqu').hide();" 
+                                  />
+                <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatosEqu').hide();"/> 
+            </h:form>
+        </p:dialog>
                 
         <p:dialog modal="true" widgetVar="statusDialogVistaGrupo" header="Cargando..." draggable="false" closable="false" resizable="false">
             <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>

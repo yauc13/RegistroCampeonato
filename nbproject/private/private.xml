@@ -5,8 +5,14 @@
         <group>
             <file>file:/D:/proyectos%20primefaces/Clone%20Registro%20Campeonato/RegistroCampeonato/src/java/com/fut/bean/JugadorBean.java</file>
             <file>file:/D:/proyectos%20primefaces/Clone%20Registro%20Campeonato/RegistroCampeonato/src/java/com/fut/dao/JugadorDao.java</file>
+            <file>file:/D:/proyectos%20primefaces/Clone%20Registro%20Campeonato/RegistroCampeonato/src/java/com/fut/util/Util.java</file>
+            <file>file:/D:/proyectos%20primefaces/Clone%20Registro%20Campeonato/RegistroCampeonato/web/WEB-INF/web.xml</file>
+            <file>file:/D:/proyectos%20primefaces/Clone%20Registro%20Campeonato/RegistroCampeonato/src/java/com/fut/bean/GrupoBean.java</file>
             <file>file:/D:/proyectos%20primefaces/Clone%20Registro%20Campeonato/RegistroCampeonato/src/java/com/fut/model/Jugador.java</file>
             <file>file:/D:/proyectos%20primefaces/Clone%20Registro%20Campeonato/RegistroCampeonato/web/listaJugador.xhtml</file>
+            <file>file:/D:/proyectos%20primefaces/Clone%20Registro%20Campeonato/RegistroCampeonato/web/listaPartido.xhtml</file>
+            <file>file:/D:/proyectos%20primefaces/Clone%20Registro%20Campeonato/RegistroCampeonato/src/java/com/fut/dao/PartidoDao.java</file>
+            <file>file:/D:/proyectos%20primefaces/Clone%20Registro%20Campeonato/RegistroCampeonato/web/vistaGrupo.xhtml</file>
         </group>
     </open-files>
 </project-private>

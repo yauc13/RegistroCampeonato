@@ -7,6 +7,7 @@ package com.fut.dao;
 
 import com.fut.model.Equipo;
 import com.fut.model.Jugador;
+import com.fut.util.Util;
 
 
 import java.sql.PreparedStatement;
@@ -52,7 +53,7 @@ public class JugadorDao extends Dao {
             try{
                 this.Conectar();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idJugador\",\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\", \"fotoJugador\" FROM public.jugador WHERE \"idEquipoJugador\" = ?");
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idJugador\",\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\", \"fotoJugador\" FROM public.jugador WHERE \"idEquipoJugador\" = ? ORDER BY \"idJugador\"");
                 st.setInt(1, camp.getIdEquipo());
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -63,7 +64,13 @@ public class JugadorDao extends Dao {
                     cam.setFechaNacimiento(rs.getString("fechaNacimiento"));
                     cam.setIdEquipoJugador(rs.getInt("idEquipoJugador"));
                     cam.setIdUsuario(rs.getInt("idUsuario"));
-                    cam.setFotoJugador(rs.getString("fotoJugador"));
+                    if(!"".equals(rs.getString("fotoJugador")) && rs.getString("fotoJugador")!=null){
+                        cam.setFotoJugador(rs.getString("fotoJugador"));
+                        //cam.setFotoJugador(Util.DEFAULTPHOTO);
+                    }else{
+                        cam.setFotoJugador(Util.DEFAULTPHOTO);
+                    }
+                    
 
                     lista.add(cam);
                 
@@ -99,7 +106,7 @@ public class JugadorDao extends Dao {
                     lista.add(cam);
                 
                 }
-            }catch(Exception e){
+            }catch(SQLException e){
                 throw e;
             }finally{
                 this.Cerrar();
@@ -122,7 +129,7 @@ public class JugadorDao extends Dao {
 		while (rs.next()) {
 			productImage = rs.getBytes("fotoJugador");
 		}
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			System.out.println(e);
 			System.exit(0);
 		}finally{
@@ -149,7 +156,7 @@ public class JugadorDao extends Dao {
                                        
                 }
                 
-            }catch(Exception e){
+            }catch(SQLException e){
                 throw e;
             }finally{
                 this.Cerrar();
@@ -164,11 +171,12 @@ public class JugadorDao extends Dao {
         try{
             this.Conectar();
             //PreparedStatement st = this.getCn().prepareStatement("UPDATE jugador SET nombreJugador = ? WHERE idJugador = ?");
-            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.jugador SET \"nombreJugador\" = ? WHERE \"idJugador\" = ?");
-            st.setString(1, cam.getNombreJugador());                      
-            st.setInt(2, cam.getIdJugador());          
+            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.jugador SET \"nombreJugador\" = ?,\"fotoJugador\" = ? WHERE \"idJugador\" = ?");
+            st.setString(1, cam.getNombreJugador());  
+            st.setString(2, cam.getFotoJugador());
+            st.setInt(3, cam.getIdJugador());          
             st.executeUpdate();
-        }catch(Exception e){
+        }catch(SQLException e){
             throw e;
         }finally{
         this.Cerrar();
@@ -183,7 +191,7 @@ public class JugadorDao extends Dao {
             PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.jugador  WHERE \"idJugador\" = ?");
             st.setInt(1, cam.getIdJugador());          
             st.executeUpdate();
-        }catch(Exception e){
+        }catch(SQLException e){
             throw e;
         }finally{
         this.Cerrar();

@@ -11,70 +11,67 @@
     <h:body>
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
-        
-        <f:event type="preRenderView" listener="#{jugadorBean.listarInicio()}" />
-        <h:form id="frm1">
 
-            <p:commandButton value="Nuevo Jugador" oncomplete="PF('wdgDatos').show();" actionListener="#{jugadorBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{jugadorBean.habilitarPermisos(jugadorBean.jugador,2)}"/>
-             
-            <p:outputLabel value="#{jugadorBean.campeonato.nombreCampeonato}/"/> 
-            
-            <p:outputLabel value="#{jugadorBean.grupo.nombreGrupo}/"/>             
-            
-            <p:outputLabel value="#{jugadorBean.equipo.nombreEquipo}/"/>             
-           
-            <p:dataTable id="data" value="#{jugadorBean.listaJugador}" var="jugador" >
-                <p:column headerText="id">
-                    <p:outputLabel value="#{jugador.idJugador}"/>
-                </p:column>
-                <p:column headerText="Foto">
-                    <p:panel id="image_file_ver" 
-                                             visible="#{jugador.fotoJugador != '' and jugador.fotoJugador != null}"
-                                             style="border: none; padding: 0;"
-                                             styleClass="custompanel">
-                                        <img style="width: 100px; height: 100px;" src="data:image/png;base64,#{jugador.fotoJugador}" />
-                      </p:panel>
-                </p:column>
-                <p:column headerText="Jugador">
-                    <p:outputLabel value="#{jugador.nombreJugador}"/>
-                </p:column>
-                
-                <p:column headerText="Creador">
-                    <p:outputLabel value="#{jugador.idUsuario}"/>
-                </p:column> 
-                   
-                <p:column headerText="Modificar">
-                    <p:commandLink value="Modificar" actionListener="#{jugadorBean.leerID(jugador)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{jugadorBean.habilitarPermisos(jugador,1)}"/>
-                </p:column>
-                <p:column headerText="Eliminar">
-                    <p:commandLink value="Eliminar" actionListener="#{jugadorBean.eliminar(jugador)}" update="data"  disabled="#{jugadorBean.habilitarPermisos(jugador,1)}"/>
-                </p:column>
-                
-            </p:dataTable>
-        </h:form>
-        
-        <p:dialog header="Registrar o Modificar Jugadors" widgetVar="wdgDatos" id="dlgDatos">
-            <h:form>
-                <p:growl autoUpdate="true" showDetail="true"/>
-                <div class="col-md-6 paddingRight30">
-                                <div class="row space1">
-                                    <p:panel id="image_file_ver" 
-                                             visible="#{jugadorBean.jugador.fotoJugador != '' and jugadorBean.jugador.fotoJugador != null}"
-                                             style="border: none; padding: 0;"
-                                             styleClass="custompanel">
-                                        <img style="width: 100px; height: 100px;" src="data:image/png;base64,#{jugadorBean.jugador.fotoJugador}" />
-                                    </p:panel>
-                                </div>
+                <f:event type="preRenderView" listener="#{jugadorBean.listarInicio()}" />
+                <h:form id="frm1">
+
+                    <p:commandButton value="Nuevo Jugador" oncomplete="PF('wdgDatos').show();" actionListener="#{jugadorBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{jugadorBean.habilitarPermisos(jugadorBean.jugador,2)}"/>
+
+                    <p:outputLabel value="#{jugadorBean.campeonato.nombreCampeonato}/"/> 
+
+                    <p:outputLabel value="#{jugadorBean.grupo.nombreGrupo}/"/>             
+
+                    <p:outputLabel value="#{jugadorBean.equipo.nombreEquipo}/"/>             
+
+                    
+                    <p:dataGrid id="dataGrid" value="#{jugadorBean.listaJugador}" var="jugador"  columns="5">
+                        <p:panelGrid columns="2">
+                            <f:facet name="header">
+                                <p:panel id="image_file_ver" 
+                                         visible="#{jugador.fotoJugador != '' and jugador.fotoJugador != null}"
+                                         style="border: none; padding: 0;"
+                                         styleClass="custompanel">
+                                    <img style="width: 100px; height: 100px;" src="data:image/png;base64,#{jugador.fotoJugador}" />
+                                </p:panel>
+                            </f:facet>
+                            <f:facet name="header">
+                                <h:outputText value="#{jugador.nombreJugador}" />
+                            </f:facet>
+
+                            <h:outputText value="iD:" />
+                            <h:outputText value="#{jugador.idJugador}" />
+                            
+                            <p:commandLink value="Modificar" actionListener="#{jugadorBean.leerID(jugador)}" 
+                                           oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{jugadorBean.habilitarPermisos(jugador,1)}"/>
+                             <p:commandLink value="Eliminar" actionListener="#{jugadorBean.eliminar(jugador)}"
+                                           update="dataGrid"  disabled="#{jugadorBean.habilitarPermisos(jugador,1)}"/>
+                            
+                        </p:panelGrid>
+                    </p:dataGrid>
+                </h:form>
+
+                <p:dialog header="Registrar o Modificar Jugadors" widgetVar="wdgDatos" id="dlgDatos">
+                    <h:form>
+                        <p:growl autoUpdate="true" showDetail="true"/>
+                        <div class="col-md-6 paddingRight30">
+                            <div class="row space1">
+                                <p:panel id="image_file_ver" 
+                                         visible="#{jugadorBean.jugador.fotoJugador != '' and jugadorBean.jugador.fotoJugador != null}"
+                                         style="border: none; padding: 0;"
+                                         styleClass="custompanel">
+                                    <img style="width: 100px; height: 100px;" src="data:image/png;base64,#{jugadorBean.jugador.fotoJugador}" />
+                                </p:panel>
                             </div>
-                <p:outputLabel for="txtNombre" value="Nombre Jugador"/>
-                <p:inputText id="txtNombre" required="true" value="#{jugadorBean.jugador.nombreJugador}"/>
-                <p:outputLabel for="calendar" value="Fecha de Nacimiento"/>
-                
-                <div class="row">
-                    <p:calendar id="calendar" navigator="true" pattern="yyyy-MM-dd" locale="pt"
-                                required="true" styleClass="dateTimeField"  value="#{jugadorBean.fechaNacimiento}"/>
-                </div>
-                <div class="row space1">
+                        </div>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="txtNombre" value="Nombre Jugador"/>
+                            <p:inputText id="txtNombre" required="true" value="#{jugadorBean.jugador.nombreJugador}"/>
+                            <p:outputLabel for="calendar" value="Fecha de Nacimiento"/>
+                            <p:calendar id="calendar" navigator="true" pattern="yyyy-MM-dd" locale="pt"
+                                        required="true" styleClass="dateTimeField"  value="#{jugadorBean.fechaNacimiento}"/>
+
+
+
                             <p:outputLabel value="Foto " />
                             <p:fileUpload fileUploadListener="#{jugadorBean.handleFileUpload}"
                                           update="image_file"
@@ -87,14 +84,14 @@
                                           uploadLabel="uploaded" 
                                           fileLimitMessage="subir un archivo a la vez"
                                           validatorMessage="Debe subir un archivo para poder continuar con el proceso" required="true" 
-                                          
+
                                           sizeLimit="209715200"
                                           allowTypes="/(\.|\/)(gif|jpe?g|png|jpg)$/"
                                           styleClass="upload-view-button"
                                           />
-                            
-                        </div>
-                 <div class="col-md-6 paddingRight30">
+
+
+                            <div class="col-md-6 paddingRight30">
                                 <div class="row space1">
                                     <p:panel id="image_file" 
                                              visible="#{jugadorBean.imageJugador != '' and jugadorBean.imageJugador != null}"
@@ -104,15 +101,18 @@
                                     </p:panel>
                                 </div>
                             </div>
-                
-                <p:commandButton value="#{jugadorBean.accion}"  actionListener="#{jugadorBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
-                <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
-            </h:form>
-        </p:dialog>
-        </ui:define>
-            
+
+                        </h:panelGrid>
+                        <p:commandButton value="#{jugadorBean.accion}"  actionListener="#{jugadorBean.operar()}"
+                                         oncomplete="PF('wdgDatos').hide();" update=":frm1:dataGrid"/>
+                        <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"
+                                         actionListener="#{jugadorBean.limpiar()}"/> 
+                    </h:form>
+                </p:dialog>
+            </ui:define>
+
         </ui:composition>
-        
+
     </h:body>
 </html>
 

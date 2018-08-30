@@ -46,12 +46,23 @@ public class JugadorBean implements Serializable{
     private Date fechaNacimiento;
     private String imageJugador; //imagen txt base64
     private UploadedFile imgFile; //file para la imagen del jugador
+    private String fotoDefault=""; //foto por defecto
     
 
     public JugadorBean() {
-        InputStream dbStream = null;
+        
         
     }
+
+    public String getFotoDefault() {
+        return fotoDefault;
+    }
+
+    public void setFotoDefault(String fotoDefault) {
+        this.fotoDefault = fotoDefault;
+    }
+    
+    
     
     public String getImageJugador() {
         return imageJugador;
@@ -67,8 +78,12 @@ public class JugadorBean implements Serializable{
         imgFile =event.getFile();
        
         // Reading a Image file from file system
+        if(imgFile!=null){
         byte imageData[] = imgFile.getContents();
         imageJugador = Base64.getEncoder().encodeToString(imageData);
+        }else{           
+            imageJugador = this.jugador.getFotoJugador();
+        }
          
     }
     
@@ -144,12 +159,15 @@ public class JugadorBean implements Serializable{
     }
 
     public void setAccion(String accion) {
+        //esta accion se hace cuando se oprime el boton nuevo
+        this.limpiar();
         this.accion = accion;
     }
 
     public void operar() throws Exception{
         switch(accion){
             case "Registrar":
+                
                 this.registrar();
                 this.limpiar();
                 break;
@@ -166,7 +184,9 @@ public class JugadorBean implements Serializable{
     this.jugador.setFechaNacimiento("");
     this.fechaNacimiento = null;
     this.jugador.setFotoJugador("");
+    this.imageJugador="";
     this.imgFile = null;
+    
     }
     
     public void registrar() throws Exception {
@@ -188,7 +208,13 @@ public class JugadorBean implements Serializable{
     public void modificar() throws Exception {
     JugadorDao dao;
     try{
+        if(imgFile==null){
+        imageJugador = this.jugador.getFotoJugador();
+        }           
+            
+        
         dao = new JugadorDao();
+        jugador.setFotoJugador(imageJugador);
         dao.modificar(jugador);
         
         this.listar();
@@ -216,8 +242,7 @@ public class JugadorBean implements Serializable{
         //Equipo camp = (Equipo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("equipo");
         
         listaJugador = dao.listar(equipo);
-        
-        
+
         }
     }catch(Exception e){   
         throw e;
@@ -244,7 +269,8 @@ public class JugadorBean implements Serializable{
     
     
     public void leerID (Jugador usu) throws Exception{
-            this.jugador = usu; 
+            this.jugador = usu;
+            //this.jugador.setFotoJugador(usu.getFotoJugador());
             this.accion = "Modificar";
     }
     
