@@ -87,6 +87,7 @@ public class EquipoBean implements Serializable{
     }
 
     public void setAccion(String accion) {
+        this.limpiar();
         this.accion = accion;
     }
 

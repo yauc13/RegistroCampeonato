@@ -26,9 +26,9 @@
             }
         </script>
         
-        <h:form id="frm1">
+        <h:form id="frm">
 
-            <p:commandButton value="Nuevo Equipo" oncomplete="PF('wdgDatos').show();" actionListener="#{equipoBean.setAccion('Registrar')}" update=":dlgDatos"  disabled="#{equipoBean.habilitarPermisos(equipoBean.equipo,2)}"/>
+            <p:commandButton value="Nuevo Equipo" oncomplete="PF('wdgDatosE').show();" actionListener="#{equipoBean.setAccion('Registrar')}" update=":dlgDatosE"  disabled="#{equipoBean.habilitarPermisos(equipoBean.equipo,2)}"/>
             
             
             <p:outputLabel value="#{equipoBean.campeonato.nombreCampeonato}/"/> 
@@ -48,11 +48,11 @@
                 </p:column> 
                 <p:column headerText="Ver Jugadores">
                     <p:commandLink value="Ver Jugadores" action="#{equipoBean.verJugadoresEquipo(equipo)}" update="data"
-                                   ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                    onclick="PrimeFaces.monitorDownload(start, stop);"
                                    />
                 </p:column>    
                 <p:column headerText="Modificar">
-                    <p:commandLink value="Modificar" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
+                    <p:commandLink value="Modificar" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatosE').show();" update=":dlgDatosE" disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
                 </p:column>
                 <p:column headerText="Eliminar">
                     <p:commandLink value="Eliminar" actionListener="#{equipoBean.eliminar(equipo)}" update="data"   disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
@@ -61,14 +61,14 @@
             </p:dataTable>
         </h:form>
         
-        <p:dialog header="Registrar o Modificar Equipos" widgetVar="wdgDatos" id="dlgDatos">
+        <p:dialog header="Registrar o Modificar Equipos" widgetVar="wdgDatosE" id="dlgDatosE">
             <h:form>
                 <p:growl autoUpdate="true" showDetail="true"/>
                 <p:outputLabel value="Nombre Equipo" for="txtNombre"/>
                 <p:inputText id="txtNombre" required="true" value="#{equipoBean.equipo.nombreEquipo}"/>
                 
-                <p:commandButton value="#{equipoBean.accion}"  actionListener="#{equipoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
-                <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
+                <p:commandButton value="#{equipoBean.accion}"  actionListener="#{equipoBean.operar()}" oncomplete="PF('wdgDatosE').hide();" update=":frm:data"/>
+                <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatosE').hide();"/> 
             </h:form>
         </p:dialog>
         </ui:define>

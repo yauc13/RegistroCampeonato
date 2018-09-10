@@ -18,11 +18,13 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.event.TabChangeEvent;
 
 /**
  *
@@ -48,6 +50,12 @@ public class GrupoBean implements Serializable{
         Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         int idCamp = camp.getIdCampeonato();
     return idCamp;
+    }
+    
+    public void onTabChange(TabChangeEvent event) {
+        FacesMessage msg = new FacesMessage("Tab Changed", "Active Tab: " + event.getTab().getTitle());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        event.getTab().setLoaded(true);
     }
     
     public void operar() throws Exception{

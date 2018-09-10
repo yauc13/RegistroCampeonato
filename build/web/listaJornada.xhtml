@@ -15,7 +15,7 @@
             
             <p:commandButton value="Salir" icon="ui-icon-power" action="#{usuarioBean.cerrarSesion()}" /> 
            
-            <p:dataTable id="data" value="#{equipoBean.listaEquipo}" var="equipo" >
+            <p:dataTable id="dataFechas" value="#{equipoBean.listaEquipo}" var="fecha" >
                 <p:column headerText="id">
                     <p:outputLabel value="#{equipo.idEquipo}"/>
                 </p:column>
@@ -32,9 +32,9 @@
             </p:dataTable>
         </h:form>
         
-        <p:dialog header="Registrar o Modificar Equipos" widgetVar="wdgDatos" id="dlgDatos">
+        <p:dialog header="Registrar o Modificar Jonadas" widgetVar="wdgDatos" id="dlgDatos">
             <h:form>
-                <p:outputLabel value="Nombre"/>
+                <p:outputLabel value="Nombre Jornada"/>
                 <p:inputText  value="#{equipoBean.equipo.nombreEquipo}"/>
                 
                 <p:commandButton value="#{equipoBean.accion}"  actionListener="#{equipoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>

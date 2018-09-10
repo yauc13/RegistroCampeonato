@@ -38,6 +38,7 @@
                         PF('statusDialog1').hide();
                     }
                 </script>
+                
 
                 <h:form id="frm1">
 
@@ -50,8 +51,11 @@
                             
                         </f:facet>
                     </p:menubar> 
-
+                    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
                     <p:dataTable id="data" value="#{campeonatoBean.listaCampeonato}" var="campeonato"  >
+                        <f:facet  name="header">
+                            <p:outputLabel value="Campeonatos"/>
+                        </f:facet>
                         <p:column headerText="id" width="5%">
                             <p:outputLabel value="#{campeonato.idCampeonato}"  />
                         </p:column>
@@ -67,17 +71,18 @@
                                            />
                         </p:column>
                         <p:column headerText="Modificar" width="10%">
-                            <p:commandLink value="Modificar" actionListener="#{campeonatoBean.leerID(campeonato)}" 
+                            <p:commandButton  icon="ui-icon-pencil" actionListener="#{campeonatoBean.leerID(campeonato)}" 
                                            oncomplete="PF('wdgDatos').show();" update=":dlgDatos"
                                            disabled="#{campeonatoBean.habilitarPermisos(campeonato,1)}"/>
                         </p:column>
                         <p:column headerText="Eliminar" width="10%">
-                            <p:commandLink value="Eliminar" 
+                            <p:commandButton icon="ui-icon-trash"
                                            update="data,dlgDelete" disabled="#{campeonatoBean.habilitarPermisos(campeonato,1)}"
                                            actionListener="#{campeonatoBean.leerID(campeonato)}"
                                            oncomplete="PF('wdgDelete').show();"/>
                         </p:column>              
                     </p:dataTable>
+                        </div>
                 </h:form>
 
                 <p:dialog header="Registrar o Modificar Campeonatos" widgetVar="wdgDatos" id="dlgDatos">
@@ -86,7 +91,8 @@
                         <p:outputLabel value="Nombre Campeonato" for="txtNombre"/>
                         <p:inputText id="txtNombre" required="true" value="#{campeonatoBean.campeonato.nombreCampeonato}"/>
 
-                        <p:commandButton  id="btnRegistrar" value="#{campeonatoBean.accion}"  actionListener="#{campeonatoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
+                        <p:commandButton  id="btnRegistrar" value="#{campeonatoBean.accion}"  actionListener="#{campeonatoBean.operar()}"
+                                          oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
 
                         <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
                     </h:form>

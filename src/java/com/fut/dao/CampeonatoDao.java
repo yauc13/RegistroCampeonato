@@ -30,7 +30,7 @@ public class CampeonatoDao extends Dao{
             
             st.executeUpdate();
             reg = true;
-        }catch(Exception e){
+        }catch(SQLException e){
             throw e;
         }finally{
         this.Cerrar();

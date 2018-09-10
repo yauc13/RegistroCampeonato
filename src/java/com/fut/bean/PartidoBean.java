@@ -104,7 +104,9 @@ public class PartidoBean implements Serializable{
         this.partido.setIdEquipoA(Integer.parseInt(this.codEquipoA));
         this.partido.setIdEquipoB(Integer.parseInt(this.codEquipoB));
         dao.registrar(partido);
+        
         this.listar();
+        
     }catch(Exception e){  
         throw e;
     }

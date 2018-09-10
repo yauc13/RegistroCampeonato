@@ -9,121 +9,161 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body id="idBody1">
-        
-        
+
+
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
-  <f:event type="preRenderView" listener="#{grupoBean.listarInicio()}" />
-        <p:dialog modal="true" widgetVar="statusDialogGrupo" header="Cargando..." draggable="false" closable="false" resizable="false">
-            <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
-        </p:dialog>
-        <script type="text/javascript">
-            function start() {
-                PF('statusDialogGrupo').show();
-            }
-            function stop() {
-                PF('statusDialogGrupo').hide();
-            }
-        </script>
-  
-            <div id="miga">
-                <h:form>
-                    <p:breadCrumb> 
-                        <p:menuitem value="Campeonatos" action="#{campeonatoBean.listarInicio()}"/>     
-                        <p:menuitem value="#{grupoBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(grupoBean.campeonato)}"/>   
-                    </p:breadCrumb>
-                </h:form>
-            </div> 
-        
-        
-            <div> 
-                <h:form >
-                    
+                <f:event type="preRenderView" listener="#{grupoBean.listarInicio()}" />
+                <p:dialog modal="true" widgetVar="statusDialogGrupo" header="Cargando..." draggable="false" closable="false" resizable="false">
+                    <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
+                </p:dialog>
+                <script type="text/javascript">
+                    function start() {
+                        PF('statusDialogGrupo').show();
+                    }
+                    function stop() {
+                        PF('statusDialogGrupo').hide();
+                    }
+                </script>
+
+                <div id="miga">
+                    <h:form>
+                        <p:breadCrumb> 
+                            <p:menuitem value="Campeonatos" action="#{campeonatoBean.listarInicio()}"/>     
+                            <p:menuitem value="#{grupoBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(grupoBean.campeonato)}"/>   
+                        </p:breadCrumb>
+                    </h:form>
+                </div> 
+
+
+                <div> 
+                    <h:form >
+
                         <p:commandLink value="Inicio  " action="listaCampeonato?faces-redirect=true" style="text-decoration: none"/>
                         <p:commandLink value="#{grupoBean.campeonato.nombreCampeonato}" action="listaGrupo?faces-redirect=true" style="text-decoration: none"/>
-                     
-                </h:form>
-            </div>
-        
-        <h:form id="frm1">
-        
 
-            <p:commandButton value="Nuevo Grupo" oncomplete="PF('wdgDatos').show();" actionListener="#{grupoBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{grupoBean.habilitarPermisos(grupoBean.campeonato,1)}"/>
-            <p:outputLabel value="#{grupoBean.campeonato.nombreCampeonato}/"/>
-            <p:dataTable id="data" value="#{grupoBean.listaGrupo}" var="grupo" >
-                <p:column headerText="id">
-                    <p:outputLabel value="#{grupo.idGrupo}"/>
-                </p:column>
-                <p:column headerText="Grupo">
-                    <p:outputLabel value="#{grupo.nombreGrupo}"/>
-                </p:column>
-                <p:column headerText="Creador">
-                    <p:outputLabel value="#{grupo.idUsuario}"/>
-                </p:column> 
-                <p:column headerText="Ver Grupos">
-                    <p:commandLink value="Ver Equipos" action="#{grupoBean.verGrupo(grup)}" update="data"
-                                   ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
-                                   />
-                </p:column>
-                <p:column headerText="Ver Partidos">
-                    <p:commandLink id="linkVPartidos" value="Ver Partidos" action="#{grupoBean.verGrupo(grup)}"  update="data" 
-                                   ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
-                                   />
+                    </h:form>
+                </div>
+                <p:tabView>
+                    <p:tab title="Fehas" id="tab1">
+                        <h:panelGrid columns="2" cellpadding="10" id="panel1">
+
+
+
+                            <h:form id="frm1">
+
+
+                                <p:commandButton value="Nuevo Grupo" oncomplete="PF('wdgDatos').show();" actionListener="#{grupoBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{grupoBean.habilitarPermisos(grupoBean.campeonato,1)}"/>
+                                <p:outputLabel value="#{grupoBean.campeonato.nombreCampeonato}/"/>
+                                <p:dataTable id="data" value="#{grupoBean.listaGrupo}" var="grupo" >
+                                    <p:column headerText="id">
+                                        <p:outputLabel value="#{grupo.idGrupo}"/>
+                                    </p:column>
+                                    <p:column headerText="Grupo">
+                                        <p:outputLabel value="#{grupo.nombreGrupo}"/>
+                                    </p:column>
+                                    <p:column headerText="Creador">
+                                        <p:outputLabel value="#{grupo.idUsuario}"/>
+                                    </p:column> 
+                                    <p:column headerText="Ver Grupos">
+                                        <p:commandLink value="Ver Equipos" action="#{grupoBean.verGrupo(grup)}" update="data"
+                                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                                       />
+                                    </p:column>
+                                    <p:column headerText="Ver Partidos">
+                                        <p:commandLink id="linkVPartidos" value="Ver Partidos" action="#{grupoBean.verGrupo(grup)}"  update="data" 
+                                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                                       />
+
+                                    </p:column>
+                                    <p:column headerText="Modificar">
+                                        <p:commandLink value="Modificar" actionListener="#{grupoBean.leerID(grupo)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{grupoBean.habilitarPermisos(grupoBean.campeonato,1)}"/>
+                                    </p:column>
+                                    <p:column headerText="Eliminar">
+                                        <p:commandLink value="Eliminar" actionListener="#{grupoBean.eliminar(grupo)}" update="data" disabled="#{grupoBean.habilitarPermisos(grupoBean.campeonato,1)}"/>
+                                    </p:column>              
+                                </p:dataTable>
+                            </h:form>
+                        </h:panelGrid>
+                    </p:tab>
                     
-                </p:column>
-                <p:column headerText="Modificar">
-                    <p:commandLink value="Modificar" actionListener="#{grupoBean.leerID(grupo)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{grupoBean.habilitarPermisos(grupoBean.campeonato,1)}"/>
-                </p:column>
-                <p:column headerText="Eliminar">
-                    <p:commandLink value="Eliminar" actionListener="#{grupoBean.eliminar(grupo)}" update="data" disabled="#{grupoBean.habilitarPermisos(grupoBean.campeonato,1)}"/>
-                </p:column>              
-            </p:dataTable>
-        </h:form>
-        
-        <h:form>
-            <p:panel id="basic" header="#{grupoBean.campeonato.nombreCampeonato}" >
-            <p:dataGrid var="grupo" value="#{grupoBean.listaGrupo}" columns="5">
-                
-                <p:panelGrid columns="1" style=" align-content:  center">
-
-                            <f:facet name="header">
+                     <p:tab title="Jornadas" id="tab2">
+                        <h:panelGrid columns="2" cellpadding="10" id="panel2">
+                            <h:form id="form2">
                                 
-                                <p:commandButton   value="#{grupo.nombreGrupo}" action="#{grupoBean.verGrupo(grupo)}" 
-                                ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
-                                title="Ver Equipos del Grupo"
-                                />
-                            </f:facet>
-                    <p:dataTable var="equi" value="#{grupoBean.getListaEquipos(grupo)}" style=" align-content:  center">
-                                <p:column width="30%">
-                                    <p:outputLabel value="#{equi.nombreEquipo}"/>
-                                </p:column>
-                            </p:dataTable>
-                    
+                                <p:dataTable id="data" value="#{grupoBean.listaGrupo}" var="grupo" >
+                                     <p:column style="width:16px">
+                                        <p:rowToggler />
+                                    </p:column>
+                                    <p:column headerText="id">
+                                        <p:outputLabel value="Fecha #{grupo.idGrupo}"/>
+                                    </p:column>
 
-                    </p:panelGrid>
-                
-            </p:dataGrid>
-                </p:panel>
-        </h:form>   
-            
-            
-            
-        
-        
-        <p:dialog header="Registrar o Modificar Grupos" widgetVar="wdgDatos" id="dlgDatos">
-            <h:form>
-                <p:growl autoUpdate="true" showDetail="true"/>
-                <p:outputLabel value="Nombre Grupo" for="txtNombre"/>
-                <p:inputText id="txtNombre" required="true" value="#{grupoBean.grupo.nombreGrupo}"/>
-                
-                <p:commandButton value="#{grupoBean.accion}"  actionListener="#{grupoBean.operar()}" oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
-                <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
-            </h:form>
-        </p:dialog>
-        
-        </ui:define>           
+                                    <p:rowExpansion>
+                                        <p:panelGrid  columns="2" columnClasses="label,value" style="width:300px">
+                                            <f:facet name="header">
+                                               
+                                            </f:facet>
+                                            <p:dataTable var="equi" value="#{grupoBean.getListaEquipos(grupo)}" style=" align-content:  center" >
+                                                <p:column width="30%">
+                                                    <p:outputLabel value="#{equi.nombreEquipo}"/>
+                                                </p:column>
+                                            </p:dataTable>
+                                         
+                                        </p:panelGrid>
+                                    </p:rowExpansion>
+                                </p:dataTable>
+                            </h:form>
+                        </h:panelGrid>
+                    </p:tab>
+
+                    <p:tab title="Grupos">
+                        <h:panelGrid columns="2" cellpadding="10">
+
+                            <h:form>
+                                <p:panel id="basic" header="#{grupoBean.campeonato.nombreCampeonato}" >
+                                    <p:dataGrid var="grupo" value="#{grupoBean.listaGrupo}" columns="5">
+
+                                        <p:panelGrid columns="1" style=" align-content:  center">
+
+                                            <f:facet name="header">
+
+                                                <p:commandButton   value="#{grupo.nombreGrupo}" action="#{grupoBean.verGrupo(grupo)}" 
+                                                                    onclick="PrimeFaces.monitorDownload(start, stop);"
+                                                                   title="Ver Equipos del Grupo"
+                                                                   />
+                                            </f:facet>
+                                            <p:dataTable var="equi" value="#{grupoBean.getListaEquipos(grupo)}" style=" align-content:  center">
+                                                <p:column width="30%">
+                                                    <p:outputLabel value="#{equi.nombreEquipo}"/>
+                                                </p:column>
+                                            </p:dataTable>
+
+
+                                        </p:panelGrid>
+
+                                    </p:dataGrid>
+                                </p:panel>
+                            </h:form> 
+                        </h:panelGrid>
+                    </p:tab>
+
+                </p:tabView>
+
+                <p:dialog header="Registrar o Modificar Grupos" widgetVar="wdgDatos" id="dlgDatos">
+                    <h:form>
+                        <p:growl autoUpdate="true" showDetail="true"/>
+                        <p:outputLabel value="Nombre Grupo" for="txtNombre"/>
+                        <p:inputText id="txtNombre" required="true" value="#{grupoBean.grupo.nombreGrupo}"/>
+
+                        <p:commandButton value="#{grupoBean.accion}"  actionListener="#{grupoBean.operar()}" oncomplete="PF('wdgDatos').hide();" />
+                        <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
+                    </h:form>
+                </p:dialog>
+
+            </ui:define>           
         </ui:composition>
-        
+
     </h:body>
 </html>
 
