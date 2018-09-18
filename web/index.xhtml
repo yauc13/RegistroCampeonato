@@ -5,57 +5,39 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>index</title>
+        <link href="resources/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
     </h:head>
-    <h:body>
+    <h:body >
         
     <p:dialog modal="true" widgetVar="statusDialogIndex" header="Cargando..." draggable="false" closable="false" resizable="false">
         <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
     </p:dialog>
-        
-        <h:form>
+        <div class="cuadro-login text-center">
+            <h:form class="form-signin">
         <p:growl autoUpdate="true" showDetail="true"/>
-        
-            <h:panelGrid columns="2">
-                <p:outputLabel for="txtUsuario" value="Usuario"/>
+        <img class="mb-4" src="resources/imagen/iconBall.jpg" alt="" width="72" height="72"/>
+        <h:panelGrid columns="1"  >
+                <p:outputLabel for="txtUsuario" value="Usuario" />
                 <p:inputText id="txtUsuario" required="true" value="#{usuarioBean.usuario.loginUsuario}"/>
                 <p:outputLabel for="txtClave" value="Clave"/>
                 <p:password id="txtClave" required="true" value="#{usuarioBean.usuario.passwordUsuario}"/>                
-                <h:column/>
+                <div/>
                 <p:commandButton icon="ui-icon-key" value="Iniciar Sesion" action="#{usuarioBean.iniciarSesion()}"
                                  ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                 class="btn btn-lg btn-primary btn-block"
                                  />                
             </h:panelGrid>
             <p:separator/>
            
         </h:form>
         
-        <h:form>
+        <h:form class="form-signin center_content">
             <p:commandLink value="Registrarse" action="registro?faces-redirect=true" />
-            <p:separator/>
+            
         </h:form>
-        <h:form>
-            <p:outputLabel value="Tipo Roles"/>
-           <h:panelGrid columns="2">
-                <p:outputLabel value=" Administrador:"/>
-                <p:outputLabel value=" tiene control total de la aplicacion"/>
-                <p:outputLabel value=" Organizador: "/>
-                <p:outputLabel value=" puede crear campeonatos y sus respectivos grupos, puede  editarlos y eliminarlos solo los creados por el. los creados por otros usuarios solo los podra observar "/> 
-                <p:outputLabel value=" Club"/>
-                <p:outputLabel value=" puede crear equipos y sus respectivos jugadores, puede  editar y eliminar solo los creados por el. los creados por otros usuarios solo los podra observar "/>
-            </h:panelGrid>
-             <p:separator/>
-            <p:outputLabel value="Nota: al cerrar sesion, e intentar ir atras, la aplicacion no permite el ingreso. tiene que volver a usar las credenciales"/>
-            <p:outputLabel value=", igual pasa si intenta ingresar directamente con url...(clik Ver Campeonatos)"/>
-             <p:separator/>
-        </h:form>
-         
-        <h:form>
-            <h:panelGrid columns="1">
-            <p:commandLink value="Ver Campeonatos" action="listaCampeonato?faces-redirect=true" />
-            <p:commandLink value="Ver index ips" action="indexIPS?faces-redirect=true" />
-            <p:commandLink value="Mostrar Imagen" action="mostrarImagen?faces-redirect=true" />
-            </h:panelGrid>
-        </h:form>
+        
+         </div>
+        
         
         <script type="text/javascript">
             function start() {

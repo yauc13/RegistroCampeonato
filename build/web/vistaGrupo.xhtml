@@ -65,7 +65,7 @@
 
 
 
-                <p:tabView>
+                <p:tabView id="idTabviewVistaGrupo">
                     <p:ajax event="tabChange" listener="#{ grupoBean.onTabChange}" />   
                     <p:tab title="Tabla de Posiciones">
                         <h:panelGrid columns="2" cellpadding="10">
@@ -239,7 +239,9 @@
                         <p:outputLabel value="Nombre Equipo" for="txtNombre"/>
                         <p:inputText id="txtNombre" required="true" value="#{equipoBean.equipo.nombreEquipo}"/>
 
-                        <p:commandButton value="#{equipoBean.accion}"  actionListener="#{equipoBean.operar()}" oncomplete="PF('wdgDatosEquipo').hide();"
+                        <p:commandButton value="#{equipoBean.accion}"  actionListener="#{equipoBean.operar()}"
+                                         oncomplete="PF('wdgDatosEquipo').hide();"
+                                         update="idTabviewVistaGrupo:frmEquipo, idTabviewVistaGrupo:frm2"
                                          />
                         <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatosEquipo').hide();"/> 
                     </h:form>

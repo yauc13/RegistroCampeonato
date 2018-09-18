@@ -8,13 +8,14 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-       
+        <link href="../../resources/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
         <link rel="icon" type="image/jpg" href="resources/imagen/iconBall.jpg" />
-        <title>Facelets Template</title>
+        <title>Registro Futsal</title>
         <f:event type="preRenderView" listener="#{usuarioBean.verificarSesion()}"/>
+        
     </h:head>
 
-    <h:body>
+    <h:body >
 
         <div id="top">
             <ui:insert name="top">
@@ -41,25 +42,7 @@
             <ui:insert name="bottom"></ui:insert>
         </div>
         
-        <style>
-                    body {
-                        background-image: url("resources/imagen/estadiochampions.jpg");
-                        background-repeat: no-repeat;
-                        background-size: 100%;
-                        
-                    }
-
-                    .opciones{
-                        background-color: rgba(0,0, 0, 0.05);
-                    }
-                    .divmiga{
-                      background-color: rgba(0,0, 0, 0.05);  
-                    }
-                    .datatable{
-                        background-color: rgba(0,0, 0, 0.05);  
-                    }
-
-                </style>
+        
 
     </h:body>
 

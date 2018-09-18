@@ -7,6 +7,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Campeonato</title>
+        <link href="resources/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
     </h:head>
     <h:body id="idBody">
 
@@ -17,6 +18,7 @@
 
 
             <ui:define name="content">
+                
                 <div id="miga" >
                     <h:form>
                         <p:breadCrumb class="divmiga" > 
@@ -39,7 +41,7 @@
                     }
                 </script>
                 
-
+ <div  class="cuadro-login">
                 <h:form id="frm1">
 
                     <p:menubar  class="opciones">
@@ -47,12 +49,17 @@
                             <p:commandButton  value="Nuevo Campeonato" oncomplete="PF('wdgDatos').show();" 
                                               actionListener="#{campeonatoBean.setAccion('Registrar')}" 
                                               update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
-                                              icon="ui-icon-circle-plus"/>
+                                              icon="ui-icon-circle-plus"
+                                              class="btn btn-lg btn-primary btn-block"/>
                             
                         </f:facet>
                     </p:menubar> 
-                    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
-                    <p:dataTable id="data" value="#{campeonatoBean.listaCampeonato}" var="campeonato"  >
+                    
+                   
+                        
+                        
+                        <p:dataTable id="data" value="#{campeonatoBean.listaCampeonato}" var="campeonato"  
+                                     class="table-hover">
                         <f:facet  name="header">
                             <p:outputLabel value="Campeonatos"/>
                         </f:facet>
@@ -82,8 +89,9 @@
                                            oncomplete="PF('wdgDelete').show();"/>
                         </p:column>              
                     </p:dataTable>
-                        </div>
+                        
                 </h:form>
+     </div>
 
                 <p:dialog header="Registrar o Modificar Campeonatos" widgetVar="wdgDatos" id="dlgDatos">
                     <h:form>
@@ -113,25 +121,7 @@
                 </p:confirmDialog>
                
 
-                <style>
-
-                    tr:hover {
-                        background-color: aqua;
-                        opacity: 0.5;
-                        cursor: pointer;
-                    }
-                    
-                    .opciones{
-                        background-color: rgba(0,0, 0, 0.05);
-                    }
-                    .divmiga{
-                      background-color: rgba(0,0, 0, 0.05);  
-                    }
-                    .datatable{
-                        background-color: rgba(0,0, 0, 0.05);  
-                    }
-
-                </style>
+                
 
             </ui:define>
 
