@@ -8,7 +8,8 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link href="../../resources/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <link href="resources/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <link href="resources/css/fontawesome.css" rel="stylesheet" type="text/css"/>
         <link rel="icon" type="image/jpg" href="resources/imagen/iconBall.jpg" />
         <title>Registro Futsal</title>
         <f:event type="preRenderView" listener="#{usuarioBean.verificarSesion()}"/>
@@ -16,7 +17,7 @@
     </h:head>
 
     <h:body >
-
+        <div class="container-fluid">
         <div id="top">
             <ui:insert name="top">
                 <h:form>
@@ -32,9 +33,18 @@
             </ui:insert>
         </div>
         
+         <div class="row">    
+                <h:form id="bread">
+                    <ol class="breadcrumb">
+                        <li><p:commandLink value="inicio" action="listaCampeonato?faces-redirect=true" style="text-decoration: none"/></li>
+                        <ui:insert name="breadcrumb"/>
+                    </ol>  
+                </h:form>
+            </div>
+        
         
 
-        <div id="content" class="center_content">
+        <div id="content" class="col-sm-12 col-md-12 col-lg-12 margin_bottom_pcpal">
             <ui:insert name="content"></ui:insert>
         </div>
 
@@ -42,7 +52,7 @@
             <ui:insert name="bottom"></ui:insert>
         </div>
         
-        
+        </div>
 
     </h:body>
 

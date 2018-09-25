@@ -8,12 +8,13 @@
     <h:head>
         <title>Facelet Title</title>
     </h:head>
-    <h:body id="idBody1">
+    <h:body>
 
 
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
                 <f:event type="preRenderView" listener="#{grupoBean.listarInicio()}" />
+                
                 <p:dialog modal="true" widgetVar="statusDialogGrupo" header="Cargando..." draggable="false" closable="false" resizable="false">
                     <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
                 </p:dialog>
@@ -44,59 +45,24 @@
 
                     </h:form>
                 </div>
-                <p:tabView>
-                    <p:tab title="Fehas" id="tab1">
-                        <h:panelGrid columns="2" cellpadding="10" id="panel1">
-
-
-
-                            <h:form id="frm1">
-
-
-                                <p:commandButton value="Nuevo Grupo" oncomplete="PF('wdgDatos').show();" actionListener="#{grupoBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{grupoBean.habilitarPermisos(grupoBean.campeonato,1)}"/>
-                                <p:outputLabel value="#{grupoBean.campeonato.nombreCampeonato}/"/>
-                                <p:dataTable id="data" value="#{grupoBean.listaGrupo}" var="grupo" >
-                                    <p:column headerText="id">
-                                        <p:outputLabel value="#{grupo.idGrupo}"/>
-                                    </p:column>
-                                    <p:column headerText="Grupo">
-                                        <p:outputLabel value="#{grupo.nombreGrupo}"/>
-                                    </p:column>
-                                    <p:column headerText="Creador">
-                                        <p:outputLabel value="#{grupo.idUsuario}"/>
-                                    </p:column> 
-                                    <p:column headerText="Ver Grupos">
-                                        <p:commandLink value="Ver Equipos" action="#{grupoBean.verGrupo(grup)}" update="data"
-                                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
-                                                       />
-                                    </p:column>
-                                    <p:column headerText="Ver Partidos">
-                                        <p:commandLink id="linkVPartidos" value="Ver Partidos" action="#{grupoBean.verGrupo(grup)}"  update="data" 
-                                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
-                                                       />
-
-                                    </p:column>
-                                    <p:column headerText="Modificar">
-                                        <p:commandLink value="Modificar" actionListener="#{grupoBean.leerID(grupo)}"  oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{grupoBean.habilitarPermisos(grupoBean.campeonato,1)}"/>
-                                    </p:column>
-                                    <p:column headerText="Eliminar">
-                                        <p:commandLink value="Eliminar" actionListener="#{grupoBean.eliminar(grupo)}" update="data" disabled="#{grupoBean.habilitarPermisos(grupoBean.campeonato,1)}"/>
-                                    </p:column>              
-                                </p:dataTable>
-                            </h:form>
-                        </h:panelGrid>
-                    </p:tab>
+                <p:tabView id="idTabviewVistaCampeonato">
                     
                      <p:tab title="Jornadas" id="tab2">
+                         
                         <h:panelGrid columns="2" cellpadding="10" id="panel2">
-                            <h:form id="form2">
+                            <h:form id="formJornadas">
+                                <p:commandButton value="Nueva Jornada" oncomplete="PF('wdgJornada').show();" 
+                                                 actionListener="#" update=":dlgJornada"/>
                                 
                                 <p:dataTable id="data" value="#{grupoBean.listaGrupo}" var="grupo" >
-                                     <p:column style="width:16px">
+                                     <p:column style="width:50px">
                                         <p:rowToggler />
                                     </p:column>
                                     <p:column headerText="id">
                                         <p:outputLabel value="Fecha #{grupo.idGrupo}"/>
+                                    </p:column>
+                                    <p:column headerText="new">
+                                        <p:outputLabel value="agregar"/>
                                     </p:column>
 
                                     <p:rowExpansion>
@@ -120,7 +86,7 @@
                     <p:tab title="Grupos">
                         <h:panelGrid columns="2" cellpadding="10">
 
-                            <h:form>
+                            <h:form id="formGrupos">
                                 <p:panel id="basic" header="#{grupoBean.campeonato.nombreCampeonato}" >
                                     <p:dataGrid var="grupo" value="#{grupoBean.listaGrupo}" columns="5">
 
@@ -147,6 +113,39 @@
                             </h:form> 
                         </h:panelGrid>
                     </p:tab>
+                    
+                    <p:tab title="Goleadores" id="tab1">
+                        <h:panelGrid columns="2" cellpadding="10" id="panel1">
+
+
+
+                            <h:form id="frm1">
+                                <p:outputLabel value="#{grupoBean.campeonato.nombreCampeonato}/"/>
+                                <p:dataTable id="data" value="#{grupoBean.listaGoleadores}" var="goleador" >
+                                    <p:column headerText="pos">
+                                        <p:outputLabel value="#{grupoBean.listaGoleadores.indexOf(goleador)+1}"/>
+                                    </p:column>
+                                    <p:column headerText="Jugador">
+                                        <p:outputLabel value="#{goleador.nombreJugador}"/>
+                                    </p:column>
+                                    <p:column headerText="id equ">
+                                        <p:outputLabel value="#{goleador.idEquipoJugador}"/>
+                                    </p:column> 
+                                    <p:column headerText="Goles">
+                                        <p:outputLabel value="#{goleador.numGol}"/>
+                                    </p:column>
+                                    <p:column headerText="Ver">
+                                        <p:commandLink id="linkVPartidos" value="Ver" action="#{grupoBean.verGrupo(grup)}"  update="data" 
+                                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                                       />
+
+                                    </p:column>
+                                                 
+                                </p:dataTable>
+                            </h:form>
+                        </h:panelGrid>
+                    </p:tab>
+                    
 
                 </p:tabView>
 
@@ -158,6 +157,20 @@
 
                         <p:commandButton value="#{grupoBean.accion}"  actionListener="#{grupoBean.operar()}" oncomplete="PF('wdgDatos').hide();" />
                         <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
+                    </h:form>
+                </p:dialog>
+                
+                <p:dialog header="Registrar o Modificar Jornada" widgetVar="wdgJornada" id="dlgJornada">
+                    <h:form>
+                        <p:growl autoUpdate="true" showDetail="true"/>
+                        <p:outputLabel value="Nombre Jornada" for="txtJornada"/>
+                        <p:inputText id="txtJornada" required="true" value="#"/>
+
+                        <p:commandButton value="nuevo"  actionListener="#"
+                                         oncomplete="PF('wdgJornada').hide();"
+                                         update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
+                                         />
+                        <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgJornada').hide();"/> 
                     </h:form>
                 </p:dialog>
 

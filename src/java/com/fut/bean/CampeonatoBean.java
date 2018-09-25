@@ -84,9 +84,18 @@ public class CampeonatoBean implements Serializable{
     }
     
     public void limpiar(){
-    this.campeonato.setIdCampeonato(0);
-    this.campeonato.setNombreCampeonato("");
+        this.campeonato = new Campeonato();
+        System.out.println("com.fut.bean.CampeonatoBean.limpiar()");
+    //this.campeonato.setIdCampeonato(0);
+    //this.campeonato.setNombreCampeonato("");
     }
+    
+    public void preparedNew(){
+        this.setAccion("Registrar");
+        limpiar();
+    }
+    
+    
     
     public void registrar() throws Exception {
     CampeonatoDao dao;

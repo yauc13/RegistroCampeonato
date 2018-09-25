@@ -50,8 +50,7 @@ public class JugadorBean implements Serializable{
     
 
     public JugadorBean() {
-        
-        
+ 
     }
 
     public String getFotoDefault() {
@@ -264,6 +263,20 @@ public class JugadorBean implements Serializable{
     
     }catch(Exception e){   
         throw e;
+    }
+    }
+    
+    public void listarGoleadores() {
+    JugadorDao dao;
+    try{
+        if(this.isPostBack() == false){
+        dao = new JugadorDao();        
+        campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
+        listaJugador = dao.listarGoleadores(campeonato);
+
+        }
+    }catch(Exception e){   
+       
     }
     }
     

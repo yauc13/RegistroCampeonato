@@ -7,11 +7,13 @@ package com.fut.bean;
 
 import com.fut.dao.EquipoDao;
 import com.fut.dao.GrupoDao;
+import com.fut.dao.JugadorDao;
 import com.fut.dao.PartidoDao;
 import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 
 import com.fut.model.Grupo;
+import com.fut.model.Jugador;
 import com.fut.model.TablaEquipos;
 import com.fut.model.Usuario;
 import java.io.Serializable;
@@ -42,7 +44,17 @@ public class GrupoBean implements Serializable{
     private List<Grupo> listaGrupo;
     private List<TablaEquipos> listaPosiciones;
     private List<Equipo> listaEquipos;
+    private List<Jugador> listaGoleadores;
     private String accion;
+    
+    private JugadorDao jugDao = new JugadorDao();
+
+    public GrupoBean() {
+      campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");  
+      listaGoleadores = jugDao.listarGoleadores(campeonato);
+    }
+    
+    
 
    
     
@@ -117,6 +129,7 @@ public class GrupoBean implements Serializable{
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         listaGrupo = dao.listar(camp);
+        listaGoleadores = jugDao.listarGoleadores(campeonato);
         }
     }catch(Exception e){   
         throw e;
@@ -131,7 +144,7 @@ public class GrupoBean implements Serializable{
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         listaGrupo = dao.listar(camp);
-    
+        listaGoleadores = jugDao.listarGoleadores(campeonato);
     }catch(Exception e){   
         throw e;
     }
@@ -303,6 +316,22 @@ public class GrupoBean implements Serializable{
 
     public void setListaEquipos(List<Equipo> listaEquipos) {
         this.listaEquipos = listaEquipos;
+    }
+
+    public List<Jugador> getListaGoleadores() {
+        return listaGoleadores;
+    }
+
+    public void setListaGoleadores(List<Jugador> listaGoleadores) {
+        this.listaGoleadores = listaGoleadores;
+    }
+
+    public JugadorDao getJugDao() {
+        return jugDao;
+    }
+
+    public void setJugDao(JugadorDao jugDao) {
+        this.jugDao = jugDao;
     }
 
     

@@ -44,7 +44,7 @@
             
             <p:outputLabel value="Equipo A: #{partidoBean.partido.equipoA.nombreEquipo}"/>
             <p:dataTable id="data" value="#{partidoBean.listaJugadoresA}" var="jugadorA" >
-                <p:column headerText="No">
+                <p:column headerText="No" width="9%">
                     <p:inputText />
                 </p:column>
                 <p:column headerText="Jugador">
@@ -82,7 +82,7 @@
                 </p:column>
                 <p:column headerText="Gol">
                     <p:commandButton value="Gol +" id="btnGolB" update="frmMarcador:panel"  actionListener="#{partidoBean.anotarGol(jugadorB, partidoBean.partido.equipoB, partidoBean.partido)}"
-                                     ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                     ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" 
                                      />
                     
                 </p:column>
@@ -95,7 +95,7 @@
       </h:panelGrid>
         <h:form>
             <p:commandButton value="Finalizar Partido" action="#{partidoBean.finalizarPartido()}"
-                                     ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                      onclick="PrimeFaces.monitorDownload(start, stop);"
                                      />
         </h:form>
     </h:body>

@@ -5,8 +5,10 @@
  */
 package com.fut.dao;
 
+import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 import com.fut.model.Jugador;
+import com.fut.util.QuerySql;
 import com.fut.util.Util;
 
 
@@ -15,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.management.Query;
 
 /**
  *
@@ -77,6 +80,36 @@ public class JugadorDao extends Dao {
                 }
             }catch(SQLException e){
                 throw e;
+            }finally{
+                this.Cerrar();
+            }
+        
+        return lista;   
+    }
+    
+    public List<Jugador> listarGoleadores(Campeonato camp){
+            List<Jugador> lista = null;
+            ResultSet rs;
+            
+            try{
+                this.Conectar();
+                //PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
+                PreparedStatement st = this.getCn().prepareCall(QuerySql.SELECT_GOLEADORES);
+                st.setInt(1, camp.getIdCampeonato());
+                rs = st.executeQuery();
+                lista = new ArrayList();
+                while(rs.next()){
+                    Jugador cam = new Jugador();
+                    cam.setIdJugador(rs.getInt("idJugador"));
+                    cam.setNombreJugador(rs.getString("nombreJugador"));                  
+                    cam.setIdEquipoJugador(rs.getInt("idEquipoJugador"));
+                    cam.setNumGol(rs.getInt("count"));
+ 
+                    lista.add(cam);
+                
+                }
+            }catch(SQLException e){
+                
             }finally{
                 this.Cerrar();
             }

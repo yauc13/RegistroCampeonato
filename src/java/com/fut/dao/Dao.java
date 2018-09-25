@@ -7,6 +7,7 @@ package com.fut.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  *
@@ -28,20 +29,20 @@ public class Dao {
         Class.forName("org.postgresql.Driver");
        // cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/torneo?user=root&password=");
         cn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/torneo?user=postgres&password=password");
-    }catch (Exception e){
+    }catch (ClassNotFoundException | SQLException e){
         System.out.println("EXCEPTION CONEXION DB");
     }
     }
     
-    public void Cerrar() throws Exception{
+    public void Cerrar() {
       try{
         if(cn != null){
             if(cn.isClosed()==false){
             cn.close();
             }
         }
-    }catch (Exception e){
-        throw e;
+    }catch (SQLException e){
+       
     }
     }    
 }

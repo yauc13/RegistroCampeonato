@@ -1,132 +1,133 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <h:head>
-        <title>Campeonato</title>
-        <link href="resources/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-    </h:head>
-    <h:body id="idBody">
+
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="./WEB-INF/template/plantilla.xhtml">
+
+    <ui:define name="breadcrumb">
+
+    </ui:define>
+    
+    <ui:define name="content">
+
+        <div id="miga" >
+            <h:form>
+                <p:breadCrumb class="divmiga" > 
+                    <p:menuitem value="Campeonatos" url="#" />     
+                    <p:menuitem value="Campeonatos" url="#" />   
+                </p:breadCrumb>
+            </h:form>
+        </div>       
+        <p:growl id="message" showDetail="true" autoUpdate="true" sticky="true"/>
+        <f:event type="preRenderView" listener="#{campeonatoBean.listarInicio()}" />
+        <p:dialog modal="true" widgetVar="statusDialog1" header="Cargando..." draggable="false" closable="false" resizable="false">
+            <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
+        </p:dialog>
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialog1').show();
+            }
+            function stop() {
+                PF('statusDialog1').hide();
+            }
+        </script>
+
+        <div class="container-fluid row" >
+            <h:form id="frm1">
+
+                <p:menubar  class="opciones">
+                    <f:facet name="options" >
+                        <p:commandButton  value="Nuevo Campeonato" oncomplete="PF('wdgDatos').show();"
+
+                                          actionListener="#{campeonatoBean.preparedNew()}"
+                                          update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
+                                          icon="ui-icon-circle-plus"
+                                          />
+
+                    </f:facet>
+                </p:menubar> 
+                <div  class="col-md-10 col-md-offset-1 col-xs-12">
+               <p:dataTable id="data" value="#{campeonatoBean.listaCampeonato}" var="camp"  
+                             
+                             >
+                    <f:facet  name="header">
+                        <p:outputLabel value="Campeonatos"/>
+                    </f:facet>
+                    <p:column headerText="id" width="5%">
+                        <p:outputLabel value="#{camp.idCampeonato}"  />
+                    </p:column>
+                    <p:column headerText="Campeonato" width="55%">
+                        <p:outputLabel value="#{camp.nombreCampeonato}" />
+                    </p:column>
+                    <p:column headerText="Creador" width="10%">
+                        <p:outputLabel value="#{camp.idUsuario}"/>
+                    </p:column>                
+                    <p:column headerText="Ver" width="15%">
+                        <p:commandLink value="Ver" action="#{campeonatoBean.verGruposCampeonato(camp)}" update="data"
+                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                       />
+                    </p:column>
+                    <p:column  width="15%">
+                        <p:commandButton  icon="ui-icon-pencil" 
+                                          title="Editar" 
+                                          actionListener="#{campeonatoBean.leerID(camp)}" 
+                                          oncomplete="PF('wdgDatos').show();" update=":dlgDatos"
+                                          disabled="#{campeonatoBean.habilitarPermisos(camp,1)}"
+                                          style="margin-left: 7px;"
+                                          />
+
+                        <p:commandButton icon="ui-icon-trash"
+                                         title="Eliminar" 
+                                         update="data,dlgDelete" disabled="#{campeonatoBean.habilitarPermisos(camp,1)}"
+                                         actionListener="#{campeonatoBean.leerID(camp)}"
+                                         oncomplete="PF('wdgDelete').show();"
+                                         style="margin-left: 7px;"
+                                         />
+                    </p:column>              
+                </p:dataTable>
+                    </div>
+
+            </h:form>
+        </div>
+
+        <p:dialog header="#{campeonatoBean.accion} Campeonatos" widgetVar="wdgDatos" id="dlgDatos">
+            <h:form>
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <p:outputLabel value="Nombre Campeonato" for="txtNombre"/>
+                <p:inputText id="txtNombre" required="true" value="#{campeonatoBean.campeonato.nombreCampeonato}"/>
+
+                <p:commandButton  id="btnRegistrar" value="#{campeonatoBean.accion}"  actionListener="#{campeonatoBean.operar()}"
+                                  oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
+
+                <p:commandButton value="Cancelar"  immediate="True"  
+                                 update=":frm1:data" oncomplete="PF('wdgDatos').hide();"/> 
+            </h:form>
+        </p:dialog>
 
 
 
-        <ui:composition template="./WEB-INF/template/plantilla.xhtml">
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+                         widgetVar="wdgDelete" id="dlgDelete" message="Eliminar Campeonato #{campeonatoBean.campeonato.nombreCampeonato}?" >
+
+            <h:form>
+
+                <p:commandButton value="SI" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" 
+                                 actionListener="#{campeonatoBean.eliminar()}"
+                                 oncomplete="PF('wdgDelete').hide();" update=":frm1:data"/>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </h:form>
+        </p:confirmDialog>
 
 
 
-            <ui:define name="content">
-                
-                <div id="miga" >
-                    <h:form>
-                        <p:breadCrumb class="divmiga" > 
-                            <p:menuitem value="Campeonatos" url="#" />     
-                            <p:menuitem value="Campeonatos" url="#" />   
-                        </p:breadCrumb>
-                    </h:form>
-                </div>       
-                <p:growl id="message" showDetail="true" autoUpdate="true" sticky="true"/>
-                <f:event type="preRenderView" listener="#{campeonatoBean.listarInicio()}" />
-                <p:dialog modal="true" widgetVar="statusDialog1" header="Cargando..." draggable="false" closable="false" resizable="false">
-                    <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
-                </p:dialog>
-                <script type="text/javascript">
-                    function start() {
-                        PF('statusDialog1').show();
-                    }
-                    function stop() {
-                        PF('statusDialog1').hide();
-                    }
-                </script>
-                
- <div  class="cuadro-login">
-                <h:form id="frm1">
 
-                    <p:menubar  class="opciones">
-                        <f:facet name="options" >
-                            <p:commandButton  value="Nuevo Campeonato" oncomplete="PF('wdgDatos').show();" 
-                                              actionListener="#{campeonatoBean.setAccion('Registrar')}" 
-                                              update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
-                                              icon="ui-icon-circle-plus"
-                                              class="btn btn-lg btn-primary btn-block"/>
-                            
-                        </f:facet>
-                    </p:menubar> 
-                    
-                   
-                        
-                        
-                        <p:dataTable id="data" value="#{campeonatoBean.listaCampeonato}" var="campeonato"  
-                                     class="table-hover">
-                        <f:facet  name="header">
-                            <p:outputLabel value="Campeonatos"/>
-                        </f:facet>
-                        <p:column headerText="id" width="5%">
-                            <p:outputLabel value="#{campeonato.idCampeonato}"  />
-                        </p:column>
-                        <p:column headerText="Campeonato">
-                            <p:outputLabel value="#{campeonato.nombreCampeonato}" />
-                        </p:column>
-                        <p:column headerText="Creador" width="7%">
-                            <p:outputLabel value="#{campeonato.idUsuario}"/>
-                        </p:column>                
-                        <p:column headerText="Ver Grupos">
-                            <p:commandLink value="Ver Grupos" action="#{campeonatoBean.verGruposCampeonato(campeonato)}" update="data"
-                                           ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
-                                           />
-                        </p:column>
-                        <p:column headerText="Modificar" width="10%">
-                            <p:commandButton  icon="ui-icon-pencil" actionListener="#{campeonatoBean.leerID(campeonato)}" 
-                                           oncomplete="PF('wdgDatos').show();" update=":dlgDatos"
-                                           disabled="#{campeonatoBean.habilitarPermisos(campeonato,1)}"/>
-                        </p:column>
-                        <p:column headerText="Eliminar" width="10%">
-                            <p:commandButton icon="ui-icon-trash"
-                                           update="data,dlgDelete" disabled="#{campeonatoBean.habilitarPermisos(campeonato,1)}"
-                                           actionListener="#{campeonatoBean.leerID(campeonato)}"
-                                           oncomplete="PF('wdgDelete').show();"/>
-                        </p:column>              
-                    </p:dataTable>
-                        
-                </h:form>
-     </div>
+    </ui:define>
 
-                <p:dialog header="Registrar o Modificar Campeonatos" widgetVar="wdgDatos" id="dlgDatos">
-                    <h:form>
-                        <p:growl autoUpdate="true" showDetail="true"/>
-                        <p:outputLabel value="Nombre Campeonato" for="txtNombre"/>
-                        <p:inputText id="txtNombre" required="true" value="#{campeonatoBean.campeonato.nombreCampeonato}"/>
+</ui:composition>
 
-                        <p:commandButton  id="btnRegistrar" value="#{campeonatoBean.accion}"  actionListener="#{campeonatoBean.operar()}"
-                                          oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
 
-                        <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
-                    </h:form>
-                </p:dialog>
-                
-                
-                  
-                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" 
-                                 widgetVar="wdgDelete" id="dlgDelete" message="Eliminar Campeonato #{campeonatoBean.campeonato.nombreCampeonato}?" >
-                     
-                    <h:form>
-                       
-                        <p:commandButton value="SI" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" 
-                                         actionListener="#{campeonatoBean.eliminar()}"
-                                         oncomplete="PF('wdgDelete').hide();" update=":frm1:data"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                     </h:form>
-                </p:confirmDialog>
-               
-
-                
-
-            </ui:define>
-
-        </ui:composition>
-
-    </h:body>
-</html>
 

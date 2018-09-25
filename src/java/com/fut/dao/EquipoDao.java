@@ -9,6 +9,7 @@ import com.fut.model.Equipo;
 import com.fut.model.Grupo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class EquipoDao extends Dao {
             
             st.executeUpdate();
             reg = true;
-        }catch(Exception e){
+        }catch(SQLException e){
             throw e;
         }finally{
         this.Cerrar();
@@ -52,7 +53,7 @@ public class EquipoDao extends Dao {
             try{
                 this.Conectar();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idEquipo\", \"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idGrupoEquipo\" = ?");
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idEquipo\", \"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idGrupoEquipo\" = ? ORDER BY \"nombreEquipo\"");
                 st.setInt(1, camp.getIdGrupo());
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -67,7 +68,7 @@ public class EquipoDao extends Dao {
                     lista.add(cam);
                 
                 }
-            }catch(Exception e){
+            }catch(SQLException e){
                 throw e;
             }finally{
                 this.Cerrar();
@@ -99,7 +100,7 @@ public class EquipoDao extends Dao {
                     lista.add(cam);
                 
                 }
-            }catch(Exception e){
+            }catch(SQLException e){
                 throw e;
             }finally{
                 this.Cerrar();
@@ -125,7 +126,7 @@ public class EquipoDao extends Dao {
                     usus.setIdUsuario(rs.getInt("idUsuario"));                   
                 }
                 
-            }catch(Exception e){
+            }catch(SQLException e){
                 throw e;
             }finally{
                 this.Cerrar();
@@ -144,7 +145,7 @@ public class EquipoDao extends Dao {
             st.setString(1, cam.getNombreEquipo());                      
             st.setInt(2, cam.getIdEquipo());          
             st.executeUpdate();
-        }catch(Exception e){
+        }catch(SQLException e){
             throw e;
         }finally{
         this.Cerrar();
@@ -159,7 +160,7 @@ public class EquipoDao extends Dao {
             PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.equipo  WHERE \"idEquipo\" = ?");
             st.setInt(1, cam.getIdEquipo());          
             st.executeUpdate();
-        }catch(Exception e){
+        }catch(SQLException e){
             throw e;
         }finally{
         this.Cerrar();

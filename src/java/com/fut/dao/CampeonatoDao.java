@@ -6,6 +6,7 @@
 package com.fut.dao;
 
 import com.fut.model.Campeonato;
+import com.fut.util.QuerySql;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,33 +20,33 @@ import java.util.logging.Logger;
  * @author Yeison
  */
 public class CampeonatoDao extends Dao{
-    public boolean registrar(Campeonato cam) throws Exception{
+    public boolean registrar(Campeonato cam) {
         boolean reg = false;
         try{
             this.Conectar();
             //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO campeonato (nombreCampeonato,idUsuario) values(?,?)");
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.campeonato (\"nombreCampeonato\", \"idUsuario\") values(?,?)");
+            PreparedStatement st = this.getCn().prepareStatement(QuerySql.REGISTER_CAMPEONATO);
             st.setString(1, cam.getNombreCampeonato());
             st.setInt(2, cam.getIdUsuario());
             
             st.executeUpdate();
             reg = true;
         }catch(SQLException e){
-            throw e;
+            
         }finally{
         this.Cerrar();
         }
         return reg;
     }
         
-    public List<Campeonato> listar() throws Exception{
-            List<Campeonato> lista;
+    public List<Campeonato> listar() {
+            List<Campeonato> lista = null;
             ResultSet rs;
             
             try{
                 this.Conectar();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idCampeonato, nombreCampeonato,idUsuario FROM campeonato");
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idCampeonato\", \"nombreCampeonato\", \"idUsuario\" FROM public.campeonato");
+                PreparedStatement st = this.getCn().prepareCall(QuerySql.SELECT_CAMPEONATO);
                 rs = st.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
@@ -58,8 +59,8 @@ public class CampeonatoDao extends Dao{
                     lista.add(cam);
                 
                 }
-            }catch(Exception e){
-                throw e;
+            }catch(SQLException e){
+                
             }finally{
                 this.Cerrar();
             }
@@ -67,7 +68,7 @@ public class CampeonatoDao extends Dao{
         return lista;   
     }
     
-    public Campeonato leerID(Campeonato cam) throws Exception{
+    public Campeonato leerID(Campeonato cam){
         Campeonato usus = null;
         ResultSet rs;
             try{
@@ -84,8 +85,8 @@ public class CampeonatoDao extends Dao{
                     usus.setIdUsuario(rs.getInt("idUsuario"));                   
                 }
                 
-            }catch(Exception e){
-                throw e;
+            }catch(SQLException e){
+               
             }finally{
                 this.Cerrar();
             }   
@@ -94,8 +95,9 @@ public class CampeonatoDao extends Dao{
     
         
     
-    public boolean modificar(Campeonato cam) throws Exception{
-        boolean reg;
+    public boolean modificar(Campeonato cam) {
+        boolean reg = false;
+        
         try{
             this.Conectar();
             //PreparedStatement st = this.getCn().prepareStatement("UPDATE campeonato SET nombreCampeonato = ? WHERE idCampeonato = ?");
@@ -104,9 +106,10 @@ public class CampeonatoDao extends Dao{
             st.setInt(2, cam.getIdCampeonato());          
             st.executeUpdate();
             reg = true;
+            
         }catch(SQLException e){
-            reg =false;
-            throw e;
+            
+            
         }finally{
         this.Cerrar();
         }
@@ -122,14 +125,13 @@ public class CampeonatoDao extends Dao{
             st.setInt(1, cam.getIdCampeonato());          
             st.executeUpdate();           
             reg = true;
+            
         }catch(SQLException e){            
             
         }finally{
-            try {
+           
                 this.Cerrar();
-            } catch (Exception ex) {
-                Logger.getLogger(CampeonatoDao.class.getName()).log(Level.SEVERE, null, ex);
-            }
+           
         }
         return reg;
     }

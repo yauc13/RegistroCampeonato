@@ -7,6 +7,7 @@ package com.fut.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 
@@ -24,6 +25,28 @@ public class Jugador implements Serializable{
     int idEquipoJugador;
     int idUsuario;
     private String fotoJugador;
+    private List<Gol> listGolJug; 
+    private int numGol;
+
+    public int getNumGol() {
+        return numGol;
+    }
+
+    public void setNumGol(int numGol) {
+        this.numGol = numGol;
+    }
+    
+    
+
+    public List<Gol> getListGolJug() {
+        return listGolJug;
+    }
+
+    public void setListGolJug(List<Gol> listGolJug) {
+        this.listGolJug = listGolJug;
+    }
+    
+    
 
     public String getFotoJugador() {
         return fotoJugador;
