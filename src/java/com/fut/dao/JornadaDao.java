@@ -5,6 +5,7 @@
  */
 package com.fut.dao;
 
+import com.fut.model.Campeonato;
 import com.fut.model.Grupo;
 import com.fut.model.Jornada;
 import java.sql.PreparedStatement;
@@ -20,33 +21,34 @@ import java.util.logging.Logger;
  * @author YeisonUrrea
  */
 public class JornadaDao extends Dao {
-    public boolean registrar(Jornada d) throws Exception{
+    
+    public boolean registrar(Jornada d) {
         boolean reg = false;
         try{
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.jornada (\"nombreJornada\",\"idGrupo\",\"idUsuario\") values(?,?,?)");
+            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.jornada (\"nombreJornada\",\"idCampeonato\") values(?,?)");
             st.setString(1, d.getNombreJornada());
-            st.setInt(2, d.getIdGrupo());
-            st.setInt(3, d.getIdUsuario());
+            st.setInt(2, d.getIdCampeonato());
+            
             
             st.executeUpdate();
             reg = true;
         }catch(SQLException e){
-            throw e;
+            System.err.println(e);
         }finally{
         this.Cerrar();
         }
         return reg;
     }
         
-    public List<Jornada> listar(Grupo camp) throws Exception{
-            List<Jornada> lista;
+    public List<Jornada> listar(Campeonato camp) {
+            List<Jornada> lista = null;
             ResultSet rs;
             
             try{
                 this.Conectar();
-                PreparedStatement st = this.getCn().prepareCall("SELECT idJornada, nombreJornada FROM jornada WHERE idGrupoJornada = ?");
-                st.setInt(1, camp.getIdGrupo());
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idJornada\", \"nombreJornada\" FROM public.jornada WHERE \"idCampeonato\" = ?");
+                st.setInt(1, camp.getIdCampeonato());
                 rs = st.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
@@ -60,7 +62,7 @@ public class JornadaDao extends Dao {
                 
                 }
             }catch(SQLException e){
-                throw e;
+                System.out.println(e);
             }finally{
                 this.Cerrar();
             }

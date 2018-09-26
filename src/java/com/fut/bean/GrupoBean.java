@@ -7,12 +7,14 @@ package com.fut.bean;
 
 import com.fut.dao.EquipoDao;
 import com.fut.dao.GrupoDao;
+import com.fut.dao.JornadaDao;
 import com.fut.dao.JugadorDao;
 import com.fut.dao.PartidoDao;
 import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 
 import com.fut.model.Grupo;
+import com.fut.model.Jornada;
 import com.fut.model.Jugador;
 import com.fut.model.TablaEquipos;
 import com.fut.model.Usuario;
@@ -41,15 +43,19 @@ public class GrupoBean implements Serializable{
     private Grupo grupo = new Grupo();
     private Campeonato campeonato = new Campeonato();
     private Usuario usuario = new Usuario();
+    private Jornada jornada; 
     private List<Grupo> listaGrupo;
     private List<TablaEquipos> listaPosiciones;
     private List<Equipo> listaEquipos;
     private List<Jugador> listaGoleadores;
+    private List<Jornada> listaJornada;
     private String accion;
     
     private JugadorDao jugDao = new JugadorDao();
+    private JornadaDao jorDao = new JornadaDao();
 
     public GrupoBean() {
+       jornada = new Jornada();
       campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");  
       listaGoleadores = jugDao.listarGoleadores(campeonato);
     }
@@ -83,6 +89,19 @@ public class GrupoBean implements Serializable{
     }
     }
     
+    public void operarJornada() {
+    switch(accion){
+        case "Registrar":
+            this.registrarJornada();
+            this.limpiar();
+            break;
+        case "Modificar":
+            this.modificarJornada();
+            this.limpiar();
+            break;
+    }
+    }
+    
     public void limpiar(){
     this.grupo.setIdGrupo(0);
     this.grupo.setNombreGrupo("");
@@ -102,14 +121,48 @@ public class GrupoBean implements Serializable{
     }   
     }
     
-    public void modificar() throws Exception {
+    public void registrarJornada() {
+
+        
+        jornada.setIdCampeonato(campeonato.getIdCampeonato());
+        jornada.setIdUsuario(usuario.getIdUsuario());
+        if(jorDao.registrar(jornada)){
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada creada");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear Jornada");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        this.listar();
+        
+       
+    }
+    
+    public void modificarJornada()  {
+    
+    try{
+        
+        if(jorDao.registrar(jornada)){
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada creada");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        this.listar();
+    }catch(Exception e){  
+        
+    }   
+    }
+    
+        public void modificar() {
     GrupoDao dao;
     try{
         dao = new GrupoDao();
         dao.modificar(grupo);
         this.listar();
     }catch(Exception e){  
-        throw e;
+        
     }   
     }
     
@@ -130,13 +183,15 @@ public class GrupoBean implements Serializable{
         Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         listaGrupo = dao.listar(camp);
         listaGoleadores = jugDao.listarGoleadores(campeonato);
+        listaJornada = jorDao.listar(campeonato);
+        
         }
     }catch(Exception e){   
         throw e;
     }
     }
     
-    public void listar() throws Exception{
+    public void listar() {
     GrupoDao dao;
     try{
         dao = new GrupoDao();
@@ -145,8 +200,9 @@ public class GrupoBean implements Serializable{
         Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         listaGrupo = dao.listar(camp);
         listaGoleadores = jugDao.listarGoleadores(campeonato);
+        listaJornada = jorDao.listar(campeonato);
     }catch(Exception e){   
-        throw e;
+       
     }
     }
     
@@ -333,6 +389,33 @@ public class GrupoBean implements Serializable{
     public void setJugDao(JugadorDao jugDao) {
         this.jugDao = jugDao;
     }
+
+    public List<Jornada> getListaJornada() {
+        return listaJornada;
+    }
+
+    public void setListaJornada(List<Jornada> listaJornada) {
+        this.listaJornada = listaJornada;
+    }
+
+    public Jornada getJornada() {
+        return jornada;
+    }
+
+    public void setJornada(Jornada jornada) {
+        this.jornada = jornada;
+    }
+
+    public JornadaDao getJorDao() {
+        return jorDao;
+    }
+
+    public void setJorDao(JornadaDao jorDao) {
+        this.jorDao = jorDao;
+    }
+    
+    
+    
 
     
     

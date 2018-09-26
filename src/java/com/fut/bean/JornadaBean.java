@@ -6,6 +6,7 @@
 package com.fut.bean;
 
 import com.fut.dao.JornadaDao;
+import com.fut.model.Campeonato;
 import com.fut.model.Grupo;
 import com.fut.model.Jornada;
 import com.fut.model.Usuario;
@@ -32,19 +33,16 @@ public class JornadaBean {
     private String loginUsuario;
     private String accion;
     JornadaDao jornadaDao;
+    Campeonato campeonato;
 
     public JornadaBean() {
+        campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         jornadaDao = new JornadaDao();
-        try {
-            jornadaDao.listar(grupo);
-        } catch (Exception ex) {
-            Logger.getLogger(JornadaBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
+       
+ jornadaDao.listar(campeonato);
+
     }
     
 
@@ -73,7 +71,7 @@ public class JornadaBean {
         
         
         jor.setNombreJornada(nombreFecha);
-            jor.setIdGrupo(grupo.getIdGrupo());            
+            jor.setIdCampeonato(grupo.getIdGrupo());            
             jor.setIdUsuario(usuario.getIdUsuario());
         boolean reg= jornadaDao.registrar(jor);
         if(reg){
@@ -135,7 +133,7 @@ public class JornadaBean {
         if(this.isPostBack() == false){
         
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        listaJornadas = jornadaDao.listar(grupo);
+        listaJornadas = jornadaDao.listar(campeonato);
         }
     }catch(Exception e){   
         throw e;
@@ -147,7 +145,7 @@ public class JornadaBean {
     try{
        
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        listaJornadas = jornadaDao.listar(grupo);
+        listaJornadas = jornadaDao.listar(campeonato);
         
     }catch(Exception e){   
         throw e;
@@ -270,6 +268,16 @@ public class JornadaBean {
     public void setJornadaDao(JornadaDao jornadaDao) {
         this.jornadaDao = jornadaDao;
     }
+
+    public Campeonato getCampeonato() {
+        return campeonato;
+    }
+
+    public void setCampeonato(Campeonato campeonato) {
+        this.campeonato = campeonato;
+    }
+    
+    
     
     
     

@@ -51,15 +51,16 @@
                          
                         <h:panelGrid columns="2" cellpadding="10" id="panel2">
                             <h:form id="formJornadas">
-                                <p:commandButton value="Nueva Jornada" oncomplete="PF('wdgJornada').show();" 
-                                                 actionListener="#" update=":dlgJornada"/>
+                                <p:commandButton value="Nueva Jornada" oncomplete="PF('wdgJornada').show();"
+                                                 actionListener="#{grupoBean.setAccion('Registrar')}"
+                                                  update=":dlgJornada" />
                                 
-                                <p:dataTable id="data" value="#{grupoBean.listaGrupo}" var="grupo" >
+                                <p:dataTable id="data" value="#{grupoBean.listaJornada}" var="jor" >
                                      <p:column style="width:50px">
                                         <p:rowToggler />
                                     </p:column>
-                                    <p:column headerText="id">
-                                        <p:outputLabel value="Fecha #{grupo.idGrupo}"/>
+                                    <p:column headerText="jornada">
+                                        <p:outputLabel value="#{jor.nombreJornada}"/>
                                     </p:column>
                                     <p:column headerText="new">
                                         <p:outputLabel value="agregar"/>
@@ -164,9 +165,9 @@
                     <h:form>
                         <p:growl autoUpdate="true" showDetail="true"/>
                         <p:outputLabel value="Nombre Jornada" for="txtJornada"/>
-                        <p:inputText id="txtJornada" required="true" value="#"/>
+                        <p:inputText id="txtJornada" required="true" value="#{grupoBean.jornada.nombreJornada}"/>
 
-                        <p:commandButton value="nuevo"  actionListener="#"
+                        <p:commandButton value="crear nuevo"  actionListener="#{grupoBean.operarJornada()}"
                                          oncomplete="PF('wdgJornada').hide();"
                                          update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
                                          />

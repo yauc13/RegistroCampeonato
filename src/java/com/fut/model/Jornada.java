@@ -12,7 +12,7 @@ package com.fut.model;
 public class Jornada {
     int idJornada;
     String nombreJornada;   
-    int idGrupo;
+    int idCampeonato;
     int idUsuario;
 
     public int getIdUsuario() {
@@ -23,13 +23,14 @@ public class Jornada {
         this.idUsuario = idUsuario;
     }
 
-    public int getIdGrupo() {
-        return idGrupo;
+    public int getIdCampeonato() {
+        return idCampeonato;
     }
 
-    public void setIdGrupo(int idGrupo) {
-        this.idGrupo = idGrupo;
+    public void setIdCampeonato(int idCampeonato) {
+        this.idCampeonato = idCampeonato;
     }
+
     
     
     
