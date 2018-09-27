@@ -16,9 +16,11 @@ import com.fut.model.Equipo;
 import com.fut.model.Grupo;
 import com.fut.model.Jornada;
 import com.fut.model.Jugador;
+import com.fut.model.Partido;
 import com.fut.model.TablaEquipos;
 import com.fut.model.Usuario;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +30,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import org.primefaces.event.TabChangeEvent;
 
 /**
@@ -49,12 +52,21 @@ public class GrupoBean implements Serializable{
     private List<Equipo> listaEquipos;
     private List<Jugador> listaGoleadores;
     private List<Jornada> listaJornada;
+    private List<Partido> listaPartidosJornada;
     private String accion;
+    
+    private List<SelectItem> selectItemOneGrupos; //para seleccionar grupo segun el campeonato
+    private List<SelectItem> selectItemOnePartidos; //para seleccionar grupo segun el campeonato
+    private int itemGrupoSelected;
+    private int itemPartidoSelected; //partido seleccionado para agregar a una jornada
     
     private JugadorDao jugDao = new JugadorDao();
     private JornadaDao jorDao = new JornadaDao();
+    private PartidoDao parDao = new PartidoDao();
+    private GrupoDao gruDao = new GrupoDao();
 
     public GrupoBean() {
+        
        jornada = new Jornada();
       campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");  
       listaGoleadores = jugDao.listarGoleadores(campeonato);
@@ -165,6 +177,12 @@ public class GrupoBean implements Serializable{
         
     }   
     }
+        
+    public void agregarPartidoJornada()  {  
+        
+        parDao.agregarPartidoJornada(jornada.getIdJornada(), itemPartidoSelected);        
+        this.listar();    
+    }
     
     
  private boolean isPostBack(){
@@ -185,6 +203,7 @@ public class GrupoBean implements Serializable{
         listaGoleadores = jugDao.listarGoleadores(campeonato);
         listaJornada = jorDao.listar(campeonato);
         
+        
         }
     }catch(Exception e){   
         throw e;
@@ -204,6 +223,10 @@ public class GrupoBean implements Serializable{
     }catch(Exception e){   
        
     }
+    }
+    
+    public List<Partido> listarPartidosJornada(Jornada jor){
+    return parDao.listarPartidosJornada(jor);
     }
     
     
@@ -413,6 +436,97 @@ public class GrupoBean implements Serializable{
     public void setJorDao(JornadaDao jorDao) {
         this.jorDao = jorDao;
     }
+
+    public List<Partido> getListaPartidosJornada() {
+        return listaPartidosJornada;
+    }
+
+    public void setListaPartidosJornada(List<Partido> listaPartidosJornada) {
+        this.listaPartidosJornada = listaPartidosJornada;
+    }
+
+    public PartidoDao getParDao() {
+        return parDao;
+    }
+
+    public void setParDao(PartidoDao parDao) {
+        this.parDao = parDao;
+    }
+
+    public List<SelectItem> getSelectItemOneGrupos() {
+         try {
+            this.selectItemOneGrupos = new ArrayList<>();
+            
+            List<Grupo> listGrupo = gruDao.listar(campeonato);
+            selectItemOneGrupos.clear();
+            for (Grupo g:listGrupo){
+            SelectItem selectItem = new SelectItem(g.getIdGrupo(),g.getNombreGrupo());
+            selectItemOneGrupos.add(selectItem);
+            }                              
+        } catch (Exception ex) {
+            Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+        
+        return selectItemOneGrupos;
+    }
+
+    public void setSelectItemOneGrupos(List<SelectItem> selectItemOneGrupos) {
+        this.selectItemOneGrupos = selectItemOneGrupos;
+    }
+
+    public GrupoDao getGruDao() {
+        return gruDao;
+    }
+
+    public void setGruDao(GrupoDao gruDao) {
+        this.gruDao = gruDao;
+    }
+
+    public int getItemGrupoSelected() {
+        return itemGrupoSelected;
+    }
+
+    public void setItemGrupoSelected(int itemGrupoSelected) {
+        this.itemGrupoSelected = itemGrupoSelected;
+    }
+
+    public List<SelectItem> getSelectItemOnePartidos() {
+        try {
+            this.selectItemOnePartidos = new ArrayList<>();
+            
+            List<Partido> listPartido = parDao.listarJoin(itemGrupoSelected);
+            selectItemOnePartidos.clear();
+            for (Partido p:listPartido){
+            SelectItem selectItem = new SelectItem(p.getIdPartido(),p.getEquipoA().getNombreEquipo()+" - "+p.getEquipoB().getNombreEquipo());
+            selectItemOnePartidos.add(selectItem);
+            }                              
+        } catch (Exception ex) {
+            Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+        return selectItemOnePartidos;
+    }
+
+    public void setSelectItemOnePartidos(List<SelectItem> selectItemOnePartidos) {
+        this.selectItemOnePartidos = selectItemOnePartidos;
+    }
+
+    public int getItemPartidoSelected() {
+        return itemPartidoSelected;
+    }
+
+    public void setItemPartidoSelected(int itemPartidoSelected) {
+        this.itemPartidoSelected = itemPartidoSelected;
+    }
+
+
+    
+    
+   
+    
+    
+    
+    
+    
     
     
     

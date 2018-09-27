@@ -8,7 +8,7 @@ package com.fut.dao;
 import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 import com.fut.model.Jugador;
-import com.fut.util.QuerySql;
+import com.fut.util.QuerySqlCampeonato;
 import com.fut.util.Util;
 
 
@@ -94,7 +94,7 @@ public class JugadorDao extends Dao {
             try{
                 this.Conectar();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
-                PreparedStatement st = this.getCn().prepareCall(QuerySql.SELECT_GOLEADORES);
+                PreparedStatement st = this.getCn().prepareCall(QuerySqlCampeonato.SELECT_GOLEADORES);
                 st.setInt(1, camp.getIdCampeonato());
                 rs = st.executeQuery();
                 lista = new ArrayList();

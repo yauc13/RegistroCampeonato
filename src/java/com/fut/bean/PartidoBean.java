@@ -135,11 +135,11 @@ public class PartidoBean implements Serializable{
     try{
         if(this.isPostBack() == false){
         dao = new PartidoDao();
-        Grupo camp = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        Grupo grup = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         
-        listaPartido = dao.listarJoin(camp);
+        listaPartido = dao.listarJoin(grupo.getIdGrupo());
         }
     }catch(Exception e){   
         throw e;
@@ -153,7 +153,7 @@ public class PartidoBean implements Serializable{
         Grupo u = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        listaPartido = dao.listarJoin(u);
+        listaPartido = dao.listarJoin(grupo.getIdGrupo());
     
     }catch(Exception e){   
         throw e;

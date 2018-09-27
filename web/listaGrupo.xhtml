@@ -63,17 +63,26 @@
                                         <p:outputLabel value="#{jor.nombreJornada}"/>
                                     </p:column>
                                     <p:column headerText="new">
-                                        <p:outputLabel value="agregar"/>
+                                        <p:commandButton value="Agregar Partido" oncomplete="PF('wdgAddParJor').show();"
+                                                         actionListener="#{grupoBean.setJornada(jor)}"
+                                                  update=":dlgAddParJor" />
                                     </p:column>
 
                                     <p:rowExpansion>
-                                        <p:panelGrid  columns="2" columnClasses="label,value" style="width:300px">
+                                       
+                                        <p:panelGrid  columns="1" columnClasses="label,value" style="width:900px">
                                             <f:facet name="header">
                                                
                                             </f:facet>
-                                            <p:dataTable var="equi" value="#{grupoBean.getListaEquipos(grupo)}" style=" align-content:  center" >
+                                            <p:dataTable var="parJor" value="#{grupoBean.listarPartidosJornada(jor)}" style=" align-content:  center" >
                                                 <p:column width="30%">
-                                                    <p:outputLabel value="#{equi.nombreEquipo}"/>
+                                                    <p:outputLabel value="#{parJor.equipoA.nombreEquipo}"/>
+                                                </p:column>
+                                                <p:column width="30%">
+                                                    <p:outputLabel value="#{parJor.golA} - #{parJor.golB}"/>
+                                                </p:column>
+                                                <p:column width="30%">
+                                                    <p:outputLabel value="#{parJor.equipoB.nombreEquipo}"/>
                                                 </p:column>
                                             </p:dataTable>
                                          
@@ -172,6 +181,32 @@
                                          update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
                                          />
                         <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgJornada').hide();"/> 
+                    </h:form>
+                </p:dialog>
+                
+                <p:dialog header="Agregar Partido a la Jornada" widgetVar="wdgAddParJor" id="dlgAddParJor">
+                    <h:form>
+                        <p:growl autoUpdate="true" showDetail="true"/>
+                        <p:outputLabel value="Grupo:"/>
+                        <p:selectOneMenu  value="#{grupoBean.itemGrupoSelected}">
+                            <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
+                            <f:selectItems value="#{grupoBean.selectItemOneGrupos}"/>
+                            <p:ajax update="selPartido"/>
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="Partido" />
+                        <p:selectOneMenu id="selPartido" value="#{grupoBean.itemPartidoSelected}" >
+                            <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
+                            <f:selectItems value="#{grupoBean.selectItemOnePartidos}"/>
+                            
+                        </p:selectOneMenu>
+                        
+
+                        <p:commandButton value="Agregar"  actionListener="#{grupoBean.agregarPartidoJornada()}"
+                                         oncomplete="PF('wdgAddParJor').hide();"
+                                         update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
+                                         />
+                        <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgAddParJor').hide();"/> 
                     </h:form>
                 </p:dialog>
 

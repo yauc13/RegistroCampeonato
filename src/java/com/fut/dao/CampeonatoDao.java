@@ -6,7 +6,7 @@
 package com.fut.dao;
 
 import com.fut.model.Campeonato;
-import com.fut.util.QuerySql;
+import com.fut.util.QuerySqlCampeonato;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +25,7 @@ public class CampeonatoDao extends Dao{
         try{
             this.Conectar();
             //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO campeonato (nombreCampeonato,idUsuario) values(?,?)");
-            PreparedStatement st = this.getCn().prepareStatement(QuerySql.REGISTER_CAMPEONATO);
+            PreparedStatement st = this.getCn().prepareStatement(QuerySqlCampeonato.REGISTER_CAMPEONATO);
             st.setString(1, cam.getNombreCampeonato());
             st.setInt(2, cam.getIdUsuario());
             
@@ -46,7 +46,7 @@ public class CampeonatoDao extends Dao{
             try{
                 this.Conectar();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idCampeonato, nombreCampeonato,idUsuario FROM campeonato");
-                PreparedStatement st = this.getCn().prepareCall(QuerySql.SELECT_CAMPEONATO);
+                PreparedStatement st = this.getCn().prepareCall(QuerySqlCampeonato.SELECT_CAMPEONATO);
                 rs = st.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
