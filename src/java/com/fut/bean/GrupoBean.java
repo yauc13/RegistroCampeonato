@@ -54,6 +54,7 @@ public class GrupoBean implements Serializable{
     private List<Jornada> listaJornada;
     private List<Partido> listaPartidosJornada;
     private String accion;
+    private int rowSelJor; //columna de jornada expandida
     
     private List<SelectItem> selectItemOneGrupos; //para seleccionar grupo segun el campeonato
     private List<SelectItem> selectItemOnePartidos; //para seleccionar grupo segun el campeonato
@@ -66,7 +67,7 @@ public class GrupoBean implements Serializable{
     private GrupoDao gruDao = new GrupoDao();
 
     public GrupoBean() {
-        
+        rowSelJor = 0;
        jornada = new Jornada();
       campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");  
       listaGoleadores = jugDao.listarGoleadores(campeonato);
@@ -180,7 +181,8 @@ public class GrupoBean implements Serializable{
         
     public void agregarPartidoJornada()  {  
         
-        parDao.agregarPartidoJornada(jornada.getIdJornada(), itemPartidoSelected);        
+        parDao.agregarPartidoJornada(jornada.getIdJornada(), itemPartidoSelected);    
+        rowSelJor = jornada.getIdJornada();
         this.listar();    
     }
     
@@ -494,7 +496,7 @@ public class GrupoBean implements Serializable{
         try {
             this.selectItemOnePartidos = new ArrayList<>();
             
-            List<Partido> listPartido = parDao.listarJoin(itemGrupoSelected);
+            List<Partido> listPartido = parDao.listarPartidosGrupoJor(itemGrupoSelected);
             selectItemOnePartidos.clear();
             for (Partido p:listPartido){
             SelectItem selectItem = new SelectItem(p.getIdPartido(),p.getEquipoA().getNombreEquipo()+" - "+p.getEquipoB().getNombreEquipo());
@@ -518,7 +520,16 @@ public class GrupoBean implements Serializable{
         this.itemPartidoSelected = itemPartidoSelected;
     }
 
+    public int getRowSelJor() {
+        return rowSelJor;
+    }
 
+    public void setRowSelJor(int rowSelJor) {
+        this.rowSelJor = rowSelJor;
+    }
+
+
+    
     
     
    

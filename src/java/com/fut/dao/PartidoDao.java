@@ -94,6 +94,55 @@ public class PartidoDao extends Dao{
         return lista;   
     }
    
+   public List<Partido> listarPartidosGrupoJor(int idGrupo){
+       //lista los partidos seleccionando el grupo, para agregar el partido a una fecha. si el partido tiene idjornada null
+            List<Partido> lista = null;
+            ResultSet rs;
+            
+            try{
+                this.Conectar();
+                PreparedStatement st = this.getCn().prepareCall(QuerySqlCampeonato.SELECT_PARTIDOS_GRUPO_JOR);
+                st.setInt(1, idGrupo);
+                rs = st.executeQuery();
+                lista = new ArrayList();
+                
+                
+                while(rs.next()){
+                    Partido cam = new Partido();
+                    //cam.setIdPartido(rs.getInt("idPartido"));
+                    cam.setIdPartido(rs.getInt(1));
+                    cam.setIdEquipoA(rs.getInt(2));
+                    cam.setIdEquipoB(rs.getInt(3));
+                    cam.setGolA(rs.getInt(4));
+                    cam.setGolB(rs.getInt(5));
+                    cam.setIdGrupo(rs.getInt(6));
+                    cam.setEstadoPartido(rs.getString(9));
+                    
+                    Equipo equipoA = new Equipo();
+                    equipoA.setIdEquipo(rs.getInt(2));
+                    equipoA.setNombreEquipo(rs.getString(7));                   
+                    cam.setEquipoA(equipoA);                    
+                    Equipo equipoB = new Equipo();
+                    equipoB.setIdEquipo(rs.getInt(3));
+                    equipoB.setNombreEquipo(rs.getString(8));                    
+                    cam.setEquipoB(equipoB);
+                    Grupo grupo = new Grupo();
+                    grupo.setIdCampeonato(rs.getInt(6));
+                    cam.setGrupo(grupo);
+                    
+                    lista.add(cam);
+                
+                }
+            }catch(SQLException e){
+                System.err.println(e);
+            }finally{
+                this.Cerrar();
+            }
+       
+        return lista;   
+    }
+   
+   
    public List<Partido> listarPartidosJornada(Jornada jor){
             List<Partido> lista = null;
             ResultSet rs;

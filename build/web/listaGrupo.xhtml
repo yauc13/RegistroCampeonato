@@ -55,7 +55,10 @@
                                                  actionListener="#{grupoBean.setAccion('Registrar')}"
                                                   update=":dlgJornada" />
                                 
-                                <p:dataTable id="data" value="#{grupoBean.listaJornada}" var="jor" >
+                                <p:dataTable id="data" value="#{grupoBean.listaJornada}" var="jor"
+                                             rowKey="#{jor.idJornada}"
+                                             expandedRow="#{jor.idJornada == grupoBean.rowSelJor}"
+                                             >
                                      <p:column style="width:50px">
                                         <p:rowToggler />
                                     </p:column>
@@ -75,6 +78,9 @@
                                                
                                             </f:facet>
                                             <p:dataTable var="parJor" value="#{grupoBean.listarPartidosJornada(jor)}" style=" align-content:  center" >
+                                                <p:column width="30%">
+                                                    <p:outputLabel value="#{parJor.idGrupo}"/>
+                                                </p:column>
                                                 <p:column width="30%">
                                                     <p:outputLabel value="#{parJor.equipoA.nombreEquipo}"/>
                                                 </p:column>
@@ -126,12 +132,14 @@
                     
                     <p:tab title="Goleadores" id="tab1">
                         <h:panelGrid columns="2" cellpadding="10" id="panel1">
-
-
-
                             <h:form id="frm1">
                                 <p:outputLabel value="#{grupoBean.campeonato.nombreCampeonato}/"/>
-                                <p:dataTable id="data" value="#{grupoBean.listaGoleadores}" var="goleador" >
+                                <p:dataTable id="data" value="#{grupoBean.listaGoleadores}" var="goleador" 
+                                             rows="5" paginator="true"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" 
+                                             reflow="true"
+                                             >
                                     <p:column headerText="pos">
                                         <p:outputLabel value="#{grupoBean.listaGoleadores.indexOf(goleador)+1}"/>
                                     </p:column>
@@ -150,7 +158,7 @@
                                                        />
 
                                     </p:column>
-                                                 
+
                                 </p:dataTable>
                             </h:form>
                         </h:panelGrid>

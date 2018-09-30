@@ -41,6 +41,13 @@
                             <h:outputText value="iD:" />
                             <h:outputText value="#{jugador.idJugador}" />
                             
+                            <h:outputText value="FN:" />
+                            
+                            <h:outputText value="#{jugador.birthday}" >
+                                <span class="ui-icon-calendar"/>
+                                    <f:convertDateTime  pattern="dd-MM-yyyy" />
+                            </h:outputText>
+                            
                             <p:commandLink value="Modificar" actionListener="#{jugadorBean.leerID(jugador)}" 
                                            oncomplete="PF('wdgDatos').show();" update=":dlgDatos" disabled="#{jugadorBean.habilitarPermisos(jugador,1)}"/>
                              <p:commandLink value="Eliminar" actionListener="#{jugadorBean.eliminar(jugador)}"
@@ -59,6 +66,7 @@
                                          visible="#{jugadorBean.jugador.fotoJugador != '' and jugadorBean.jugador.fotoJugador != null}"
                                          style="border: none; padding: 0;"
                                          styleClass="custompanel">
+                                    
                                     <img style="width: 100px; height: 100px;" src="data:image/png;base64,#{jugadorBean.jugador.fotoJugador}" />
                                 </p:panel>
                             </div>
@@ -66,9 +74,10 @@
                         <h:panelGrid columns="2">
                             <p:outputLabel for="txtNombre" value="Nombre Jugador"/>
                             <p:inputText id="txtNombre" required="true" value="#{jugadorBean.jugador.nombreJugador}"/>
-                            <p:outputLabel for="calendar" value="Fecha de Nacimiento"/>
+                            <p:outputLabel value="Fecha de Nacimiento"/>
                             <p:calendar id="calendar" navigator="true" pattern="yyyy-MM-dd" locale="pt"
-                                        required="true" styleClass="dateTimeField"  value="#{jugadorBean.fechaNacimiento}"/>
+                                        styleClass="dateTimeField"  value="#{jugadorBean.jugador.birthday}"
+                                         yearRange="c-100:c"/>
 
 
 

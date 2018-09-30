@@ -21,6 +21,7 @@ public class Jugador implements Serializable{
     int idJugador;
     String nombreJugador;
     String fechaNacimiento;
+    Date birthday;
     int golJugador;
     int idEquipoJugador;
     int idUsuario;
@@ -109,6 +110,16 @@ public class Jugador implements Serializable{
     public void setIdEquipoJugador(int idEquipoJugador) {
         this.idEquipoJugador = idEquipoJugador;
     }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+    
+    
     
     
     
