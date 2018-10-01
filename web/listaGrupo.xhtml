@@ -77,7 +77,9 @@
                                             <f:facet name="header">
                                                
                                             </f:facet>
-                                            <p:dataTable var="parJor" value="#{grupoBean.listarPartidosJornada(jor)}" style=" align-content:  center" >
+                                            <p:dataTable id="idTableParJor" var="parJor" value="#{grupoBean.listarPartidosJornada(jor)}" style=" align-content:  center" 
+                                                         rowKey="#{parJor.idPartido}"
+                                                         selection="#{grupoBean.partidoSelecJor}" selectionMode="single">
                                                 <p:column width="30%">
                                                     <p:outputLabel value="#{parJor.idGrupo}"/>
                                                 </p:column>
@@ -91,10 +93,18 @@
                                                     <p:outputLabel value="#{parJor.equipoB.nombreEquipo}"/>
                                                 </p:column>
                                             </p:dataTable>
+                                            <p:contextMenu for="idTableParJor">
+                                                <p:menuitem value="View"  icon="ui-icon-search" oncomplete="PF('DlgConfirmDeleteParJor').show();"/>     
+                                                <p:menuitem value="Delete"  icon="ui-icon-close" actionListener="#"/>
+                                            </p:contextMenu>
                                          
                                         </p:panelGrid>
                                     </p:rowExpansion>
                                 </p:dataTable>
+                                 <p:confirmDialog widgetVar="DlgConfirmDeleteParJor" global="true" showEffect="fade" hideEffect="fade" styleClass="customTitleDialogBar">
+                                                    <p:commandButton value="yes" type="button" styleClass="ui-confirmdialog-yes customButtonAdd" icon="fa fa-check" style="float: right"/>
+                                                    <p:commandButton  value="no" type="button" styleClass="ui-confirmdialog-no customButtonAdd" icon="fa fa-times" style="float: left"/>
+                                </p:confirmDialog>
                             </h:form>
                         </h:panelGrid>
                     </p:tab>

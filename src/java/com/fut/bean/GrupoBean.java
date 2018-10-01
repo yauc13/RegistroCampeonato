@@ -47,6 +47,7 @@ public class GrupoBean implements Serializable{
     private Campeonato campeonato = new Campeonato();
     private Usuario usuario = new Usuario();
     private Jornada jornada; 
+    private Partido partidoSelecJor;
     private List<Grupo> listaGrupo;
     private List<TablaEquipos> listaPosiciones;
     private List<Equipo> listaEquipos;
@@ -527,6 +528,16 @@ public class GrupoBean implements Serializable{
     public void setRowSelJor(int rowSelJor) {
         this.rowSelJor = rowSelJor;
     }
+
+    public Partido getPartidoSelecJor() {
+        return partidoSelecJor;
+    }
+
+    public void setPartidoSelecJor(Partido partidoSelecJor) {
+        this.partidoSelecJor = partidoSelecJor;
+    }
+    
+    
 
 
     
