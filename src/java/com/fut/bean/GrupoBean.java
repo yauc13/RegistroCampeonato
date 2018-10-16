@@ -28,7 +28,6 @@ import javax.faces.application.FacesMessage;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.event.TabChangeEvent;
@@ -46,7 +45,8 @@ public class GrupoBean implements Serializable{
     private Grupo grupo = new Grupo();
     private Campeonato campeonato = new Campeonato();
     private Usuario usuario = new Usuario();
-    private Jornada jornada; 
+    private Jornada jornada = new Jornada(); 
+    private Jornada jornadaNew = new Jornada();
     private Partido partidoSelecJor;
     private List<Grupo> listaGrupo;
     private List<TablaEquipos> listaPosiciones;
@@ -55,6 +55,7 @@ public class GrupoBean implements Serializable{
     private List<Jornada> listaJornada;
     private List<Partido> listaPartidosJornada;
     private String accion;
+   
     private int rowSelJor; //columna de jornada expandida
     
     private List<SelectItem> selectItemOneGrupos; //para seleccionar grupo segun el campeonato
@@ -66,10 +67,11 @@ public class GrupoBean implements Serializable{
     private JornadaDao jorDao = new JornadaDao();
     private PartidoDao parDao = new PartidoDao();
     private GrupoDao gruDao = new GrupoDao();
-
+    
     public GrupoBean() {
+        partidoSelecJor = new Partido();
         rowSelJor = 0;
-       jornada = new Jornada();
+       
       campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");  
       listaGoleadores = jugDao.listarGoleadores(campeonato);
     }
@@ -90,15 +92,15 @@ public class GrupoBean implements Serializable{
         event.getTab().setLoaded(true);
     }
     
-    public void operar() throws Exception{
+    public void operarGroup() {
     switch(accion){
         case "Registrar":
-            this.registrar();
-            this.limpiar();
+            this.registrarGrupo();
+            this.limpiarGrupo();
             break;
         case "Modificar":
-            this.modificar();
-            this.limpiar();
+            this.modificarGrupo();
+            this.limpiarGrupo();
             break;
     }
     }
@@ -107,77 +109,87 @@ public class GrupoBean implements Serializable{
     switch(accion){
         case "Registrar":
             this.registrarJornada();
-            this.limpiar();
+            this.limpiarJornada();
             break;
         case "Modificar":
             this.modificarJornada();
-            this.limpiar();
+            this.limpiarJornada();
             break;
     }
     }
     
-    public void limpiar(){
-    this.grupo.setIdGrupo(0);
-    this.grupo.setNombreGrupo("");
+    public void limpiarGrupo(){
+        this.grupo = new Grupo();    
     }
     
-    public void registrar() throws Exception {
+    private void limpiarJornada(){
+        this.jornadaNew = new Jornada();
+    }
+    
+    
+    
+    public void registrarGrupo() {
     GrupoDao dao;
-    try{
+    
         dao = new GrupoDao();
         //Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         this.grupo.setIdCampeonato(campeonato.getIdCampeonato());
-        this.grupo.setIdUsuario(usuario.getIdUsuario());
-        dao.registrar(grupo);
-        this.listar();
-    }catch(Exception e){  
-        throw e;
-    }   
+        this.grupo.setIdUsuario(usuario.getIdUsuario());       
+        if(dao.insertGroup(grupo)){
+           this.listar();
+           FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Creado");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo Crear");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+       
     }
     
-    public void registrarJornada() {
-
-        
-        jornada.setIdCampeonato(campeonato.getIdCampeonato());
-        jornada.setIdUsuario(usuario.getIdUsuario());
-        if(jorDao.registrar(jornada)){
+    public void preparedNewFixture(){
+        this.accion = "Registrar";
+        this.limpiarJornada();
+    }
+    
+    public void registrarJornada() {       
+        jornadaNew.setIdCampeonato(campeonato.getIdCampeonato());
+        jornadaNew.setIdUsuario(usuario.getIdUsuario());
+        boolean reg = jorDao.registrar(jornadaNew);
+        if(reg){
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada creada");
         FacesContext.getCurrentInstance().addMessage(null, message);
         }else{
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear Jornada");
         FacesContext.getCurrentInstance().addMessage(null, message);
         }
-        this.listar();
-        
-       
+        this.listar();  
     }
     
     public void modificarJornada()  {
-    
-    try{
-        
-        if(jorDao.registrar(jornada)){
+        if(jorDao.modificar(jornadaNew)){
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada creada");
         FacesContext.getCurrentInstance().addMessage(null, message);
         }else{
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear");
         FacesContext.getCurrentInstance().addMessage(null, message);
         }
-        this.listar();
-    }catch(Exception e){  
-        
-    }   
+        this.listar();    
     }
     
-        public void modificar() {
+        public void modificarGrupo() {
     GrupoDao dao;
-    try{
+    
         dao = new GrupoDao();
-        dao.modificar(grupo);
-        this.listar();
-    }catch(Exception e){  
+        if(dao.updateGroup(grupo)){
+           this.listar();
+           FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Modificado");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo modificar");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }
         
-    }   
+       
     }
         
     public void agregarPartidoJornada()  {  
@@ -194,9 +206,9 @@ public class GrupoBean implements Serializable{
         return rta;
     }
     
-    public void listarInicio() throws Exception{
+    public void listarInicio(){
     GrupoDao dao;
-    try{
+    
         if(this.isPostBack() == false){
         dao = new GrupoDao();
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
@@ -204,28 +216,22 @@ public class GrupoBean implements Serializable{
         Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         listaGrupo = dao.listar(camp);
         listaGoleadores = jugDao.listarGoleadores(campeonato);
-        listaJornada = jorDao.listar(campeonato);
-        
-        
+        listaJornada = jorDao.listarJornadas(campeonato);
         }
-    }catch(Exception e){   
-        throw e;
-    }
+    
     }
     
     public void listar() {
     GrupoDao dao;
-    try{
+    
         dao = new GrupoDao();
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         listaGrupo = dao.listar(camp);
         listaGoleadores = jugDao.listarGoleadores(campeonato);
-        listaJornada = jorDao.listar(campeonato);
-    }catch(Exception e){   
-       
-    }
+        listaJornada = jorDao.listarJornadas(campeonato);
+    
     }
     
     public List<Partido> listarPartidosJornada(Jornada jor){
@@ -266,37 +272,40 @@ public class GrupoBean implements Serializable{
     return direccion;
     }
     
-     public String verPartidosGrupo() throws Exception {
-    
-    String direccion = null;
-    try{
+     public String verPartidosGrupo()  {    
+    String direccion;
         //sirve para pasar datos entres los beans
         grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         direccion = "listaPartido?faces-redirect=true";
-        
-    }catch(Exception e){  
-        throw e;
-    }   
     return direccion;
     }
     
    
-    public void eliminar(Grupo usu) throws Exception {
-    GrupoDao dao;
-    try{
+    public void deleteGroup(Grupo usu) {
+    GrupoDao dao;    
         dao = new GrupoDao();
-        dao.eliminar(usu);
-        this.listar();
-    }catch(Exception e){  
-        throw e;
-    }   
+        dao.deleteGroup(usu);
+        this.listar();  
+    }
+    
+    public void deleteJornada(Jornada jor) {
+    JornadaDao dao;    
+        dao = new JornadaDao();
+        boolean reg = dao.deleteJornada(jor);
+         if(reg){
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada Eliminada");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo Eliminar", "porque tiene partidos asociados");
+        FacesContext.getCurrentInstance().addMessage(null, message);}
+        this.listar();  
     }
 
     public String habilitarPermisos(Campeonato camp, int i){
         String bol = null;
        switch (i){
            case 1:
-               //habilitar eliminar y editar
+               //habilitar deleteGroup y editar
                if(camp.getIdUsuario() == usuario.getIdUsuario() || "Administrador".equals(usuario.getRolUsuario())){
                     bol = "false";
                 }else{
@@ -328,6 +337,22 @@ public class GrupoBean implements Serializable{
         } catch (Exception ex) {
             Logger.getLogger(GrupoBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void quitarPartidoJornada(){
+        rowSelJor = partidoSelecJor.getIdJornada();
+        boolean resp = parDao.quitarPartidoJornada(partidoSelecJor);
+        if(resp){
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Partido quitado de la jornada");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "el partido no se pudo quitar");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        //rowSelJor = jornada.getIdJornada();
+        
+        partidoSelecJor = new Partido();
+        this.listar();
     }
     
 
@@ -535,6 +560,14 @@ public class GrupoBean implements Serializable{
 
     public void setPartidoSelecJor(Partido partidoSelecJor) {
         this.partidoSelecJor = partidoSelecJor;
+    }
+
+    public Jornada getJornadaNew() {
+        return jornadaNew;
+    }
+
+    public void setJornadaNew(Jornada jornadaNew) {
+        this.jornadaNew = jornadaNew;
     }
     
     

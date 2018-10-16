@@ -10,7 +10,7 @@ import com.fut.model.Grupo;
 import com.fut.model.Jornada;
 import com.fut.model.Partido;
 import com.fut.model.TablaEquipos;
-import com.fut.util.QuerySqlCampeonato;
+import com.fut.util.SqlAdminFutSal;
 import com.fut.util.Util;
 import java.sql.Array;
 import java.sql.PreparedStatement;
@@ -26,11 +26,11 @@ import java.util.logging.Logger;
  * @author Yeison
  */
 public class PartidoDao extends Dao{
-    public boolean registrar(Partido cam) throws Exception{
+    public boolean registrar(Partido cam) {
         boolean reg = false;
         try{
-            this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.partido (\"idEquipoA\",\"idEquipoB\",\"idGrupo\",\"idUsuario\",\"estadoPartido\") values(?,?,?,?,?)");
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_PARTIDO);
             st.setInt(1, cam.getIdEquipoA());
             st.setInt(2, cam.getIdEquipoB());
             st.setInt(3, cam.getIdGrupo());
@@ -39,10 +39,10 @@ public class PartidoDao extends Dao{
 
             st.executeUpdate();
             reg = true;
-        }catch(Exception e){
-            throw e;
+        }catch(SQLException e){
+            System.out.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
         return reg;
     }
@@ -52,8 +52,8 @@ public class PartidoDao extends Dao{
             ResultSet rs;
             
             try{
-                this.Conectar();
-                PreparedStatement st = this.getCn().prepareCall(QuerySqlCampeonato.SELECT_PARTIDOS_GRUPO);
+                this.ConectionDataBase();
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_GRUPO);
                 st.setInt(1, idGrupo);
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -69,6 +69,7 @@ public class PartidoDao extends Dao{
                     cam.setGolB(rs.getInt(5));
                     cam.setIdGrupo(rs.getInt(6));
                     cam.setEstadoPartido(rs.getString(9));
+                    cam.setIdJornada(rs.getInt(10));
                     
                     Equipo equipoA = new Equipo();
                     equipoA.setIdEquipo(rs.getInt(2));
@@ -88,7 +89,7 @@ public class PartidoDao extends Dao{
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
        
         return lista;   
@@ -100,8 +101,8 @@ public class PartidoDao extends Dao{
             ResultSet rs;
             
             try{
-                this.Conectar();
-                PreparedStatement st = this.getCn().prepareCall(QuerySqlCampeonato.SELECT_PARTIDOS_GRUPO_JOR);
+                this.ConectionDataBase();
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_GRUPO_JOR);
                 st.setInt(1, idGrupo);
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -136,7 +137,7 @@ public class PartidoDao extends Dao{
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
        
         return lista;   
@@ -148,8 +149,8 @@ public class PartidoDao extends Dao{
             ResultSet rs;
             
             try{
-                this.Conectar();
-                PreparedStatement st = this.getCn().prepareCall(QuerySqlCampeonato.SELECT_PARTIDOS_JORNADA);
+                this.ConectionDataBase();
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_JORNADA);
                 st.setInt(1, jor.getIdJornada());
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -165,6 +166,7 @@ public class PartidoDao extends Dao{
                     cam.setGolB(rs.getInt(5));
                     cam.setIdGrupo(rs.getInt(6));
                     cam.setEstadoPartido(rs.getString(9));
+                    cam.setIdJornada(rs.getInt(10));
                     
                     Equipo equipoA = new Equipo();
                     equipoA.setIdEquipo(rs.getInt(2));
@@ -186,56 +188,19 @@ public class PartidoDao extends Dao{
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         return lista;   
     }
         
-    public List<Partido> listar(Grupo camp) throws Exception{
-            List<Partido> lista;
-            ResultSet rs;
-            
-            try{
-                this.Conectar();
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\",\"idGrupo\" FROM public.partido WHERE \"idGrupo\" = ? ORDER BY \"idPartido\" ASC");
-                st.setInt(1, camp.getIdGrupo());
-                rs = st.executeQuery();
-                lista = new ArrayList();
-                while(rs.next()){
-                    Partido cam = new Partido();
-                    cam.setIdPartido(rs.getInt("idPartido"));
-                    cam.setIdEquipoA(rs.getInt("idEquipoA"));
-                    cam.setIdEquipoB(rs.getInt("idEquipoB"));
-                    cam.setGolA(rs.getInt("golA"));
-                    cam.setGolB(rs.getInt("golB"));
-                    cam.setIdGrupo(rs.getInt("idGrupo"));
-                    EquipoDao equipoDao = new EquipoDao();
-                    Equipo equipo = equipoDao.leerID(rs.getInt("idEquipoA"));
-                    cam.setEquipoA(equipo);
-                    equipo = equipoDao.leerID(rs.getInt("idEquipoB"));
-                    cam.setEquipoB(equipo);
-                    GrupoDao grupoDao = new GrupoDao();
-                    Grupo grupo = grupoDao.leerID(rs.getInt("idGrupo"));
-                    cam.setGrupo(grupo);
-                    
-                    lista.add(cam);
-                
-                }
-            }catch(Exception e){
-                throw e;
-            }finally{
-                this.Cerrar();
-            }
-        
-        return lista;   
-    }
     
-    public List<Partido> listarPartidosEquipo(Grupo camp, int idEquipo) throws Exception{
-            List<Partido> lista;
+    
+    public List<Partido> listarPartidosEquipo(Grupo camp, int idEquipo){
+            List<Partido> lista = null;
             ResultSet rs;
             
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 PreparedStatement st = this.getCn().prepareCall("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\",\"idGrupo\" FROM public.partido WHERE \"idGrupo\" = ? AND \"idEquipoA\"=? OR \"idEquipoB\"=?");
                 st.setInt(1, camp.getIdGrupo());
                 st.setInt(2, idEquipo);
@@ -264,19 +229,19 @@ public class PartidoDao extends Dao{
                 
                 }
             }catch(Exception e){
-                throw e;
+                System.err.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;   
     }
     
-    public Partido leerID(int idPartido) throws Exception{
+    public Partido leerID(int idPartido) {
         Partido usus = null;
         ResultSet rs;
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 PreparedStatement st = this.getCn().prepareStatement("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\",\"idGrupo\" FROM public.partido WHERE \"idPartido\" = ?");
                 st.setInt(1, idPartido);
                
@@ -304,14 +269,14 @@ public class PartidoDao extends Dao{
                 
                 
             }catch(Exception e){
-                throw e;
+                System.err.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }   
             return usus;
     }
     
-    public List<TablaEquipos> listarTablaPosiciones(Grupo grup) throws SQLException, Exception{
+    public List<TablaEquipos> listarTablaPosiciones(Grupo grup) {
         List<TablaEquipos> lista = null;
             ResultSet rs;
         List<Equipo> listEquipo = null;
@@ -325,10 +290,10 @@ public class PartidoDao extends Dao{
       
             lista = new ArrayList();
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //se recorre la lista de equipos del grupo
                 for(Equipo e: listEquipo){
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\" FROM public.partido WHERE (\"golA\">-1 OR \"golA\">-1)AND( \"idEquipoA\"=? OR \"idEquipoB\"=?)");
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.LIST_POSITION_TEAM);
                 //st.setInt(1, grup.getIdGrupo());
                 st.setInt(1, e.getIdEquipo());
                 st.setInt(2, e.getIdEquipo());
@@ -346,9 +311,9 @@ public class PartidoDao extends Dao{
                     cam.setGolB(rs.getInt("golB"));
                     //cam.setIdGrupo(rs.getInt("idGrupo"));
                     TablaEquipos tab = new TablaEquipos();
-                    System.out.println("partido id:"+cam.getIdPartido()+"idA: "+cam.getIdEquipoA()+"golA:"+cam.getGolA()+" golB:"+cam.getGolB()+"idB:"+cam.getIdEquipoB());
+                    
                     int [] vPuntosPart = tab.calcularPuntosPartido(cam, e.getIdEquipo());
-                    System.out.println("partidos jugados: "+vPuntosPart[4]);
+                   
                    
                    tablaEqui.setPuntos(tablaEqui.getPuntos()+vPuntosPart[0]);
                    tablaEqui.setDF(tablaEqui.getDF()+vPuntosPart[1]);
@@ -366,12 +331,12 @@ public class PartidoDao extends Dao{
                 tablaEqui.setNombre(e.getNombreEquipo());
                 lista.add(tablaEqui);
                 
-                System.out.println(tablaEqui.getNombre()+lista.size());
+                
                 }
             }catch(SQLException e){
-                throw e;
+                System.err.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         TablaEquipos tablaE= new TablaEquipos();
         tablaE.ordenarTabla(lista);
@@ -380,10 +345,10 @@ public class PartidoDao extends Dao{
     
         
     
-    public void modificar(Partido cam) throws Exception{
+    public void modificar(Partido cam){
         
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             PreparedStatement st = this.getCn().prepareStatement("UPDATE partido SET idEquipoA = ?,idEquipoB = ?,golA = ?,golB = ?,idGrupo = ? WHERE idPartido = ?");
             st.setInt(1, cam.getIdEquipoA());  
             st.setInt(2, cam.getIdEquipoB());
@@ -409,18 +374,18 @@ public class PartidoDao extends Dao{
             st.setArray(8, (Array) idGolEB);
 
             
-        }catch(Exception e){
-            throw e;
+        }catch(SQLException e){
+            System.err.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
     }
     
     public void agregarPartidoJornada(int idJornada, int idPartido) {
         
         try{
-            this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.partido SET \"idJornada\" = ? WHERE \"idPartido\" = ?");
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.ADD_MATCH_TO_JORNADA);
             st.setInt(1, idJornada);                          
             st.setInt(2, idPartido);  
             st.executeUpdate();
@@ -428,15 +393,15 @@ public class PartidoDao extends Dao{
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
     }
     
         public void finalizarPartido(Partido cam){
         
         try{
-            this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.partido SET \"golA\" = ?,\"golB\" = ?,\"estadoPartido\" = ? WHERE \"idPartido\" = ?");           
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.FINISH_MATCH);           
             st.setInt(1, cam.getGolA());  
             st.setInt(2, cam.getGolB()); 
             st.setString(3, "Finalizado"); 
@@ -447,21 +412,38 @@ public class PartidoDao extends Dao{
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
     }
+        
+    public boolean quitarPartidoJornada(Partido par){
+        boolean resp= false;
+        try{
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.REMOVE_MATCH_FIXTURE);
+                                  
+            st.setInt(1, par.getIdPartido());  
+            st.executeUpdate();
+            resp= true;
+        }catch(SQLException e){
+            System.err.println(e);
+        }finally{
+        this.CloseConection();
+        }
+        return resp;
+    }
     
-    public void eliminar(Partido cam) throws Exception{
+    public void eliminar(Partido cam) {
         
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             PreparedStatement st = this.getCn().prepareStatement("DELETE FROM partido  WHERE idPartido = ?");
             st.setInt(1, cam.getIdPartido());          
             st.executeUpdate();
-        }catch(Exception e){
-            throw e;
+        }catch(SQLException e){
+            System.err.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
     }
 }

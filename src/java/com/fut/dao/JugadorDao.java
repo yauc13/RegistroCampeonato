@@ -8,7 +8,7 @@ package com.fut.dao;
 import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 import com.fut.model.Jugador;
-import com.fut.util.QuerySqlCampeonato;
+import com.fut.util.SqlAdminFutSal;
 import com.fut.util.Util;
 import java.sql.Date;
 
@@ -19,7 +19,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.management.Query;
 
 /**
  *
@@ -33,23 +32,25 @@ public class JugadorDao extends Dao {
            birth = new java.sql.Date((cam.getBirthday()).getTime());
         }
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO jugador (nombreJugador,fechaNacimiento,golJugador,idEquipoJugador,idUsuario) values(?,?,?,?,?)");
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.jugador (\"nombreJugador\",birthday,\"golJugador\",\"idEquipoJugador\",\"idUsuario\",\"fotoJugador\") values(?,?,?,?,?,?)");
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_PLAYER);
             st.setString(1, cam.getNombreJugador());
-            //st.setDate(2, (Date) cam.getBirthday());
             st.setDate(2, birth);
             st.setInt(3, cam.getGolJugador());
             st.setInt(4, cam.getIdEquipoJugador());
             st.setInt(5, cam.getIdUsuario());
             st.setString(6, cam.getFotoJugador());
-            
-            st.executeUpdate();
+                       
+            int resul =st.executeUpdate();
+            if(resul>0){
             reg = true;
+            }
+            
         }catch(SQLException e){
             System.out.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
         return reg;
     }
@@ -61,7 +62,7 @@ public class JugadorDao extends Dao {
             ResultSet rs;
             
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
                 PreparedStatement st = this.getCn().prepareCall("SELECT \"idJugador\",\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\", \"fotoJugador\" , birthday FROM public.jugador WHERE \"idEquipoJugador\" = ? ORDER BY \"idJugador\"");
                 st.setInt(1, camp.getIdEquipo());
@@ -88,7 +89,7 @@ public class JugadorDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;   
@@ -99,9 +100,9 @@ public class JugadorDao extends Dao {
             ResultSet rs;
             
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
-                PreparedStatement st = this.getCn().prepareCall(QuerySqlCampeonato.SELECT_GOLEADORES);
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_GOLEADORES);
                 st.setInt(1, camp.getIdCampeonato());
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -118,7 +119,7 @@ public class JugadorDao extends Dao {
             }catch(SQLException e){
                 
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;   
@@ -129,7 +130,7 @@ public class JugadorDao extends Dao {
             ResultSet rs;
             
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
                 PreparedStatement st = this.getCn().prepareCall("SELECT \"idJugador\",\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\" FROM public.jugador WHERE \"idEquipoJugador\" = ?");
                 st.setInt(1, camp.getIdEquipo());
@@ -149,7 +150,7 @@ public class JugadorDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;   
@@ -161,7 +162,7 @@ public class JugadorDao extends Dao {
 		byte[] productImage = null;
  
 		try {
-                    this.Conectar();
+                    this.ConectionDataBase();
 		PreparedStatement st = this.getCn().prepareCall("SELECT \"fotoJugador\" FROM public.jugador WHERE \"idJugador\"=?");
 		st.setString(1, productId);
 		rs = st.executeQuery();
@@ -173,7 +174,7 @@ public class JugadorDao extends Dao {
 			System.out.println(e);
 			System.exit(0);
 		}finally{
-                this.Cerrar();
+                this.CloseConection();
             }
 		return productImage;
 	}
@@ -182,7 +183,7 @@ public class JugadorDao extends Dao {
         Jugador usus = null;
         ResultSet rs;
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareStatement("SELECT idJugador, nombreJugador,idUsuario FROM jugador WHERE idJugador = ?");
                 PreparedStatement st = this.getCn().prepareStatement("SELECT \"idJugador\", \"nombreJugador\",\"idUsuario\" FROM public.jugador WHERE \"idJugador\" = ?");
                 st.setInt(1, idJugador);
@@ -199,38 +200,43 @@ public class JugadorDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }   
             return usus;
     }
     
         
     
-    public void modificar(Jugador cam){
+    public boolean modificar(Jugador cam){
+        boolean resp = false;
         Date birth = null;
         if(cam.getBirthday()!= null){
            birth = new java.sql.Date((cam.getBirthday()).getTime());
         }
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("UPDATE jugador SET nombreJugador = ? WHERE idJugador = ?");
-            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.jugador SET \"nombreJugador\" = ?,birthday=?, \"fotoJugador\" = ? WHERE \"idJugador\" = ?");
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.UPDATE_PLAYER);
             st.setString(1, cam.getNombreJugador());
             st.setDate(2, birth);
             st.setString(3, cam.getFotoJugador());
             st.setInt(4, cam.getIdJugador());          
-            st.executeUpdate();
+            int resul =st.executeUpdate();
+            if(resul>0){
+            resp = true;
+            }
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
+        return resp;
     }
     
     public void eliminar(Jugador cam) {
         
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("DELETE FROM jugador  WHERE idJugador = ?");
             PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.jugador  WHERE \"idJugador\" = ?");
             st.setInt(1, cam.getIdJugador());          
@@ -238,7 +244,7 @@ public class JugadorDao extends Dao {
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
     }    
 }

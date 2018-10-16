@@ -18,12 +18,12 @@
             <h:form>
                 <p:breadCrumb class="divmiga" > 
                     <p:menuitem value="Campeonatos" url="#" />     
-                    <p:menuitem value="Campeonatos" url="#" />   
+                     
                 </p:breadCrumb>
             </h:form>
         </div>       
         <p:growl id="message" showDetail="true" autoUpdate="true" sticky="true"/>
-        <f:event type="preRenderView" listener="#{campeonatoBean.listarInicio()}" />
+        <f:event type="preRenderView" listener="#{campeonatoBean.listarCampeonatosInicio()}" />
         <p:dialog modal="true" widgetVar="statusDialog1" header="Cargando..." draggable="false" closable="false" resizable="false">
             <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
         </p:dialog>
@@ -35,28 +35,29 @@
                 PF('statusDialog1').hide();
             }
         </script>
-
+        <div class="row"> 
         <div class="container-fluid row" >
             <h:form id="frm1">
-
-                <p:menubar  class="opciones">
-                    <f:facet name="options" >
-                        <p:commandButton  value="Nuevo Campeonato" oncomplete="PF('wdgDatos').show();"
-
-                                          actionListener="#{campeonatoBean.preparedNew()}"
-                                          update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
-                                          icon="ui-icon-circle-plus"
-                                          />
-
-                    </f:facet>
-                </p:menubar> 
-                <div  class="col-md-10 col-md-offset-1 col-xs-12">
+                <br/>
+                <div  class="col-md-10 col-md-offset-8 ">
                <p:dataTable id="data" value="#{campeonatoBean.listaCampeonato}" var="camp"  
                              
                              >
-                    <f:facet  name="header">
-                        <p:outputLabel value="Campeonatos"/>
-                    </f:facet>
+                    
+                        <f:facet  name="header">
+                            <div class="row">
+                                <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
+                                    <p:commandButton  value="Nuevo Campeonato" oncomplete="PF('wdgDatos').show();"
+                                                      actionListener="#{campeonatoBean.preparedNew()}"
+                                                      update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
+                                                      icon="ui-icon-circle-plus"
+                                                      />
+                                </div>
+                                <div class="col-md-10 col-xs-10 col-sm-10">
+                                    <p:outputLabel value="Campeonatos"/>
+                                </div>
+                            </div>
+                        </f:facet>
                     <p:column headerText="id" width="5%">
                         <p:outputLabel value="#{camp.idCampeonato}"  />
                     </p:column>
@@ -93,7 +94,7 @@
 
             </h:form>
         </div>
-
+</div>
         <p:dialog header="#{campeonatoBean.accion} Campeonatos" widgetVar="wdgDatos" id="dlgDatos">
             <h:form>
                 <p:growl autoUpdate="true" showDetail="true"/>
@@ -110,13 +111,13 @@
 
 
 
-        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" 
                          widgetVar="wdgDelete" id="dlgDelete" message="Eliminar Campeonato #{campeonatoBean.campeonato.nombreCampeonato}?" >
 
             <h:form>
 
                 <p:commandButton value="SI" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" 
-                                 actionListener="#{campeonatoBean.eliminar()}"
+                                 actionListener="#{campeonatoBean.deleteCampeonato()}"
                                  oncomplete="PF('wdgDelete').hide();" update=":frm1:data"/>
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </h:form>

@@ -23,7 +23,7 @@ public class GolDao extends Dao{
     public boolean registrar(Gol cam) throws Exception{
         boolean reg = false;
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.gol (\"idJugador\",\"idEquipo\",\"idPartido\") values(?,?,?)");
             st.setInt(1, cam.getJugador().getIdJugador());
             st.setInt(2, cam.getEquipo().getIdEquipo());
@@ -34,7 +34,7 @@ public class GolDao extends Dao{
         }catch(Exception e){
             throw e;
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
         return reg;
     }
@@ -46,7 +46,7 @@ public class GolDao extends Dao{
             ResultSet rs;
             
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 PreparedStatement st = this.getCn().prepareCall("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idJugador\" = ?");
                 st.setInt(1, camp.getIdJugador());
                 rs = st.executeQuery();
@@ -73,7 +73,7 @@ public class GolDao extends Dao{
             }catch(Exception e){
                 throw e;
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;   
@@ -84,7 +84,7 @@ public class GolDao extends Dao{
             ResultSet rs;
             
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 PreparedStatement st = this.getCn().prepareCall("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idEquipo\" = ?");
                 st.setInt(1, equi.getIdEquipo());
                 rs = st.executeQuery();
@@ -111,7 +111,7 @@ public class GolDao extends Dao{
             }catch(Exception e){
                 throw e;
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;    
@@ -122,7 +122,7 @@ public class GolDao extends Dao{
             ResultSet rs;
             
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 PreparedStatement st = this.getCn().prepareCall("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idPartido\" = ? AND \"idEquipo\" = ?");
                 st.setInt(1, par.getIdPartido());
                 st.setInt(2, equ.getIdEquipo());
@@ -150,7 +150,7 @@ public class GolDao extends Dao{
             }catch(Exception e){
                 throw e;
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;    
@@ -161,7 +161,7 @@ public class GolDao extends Dao{
             ResultSet rs;
             
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 PreparedStatement st = this.getCn().prepareCall("SELECT gol.\"idGol\", gol.\"idJugador\", gol.\"idEquipo\", gol.\"idPartido\""
                                                                 + ",equ.\"nombreEquipo\", jug.\"nombreJugador\"\n" +
                                                                 "FROM public.gol gol\n" +
@@ -193,7 +193,7 @@ public class GolDao extends Dao{
             }catch(Exception e){
                 throw e;
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;    
@@ -203,7 +203,7 @@ public class GolDao extends Dao{
         Gol cam = null;
         ResultSet rs;
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 PreparedStatement st = this.getCn().prepareStatement("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idGol\" = ?");
                 st.setInt(1, idGol);
                
@@ -229,7 +229,7 @@ public class GolDao extends Dao{
             }catch(Exception e){
                 throw e;
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }   
             return cam;
     }
@@ -239,7 +239,7 @@ public class GolDao extends Dao{
     public void modificar(Gol cam) throws Exception{
         
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             PreparedStatement st = this.getCn().prepareStatement("UPDATE public.gol SET \"idJugador\"=?,\"idEquipo\"=?,\"idPartido\"=? WHERE \"idGol\" = ?");
             st.setInt(1, cam.getJugador().getIdJugador());  
             st.setInt(2, cam.getEquipo().getIdEquipo());
@@ -249,21 +249,21 @@ public class GolDao extends Dao{
         }catch(Exception e){
             throw e;
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
     }
     
     public void eliminar(Gol cam) throws Exception{
         
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.gol  WHERE \"idGol\" = ?");
             st.setInt(1, cam.getIdGol());          
             st.executeUpdate();
         }catch(Exception e){
             throw e;
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
     }    
 }

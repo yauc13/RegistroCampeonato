@@ -95,7 +95,7 @@
 
                                 <p:dataTable id="data" value="#{partidoBean.listaPartido}" var="partido"  
                                              rowStyleClass="#{partido.estadoPartido le 'Finalizado' ? 'colored' : ''}" 
-                                             emptyMessage="hoal">
+                                             emptyMessage="No hay Registros...">
                                     <f:facet name="header">
                                         <p:outputLabel value="Partidos #{partidoBean.grupo.nombreGrupo}"/>
                                     </f:facet>
@@ -179,18 +179,18 @@
 
 
 
-                <p:dialog header="Registrar o Modificar Partidos" widgetVar="wdgDatos" id="dlgDatos">
+                <p:dialog header="Registrar o Modificar Partidos" widgetVar="wdgDatos" id="dlgDatos" modal="true">
                     <h:form>
-                        <p:outputLabel value="Equipo A"/>
+                        <p:outputLabel value="Equipo A" for="idSelA"/>
 
-                        <p:selectOneMenu  value="#{partidoBean.codEquipoA}">
+                        <p:selectOneMenu  id="idSelA" required="true" value="#{partidoBean.codEquipoA}">
                             <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
                             <f:selectItems value="#{partidoBean.selectItemOneEquipo}"/>
                             <p:ajax update="selectEB"/>
                         </p:selectOneMenu>
 
-                        <p:outputLabel value="Equipo B"/>
-                        <p:selectOneMenu   id="selectEB" value="#{partidoBean.codEquipoB}">
+                        <p:outputLabel value="Equipo B" for="selectEB"/>
+                        <p:selectOneMenu   id="selectEB" required="true" value="#{partidoBean.codEquipoB}">
                             <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
                             <f:selectItems value="#{partidoBean.selectItemOneEquipoB}"/>
 
@@ -198,8 +198,9 @@
 
 
                         <p:commandButton value="#{partidoBean.accion}"  actionListener="#{partidoBean.operar()}"
-                                         oncomplete="PF('wdgDatos').hide();" update="tabPartidos:frm2:data"
-                                         ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"/>
+                                         oncomplete="PF('wdgDatos').hide();" 
+                                         update="idTabviewVistaGrupo:frmEquipo, idTabviewVistaGrupo:frm2"
+                                         />
                         <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
                     </h:form>
                 </p:dialog>

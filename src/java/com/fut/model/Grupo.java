@@ -5,18 +5,21 @@
  */
 package com.fut.model;
 
-import java.io.Serializable;
 
+import java.io.Serializable;
+import java.util.List;
 /**
  *
  * @author Yeison
  */
 public class Grupo implements Serializable{
-    int idGrupo;
-    String nombreGrupo;
-    int idCampeonato;
-    int idUsuario;
-    int numClasificados;
+    private int idGrupo;
+    private String nombreGrupo;
+    private int idCampeonato;
+    private int idUsuario;
+    private int numClasificados;
+    private Campeonato campeonato;
+    private List<Equipo> listEquipos;
 
     public int getIdUsuario() {
         return idUsuario;
@@ -59,6 +62,24 @@ public class Grupo implements Serializable{
     public void setNumClasificados(int numClasificados) {
         this.numClasificados = numClasificados;
     }
+
+    public Campeonato getCampeonato() {
+        return campeonato;
+    }
+
+    public void setCampeonato(Campeonato campeonato) {
+        this.campeonato = campeonato;
+    }
+
+    public List<Equipo> getListEquipos() {
+        return listEquipos;
+    }
+
+    public void setListEquipos(List<Equipo> listEquipos) {
+        this.listEquipos = listEquipos;
+    }
+    
+    
     
     
     

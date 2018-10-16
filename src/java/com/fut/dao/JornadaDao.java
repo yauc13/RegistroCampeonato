@@ -6,8 +6,8 @@
 package com.fut.dao;
 
 import com.fut.model.Campeonato;
-import com.fut.model.Grupo;
 import com.fut.model.Jornada;
+import com.fut.util.SqlAdminFutSal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,29 +25,29 @@ public class JornadaDao extends Dao {
     public boolean registrar(Jornada d) {
         boolean reg = false;
         try{
-            this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.jornada (\"nombreJornada\",\"idCampeonato\") values(?,?)");
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_FIXTURE);
             st.setString(1, d.getNombreJornada());
             st.setInt(2, d.getIdCampeonato());
-            
-            
-            st.executeUpdate();
+            int res = st.executeUpdate();
+            if(res>0){
             reg = true;
+            }
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
         return reg;
     }
         
-    public List<Jornada> listar(Campeonato camp) {
+    public List<Jornada> listarJornadas(Campeonato camp) {
             List<Jornada> lista = null;
             ResultSet rs;
             
             try{
-                this.Conectar();
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idJornada\", \"nombreJornada\" FROM public.jornada WHERE \"idCampeonato\" = ?");
+                this.ConectionDataBase();
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_FIXTURE_CAMPEONATO);
                 st.setInt(1, camp.getIdCampeonato());
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -55,16 +55,12 @@ public class JornadaDao extends Dao {
                     Jornada cam = new Jornada();
                     cam.setIdJornada(rs.getInt("idJornada"));
                     cam.setNombreJornada(rs.getString("nombreJornada"));
-                    
-                    
-                    
-                    lista.add(cam);
-                
+                    lista.add(cam);               
                 }
             }catch(SQLException e){
                 System.out.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;   
@@ -74,7 +70,7 @@ public class JornadaDao extends Dao {
         Jornada usus = null;
         ResultSet rs;
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 PreparedStatement st = this.getCn().prepareStatement("SELECT idJornada, nombreJornada FROM jornada WHERE idJornada = ?");
                 st.setInt(1, cam.getIdJornada());
                 st.setString(2, cam.getNombreJornada());
@@ -89,46 +85,46 @@ public class JornadaDao extends Dao {
             }catch(SQLException e){
                 throw e;
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }   
             return usus;
     }
     
         
     
-    public boolean modificar(Jornada cam) throws Exception{
+    public boolean modificar(Jornada cam) {
         boolean resp = false;
         try{
-            this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("UPDATE usuario SET passwordUsuario = ? WHERE idUsuario = ?");
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.jornada SET \"nombreJornada\" = ? WHERE \"idJornada\" = ?");
             st.setString(1, cam.getNombreJornada());                      
             st.setInt(2, cam.getIdJornada());          
-            st.executeUpdate();
+            int res = st.executeUpdate();
+            if(res>0){
             resp = true;
+            }
         }catch(SQLException e){
-            throw e;
+            System.err.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
         return resp;
     }
     
-    public boolean eliminar(Jornada cam){
+    public boolean deleteJornada(Jornada cam){
         boolean resp= false;
         try{
-            this.Conectar();
-            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM usuario  WHERE idUsuario = ?");
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.jornada  WHERE \"idJornada\" = ?");
             st.setInt(1, cam.getIdJornada());          
-            st.executeUpdate();
+            int res = st.executeUpdate();
+            if(res>0){
             resp = true;
-        }catch(SQLException e){
-            
-        }finally{
-            try {
-                this.Cerrar();
-            } catch (Exception ex) {
-                Logger.getLogger(JornadaDao.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }catch(SQLException e){
+            System.err.println(e);
+        }finally{           
+                this.CloseConection();     
         }
         return resp;
     }

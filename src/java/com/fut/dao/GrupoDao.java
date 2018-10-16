@@ -7,8 +7,10 @@ package com.fut.dao;
 
 import com.fut.model.Campeonato;
 import com.fut.model.Grupo;
+import com.fut.util.SqlAdminFutSal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,32 +19,34 @@ import java.util.List;
  * @author Yeison
  */
 public class GrupoDao extends Dao {
-    public boolean registrar(Grupo cam) throws Exception{
+    public boolean insertGroup(Grupo group){
         boolean reg = false;
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO grupo (nombreGrupo,idCampeonato,idUsuario) values(?,?,?)");
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.grupo (\"nombreGrupo\",\"idCampeonato\",\"idUsuario\") values(?,?,?)");
-            st.setString(1, cam.getNombreGrupo());
-            st.setInt(2, cam.getIdCampeonato());
-            st.setInt(3, cam.getIdUsuario());
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_GRUP);
+            st.setString(1, group.getNombreGrupo());
+            st.setInt(2, group.getIdCampeonato());
+            st.setInt(3, group.getIdUsuario());
             
-            st.executeUpdate();
+            int exRes = st.executeUpdate();
+            if(exRes>0){
             reg = true;
-        }catch(Exception e){
-            throw e;
+            }
+        }catch(SQLException e){
+            System.out.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
         return reg;
     }
         
-    public List<Grupo> listar(Campeonato camp) throws Exception{
-            List<Grupo> lista;
+    public List<Grupo> listar(Campeonato camp){
+            List<Grupo> lista = null;
             ResultSet rs;
             
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idGrupo, nombreGrupo,idUsuario FROM grupo WHERE idCampeonato = ?");
                 PreparedStatement st = this.getCn().prepareCall("SELECT \"idGrupo\", \"nombreGrupo\",\"idUsuario\" FROM public.grupo WHERE \"idCampeonato\" = ?");
                 st.setInt(1, camp.getIdCampeonato());
@@ -53,26 +57,22 @@ public class GrupoDao extends Dao {
                     cam.setIdGrupo(rs.getInt("idGrupo"));
                     cam.setNombreGrupo(rs.getString("nombreGrupo"));
                     cam.setIdUsuario(rs.getInt("idUsuario"));
-                    
-                    
-                    
-                    lista.add(cam);
-                
+                    lista.add(cam);               
                 }
-            }catch(Exception e){
-                throw e;
+            }catch(SQLException e){
+                System.err.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;   
     }
     
-    public Grupo leerID(int idGrupo) throws Exception{
+    public Grupo leerID(int idGrupo) {
         Grupo usus = null;
         ResultSet rs;
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareStatement("SELECT idGrupo, nombreGrupo, idUsuario FROM grupo WHERE idGrupo = ?");
                 PreparedStatement st = this.getCn().prepareStatement("SELECT \"idGrupo\", \"nombreGrupo\", \"idUsuario\" FROM public.grupo WHERE \"idGrupo\" = ?");
                 st.setInt(1, idGrupo);
@@ -86,44 +86,49 @@ public class GrupoDao extends Dao {
                                        
                 }
                 
-            }catch(Exception e){
-                throw e;
+            }catch(SQLException e){
+                System.err.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }   
             return usus;
     }
     
         
     
-    public void modificar(Grupo cam) throws Exception{
-        
+    public boolean updateGroup(Grupo cam){
+        boolean resp=false;
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("UPDATE grupo SET nombreGrupo = ? WHERE idGrupo = ?");
-            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.grupo SET \"nombreGrupo\" = ? WHERE \"idGrupo\" = ?");
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.UPDATE_GRUP);
             st.setString(1, cam.getNombreGrupo());                      
             st.setInt(2, cam.getIdGrupo());          
-            st.executeUpdate();
-        }catch(Exception e){
-            throw e;
+            
+            int exRes = st.executeUpdate();
+            if(exRes>0){
+            resp = true;
+            }
+        }catch(SQLException e){
+            System.err.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
+        return resp;
     }
     
-    public void eliminar(Grupo cam) throws Exception{
+    public void deleteGroup(Grupo grupo){
         
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("DELETE FROM grupo  WHERE idGrupo = ?");
             PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.grupo  WHERE \"idGrupo\" = ?");
-            st.setInt(1, cam.getIdGrupo());          
+            st.setInt(1, grupo.getIdGrupo());          
             st.executeUpdate();
-        }catch(Exception e){
-            throw e;
+        }catch(SQLException e){
+            System.err.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
     }
 }

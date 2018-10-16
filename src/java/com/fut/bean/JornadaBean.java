@@ -41,7 +41,7 @@ public class JornadaBean {
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         jornadaDao = new JornadaDao();
        
- jornadaDao.listar(campeonato);
+ jornadaDao.listarJornadas(campeonato);
 
     }
     
@@ -133,7 +133,7 @@ public class JornadaBean {
         if(this.isPostBack() == false){
         
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        listaJornadas = jornadaDao.listar(campeonato);
+        listaJornadas = jornadaDao.listarJornadas(campeonato);
         }
     }catch(Exception e){   
         throw e;
@@ -145,7 +145,7 @@ public class JornadaBean {
     try{
        
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        listaJornadas = jornadaDao.listar(campeonato);
+        listaJornadas = jornadaDao.listarJornadas(campeonato);
         
     }catch(Exception e){   
         throw e;
@@ -164,7 +164,7 @@ public class JornadaBean {
     
     try{
         
-        boolean reg =jornadaDao.eliminar(jornada);
+        boolean reg =jornadaDao.deleteJornada(jornada);
         if(reg){
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada Eliminado");
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -181,7 +181,7 @@ public class JornadaBean {
         String bol=null;
        switch (i){
            case 1:
-               //habilitar eliminar y editar
+               //habilitar deleteJornada y editar
                if(camp.getIdUsuario() == usuario.getIdUsuario() || "Administrador".equals(usuario.getRolUsuario())){
                     bol = "false";
                 }else{

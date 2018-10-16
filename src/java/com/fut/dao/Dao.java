@@ -24,17 +24,17 @@ public class Dao {
         this.cn = cn;
     }
     
-    public void Conectar() {
+    public void ConectionDataBase() {
     try{
         Class.forName("org.postgresql.Driver");
        // cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/torneo?user=root&password=");
         cn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/torneo?user=postgres&password=password");
     }catch (ClassNotFoundException | SQLException e){
-        System.out.println("EXCEPTION CONEXION DB");
+        System.out.println(e+"EXCEPTION CONEXION DB");
     }
     }
     
-    public void Cerrar() {
+    public void CloseConection() {
       try{
         if(cn != null){
             if(cn.isClosed()==false){
@@ -42,7 +42,7 @@ public class Dao {
             }
         }
     }catch (SQLException e){
-       
+          System.err.println(e);
     }
     }    
 }

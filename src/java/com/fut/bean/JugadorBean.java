@@ -13,13 +13,12 @@ import com.fut.model.Jugador;
 import com.fut.model.Usuario;
 import java.io.Serializable;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultUploadedFile;
 import org.primefaces.model.UploadedFile;
 
 /**
@@ -50,8 +49,6 @@ public class JugadorBean implements Serializable{
 
     
     public void handleFileUpload(FileUploadEvent event) {
-        //impl.handleFileUpload(event, dto);
-        //dto.setImgFile(event.getFile());
         imgFile =event.getFile();
        
         // Reading a Image file from file system
@@ -67,7 +64,7 @@ public class JugadorBean implements Serializable{
     
 
 
-    public void operar() throws Exception{
+    public void operar(){
         switch(accion){
             case "Registrar":
                 
@@ -82,45 +79,45 @@ public class JugadorBean implements Serializable{
     }
     
     public void limpiar(){
-    /*this.jugador.setIdJugador(0);
-    this.jugador.setNombreJugador("");
-    this.jugador.setFechaNacimiento("");
-    this.fechaNacimiento = null;
-    this.jugador.setFotoJugador("");
-    this.imageJugador="";
-    this.imgFile = null; */
     this.jugador = new Jugador();
     imageJugador = "";
     this.imgFile = null;
-    //this.imgFile = new DefaultUploadedFile();
-    
     }
     
     public void registrar() {
-    JugadorDao dao;
-   
-       
+        JugadorDao dao;
         dao = new JugadorDao();
-        this.jugador.setIdEquipoJugador(equipo.getIdEquipo());       
+        this.jugador.setIdEquipoJugador(equipo.getIdEquipo());
         this.jugador.setIdUsuario(usuario.getIdUsuario());
         this.jugador.setFotoJugador(imageJugador);
-        dao.registrar(jugador);
-        this.listar();
-    
+        if (dao.registrar(jugador)) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jugador creado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            this.listar();
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear Jugador");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
     }
     
     public void modificar() {
     JugadorDao dao;
     
-       /* if(imgFile==null){
+       if(imgFile==null){
         imageJugador = this.jugador.getFotoJugador();
-        }*/ 
+        }
 
         dao = new JugadorDao();
-        //jugador.setFotoJugador(imageJugador);
-        dao.modificar(jugador);
+        jugador.setFotoJugador(imageJugador);
         
-        this.listar();
+        if (dao.modificar(jugador)) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jugador Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            this.listar();
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo modificar Jugador");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
        
     }
     

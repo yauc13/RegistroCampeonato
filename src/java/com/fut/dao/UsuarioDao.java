@@ -19,7 +19,7 @@ public class UsuarioDao extends Dao {
     public boolean registrar(Usuario usu) throws Exception{
         boolean reg = false;
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO usuario (loginUsuario, passwordUsuario, rolUsuario) values(?, ?, ?)");
             PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.usuario(\"loginUsuario\",\"passwordUsuario\",\"rolUsuario\") VALUES (?, ?, ?);");
             st.setString(1, usu.getLoginUsuario());
@@ -30,7 +30,7 @@ public class UsuarioDao extends Dao {
         }catch(Exception e){
             throw e;
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
         return reg;
     }
@@ -40,7 +40,7 @@ public class UsuarioDao extends Dao {
             ResultSet rs;
             
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idUsuario, loginUsuario, passwordUsuario, rolUsuario FROM usuario");
                 PreparedStatement st = this.getCn().prepareCall("SELECT \"idUsuario\", \"loginUsuario\", \"passwordUsuario\", \"rolUsuario\" FROM public.usuario");
                 rs = st.executeQuery();
@@ -58,7 +58,7 @@ public class UsuarioDao extends Dao {
             }catch(Exception e){
                 throw e;
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;   
@@ -68,7 +68,7 @@ public class UsuarioDao extends Dao {
         Usuario usus = null;
         ResultSet rs;
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareStatement("SELECT idUsuario, loginUsuario, passwordUsuario, rolUsuario FROM usuario WHERE loginUsuario = ? and passwordUsuario = ?");
                 PreparedStatement st = this.getCn().prepareStatement("SELECT \"idUsuario\", \"loginUsuario\", \"passwordUsuario\", \"rolUsuario\" FROM public.usuario WHERE \"loginUsuario\" = ? and \"passwordUsuario\" = ?");
                 st.setString(1, usu.getLoginUsuario());
@@ -86,7 +86,7 @@ public class UsuarioDao extends Dao {
             }catch(Exception e){
                 throw e;
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }   
             return usus;
     }
@@ -95,7 +95,7 @@ public class UsuarioDao extends Dao {
         Usuario usus = null;
         ResultSet rs;
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareStatement("SELECT idUsuario, loginUsuario, passwordUsuario, rolUsuario FROM usuario WHERE  loginUsuario = ?");
                 PreparedStatement st = this.getCn().prepareStatement("SELECT \"idUsuario\", \"loginUsuario\", \"passwordUsuario\", \"rolUsuario\" FROM public.usuario WHERE  \"loginUsuario\" = ?");
                 st.setString(1, usu.getLoginUsuario());
@@ -113,7 +113,7 @@ public class UsuarioDao extends Dao {
             }catch(Exception e){
                 throw e;
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }   
             return usus;
     }
@@ -121,7 +121,7 @@ public class UsuarioDao extends Dao {
     public void modificar(Usuario usu) throws Exception{
         
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             PreparedStatement st = this.getCn().prepareStatement("UPDATE public.usuario SET  \"passwordUsuario\"=?");
             st.setString(1, usu.getPasswordUsuario());                      
             st.setInt(2, usu.getIdUsuario());          
@@ -129,21 +129,21 @@ public class UsuarioDao extends Dao {
         }catch(Exception e){
             throw e;
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
     }
     
     public void eliminar(Usuario usu) throws Exception{
         
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.usuario  WHERE \"idUsuario\" = ?");
             st.setInt(1, usu.getIdUsuario());          
             st.executeUpdate();
         }catch(Exception e){
             throw e;
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
     }    
 }

@@ -5,11 +5,13 @@
  */
 package com.fut.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author DIANA G
  */
-public class Usuario {
+public class Usuario implements Serializable {
     private int idUsuario;
     private String loginUsuario;
     private String passwordUsuario;

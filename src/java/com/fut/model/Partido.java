@@ -5,11 +5,13 @@
  */
 package com.fut.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Yeison
  */
-public class Partido {
+public class Partido implements Serializable  {
     int idPartido;
     int idEquipoA;
     int idEquipoB;
@@ -24,6 +26,8 @@ public class Partido {
     Gol [] golEB;
     private String estadoPartido;
     private int idJornada;
+    private Jornada jornada;
+    
     
 
     public int getIdUsuario() {
@@ -141,6 +145,15 @@ public class Partido {
     public void setIdJornada(int idJornada) {
         this.idJornada = idJornada;
     }
+
+    public Jornada getJornada() {
+        return jornada;
+    }
+
+    public void setJornada(Jornada jornada) {
+        this.jornada = jornada;
+    }
+    
     
     
 

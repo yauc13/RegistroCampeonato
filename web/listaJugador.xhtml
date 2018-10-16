@@ -11,20 +11,34 @@
     <h:body>
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
-
+                <div id="miga">
+                    <h:form>
+                        <p:breadCrumb> 
+                            <p:menuitem value="Campeonatos" action="#{campeonatoBean.listarCampeonatosInicio()}"/>     
+                            <p:menuitem value="#{grupoBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(grupoBean.campeonato)}"/>   
+                            <p:menuitem value="#{jugadorBean.grupo.nombreGrupo}"  action="#{grupoBean.verGrupo(grupo)}" />
+                            <p:menuitem value="#{jugadorBean.equipo.nombreEquipo}" action="#"/>
+                        </p:breadCrumb>
+                    </h:form>
+                </div> 
                 <f:event type="preRenderView" listener="#{jugadorBean.listarInicio()}" />
                 <h:form id="frm1">
 
-                    <p:commandButton value="Nuevo Jugador" oncomplete="PF('wdgDatos').show();" actionListener="#{jugadorBean.setAccion('Registrar')}" update=":dlgDatos" disabled="#{jugadorBean.habilitarPermisos(jugadorBean.jugador,2)}"/>
-
-                    <p:outputLabel value="#{jugadorBean.campeonato.nombreCampeonato}/"/> 
-
-                    <p:outputLabel value="#{jugadorBean.grupo.nombreGrupo}/"/>             
-
-                    <p:outputLabel value="#{jugadorBean.equipo.nombreEquipo}/"/>             
+                    <br/>         
 
                     
                     <p:dataGrid id="dataGrid" value="#{jugadorBean.listaJugador}" var="jugador"  columns="5">
+                        <f:facet  name="header">
+                            <div class="row">
+                                <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
+                                    <p:commandButton icon="ui-icon-circle-plus" value="Nuevo Jugador" oncomplete="PF('wdgDatos').show();" actionListener="#{jugadorBean.setAccion('Registrar')}" 
+                                                     update=":dlgDatos" disabled="#{jugadorBean.habilitarPermisos(jugadorBean.jugador,2)}"/>
+                                </div>
+                                <div class="col-md-10 col-xs-10 col-sm-10">
+                                    <p:outputLabel value="Jugadores #{jugadorBean.equipo.nombreEquipo}"/>
+                                </div>
+                            </div>
+                        </f:facet>
                         <p:panelGrid columns="2">
                             <f:facet name="header">
                                 <p:panel id="image_file_ver" 

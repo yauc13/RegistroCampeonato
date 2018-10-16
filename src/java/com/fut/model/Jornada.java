@@ -5,15 +5,26 @@
  */
 package com.fut.model;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 /**
  *
  * @author Yeison
  */
-public class Jornada {
-    int idJornada;
-    String nombreJornada;   
-    int idCampeonato;
-    int idUsuario;
+public class Jornada implements Serializable{
+    private int idJornada;
+    private String nombreJornada;   
+    private int idCampeonato;
+    private int idUsuario;
+    private Date fechaJornada;
+    private List<Partido> listMatch;
+    
+
+    public Jornada() {
+    }
+    
+    
 
     public int getIdUsuario() {
         return idUsuario;
@@ -31,11 +42,6 @@ public class Jornada {
         this.idCampeonato = idCampeonato;
     }
 
-    
-    
-    
-    
-
     public int getIdJornada() {
         return idJornada;
     }
@@ -52,6 +58,23 @@ public class Jornada {
         this.nombreJornada = nombreJornada;
     }
 
+    public Date getFechaJornada() {
+        return fechaJornada;
+    }
+
+    public void setFechaJornada(Date fechaJornada) {
+        this.fechaJornada = fechaJornada;
+    }
+
+    public List<Partido> getListMatch() {
+        return listMatch;
+    }
+
+    public void setListMatch(List<Partido> listMatch) {
+        this.listMatch = listMatch;
+    }
+
+    
  
 
  

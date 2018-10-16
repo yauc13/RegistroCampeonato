@@ -74,25 +74,22 @@ public class CampeonatoBean implements Serializable{
     switch(accion){
         case "Registrar":
             this.registrar();
-            this.limpiar();
+            this.limpiarCampeonato();
             break;
         case "Modificar":
             this.modificar();
-            this.limpiar();
+            this.limpiarCampeonato();
             break;
     }
     }
     
-    public void limpiar(){
+    public void limpiarCampeonato(){
         this.campeonato = new Campeonato();
-        System.out.println("com.fut.bean.CampeonatoBean.limpiar()");
-    //this.campeonato.setIdCampeonato(0);
-    //this.campeonato.setNombreCampeonato("");
     }
     
     public void preparedNew(){
         this.setAccion("Registrar");
-        limpiar();
+        limpiarCampeonato();
     }
     
     
@@ -112,7 +109,7 @@ public class CampeonatoBean implements Serializable{
         }else{
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear");
         FacesContext.getCurrentInstance().addMessage(null, message);}
-        this.listar();
+        this.listarCampeonatos();
     }catch(Exception e){  
         throw e;
     }   
@@ -130,7 +127,7 @@ public class CampeonatoBean implements Serializable{
         }else{
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo modificar");
         FacesContext.getCurrentInstance().addMessage(null, message);}
-        this.listar();
+        this.listarCampeonatos();
     }catch(Exception e){  
         throw e;
     }   
@@ -158,29 +155,20 @@ public class CampeonatoBean implements Serializable{
         return rta;
     }
     
-    public void listarInicio() throws Exception{
-    CampeonatoDao dao;
-    try{
+    public void listarCampeonatosInicio(){
+    CampeonatoDao dao;    
         if(this.isPostBack() == false){
         dao = new CampeonatoDao();
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         listaCampeonato = dao.listar();
-        }
-    }catch(Exception e){   
-        throw e;
-    }
+        }    
     }
     
-    public void listar() throws Exception{
-    CampeonatoDao dao;
-    try{
+    public void listarCampeonatos(){
+    CampeonatoDao dao;    
         dao = new CampeonatoDao();
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         listaCampeonato = dao.listar();
-        
-    }catch(Exception e){   
-        throw e;
-    }
     }
     
     
@@ -191,28 +179,26 @@ public class CampeonatoBean implements Serializable{
     
 
    
-    public void eliminar() throws Exception {
+    public void deleteCampeonato() {
     CampeonatoDao dao;
-    try{
+    
         dao = new CampeonatoDao();
-        boolean reg =dao.eliminar(campeonato);
+        boolean reg =dao.deleteCampeonato(campeonato);
         if(reg){
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Campeonato Eliminado");
         FacesContext.getCurrentInstance().addMessage(null, message);
         }else{
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo Eliminar", "porque tiene grupos creados");
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo Eliminar", "porque tiene jornadas o grupos asociados");
         FacesContext.getCurrentInstance().addMessage(null, message);}
-        this.listar();
-    }catch(Exception e){  
-        throw e;
-    }   
+        this.listarCampeonatos();
+      
     }
     
     public String habilitarPermisos(Campeonato camp, int i){
         String bol=null;
        switch (i){
            case 1:
-               //habilitar eliminar y editar
+               //habilitar deleteCampeonato y editar
                if(camp.getIdUsuario() == usuario.getIdUsuario() || "Administrador".equals(usuario.getRolUsuario())){
                     bol = "false";
                 }else{

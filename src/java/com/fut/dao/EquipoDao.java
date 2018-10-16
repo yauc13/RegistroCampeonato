@@ -22,7 +22,7 @@ public class EquipoDao extends Dao {
     public boolean registrar(Equipo cam) throws Exception{
         boolean reg = false;
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO equipo (nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario) values(?,?,?,?,?,?,?,?)");
             PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.equipo (\"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\") values(?,?,?,?,?,?,?,?)");
             st.setString(1, cam.getNombreEquipo());
@@ -39,7 +39,7 @@ public class EquipoDao extends Dao {
         }catch(SQLException e){
             throw e;
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
         return reg;
     }
@@ -51,7 +51,7 @@ public class EquipoDao extends Dao {
             ResultSet rs;
             
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
                 PreparedStatement st = this.getCn().prepareCall("SELECT \"idEquipo\", \"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idGrupoEquipo\" = ? ORDER BY \"nombreEquipo\"");
                 st.setInt(1, camp.getIdGrupo());
@@ -71,7 +71,7 @@ public class EquipoDao extends Dao {
             }catch(SQLException e){
                 throw e;
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;   
@@ -82,7 +82,7 @@ public class EquipoDao extends Dao {
             ResultSet rs;
             
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
                 PreparedStatement st = this.getCn().prepareCall("SELECT \"idEquipo\", \"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idGrupoEquipo\" = ? AND \"idEquipo\" != ?");
                 st.setInt(1, camp.getIdGrupo());
@@ -103,7 +103,7 @@ public class EquipoDao extends Dao {
             }catch(SQLException e){
                 throw e;
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;   
@@ -113,7 +113,7 @@ public class EquipoDao extends Dao {
         Equipo usus = null;
         ResultSet rs;
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareStatement("SELECT idEquipo, nombreEquipo,idUsuario FROM equipo WHERE idEquipo = ?");
                 PreparedStatement st = this.getCn().prepareStatement("SELECT \"idEquipo\", \"nombreEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idEquipo\" = ?");
                 st.setInt(1, idEquipo);
@@ -129,7 +129,7 @@ public class EquipoDao extends Dao {
             }catch(SQLException e){
                 throw e;
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }   
             return usus;
     }
@@ -139,7 +139,7 @@ public class EquipoDao extends Dao {
     public void modificar(Equipo cam) throws Exception{
         
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("UPDATE equipo SET nombreEquipo = ? WHERE idEquipo = ?");
             PreparedStatement st = this.getCn().prepareStatement("UPDATE public.equipo SET \"nombreEquipo\" = ? WHERE \"idEquipo\" = ?");
             st.setString(1, cam.getNombreEquipo());                      
@@ -148,14 +148,14 @@ public class EquipoDao extends Dao {
         }catch(SQLException e){
             throw e;
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
     }
     
     public void eliminar(Equipo cam) throws Exception{
         
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("DELETE FROM equipo  WHERE idEquipo = ?");
             PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.equipo  WHERE \"idEquipo\" = ?");
             st.setInt(1, cam.getIdEquipo());          
@@ -163,7 +163,7 @@ public class EquipoDao extends Dao {
         }catch(SQLException e){
             throw e;
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
     }
 }

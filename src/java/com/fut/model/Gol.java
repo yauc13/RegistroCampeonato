@@ -5,11 +5,13 @@
  */
 package com.fut.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author DIANA G
  */
-public class Gol {
+public class Gol implements Serializable {
    int idGol;
    Jugador jugador;
    Equipo equipo;

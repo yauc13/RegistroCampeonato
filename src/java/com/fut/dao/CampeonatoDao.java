@@ -6,14 +6,12 @@
 package com.fut.dao;
 
 import com.fut.model.Campeonato;
-import com.fut.util.QuerySqlCampeonato;
+import com.fut.util.SqlAdminFutSal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -23,18 +21,18 @@ public class CampeonatoDao extends Dao{
     public boolean registrar(Campeonato cam) {
         boolean reg = false;
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO campeonato (nombreCampeonato,idUsuario) values(?,?)");
-            PreparedStatement st = this.getCn().prepareStatement(QuerySqlCampeonato.REGISTER_CAMPEONATO);
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.REGISTER_CAMPEONATO);
             st.setString(1, cam.getNombreCampeonato());
             st.setInt(2, cam.getIdUsuario());
             
             st.executeUpdate();
             reg = true;
         }catch(SQLException e){
-            
+            System.err.println(e);
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
         return reg;
     }
@@ -44,9 +42,9 @@ public class CampeonatoDao extends Dao{
             ResultSet rs;
             
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idCampeonato, nombreCampeonato,idUsuario FROM campeonato");
-                PreparedStatement st = this.getCn().prepareCall(QuerySqlCampeonato.SELECT_CAMPEONATO);
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_CAMPEONATO);
                 rs = st.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
@@ -60,9 +58,9 @@ public class CampeonatoDao extends Dao{
                 
                 }
             }catch(SQLException e){
-                
+                System.err.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }
         
         return lista;   
@@ -72,7 +70,7 @@ public class CampeonatoDao extends Dao{
         Campeonato usus = null;
         ResultSet rs;
             try{
-                this.Conectar();
+                this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareStatement("SELECT idCampeonato, nombreCampeonato,idUsuario FROM campeonato WHERE idCampeonato = ?");
                 PreparedStatement st = this.getCn().prepareStatement("SELECT \"idCampeonato\", \"nombreCampeonato\", \"idUsuario\" FROM public.campeonato WHERE \"idCampeonato\" = ?");
                 st.setInt(1, cam.getIdCampeonato());
@@ -86,9 +84,9 @@ public class CampeonatoDao extends Dao{
                 }
                 
             }catch(SQLException e){
-               
+                System.err.println(e);
             }finally{
-                this.Cerrar();
+                this.CloseConection();
             }   
             return usus;
     }
@@ -99,7 +97,7 @@ public class CampeonatoDao extends Dao{
         boolean reg = false;
         
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("UPDATE campeonato SET nombreCampeonato = ? WHERE idCampeonato = ?");
             PreparedStatement st = this.getCn().prepareStatement("UPDATE public.campeonato SET \"nombreCampeonato\" = ? WHERE \"idCampeonato\" = ?");
             st.setString(1, cam.getNombreCampeonato());                      
@@ -108,30 +106,29 @@ public class CampeonatoDao extends Dao{
             reg = true;
             
         }catch(SQLException e){
-            
+            System.err.println(e); 
             
         }finally{
-        this.Cerrar();
+        this.CloseConection();
         }
         return reg;
     }
     
-    public boolean eliminar(Campeonato cam){
+    public boolean deleteCampeonato(Campeonato cam){
         boolean reg=false;
         try{
-            this.Conectar();
+            this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("DELETE FROM campeonato  WHERE idCampeonato = ?");
             PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.campeonato  WHERE \"idCampeonato\" = ?");
             st.setInt(1, cam.getIdCampeonato());          
-            st.executeUpdate();           
+            int res = st.executeUpdate();  
+            if(res>0){
             reg = true;
-            
+            }
         }catch(SQLException e){            
-            
-        }finally{
-           
-                this.Cerrar();
-           
+            System.err.println(e);
+        }finally{          
+                this.CloseConection();          
         }
         return reg;
     }
