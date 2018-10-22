@@ -10,6 +10,7 @@ import com.fut.dao.GrupoDao;
 import com.fut.dao.JornadaDao;
 import com.fut.dao.JugadorDao;
 import com.fut.dao.PartidoDao;
+import com.fut.dao.PlayOffDao;
 import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 
@@ -17,6 +18,7 @@ import com.fut.model.Grupo;
 import com.fut.model.Jornada;
 import com.fut.model.Jugador;
 import com.fut.model.Partido;
+import com.fut.model.PlayOff;
 import com.fut.model.TablaEquipos;
 import com.fut.model.Usuario;
 import java.io.Serializable;
@@ -41,8 +43,9 @@ import org.primefaces.event.TabChangeEvent;
 @ManagedBean
 @SessionScoped
 
-public class GrupoBean implements Serializable{
+public class AdminChampionShipBean implements Serializable{
     private Grupo grupo = new Grupo();
+    private PlayOff playOff = new PlayOff();
     private Campeonato campeonato = new Campeonato();
     private Usuario usuario = new Usuario();
     private Jornada jornada = new Jornada(); 
@@ -53,6 +56,7 @@ public class GrupoBean implements Serializable{
     private List<Equipo> listaEquipos;
     private List<Jugador> listaGoleadores;
     private List<Jornada> listaJornada;
+    private List<PlayOff> listaPlayOff;
     private List<Partido> listaPartidosJornada;
     private String accion;
    
@@ -67,8 +71,9 @@ public class GrupoBean implements Serializable{
     private JornadaDao jorDao = new JornadaDao();
     private PartidoDao parDao = new PartidoDao();
     private GrupoDao gruDao = new GrupoDao();
+    private PlayOffDao plaDao = new PlayOffDao();
     
-    public GrupoBean() {
+    public AdminChampionShipBean() {
         partidoSelecJor = new Partido();
         rowSelJor = 0;
        
@@ -105,6 +110,19 @@ public class GrupoBean implements Serializable{
     }
     }
     
+    public void operatePlayOff() {
+    switch(accion){
+        case "Registrar":
+            this.registrarPlayOff();
+            this.limpiarPlayOff();
+            break;
+        case "Modificar":
+            this.modificarPlayOff();
+            this.limpiarPlayOff();
+            break;
+    }
+    }
+    
     public void operarJornada() {
     switch(accion){
         case "Registrar":
@@ -118,21 +136,13 @@ public class GrupoBean implements Serializable{
     }
     }
     
-    public void limpiarGrupo(){
-        this.grupo = new Grupo();    
-    }
-    
-    private void limpiarJornada(){
-        this.jornadaNew = new Jornada();
-    }
-    
-    
+
     
     public void registrarGrupo() {
     GrupoDao dao;
     
         dao = new GrupoDao();
-        //Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
+        
         this.grupo.setIdCampeonato(campeonato.getIdCampeonato());
         this.grupo.setIdUsuario(usuario.getIdUsuario());       
         if(dao.insertGroup(grupo)){
@@ -146,12 +156,21 @@ public class GrupoBean implements Serializable{
        
     }
     
-    public void preparedNewFixture(){
-        this.accion = "Registrar";
-        this.limpiarJornada();
+    public void registrarPlayOff() {
+        
+        plaDao = new PlayOffDao();
+        this.playOff.setIdCampeonato(campeonato.getIdCampeonato());
+        if (plaDao.insertPlayOff(playOff)) {
+            this.listar();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Play-Off Creado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo Crear");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
     }
     
-    public void registrarJornada() {       
+        public void registrarJornada() {       
         jornadaNew.setIdCampeonato(campeonato.getIdCampeonato());
         jornadaNew.setIdUsuario(usuario.getIdUsuario());
         boolean reg = jorDao.registrar(jornadaNew);
@@ -164,6 +183,38 @@ public class GrupoBean implements Serializable{
         }
         this.listar();  
     }
+    
+    public void preparedNewFixture(){
+        this.accion = "Registrar";
+        this.limpiarJornada();
+    }
+    
+    public void preparedNewPlayOff(){
+        this.accion = "Registrar";
+        this.limpiarPlayOff();
+    }
+    
+    public void preparedNewGroup(){
+        this.accion = "Registrar";
+        this.grupo = new Grupo();
+        
+    }
+    
+    public void limpiarGrupo(){
+        this.grupo = new Grupo();    
+    }
+    
+    private void limpiarJornada(){
+        this.jornadaNew = new Jornada();
+    }
+    
+     private void limpiarPlayOff(){
+        this.playOff = new PlayOff();
+    }
+    
+    
+    
+
     
     public void modificarJornada()  {
         if(jorDao.modificar(jornadaNew)){
@@ -181,6 +232,21 @@ public class GrupoBean implements Serializable{
     
         dao = new GrupoDao();
         if(dao.updateGroup(grupo)){
+           this.listar();
+           FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Modificado");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo modificar");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        
+       
+    }
+        
+    public void modificarPlayOff() {
+       
+        plaDao = new PlayOffDao();
+        if(plaDao.updatePlayOff(playOff)){
            this.listar();
            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Modificado");
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -213,10 +279,11 @@ public class GrupoBean implements Serializable{
         dao = new GrupoDao();
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
-        Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
-        listaGrupo = dao.listar(camp);
+        
+        listaGrupo = dao.listGroupByChampionShip(campeonato);
         listaGoleadores = jugDao.listarGoleadores(campeonato);
         listaJornada = jorDao.listarJornadas(campeonato);
+        listaPlayOff = plaDao.listGroupByChampionShip(campeonato);
         }
     
     }
@@ -226,11 +293,11 @@ public class GrupoBean implements Serializable{
     
         dao = new GrupoDao();
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
-        Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
-        listaGrupo = dao.listar(camp);
+        campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");        
+        listaGrupo = dao.listGroupByChampionShip(campeonato);
         listaGoleadores = jugDao.listarGoleadores(campeonato);
         listaJornada = jorDao.listarJornadas(campeonato);
+        listaPlayOff = plaDao.listGroupByChampionShip(campeonato);
     
     }
     
@@ -239,36 +306,37 @@ public class GrupoBean implements Serializable{
     }
     
     
-    public void leerID (Grupo usu) throws Exception{
-            this.grupo = usu; 
+    public void preparedEditGroup (Grupo gru){
+            this.grupo = gru; 
             this.accion = "Modificar";
     }
     
-    public String verEquiposGrupos() throws Exception {
+
     
-    String direccion = null;
-    try{
+    public String verEquiposGrupos() {
+    
+    String direccion = null;   
         //sirve para pasar datos entres los beans
         grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         direccion = "listaEquipo?faces-redirect=true";
-        
-    }catch(Exception e){  
-        throw e;
-    }   
     return direccion;
     }
     
-    public String verGrupo(Grupo grup) throws Exception {
+    public String verGrupo(Grupo grup){
     
-    String direccion = null;
-    try{
+    String direccion = null; 
         //sirve para pasar datos entres los beans
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("grupo", grup);
         direccion = "vistaGrupo?faces-redirect=true";
-        
-    }catch(Exception e){  
-        throw e;
-    }   
+    return direccion;
+    }
+    
+    public String verPlayOff(PlayOff play){
+    
+    String direccion; 
+        //sirve para pasar datos entres los beans
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("play", play);
+        direccion = "listaPartidoPlayOff?faces-redirect=true";
     return direccion;
     }
     
@@ -329,14 +397,10 @@ public class GrupoBean implements Serializable{
     }
     
     public void  listarPosicionesGrupo(){
-        PartidoDao partidoDao= new PartidoDao();
-        try {
+        PartidoDao partidoDao= new PartidoDao();       
             //listaPosiciones.clear();
             grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
-            listaPosiciones= partidoDao.listarTablaPosiciones(grupo);
-        } catch (Exception ex) {
-            Logger.getLogger(GrupoBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            listaPosiciones = partidoDao.listarTablaPosiciones(grupo);        
     }
     
     public void quitarPartidoJornada(){
@@ -416,7 +480,7 @@ public class GrupoBean implements Serializable{
         try {
             listaEquipos = equipoDao.listar(gru);
         } catch (Exception ex) {
-            Logger.getLogger(GrupoBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdminChampionShipBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listaEquipos;
     }
@@ -485,7 +549,7 @@ public class GrupoBean implements Serializable{
          try {
             this.selectItemOneGrupos = new ArrayList<>();
             
-            List<Grupo> listGrupo = gruDao.listar(campeonato);
+            List<Grupo> listGrupo = gruDao.listGroupByChampionShip(campeonato);
             selectItemOneGrupos.clear();
             for (Grupo g:listGrupo){
             SelectItem selectItem = new SelectItem(g.getIdGrupo(),g.getNombreGrupo());
@@ -569,6 +633,35 @@ public class GrupoBean implements Serializable{
     public void setJornadaNew(Jornada jornadaNew) {
         this.jornadaNew = jornadaNew;
     }
+
+    public PlayOff getPlayOff() {
+        return playOff;
+    }
+
+    public void setPlayOff(PlayOff playOff) {
+        this.playOff = playOff;
+    }
+
+    public List<PlayOff> getListaPlayOff() {
+        return listaPlayOff;
+    }
+
+    public void setListaPlayOff(List<PlayOff> listaPlayOff) {
+        this.listaPlayOff = listaPlayOff;
+    }
+
+    public PlayOffDao getPlaDao() {
+        return plaDao;
+    }
+
+    public void setPlaDao(PlayOffDao plaDao) {
+        this.plaDao = plaDao;
+    }
+    
+    
+    
+    
+    
     
     
 

@@ -16,13 +16,17 @@ public class Partido implements Serializable  {
     int idEquipoA;
     int idEquipoB;
     int idGrupo;
+    int idPlayOff;
     int golA;
     int golB;
+    int penalA;
+    int penalB;
     int idUsuario;
     Grupo grupo;
+    PlayOff playOff;
     Equipo equipoA;
     Equipo equipoB;
-    Gol [] golEA;
+    Gol [] golEA; //captura los goles de A para saber si el partido lo gana
     Gol [] golEB;
     private String estadoPartido;
     private int idJornada;
@@ -152,6 +156,38 @@ public class Partido implements Serializable  {
 
     public void setJornada(Jornada jornada) {
         this.jornada = jornada;
+    }
+
+    public int getIdPlayOff() {
+        return idPlayOff;
+    }
+
+    public void setIdPlayOff(int idPlayOff) {
+        this.idPlayOff = idPlayOff;
+    }
+
+    public PlayOff getPlayOff() {
+        return playOff;
+    }
+
+    public void setPlayOff(PlayOff playOff) {
+        this.playOff = playOff;
+    }
+
+    public int getPenalA() {
+        return penalA;
+    }
+
+    public void setPenalA(int penalA) {
+        this.penalA = penalA;
+    }
+
+    public int getPenalB() {
+        return penalB;
+    }
+
+    public void setPenalB(int penalB) {
+        this.penalB = penalB;
     }
     
     

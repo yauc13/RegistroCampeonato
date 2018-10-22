@@ -75,7 +75,7 @@
                     <p:column  width="15%">
                         <p:commandButton  icon="ui-icon-pencil" 
                                           title="Editar" 
-                                          actionListener="#{campeonatoBean.leerID(camp)}" 
+                                          actionListener="#{campeonatoBean.preparedEditChampionShip(camp)}" 
                                           oncomplete="PF('wdgDatos').show();" update=":dlgDatos"
                                           disabled="#{campeonatoBean.habilitarPermisos(camp,1)}"
                                           style="margin-left: 7px;"
@@ -84,7 +84,7 @@
                         <p:commandButton icon="ui-icon-trash"
                                          title="Eliminar" 
                                          update="data,dlgDelete" disabled="#{campeonatoBean.habilitarPermisos(camp,1)}"
-                                         actionListener="#{campeonatoBean.leerID(camp)}"
+                                         actionListener="#{campeonatoBean.preparedEditChampionShip(camp)}"
                                          oncomplete="PF('wdgDelete').show();"
                                          style="margin-left: 7px;"
                                          />

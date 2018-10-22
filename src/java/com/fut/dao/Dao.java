@@ -31,6 +31,7 @@ public class Dao {
         cn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/torneo?user=postgres&password=password");
     }catch (ClassNotFoundException | SQLException e){
         System.out.println(e+"EXCEPTION CONEXION DB");
+        
     }
     }
     

@@ -140,7 +140,7 @@ public class CampeonatoBean implements Serializable{
     try{
         //sirve para pasar datos entres los beans
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("campeonato", camp);
-        direccion = "listaGrupo?faces-redirect=true";
+        direccion = "adminChampionShip?faces-redirect=true";
         
         
     }catch(Exception e){  
@@ -172,7 +172,7 @@ public class CampeonatoBean implements Serializable{
     }
     
     
-    public void leerID (Campeonato usu) throws Exception{
+    public void preparedEditChampionShip (Campeonato usu) throws Exception{
             this.campeonato = usu; 
             this.accion = "Modificar";
     }

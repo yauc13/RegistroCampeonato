@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  * @author Yeison
  */
 public class PartidoDao extends Dao{
-    public boolean registrar(Partido cam) {
+    public boolean registrarPartido(Partido cam) {
         boolean reg = false;
         try{
             this.ConectionDataBase();
@@ -39,6 +39,29 @@ public class PartidoDao extends Dao{
 
             st.executeUpdate();
             reg = true;
+        }catch(SQLException e){
+            System.out.println(e);
+        }finally{
+        this.CloseConection();
+        }
+        return reg;
+    }
+    
+        public boolean registrarPartidoPlayOff(Partido par) {
+        boolean reg = false;
+        try{
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_PARTIDO_PLAYOFF);
+            st.setInt(1, par.getIdEquipoA());
+            st.setInt(2, par.getIdEquipoB());
+            st.setInt(3, par.getIdPlayOff());
+            st.setInt(4, par.getIdUsuario());
+            st.setString(5, "Por Jugar");
+
+            int res = st.executeUpdate();
+            if(res>0){
+            reg = true;
+            }
         }catch(SQLException e){
             System.out.println(e);
         }finally{
@@ -94,6 +117,55 @@ public class PartidoDao extends Dao{
        
         return lista;   
     }
+   
+    public List<Partido> listarPartidosPlayOff(int idPlay){
+            List<Partido> lista = null;
+            ResultSet rs;
+            
+            try{
+                this.ConectionDataBase();
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_GRUPO);
+                st.setInt(1, idPlay);
+                rs = st.executeQuery();
+                lista = new ArrayList();
+                
+                
+                while(rs.next()){
+                    Partido cam = new Partido();
+                    //cam.setIdPartido(rs.getInt("idPartido"));
+                    cam.setIdPartido(rs.getInt(1));
+                    cam.setIdEquipoA(rs.getInt(2));
+                    cam.setIdEquipoB(rs.getInt(3));
+                    cam.setGolA(rs.getInt(4));
+                    cam.setGolB(rs.getInt(5));
+                    cam.setIdGrupo(rs.getInt(6));
+                    cam.setEstadoPartido(rs.getString(9));
+                    cam.setIdJornada(rs.getInt(10));
+                    
+                    Equipo equipoA = new Equipo();
+                    equipoA.setIdEquipo(rs.getInt(2));
+                    equipoA.setNombreEquipo(rs.getString(7));                   
+                    cam.setEquipoA(equipoA);                    
+                    Equipo equipoB = new Equipo();
+                    equipoB.setIdEquipo(rs.getInt(3));
+                    equipoB.setNombreEquipo(rs.getString(8));                    
+                    cam.setEquipoB(equipoB);
+                    Grupo grupo = new Grupo();
+                    grupo.setIdCampeonato(rs.getInt(6));
+                    cam.setGrupo(grupo);
+                    
+                    lista.add(cam);
+                
+                }
+            }catch(SQLException e){
+                System.err.println(e);
+            }finally{
+                this.CloseConection();
+            }
+       
+        return lista;   
+    }
+   
    
    public List<Partido> listarPartidosGrupoJor(int idGrupo){
        //lista los partidos seleccionando el grupo, para agregar el partido a una fecha. si el partido tiene idjornada null
@@ -281,13 +353,7 @@ public class PartidoDao extends Dao{
             ResultSet rs;
         List<Equipo> listEquipo = null;
         EquipoDao equipoDao = new EquipoDao();
-        
-        try {
             listEquipo = equipoDao.listar(grup); //se llena la lista de los equipos del grupo
-        } catch (Exception ex) {
-            Logger.getLogger(PartidoDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-      
             lista = new ArrayList();
             try{
                 this.ConectionDataBase();
@@ -301,7 +367,7 @@ public class PartidoDao extends Dao{
                 rs = st.executeQuery();
                 
                 TablaEquipos tablaEqui= new TablaEquipos();
-                System.out.println(e.getNombreEquipo());
+                
                 while(rs.next()){
                     Partido cam = new Partido();
                     cam.setIdPartido(rs.getInt("idPartido"));
@@ -323,8 +389,7 @@ public class PartidoDao extends Dao{
                    tablaEqui.setPG(tablaEqui.getPG()+vPuntosPart[5]);
                    tablaEqui.setPE(tablaEqui.getPE()+vPuntosPart[6]);
                    tablaEqui.setPP(tablaEqui.getPP()+vPuntosPart[7]); 
-                   System.out.println("puntos partido: "+vPuntosPart[0]);
-                   System.out.println(tablaEqui.getNombre()+lista.size());
+                   
                 }
                 
                 //tablaEqui.setProm(tablaEqui.getPuntos()/tablaEqui.getPJ());

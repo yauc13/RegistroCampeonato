@@ -7,13 +7,14 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Facelet Title</title>
+        <link href="resources/css/listaGrupo.css" rel="stylesheet" type="text/css"/>
     </h:head>
     <h:body>
 
 
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
-                <f:event type="preRenderView" listener="#{grupoBean.listarInicio()}" />
+                <f:event type="preRenderView" listener="#{adminChampionShipBean.listarInicio()}" />
 
                 <p:dialog modal="true" widgetVar="statusDialogGrupo" header="Cargando..." draggable="false" closable="false" resizable="false">
                     <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
@@ -32,20 +33,13 @@
                         <p:breadCrumb> 
                             <p:menuitem value="Campeonatos" action="listaCampeonato?faces-redirect=true"/> 
                             
-                            <p:menuitem value="#{grupoBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(grupoBean.campeonato)}"/>   
+                            <p:menuitem value="#{adminChampionShipBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(adminChampionShipBean.campeonato)}"/>   
                         </p:breadCrumb>
                     </h:form>
                 </div> 
 
-
-                <div> 
-                    <h:form >
-
-                        <p:commandLink value="Inicio  " action="listaCampeonato?faces-redirect=true" style="text-decoration: none"/>
-                        <p:commandLink value="#{grupoBean.campeonato.nombreCampeonato}" action="listaGrupo?faces-redirect=true" style="text-decoration: none"/>
-
-                    </h:form>
-                </div>
+                <br/>
+                
                 <p:tabView id="idTabviewVistaCampeonato">
 
                     <p:tab title="Jornadas" id="tab2">
@@ -54,24 +48,24 @@
                             <h:form id="formJornadas">
                                 
 
-                                <p:dataTable id="data" value="#{grupoBean.listaJornada}" var="jor"
+                                <p:dataTable id="data" value="#{adminChampionShipBean.listaJornada}" var="jor"
                                              rowKey="#{jor.idJornada}"
-                                             expandedRow="#{jor.idJornada == grupoBean.rowSelJor}"  
+                                             expandedRow="#{jor.idJornada == adminChampionShipBean.rowSelJor}"  
                                              
-                                             selection="#{grupoBean.jornada}" 
+                                             selection="#{adminChampionShipBean.jornada}" 
                                              selectionMode="single"
                                              >
                                      <f:facet  name="header">
                                                 <div class="row">
                                                     <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
                                                         <p:commandButton  value="Nueva jornada" oncomplete="PF('wdgJornada').show();"
-                                                                          actionListener="#{grupoBean.preparedNewFixture()}"
+                                                                          actionListener="#{adminChampionShipBean.preparedNewFixture()}"
                                                                           update=":dlgJornada" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
                                                                           icon="ui-icon-circle-plus"
                                                                           />
                                                     </div>
                                                    <div class="col-md-10 col-xs-10 col-sm-10">
-                                                        <p:outputLabel value="Jornadas de #{grupoBean.campeonato.nombreCampeonato}"/>
+                                                        <p:outputLabel value="Jornadas de #{adminChampionShipBean.campeonato.nombreCampeonato}"/>
                                                     </div>
                                                 </div>
                                             </f:facet>
@@ -83,12 +77,12 @@
                                     </p:column>
                                     <p:column headerText="new">
                                         <p:commandButton value="Agregar Partido" oncomplete="PF('wdgAddParJor').show();"
-                                                         actionListener="#{grupoBean.setJornada(jor)}"
+                                                         actionListener="#{adminChampionShipBean.setJornada(jor)}"
                                                          update=":dlgAddParJor" />
                                         <p:commandButton icon="ui-icon-trash"
                                                                      title="Eliminar Jornada" 
                                                                      update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
-                                                                     actionListener="#{grupoBean.deleteJornada(jor)}"
+                                                                     actionListener="#{adminChampionShipBean.deleteJornada(jor)}"
                                                                      
                                                                      style="margin-left: 7px;"
                                                                      />
@@ -103,7 +97,7 @@
                                             <f:facet name="header">
 
                                             </f:facet>
-                                            <p:dataTable id="idTableParJor" var="parJor" value="#{grupoBean.listarPartidosJornada(jor)}" style=" align-content:  center" 
+                                            <p:dataTable id="idTableParJor" var="parJor" value="#{adminChampionShipBean.listarPartidosJornada(jor)}" style=" align-content:  center" 
                                                          rowKey="#{parJor.idPartido}"
                                                          >
                                                 <p:column width="5%">
@@ -122,7 +116,7 @@
                                                     <p:commandButton icon="ui-icon-trash"
                                                                      title="Eliminar" 
                                                                      update="idDiagQuitarParJor"
-                                                                     actionListener="#{grupoBean.setPartidoSelecJor(parJor)}"
+                                                                     actionListener="#{adminChampionShipBean.setPartidoSelecJor(parJor)}"
                                                                      oncomplete="PF('wdgQuitarParJor').show();"
                                                                      style="margin-left: 7px;"
                                                                      />
@@ -143,19 +137,20 @@
 
                             <h:form id="formGrupos">
                                 
-                                    <p:dataGrid var="grupo" value="#{grupoBean.listaGrupo}" columns="5">
+                                    <p:dataGrid var="grupo" value="#{adminChampionShipBean.listaGrupo}" columns="5">
                                         <f:facet  name="header">
                                                 <div class="row">
                                                     <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
                                                         <p:commandButton  value="Nuevo Grupo" oncomplete="PF('wdgCrudGrupo').show();"
-                                                                          actionListener="#{grupoBean.setAccion('Registrar')}"
+                                                                          actionListener="#{adminChampionShipBean.preparedNewGroup()}"
                                                                           update=":dlgCrudGrupo" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
                                                                           icon="ui-icon-circle-plus"
                                                                           />
                                                     </div>
                                                     <div class="col-md-10 col-xs-10 col-sm-10">
-                                                        <p:outputLabel value="Grupos de #{grupoBean.campeonato.nombreCampeonato}"/>
+                                                        <p:outputLabel value="Grupos de #{adminChampionShipBean.campeonato.nombreCampeonato}"/>
                                                     </div>
+                                                    
                                                 </div>
                                             </f:facet>
 
@@ -164,12 +159,30 @@
 
                                             <f:facet name="header">
 
-                                                <p:commandButton   value="#{grupo.nombreGrupo}" action="#{grupoBean.verGrupo(grupo)}" 
+                                                <p:commandButton   value="#{grupo.nombreGrupo}" action="#{adminChampionShipBean.verGrupo(grupo)}" 
                                                                    onclick="PrimeFaces.monitorDownload(start, stop);"
                                                                    title="Ver Equipos del Grupo"
                                                                    />
+                                                <p:commandButton icon="ui-icon-pencil"
+                                                                     title="Editar Grupo" 
+                                                                     update=":dlgCrudGrupo"
+                                                                     actionListener="#{adminChampionShipBean.preparedEditGroup(grupo)}"
+                                                                      oncomplete="PF('wdgCrudGrupo').show();"
+                                                                     style="margin-left: 7px;"
+                                                                     />
+                                                <p:commandButton icon="ui-icon-trash"
+                                                                     title="Eliminar Grupo" 
+                                                                     update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
+                                                                     actionListener="#"
+                                                                     
+                                                                     style="margin-left: 7px;"
+                                                                     />
                                             </f:facet>
-                                            <p:dataTable var="equi" value="#{grupoBean.getListaEquipos(grupo)}" style=" align-content:  center">
+                                            <p:dataTable var="equi" value="#{adminChampionShipBean.getListaEquipos(grupo)}"
+                                                         style=" align-content:  center"
+                                                         rowIndexVar="rowIndex"
+                                                         rowStyleClass="#{rowIndex lt grupo.numClasificados ? 'clasificadosGrupo' : ''}"
+                                                        >
                                                 <p:column width="30%">
                                                     <p:outputLabel value="#{equi.nombreEquipo}"/>
                                                 </p:column>
@@ -183,19 +196,81 @@
                             </h:form> 
                         
                     </p:tab>
+                    
+                    <p:tab title="PlayOff">
+                       
+
+                            <h:form id="formPlayOff">
+                                
+                                    <p:dataGrid var="playOff" value="#{adminChampionShipBean.listaPlayOff}" columns="5">
+                                        <f:facet  name="header">
+                                                <div class="row">
+                                                    <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
+                                                        <p:commandButton  value="Nuevo PlayOff" oncomplete="PF('wdgCrudPlayOff').show();"
+                                                                          actionListener="#{adminChampionShipBean.preparedNewPlayOff()}"
+                                                                          update=":dlgCrudPlayOff" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
+                                                                          icon="ui-icon-circle-plus"
+                                                                          />
+                                                    </div>
+                                                    <div class="col-md-10 col-xs-10 col-sm-10">
+                                                        <p:outputLabel value="PlayOff de #{adminChampionShipBean.campeonato.nombreCampeonato}"/>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </f:facet>
+
+                                        <p:panelGrid columns="1" style=" align-content:  center">
+                                            
+
+                                            <f:facet name="header">
+
+                                                <p:commandButton   value="#{playOff.namePlayOff}" action="#{adminChampionShipBean.verPlayOff(playOff)}" 
+                                                                   onclick="PrimeFaces.monitorDownload(start, stop);"
+                                                                   title="Ver Partidos del PlayOff"
+                                                                   />
+                                                <p:commandButton icon="ui-icon-pencil"
+                                                                     title="Editar Grupo" 
+                                                                     update=":dlgCrudGrupo"
+                                                                     actionListener="#{adminChampionShipBean.preparedEditGroup(playOff)}"
+                                                                      oncomplete="PF('wdgCrudPlayOff').show();"
+                                                                     style="margin-left: 7px;"
+                                                                     />
+                                                <p:commandButton icon="ui-icon-trash"
+                                                                     title="Eliminar Grupo" 
+                                                                     update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos, idTabviewVistaCampeonato:formPlayOff"
+                                                                     actionListener="#"
+                                                                     
+                                                                     style="margin-left: 7px;"
+                                                                     />
+                                            </f:facet>
+                                            <p:dataTable var="equi" value="#{adminChampionShipBean.getListaEquipos(grupo)}" style=" align-content:  center">
+                                                <p:column width="30%">
+                                                    <p:outputLabel value="#{playOff.namePlayOff}"/>
+                                                </p:column>
+                                            </p:dataTable>
+
+
+                                        </p:panelGrid>
+
+                                    </p:dataGrid>
+                                
+                            </h:form> 
+                        
+                    </p:tab>
+
 
                     <p:tab title="Goleadores" id="tab1">
                         <h:panelGrid columns="2" cellpadding="10" id="panel1">
                             <h:form id="frm1">
-                                <p:outputLabel value="#{grupoBean.campeonato.nombreCampeonato}/"/>
-                                <p:dataTable id="data" value="#{grupoBean.listaGoleadores}" var="goleador" 
+                                <p:outputLabel value="#{adminChampionShipBean.campeonato.nombreCampeonato}/"/>
+                                <p:dataTable id="data" value="#{adminChampionShipBean.listaGoleadores}" var="goleador" 
                                              rows="5" paginator="true"
                                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                              rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" 
                                              reflow="true"
                                              >
                                     <p:column headerText="pos">
-                                        <p:outputLabel value="#{grupoBean.listaGoleadores.indexOf(goleador)+1}"/>
+                                        <p:outputLabel value="#{adminChampionShipBean.listaGoleadores.indexOf(goleador)+1}"/>
                                     </p:column>
                                     <p:column headerText="Jugador">
                                         <p:outputLabel value="#{goleador.nombreJugador}"/>
@@ -221,16 +296,37 @@
 
                 </p:tabView>
 
-                <p:dialog header="Registrar o Modificar Grupos" widgetVar="wdgCrudGrupo" id="dlgCrudGrupo">
+                <p:dialog header="Registrar o Modificar Grupos" widgetVar="wdgCrudGrupo" id="dlgCrudGrupo" modal="true">
                     <h:form id="formCrudGrupo">
-                        
+                        <p:panelGrid columns="2">
                         <p:outputLabel value="Nombre Grupo" for="txtNombre"/>
-                        <p:inputText id="txtNombre" required="true" value="#{grupoBean.grupo.nombreGrupo}"/>
+                        <p:inputText id="txtNombre" required="true" value="#{adminChampionShipBean.grupo.nombreGrupo}"/>
+                        
+                        <p:outputLabel value="No clasificados" for="txtClasi"/>
+                        <p:inputText id="txtClasi" required="true" type="number" value="#{adminChampionShipBean.grupo.numClasificados}"/>
 
-                        <p:commandButton value="#{grupoBean.accion}"  actionListener="#{grupoBean.operarGroup()}" 
+                        <p:commandButton value="#{adminChampionShipBean.accion}"  actionListener="#{adminChampionShipBean.operarGroup()}" 
                                          oncomplete="PF('wdgCrudGrupo').hide();" 
                                          update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"/>
                         <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgCrudGrupo').hide();"/> 
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                
+                 <p:dialog header="Registrar o Modificar PlayOff" widgetVar="wdgCrudPlayOff" id="dlgCrudPlayOff" modal="true">
+                    <h:form id="formCrudPlayOff">
+                        <p:panelGrid columns="2">
+                        <p:outputLabel value="Nombre PlayOff" for="txtNombre"/>
+                        <p:inputText id="txtNombre" required="true" value="#{adminChampionShipBean.playOff.namePlayOff}"/>
+                        
+                        <p:outputLabel value="No Partidos" for="txtClasi"/>
+                        <p:inputText id="txtClasi" required="true" type="number" value="#{adminChampionShipBean.playOff.numPartidos}"/>
+
+                        <p:commandButton value="#{adminChampionShipBean.accion}"  actionListener="#{adminChampionShipBean.operatePlayOff()}" 
+                                         oncomplete="PF('wdgCrudPlayOff').hide();" 
+                                         update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos, idTabviewVistaCampeonato:formPlayOff"/>
+                        <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgCrudPlayOff').hide();"/> 
+                        </p:panelGrid>
                     </h:form>
                 </p:dialog>
 
@@ -239,9 +335,9 @@
                     <h:form>
                       
                         <p:outputLabel value="Nombre Jornada" for="txtJornada"/>
-                        <p:inputText id="txtJornada" required="true" value="#{grupoBean.jornadaNew.nombreJornada}"/>
+                        <p:inputText id="txtJornada" required="true" value="#{adminChampionShipBean.jornadaNew.nombreJornada}"/>
 
-                        <p:commandButton value="#{grupoBean.accion}"  actionListener="#{grupoBean.operarJornada()}"
+                        <p:commandButton value="#{adminChampionShipBean.accion}"  actionListener="#{adminChampionShipBean.operarJornada()}"
                                          oncomplete="PF('wdgJornada').hide();"
                                          update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
                                          />
@@ -254,21 +350,21 @@
                     <h:form>
                         <p:growl autoUpdate="true" showDetail="true"/>
                         <p:outputLabel value="Grupo:" for="idSelGrupo"/>
-                        <p:selectOneMenu id="idSelGrupo" required="true" value="#{grupoBean.itemGrupoSelected}">
+                        <p:selectOneMenu id="idSelGrupo" required="true" value="#{adminChampionShipBean.itemGrupoSelected}">
                             <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
-                            <f:selectItems value="#{grupoBean.selectItemOneGrupos}"/>
+                            <f:selectItems value="#{adminChampionShipBean.selectItemOneGrupos}"/>
                             <p:ajax update="selPartido"/>
                         </p:selectOneMenu>
 
                         <p:outputLabel value="Partido" for="selPartido"/>
-                        <p:selectOneMenu id="selPartido" required="true" value="#{grupoBean.itemPartidoSelected}" >
+                        <p:selectOneMenu id="selPartido" required="true" value="#{adminChampionShipBean.itemPartidoSelected}" >
                             <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
-                            <f:selectItems value="#{grupoBean.selectItemOnePartidos}"/>
+                            <f:selectItems value="#{adminChampionShipBean.selectItemOnePartidos}"/>
 
                         </p:selectOneMenu>
 
 
-                        <p:commandButton value="Agregar"  actionListener="#{grupoBean.agregarPartidoJornada()}"
+                        <p:commandButton value="Agregar"  actionListener="#{adminChampionShipBean.agregarPartidoJornada()}"
                                          oncomplete="PF('wdgAddParJor').hide();"
                                          update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
                                          />
@@ -282,10 +378,10 @@
                     
                     <h:form>
                       <h:panelGrid columns="2">  
-                    <p:outputLabel id="txtParJorDel" value="id Par: #{grupoBean.partidoSelecJor.equipoA.nombreEquipo} vs #{grupoBean.partidoSelecJor.equipoB.nombreEquipo}"/>
+                    <p:outputLabel id="txtParJorDel" value="id Par: #{adminChampionShipBean.partidoSelecJor.equipoA.nombreEquipo} vs #{adminChampionShipBean.partidoSelecJor.equipoB.nombreEquipo}"/>
                     <p:outputLabel value=""/>
                     <p:commandButton value="Aceptar"  icon="ui-icon-check" 
-                                     style="float: right" actionListener="#{grupoBean.quitarPartidoJornada()}"
+                                     style="float: right" actionListener="#{adminChampionShipBean.quitarPartidoJornada()}"
                                      oncomplete="PF('wdgQuitarParJor').hide();"
                                      update="idTabviewVistaCampeonato:formJornadas"
                                      />
@@ -301,10 +397,10 @@
                     
                     <h:form>
                       <h:panelGrid columns="2">  
-                          <p:outputLabel id="txtParJorDel" value="#{grupoBean.jornada}"/>
+                          <p:outputLabel id="txtParJorDel" value="#{adminChampionShipBean.jornada}"/>
                     <p:outputLabel value=""/>
                     <p:commandButton value="Aceptar"  icon="ui-icon-check" 
-                                     style="float: right" actionListener="#{grupoBean.quitarPartidoJornada()}"
+                                     style="float: right" actionListener="#{adminChampionShipBean.quitarPartidoJornada()}"
                                      oncomplete="PF('wdgDeleteJor').hide();"
                                      update="idTabviewVistaCampeonato:formJornadas"
                                      />

@@ -7,13 +7,14 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
+       >
     </h:head>
     <h:body>
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
 
 
-                <f:event type="preRenderView" listener="#{grupoBean.listarPosicionesGrupo()}" />
+                <f:event type="preRenderView" listener="#{adminChampionShipBean.listarPosicionesGrupo()}" />
                 <f:event type="preRenderView" listener="#{partidoBean.listarInicio()}" />       
                 <f:event type="preRenderView" listener="#{equipoBean.listarInicio()}" />
                 <p:growl autoUpdate="true" showDetail="true"/>
@@ -21,39 +22,36 @@
                     <h:form>
                         <p:breadCrumb> 
                             <p:menuitem value="Campeonatos" url="listaCampeonato?faces-redirect=true" />     
-                            <p:menuitem value="#{grupoBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(grupoBean.campeonato)}"/> 
-                            <p:menuitem value="#{grupoBean.grupo.nombreGrupo}"  action="#{grupoBean.verGrupo(grupo)}"/>
+                            <p:menuitem value="#{adminChampionShipBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(adminChampionShipBean.campeonato)}"/> 
+                            <p:menuitem value="#{adminChampionShipBean.grupo.nombreGrupo}"  action="#{adminChampionShipBean.verGrupo(grupo)}"/>
                         </p:breadCrumb>
                     </h:form>
                 </div>
 
-                <h:form>
-                    <p:outputLabel value="#{grupoBean.campeonato.nombreCampeonato}/"/>
-                    <p:outputLabel value="#{grupoBean.grupo.nombreGrupo}/"/>
-                    
-                </h:form> 
+                <br/>
 
 
 
                 <p:tabView id="idTabviewVistaGrupo">
-                    <p:ajax event="tabChange" listener="#{ grupoBean.onTabChange}" />   
+                    <p:ajax event="tabChange" listener="#{ adminChampionShipBean.onTabChange}" />   
                     <p:tab title="Tabla de Posiciones">
                         <h:panelGrid columns="2" cellpadding="10">
                             <h:form>
 
-                                <p:dataTable id="data" value="#{grupoBean.listaPosiciones}" var="tablaEquipo"
+                                <p:dataTable id="data" value="#{adminChampionShipBean.listaPosiciones}" var="tablaEquipo"
+                                             rowKey="#{tablaEquipo}"
+                                             rowIndexVar="rowIndex"
+                                             rowStyleClass="#{rowIndex lt adminChampionShipBean.grupo.numClasificados ? 'clasificadosGrupo' : ''}"
                                              
-
-                                             rowStyleClass="#{grupoBean.listaPosiciones.indexOf(tablaEquipo)+1 le 2 ? 'colored' : ''}" 
                                              >
                                     <f:facet name="header">
-                                        <p:outputLabel value="Tabla de Posiciones #{partidoBean.grupo.nombreGrupo}"/>
+                                        <p:outputLabel style="color: #002752" value="Tabla de Posiciones #{partidoBean.grupo.nombreGrupo}"/>
                                     </f:facet>
-                                    <p:column headerText="pos" width="5%">
-                                        <p:outputLabel value="#{grupoBean.listaPosiciones.indexOf(tablaEquipo)+1}" />
+                                    <p:column headerText="pos" width="5%" >
+                                        <p:outputLabel value="#{adminChampionShipBean.listaPosiciones.indexOf(tablaEquipo)+1}" />
                                     </p:column>
-                                    <p:column headerText="Equipo" width="50%">
-                                        <p:outputLabel value="#{tablaEquipo.nombre}"/>
+                                    <p:column headerText="Equipo" width="50%" >
+                                        <p:outputLabel value="#{tablaEquipo.nombre}" />
                                     </p:column>
                                     <p:column headerText="Puntos" width="6%">
                                         <p:outputLabel value="#{tablaEquipo.puntos}" />

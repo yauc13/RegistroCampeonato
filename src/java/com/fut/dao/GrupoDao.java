@@ -26,8 +26,9 @@ public class GrupoDao extends Dao {
             //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO grupo (nombreGrupo,idCampeonato,idUsuario) values(?,?,?)");
             PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_GRUP);
             st.setString(1, group.getNombreGrupo());
-            st.setInt(2, group.getIdCampeonato());
-            st.setInt(3, group.getIdUsuario());
+            st.setInt(2, group.getNumClasificados());
+            st.setInt(3, group.getIdCampeonato());
+            st.setInt(4, group.getIdUsuario());
             
             int exRes = st.executeUpdate();
             if(exRes>0){
@@ -41,14 +42,14 @@ public class GrupoDao extends Dao {
         return reg;
     }
         
-    public List<Grupo> listar(Campeonato camp){
+    public List<Grupo> listGroupByChampionShip(Campeonato camp){
             List<Grupo> lista = null;
             ResultSet rs;
             
             try{
                 this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idGrupo, nombreGrupo,idUsuario FROM grupo WHERE idCampeonato = ?");
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idGrupo\", \"nombreGrupo\",\"idUsuario\" FROM public.grupo WHERE \"idCampeonato\" = ?");
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_GROUP_BY_CHAMPIONSHIP);
                 st.setInt(1, camp.getIdCampeonato());
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -56,6 +57,7 @@ public class GrupoDao extends Dao {
                     Grupo cam = new Grupo();
                     cam.setIdGrupo(rs.getInt("idGrupo"));
                     cam.setNombreGrupo(rs.getString("nombreGrupo"));
+                    cam.setNumClasificados(rs.getInt("clasificadosGrupo"));
                     cam.setIdUsuario(rs.getInt("idUsuario"));
                     lista.add(cam);               
                 }
@@ -96,15 +98,15 @@ public class GrupoDao extends Dao {
     
         
     
-    public boolean updateGroup(Grupo cam){
+    public boolean updateGroup(Grupo gru){
         boolean resp=false;
         try{
             this.ConectionDataBase();
             //PreparedStatement st = this.getCn().prepareStatement("UPDATE grupo SET nombreGrupo = ? WHERE idGrupo = ?");
             PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.UPDATE_GRUP);
-            st.setString(1, cam.getNombreGrupo());                      
-            st.setInt(2, cam.getIdGrupo());          
-            
+            st.setString(1, gru.getNombreGrupo());                      
+            st.setInt(2, gru.getNumClasificados());          
+            st.setInt(3, gru.getIdGrupo());  
             int exRes = st.executeUpdate();
             if(exRes>0){
             resp = true;

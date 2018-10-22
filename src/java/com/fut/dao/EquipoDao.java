@@ -46,8 +46,8 @@ public class EquipoDao extends Dao {
     
 
         
-    public List<Equipo> listar(Grupo camp) throws Exception{
-            List<Equipo> lista;
+    public List<Equipo> listar(Grupo camp){
+            List<Equipo> lista = null;
             ResultSet rs;
             
             try{
@@ -69,7 +69,7 @@ public class EquipoDao extends Dao {
                 
                 }
             }catch(SQLException e){
-                throw e;
+                System.err.println(e);
             }finally{
                 this.CloseConection();
             }
@@ -102,6 +102,34 @@ public class EquipoDao extends Dao {
                 }
             }catch(SQLException e){
                 throw e;
+            }finally{
+                this.CloseConection();
+            }
+        
+        return lista;   
+    }
+        
+        
+     public List<Equipo> listarEquiposClasificados(int idChampionShip){
+            List<Equipo> lista = null;
+            ResultSet rs;
+            
+            try{
+                this.ConectionDataBase();
+                //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idEquipo\", \"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idGrupoEquipo\" = ? ORDER BY \"nombreEquipo\"");
+                st.setInt(1, idChampionShip);
+                rs = st.executeQuery();
+                lista = new ArrayList();
+                while(rs.next()){
+                    Equipo cam = new Equipo();
+                    cam.setIdEquipo(rs.getInt("idEquipo"));
+                    cam.setNombreEquipo(rs.getString("nombreEquipo"));
+                    cam.setIdUsuario(rs.getInt("idUsuario"));
+                    lista.add(cam);                
+                }
+            }catch(SQLException e){
+                System.err.println(e);
             }finally{
                 this.CloseConection();
             }
