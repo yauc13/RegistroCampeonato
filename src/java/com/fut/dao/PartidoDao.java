@@ -26,15 +26,27 @@ import java.util.logging.Logger;
  * @author Yeison
  */
 public class PartidoDao extends Dao{
-    public boolean registrarPartido(Partido cam) {
+    public boolean registrarPartido(Partido par) {
         boolean reg = false;
+        String query;
+        String repla = "";
+        int idRepla = 0;
+        if(par.getIdGrupo()!= 0){
+            repla = "idGrupo";
+            idRepla = par.getIdGrupo();
+        }else if(par.getIdPlayOff()!=0){
+            repla = "idPlayOff";
+            idRepla = par.getIdPlayOff();
+        }
         try{
             this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_PARTIDO);
-            st.setInt(1, cam.getIdEquipoA());
-            st.setInt(2, cam.getIdEquipoB());
-            st.setInt(3, cam.getIdGrupo());
-            st.setInt(4, cam.getIdUsuario());
+            query = SqlAdminFutSal.INSERT_PARTIDO.replaceAll("remplazo", repla);
+            
+            PreparedStatement st = this.getCn().prepareStatement(query);
+            st.setInt(1, par.getIdEquipoA());
+            st.setInt(2, par.getIdEquipoB());
+            st.setInt(3,  idRepla);
+            st.setInt(4, par.getIdUsuario());
             st.setString(5, "Por Jugar");
 
             st.executeUpdate();
@@ -124,7 +136,7 @@ public class PartidoDao extends Dao{
             
             try{
                 this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_GRUPO);
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_PLAYOFF);
                 st.setInt(1, idPlay);
                 rs = st.executeQuery();
                 lista = new ArrayList();

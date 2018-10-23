@@ -39,7 +39,7 @@
         <h:form id="frm2">
               
             <p:commandButton value="Nuevo" oncomplete="PF('wdgDatos').show();" 
-                             actionListener="#{partidoBean.setAccion('Registrar')}" update=":dlgDatos"/>
+                             actionListener="#{partidoBean.preparedRegisterMatch()}" update=":dlgDatos"/>
             
             <style type="text/css">
                 .colored {
@@ -50,7 +50,7 @@
                 }
             </style>
            
-            <p:dataTable id="data" value="#{partidoBean.listaPartido}" var="partido"  
+                <p:dataTable id="data" value="#{partidoBean.listMatchPlayOff}" var="partido"  
                          rowStyleClass="#{partido.estadoPartido le 'Finalizado' ? 'colored' : ''}" >
                 
                 
@@ -97,19 +97,19 @@
                 
                 <p:selectOneMenu  value="#{partidoBean.codEquipoA}">
                         <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
-                        <f:selectItems value="#{partidoBean.selectItemOneEquipo}"/>
+                        <f:selectItems value="#{partidoBean.selectItemOnePlayEquipoA}"/>
                         <p:ajax update="selectEB"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Equipo B"/>
                 <p:selectOneMenu   id="selectEB" value="#{partidoBean.codEquipoB}">
                         <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
-                        <f:selectItems value="#{partidoBean.selectItemOneEquipoB}"/>
+                        <f:selectItems value="#{partidoBean.selectItemOnePlayEquipoA}"/>
                         
                 </p:selectOneMenu>              
                 
                 
-                <p:commandButton value="#{partidoBean.accion}"  actionListener="#{partidoBean.operar()}"
+                <p:commandButton value="#{partidoBean.accion}"  actionListener="#{partidoBean.operarPartidoPlayOff()}"
                                  oncomplete="PF('wdgDatos').hide();" update=":frm2:data"
                                  ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"/>
                 <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 

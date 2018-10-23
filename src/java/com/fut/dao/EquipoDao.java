@@ -7,6 +7,7 @@ package com.fut.dao;
 
 import com.fut.model.Equipo;
 import com.fut.model.Grupo;
+import com.fut.util.SqlAdminFutSal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -62,11 +63,7 @@ public class EquipoDao extends Dao {
                     cam.setIdEquipo(rs.getInt("idEquipo"));
                     cam.setNombreEquipo(rs.getString("nombreEquipo"));
                     cam.setIdUsuario(rs.getInt("idUsuario"));
-                    
-                    
-                    
-                    lista.add(cam);
-                
+                    lista.add(cam);                
                 }
             }catch(SQLException e){
                 System.err.println(e);
@@ -117,7 +114,7 @@ public class EquipoDao extends Dao {
             try{
                 this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idEquipo\", \"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idGrupoEquipo\" = ? ORDER BY \"nombreEquipo\"");
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_TEAM_CLASSIFIED);
                 st.setInt(1, idChampionShip);
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -125,7 +122,7 @@ public class EquipoDao extends Dao {
                     Equipo cam = new Equipo();
                     cam.setIdEquipo(rs.getInt("idEquipo"));
                     cam.setNombreEquipo(rs.getString("nombreEquipo"));
-                    cam.setIdUsuario(rs.getInt("idUsuario"));
+                    
                     lista.add(cam);                
                 }
             }catch(SQLException e){

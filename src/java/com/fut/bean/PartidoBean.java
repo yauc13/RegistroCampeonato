@@ -9,6 +9,7 @@ import com.fut.dao.EquipoDao;
 import com.fut.dao.GolDao;
 import com.fut.dao.JugadorDao;
 import com.fut.dao.PartidoDao;
+import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 import com.fut.model.Gol;
 import com.fut.model.Grupo;
@@ -39,7 +40,9 @@ public class PartidoBean implements Serializable{
     private Grupo grupo = new Grupo();
     private Usuario usuario = new Usuario();
     private PlayOff playOff = new PlayOff();
+    private Campeonato campeonato = new Campeonato();
     private List<Partido> listaPartido;
+    private List<Partido> listaPartidoPlayOff;
     private List<Jugador> listaJugadoresA;
     private List<Jugador> listaJugadoresB;
     private List<Gol> listaGolesA;
@@ -58,6 +61,11 @@ public class PartidoBean implements Serializable{
     private String accion;
     private Equipo equipoA;
     private Equipo equipoB;
+
+    public PartidoBean() {
+        campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
+        playOff = (PlayOff) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("play");
+    }
 
 
     
@@ -88,23 +96,44 @@ public class PartidoBean implements Serializable{
         switch(accion){
             case "Registrar":
                 this.registrar();
-                this.limpiar();
+                this.limpiarPartido();
                 break;
             case "Modificar":
                 this.modificar();
-                this.limpiar();
+                this.limpiarPartido();
                 break;
         }
     }
     
-    public void limpiar(){
-    this.partido.setIdPartido(0);
-    
+     public void operarPartidoPlayOff() throws Exception{
+        switch(accion){
+            case "Registrar":
+                this.registrarPartidoPlayOff();
+                this.limpiarPartido();
+                break;
+            case "Modificar":
+                this.modificar();
+                this.limpiarPartido();
+                break;
+        }
     }
     
-    public void registrar() throws Exception {
+    public void limpiarPartido(){
+    this.partido = new Partido();
+    this.codEquipoA = "";
+    this.codEquipoB = "";
+    }
+    
+    public void preparedRegisterMatch(){
+        this.accion = "Registrar";
+        
+        limpiarPartido();
+        this.cargarEquiposPlayOffA();
+    }
+    
+    public void registrar() {
     PartidoDao dao;
-    try{
+    
         dao = new PartidoDao();
         this.partido.setIdGrupo(grupo.getIdGrupo());
         this.partido.setIdUsuario(usuario.getIdUsuario());
@@ -113,10 +142,21 @@ public class PartidoBean implements Serializable{
         dao.registrarPartido(partido);
         
         this.listar();
-        
-    }catch(Exception e){  
-        throw e;
+     
     }
+    
+     public void registrarPartidoPlayOff() {
+    PartidoDao dao;
+    
+        dao = new PartidoDao();
+        this.partido.setIdPlayOff(playOff.getIdPlayOff());
+        this.partido.setIdUsuario(usuario.getIdUsuario());
+        this.partido.setIdEquipoA(Integer.parseInt(this.codEquipoA));
+        this.partido.setIdEquipoB(Integer.parseInt(this.codEquipoB));
+        dao.registrarPartido(partido);
+        
+        this.listar();
+     
     }
     
     public void modificar() throws Exception {
@@ -156,19 +196,20 @@ public class PartidoBean implements Serializable{
   
     }
     
-    public void listar() throws Exception{
-    PartidoDao dao;
-    try{
+    public void listar() {
+    PartidoDao dao;    
         dao = new PartidoDao();
         Grupo u = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        if(grupo!=null){
         listaPartido = dao.listarJoin(grupo.getIdGrupo());
+        }else if(playOff!=null){
+            listMatchPlayOff = dao.listarPartidosPlayOff(playOff.getIdPlayOff());
+        }
+    }
     
-    }catch(Exception e){   
-        throw e;
-    }
-    }
+ 
     
     public void listarPlanillasInicio() throws Exception{
     PartidoDao dao;
@@ -274,20 +315,16 @@ public class PartidoBean implements Serializable{
     
     public void cargarEquiposPlayOffA(){
         List<SelectItem> listSelecPlay = null;
-        try {
-            listSelecPlay = new ArrayList<SelectItem>();
+        
+            listSelecPlay = new ArrayList<>();
             EquipoDao dao = new EquipoDao();
-            List<Equipo> listEquipo = dao.listar(grupo);
+            List<Equipo> listEquipo = dao.listarEquiposClasificados(campeonato.getIdCampeonato());
             listSelecPlay.clear();
             for (Equipo p:listEquipo){
             SelectItem selectItem = new SelectItem(p.getIdEquipo(), p.getNombreEquipo());
             listSelecPlay.add(selectItem);
-            }                              
-        } catch (Exception ex) {
-            Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
-        }    
+            }                                   
        selectItemOnePlayEquipoA = listSelecPlay;
-
     }
     
     
@@ -596,6 +633,26 @@ public class PartidoBean implements Serializable{
     public void setSelectItemOnePlayEquipoB(List<SelectItem> selectItemOnePlayEquipoB) {
         this.selectItemOnePlayEquipoB = selectItemOnePlayEquipoB;
     }
+
+    public Campeonato getCampeonato() {
+        return campeonato;
+    }
+
+    public void setCampeonato(Campeonato campeonato) {
+        this.campeonato = campeonato;
+    }
+
+    public List<Partido> getListaPartidoPlayOff() {
+        return listaPartidoPlayOff;
+    }
+
+    public void setListaPartidoPlayOff(List<Partido> listaPartidoPlayOff) {
+        this.listaPartidoPlayOff = listaPartidoPlayOff;
+    }
+    
+    
+    
+    
     
     
     

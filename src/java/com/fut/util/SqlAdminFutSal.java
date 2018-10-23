@@ -19,7 +19,7 @@ public class SqlAdminFutSal {
     public static final String UPDATE_PLAYER = "UPDATE public.jugador SET \"nombreJugador\" = ?,birthday=?, \"fotoJugador\" = ? WHERE \"idJugador\" = ?";
     public static final String SELECT_GOLEADORES = "SELECT jug.\"idJugador\", jug.\"nombreJugador\", jug.\"idEquipoJugador\", count (*) FROM public.jugador jug INNER JOIN public.gol  gol ON gol.\"idJugador\" = jug.\"idJugador\" INNER JOIN public.equipo  equ ON equ.\"idEquipo\" = jug.\"idEquipoJugador\"  INNER JOIN public.grupo  gru ON equ.\"idGrupoEquipo\" = gru.\"idGrupo\" INNER JOIN public.campeonato  cam ON gru.\"idCampeonato\"  = cam.\"idCampeonato\" AND cam.\"idCampeonato\" = ? GROUP BY jug.\"idJugador\" ORDER BY COUNT DESC";
     /*DAO PARTIDO*/
-    public static final String INSERT_PARTIDO = "INSERT INTO public.partido (\"idEquipoA\",\"idEquipoB\",\"idGrupo\",\"idUsuario\",\"estadoPartido\") values(?,?,?,?,?)";
+    public static final String INSERT_PARTIDO = "INSERT INTO public.partido (\"idEquipoA\",\"idEquipoB\",\"remplazo\",\"idUsuario\",\"estadoPartido\") values(?,?,?,?,?)";
     public static final String INSERT_PARTIDO_PLAYOFF = "INSERT INTO public.partido (\"idEquipoA\",\"idEquipoB\",\"idGrupo\",\"idUsuario\",\"estadoPartido\") values(?,?,?,?,?)";
     public static final String ADD_MATCH_TO_JORNADA = "UPDATE public.partido SET \"idJornada\" = ? WHERE \"idPartido\" = ?";
     public static final String REMOVE_MATCH_FIXTURE = "UPDATE public.partido SET \"idJornada\" = null WHERE \"idPartido\" = ?";
@@ -42,4 +42,8 @@ public class SqlAdminFutSal {
     public static final String INSERT_PLAYOFF = "INSERT INTO public.playoff(\"namePlayOff\", \"numPartidos\", \"idCampeonato\") VALUES (?, ?, ?);";
     public static final String UPDATE_PLAYOFF = "UPDATE public.playoff SET  \"namePlayOff\"=?, \"numPartidos\"=? WHERE \"idPlayOff\"=?;";        
     public static final String  SELECT_PLAYOFF_BY_CHAMPIONSHIP =  "SELECT \"idPlayOff\", \"namePlayOff\",\"numPartidos\", \"idCampeonato\" FROM public.playoff WHERE \"idCampeonato\" = ? ORDER BY \"idPlayOff\"";;    
+
+    /*DAO EQUIPO*/
+    public static final String  SELECT_TEAM_CLASSIFIED = "SELECT \"idEquipo\", \"nombreEquipo\", \"nombreGrupo\" FROM public.equipo equ INNER JOIN public.grupo  gru ON equ.\"idGrupoEquipo\" = gru.\"idGrupo\" INNER JOIN public.campeonato cam ON gru.\"idCampeonato\" = cam.\"idCampeonato\" WHERE cam.\"idCampeonato\" = ? ORDER BY gru.\"nombreGrupo\" ASC";
+
 }
