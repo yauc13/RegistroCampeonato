@@ -243,27 +243,28 @@ public class PartidoDao extends Dao{
                 while(rs.next()){
                     Partido cam = new Partido();
                     //cam.setIdPartido(rs.getInt("idPartido"));
-                    cam.setIdPartido(rs.getInt(1));
-                    cam.setIdEquipoA(rs.getInt(2));
-                    cam.setIdEquipoB(rs.getInt(3));
-                    cam.setGolA(rs.getInt(4));
-                    cam.setGolB(rs.getInt(5));
-                    cam.setIdGrupo(rs.getInt(6));
-                    cam.setEstadoPartido(rs.getString(9));
-                    cam.setIdJornada(rs.getInt(10));
+                    cam.setIdPartido(rs.getInt("idPartido"));
+                    cam.setIdEquipoA(rs.getInt("idEquipoA"));
+                    cam.setIdEquipoB(rs.getInt("idEquipoB"));
+                    cam.setGolA(rs.getInt("golA"));
+                    cam.setGolB(rs.getInt("golB"));
+                    cam.setIdGrupo(rs.getInt("idGrupo"));
+                    cam.setEstadoPartido(rs.getString("estadoPartido"));
+                    cam.setIdJornada(rs.getInt(11));
                     
                     Equipo equipoA = new Equipo();
-                    equipoA.setIdEquipo(rs.getInt(2));
-                    equipoA.setNombreEquipo(rs.getString(7));                   
+                    equipoA.setIdEquipo(rs.getInt("idEquipoA"));
+                    equipoA.setNombreEquipo(rs.getString(8));                   
                     cam.setEquipoA(equipoA);
                     
                     Equipo equipoB = new Equipo();
-                    equipoB.setIdEquipo(rs.getInt(3));
-                    equipoB.setNombreEquipo(rs.getString(8));                    
+                    equipoB.setIdEquipo(rs.getInt("idEquipoB"));
+                    equipoB.setNombreEquipo(rs.getString(9));                    
                     cam.setEquipoB(equipoB);
                     
                     Grupo grupo = new Grupo();
-                    grupo.setIdCampeonato(rs.getInt(6));
+                    grupo.setIdGrupo(rs.getInt(6));
+                    grupo.setNombreGrupo(rs.getString("nombreGrupo"));
                     cam.setGrupo(grupo);
                     
                     lista.add(cam);

@@ -45,8 +45,8 @@ public class PartidoBean implements Serializable{
     private List<Partido> listaPartidoPlayOff;
     private List<Jugador> listaJugadoresA;
     private List<Jugador> listaJugadoresB;
-    private List<Gol> listaGolesA;
-    private List<Gol> listaGolesB;
+    private List<Gol> listaGolesA; //
+    private List<Gol> listaGolesB; //
     private List<Partido> listMatchPlayOff;
     
     private List<SelectItem> selectItemOneEquipo;
@@ -124,11 +124,18 @@ public class PartidoBean implements Serializable{
     this.codEquipoB = "";
     }
     
-    public void preparedRegisterMatch(){
+    public void preparedRegisterMatchPlayOff(){
         this.accion = "Registrar";
         
         limpiarPartido();
         this.cargarEquiposPlayOffA();
+    }
+    
+     public void preparedRegisterMatchGroup(){
+        this.accion = "Registrar";
+        
+        limpiarPartido();
+        
     }
     
     public void registrar() {
@@ -187,7 +194,8 @@ public class PartidoBean implements Serializable{
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         if(grupo!=null){
         listaPartido = dao.listarJoin(grupo.getIdGrupo());
-        }else if(playOff!=null){
+        }
+        if(playOff!=null){
             listMatchPlayOff = dao.listarPartidosPlayOff(playOff.getIdPlayOff());
         }
        // listMatchPlayOff = 
@@ -204,13 +212,14 @@ public class PartidoBean implements Serializable{
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         if(grupo!=null){
         listaPartido = dao.listarJoin(grupo.getIdGrupo());
-        }else if(playOff!=null){
+        }
+        if(playOff!=null){
             listMatchPlayOff = dao.listarPartidosPlayOff(playOff.getIdPlayOff());
         }
     }
     
  
-    
+    //
     public void listarPlanillasInicio() throws Exception{
     PartidoDao dao;
     try{
@@ -232,6 +241,7 @@ public class PartidoBean implements Serializable{
     }
     }
     
+    //
         public void listarPlanillas() throws Exception{
     PartidoDao dao;
     try{
@@ -258,7 +268,7 @@ public class PartidoBean implements Serializable{
         gol.setEquipo(equ);
         gol.setPartido(par);
         try {
-            golDao.registrar(gol);
+            golDao.insertGol(gol);
             this.listarPlanillas();
         } catch (Exception ex) {
             Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -271,46 +281,37 @@ public class PartidoBean implements Serializable{
             this.accion = "Modificar";
     }
     
-    public String editarPlanilla(Partido par) throws Exception {
-    
-    String direccion = null;
-    try{
+    public String editarPlanilla(Partido par) {   
+    String direccion = null;   
         //sirve para pasar datos entres los beans
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("partido", par);
         direccion = "planillaPartido?faces-redirect=true";
-        
-    }catch(Exception e){  
-        throw e;
-    }   
     return direccion;
     }
     
+    //
     public String finalizarPartido() throws Exception{
-        String direccion;
+        String direccion="";
         PartidoDao dao;
-        try{
-            dao = new PartidoDao();
-            partido.setGolA(listaGolesA.size());
-            partido.setGolB(listaGolesB.size());
-            dao.finalizarPartido(partido);
+        dao = new PartidoDao();
+        partido.setGolA(listaGolesA.size());
+        partido.setGolB(listaGolesB.size());
+        dao.finalizarPartido(partido);
+        if (grupo != null) {
             direccion = "vistaGrupo?faces-redirect=true";
-        }catch(Exception e){  
-            throw e;
-        }
+        } else if (playOff != null) {
+            direccion = "listaPartidoPlayOff?faces-redirect=true";
+        }       
         return direccion;
     }
     
 
    
-    public void eliminar(Partido usu) throws Exception {
+    public void eliminar(Partido usu) {
     PartidoDao dao;
-    try{
         dao = new PartidoDao();
         dao.eliminar(usu);
-        this.listar();
-    }catch(Exception e){  
-        throw e;
-    }   
+        this.listar();   
     }
     
     public void cargarEquiposPlayOffA(){
@@ -321,7 +322,7 @@ public class PartidoBean implements Serializable{
             List<Equipo> listEquipo = dao.listarEquiposClasificados(campeonato.getIdCampeonato());
             listSelecPlay.clear();
             for (Equipo p:listEquipo){
-            SelectItem selectItem = new SelectItem(p.getIdEquipo(), p.getNombreEquipo());
+            SelectItem selectItem = new SelectItem(p.getIdEquipo(), p.getGrupo().getNombreGrupo()+": "+p.getNombreEquipo());
             listSelecPlay.add(selectItem);
             }                                   
        selectItemOnePlayEquipoA = listSelecPlay;
@@ -332,7 +333,7 @@ public class PartidoBean implements Serializable{
     List<Equipo> listEquipoFinal;
     List<SelectItem> listSelecPlay = null;
         try {
-            listSelecPlay = new ArrayList<SelectItem>();
+            listSelecPlay = new ArrayList<>();
             EquipoDao dao = new EquipoDao();
             PartidoDao daoPartido = new PartidoDao();
             

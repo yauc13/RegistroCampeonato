@@ -1,0 +1,176 @@
+/*muestra el total de goels del partido y los goles de equipo A y B */
+SELECT pa."idPartido", pa."idEquipoA",eqA."nombreEquipo", pa."idEquipoB",eqB."nombreEquipo",
+pa."idGrupo",gru."nombreGrupo", pa."golA", pa."golB",
+count(gol."idGol") as "golPar",(
+	SELECT count(golA."idGol") as "golEqA"
+	FROM public.partido paA
+	LEFT JOIN public.gol golA ON paA."idPartido" = golA."idPartido"
+	where paA."idPartido" = pa."idPartido" AND paA."idEquipoA" = golA."idEquipo"
+	group by paA."idPartido"	
+	ORDER BY paA."idPartido"
+	)
+	,(
+	SELECT count(golB."idGol") as "golEqB"
+	FROM public.partido paB
+	LEFT JOIN public.gol golB ON paB."idPartido" = golB."idPartido"
+	where paB."idPartido" = pa."idPartido" AND paB."idEquipoB" = golB."idEquipo"
+	group by paB."idPartido"	
+	ORDER BY paB."idPartido"
+	)
+FROM public.partido pa
+INNER JOIN public.equipo eqA on pa."idEquipoA" = eqA."idEquipo"
+INNER JOIN public.equipo eqB on pa."idEquipoB" = eqB."idEquipo"
+INNER JOIN public.grupo gru on pa."idGrupo" = gru."idGrupo"
+LEFT JOIN public.gol gol ON pa."idPartido" = gol."idPartido"
+where pa."idGrupo" = 16
+group by pa."idPartido",eqA."nombreEquipo",eqB."nombreEquipo", gru."nombreGrupo"
+ORDER BY pa."idPartido"
+
+
+/*equipos y partidos*/
+SELECT equ."idEquipo", equ."nombreEquipo", par."idPartido", par."idEquipoA", par."idEquipoB"
+
+FROM public.equipo equ
+INNER JOIN public.partido par ON (equ."idEquipo" = par."idEquipoA" OR equ."idEquipo" = par."idEquipoB")
+WHERE equ."idGrupoEquipo"=16
+order by par."idPartido"
+
+GROUP BY equ."idEquipo"
+
+/*muestra tabla con total par loc y vis*/
+SELECT equ."nombreEquipo", count(par."idPartido") as "totPar",
+	(
+		SELECT count(parL."idEquipoA") as "totParL"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoA"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "PGL"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "PEL"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "PPL"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "totParV"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "PGV"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "PEV"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "PPV"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	)
+
+FROM public.equipo equ
+INNER JOIN public.partido par ON (equ."idEquipo" = par."idEquipoA" OR equ."idEquipo" = par."idEquipoB")
+WHERE equ."idGrupoEquipo"=16
+GROUP BY equ."idEquipo"
+
+
+
+/*muestra tabla con ...*/
+SELECT equ."nombreEquipo", count(par."idPartido") as "totPar",
+	(
+		SELECT count(parL."idEquipoA") as "totParL"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoA"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT (
+				count(gol."idGol") as "PGL",(
+				SELECT count(golA."idGol") as "golEqA"
+				FROM public.partido paA
+				LEFT JOIN public.gol golA ON paA."idPartido" = golA."idPartido"
+				where paA."idPartido" = pa."idPartido" AND gol."idGol"=golA."idGol" 
+					AND paA."idEquipoA" = golA."idEquipo"
+				group by paA."idPartido"	
+				ORDER BY paA."idPartido"
+				),(
+				SELECT count(golB."idGol") as "golEqB"
+				FROM public.partido paB
+				LEFT JOIN public.gol golB ON paB."idPartido" = golB."idPartido"
+				where paB."idPartido" = pa."idPartido" AND gol."idGol"=golA."idGol"
+					AND paB."idEquipoB" = golB."idEquipo"
+				group by paB."idPartido"	
+				ORDER BY paB."idPartido"
+				)
+				)
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		LEFT JOIN public.gol gol ON parL."idPartido" = gol."idPartido"
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "PEL"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "PPL"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "totParV"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "PGV"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "PEV"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "PPV"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	)
+
+FROM public.equipo equ
+INNER JOIN public.partido par ON (equ."idEquipo" = par."idEquipoA" OR equ."idEquipo" = par."idEquipoB")
+WHERE equ."idGrupoEquipo"=16
+GROUP BY equ."idEquipo"
+
+

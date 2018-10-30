@@ -29,52 +29,48 @@
                 <h:form>
                     <p:breadCrumb> 
                         <p:menuitem value="Campeonatos" url="#" />     
-                        <p:menuitem value="#{adminChampionShipBean.campeonato.nombreCampeonato}" action="#{campeonatoBean.verGruposCampeonato(grupoBean.campeonato)}" />   
-                        <p:menuitem value="#{partidoBean.grupo.nombreGrupo}"  action="#{grupoBean.verGrupo(partidoBean.grupo)}"  />
+                        <p:menuitem value="#{adminChampionShipBean.campeonato.nombreCampeonato}" action="#{campeonatoBean.verGruposCampeonato(partidoBean.campeonato)}" />   
+                        <p:menuitem value="#{partidoBean.playOff.namePlayOff}"  action="#"  />
                     </p:breadCrumb>
                 </h:form>
         </div>
-       
+       <br/>
        
         <h:form id="frm2">
-              
-            <p:commandButton value="Nuevo" oncomplete="PF('wdgDatos').show();" 
-                             actionListener="#{partidoBean.preparedRegisterMatch()}" update=":dlgDatos"/>
-            
-            <style type="text/css">
-                .colored {
-                  background-color: #76D7C4;
-                  color: #000000;
-                  
-                  
-                }
-            </style>
-           
+      
                 <p:dataTable id="data" value="#{partidoBean.listMatchPlayOff}" var="partido"  
-                         rowStyleClass="#{partido.estadoPartido le 'Finalizado' ? 'colored' : ''}" >
+                         >
+                    <f:facet  name="header">
+                        <div class="row">
+                            <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
+                                <p:commandButton  value="Nuevo Partido" oncomplete="PF('wdgDatos').show();" 
+                                                  actionListener="#{partidoBean.preparedRegisterMatchPlayOff()}"
+                                                  update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
+                                                  icon="ui-icon-circle-plus"
+                                                  />
+                            </div>
+                            <div class="col-md-10 col-xs-10 col-sm-10">
+                                <p:outputLabel value="#{partidoBean.playOff.namePlayOff} de #{adminChampionShipBean.campeonato.nombreCampeonato}"/>
+                            </div>
+                        </div>
+                    </f:facet>
                 
                 
                 <p:column headerText="id">
                     <p:outputLabel value="#{partido.idPartido}"/>
                 </p:column>
-                <p:column headerText="idEquipoA">
-                    <p:outputLabel value="#{partido.idEquipoA}"/>
-                </p:column>
+               
                 <p:column headerText="EquipoA">
                     <p:outputLabel value="#{partido.equipoA.nombreEquipo}"/>
                 </p:column>
-                <p:column headerText="golA">
-                    <p:outputLabel value="#{partido.golA}"/>
+                    <p:column headerText="goles" class="text-center">
+                    <p:outputLabel value="#{partido.golA} - #{partido.golB}"/>
                 </p:column>
-                <p:column headerText="idEquipoB">
-                    <p:outputLabel value="#{partido.idEquipoB}"/>
-                </p:column>
+                
                 <p:column headerText="EquipoB">
                     <p:outputLabel value="#{partido.equipoB.nombreEquipo}"/>
                 </p:column>
-                <p:column headerText="golB">
-                    <p:outputLabel value="#{partido.golB}"/>
-                </p:column>
+                
                 <p:column headerText="Estado">
                     <p:outputLabel value="#{partido.estadoPartido}"/>
                 </p:column>
@@ -84,9 +80,7 @@
                                     />
                     
                 </p:column>
-                <p:column headerText="Grupo">
-                    <p:outputLabel value="#{partido.grupo.nombreGrupo}"/>
-                </p:column>
+               
                 
             </p:dataTable>
         </h:form>

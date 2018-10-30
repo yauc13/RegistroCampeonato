@@ -1,0 +1,139 @@
+/*muestra todos los partidos y sus goles si los tiene*/
+SELECT pa."idPartido", pa."idEquipoA", pa."idEquipoB", pa."idGrupo", pa."golA", pa."golB",
+gol."idGol", gol."idJugador", gol."idEquipo", gol."idPartido"
+FROM public.partido pa
+LEFT JOIN public.gol gol ON pa."idPartido" = gol."idPartido"
+ORDER BY pa."idPartido"
+
+/*muestra el total de goels del partido y los goles de equipo A*/
+SELECT pa."idPartido", pa."idEquipoA", pa."idEquipoB", pa."idGrupo", pa."golA", pa."golB",
+count(gol."idGol") as "goles Par",(
+	SELECT count(golA."idGol") as "goles EqA"
+	FROM public.partido paA
+	LEFT JOIN public.gol golA ON paA."idPartido" = golA."idPartido"
+	where paA."idPartido" = pa."idPartido" AND paA."idEquipoA" = golA."idEquipo"
+	group by paA."idPartido"
+	
+	ORDER BY paA."idPartido"
+	)
+FROM public.partido pa
+LEFT JOIN public.gol gol ON pa."idPartido" = gol."idPartido"
+group by pa."idPartido"
+ORDER BY pa."idPartido"
+
+/*muestra el total de goels del partido y los goles y nombres de equipo A y B */
+SELECT pa."idPartido", pa."idEquipoA",eqA."nombreEquipo", pa."idEquipoB",eqB."nombreEquipo",
+pa."idGrupo",gru."nombreGrupo", pa."golA", pa."golB",
+count(gol."idGol") as "golPar",(
+	SELECT count(golA."idGol") as "golEqA"
+	FROM public.partido paA
+	LEFT JOIN public.gol golA ON paA."idPartido" = golA."idPartido"
+	where paA."idPartido" = pa."idPartido" AND paA."idEquipoA" = golA."idEquipo"
+	group by paA."idPartido"	
+	ORDER BY paA."idPartido"
+	)
+	,(
+	SELECT count(golB."idGol") as "golEqB"
+	FROM public.partido paB
+	LEFT JOIN public.gol golB ON paB."idPartido" = golB."idPartido"
+	where paB."idPartido" = pa."idPartido" AND paB."idEquipoB" = golB."idEquipo"
+	group by paB."idPartido"	
+	ORDER BY paB."idPartido"
+	)
+FROM public.partido pa
+INNER JOIN public.equipo eqA on pa."idEquipoA" = eqA."idEquipo"
+INNER JOIN public.equipo eqB on pa."idEquipoB" = eqB."idEquipo"
+INNER JOIN public.grupo gru on pa."idGrupo" = gru."idGrupo"
+LEFT JOIN public.gol gol ON pa."idPartido" = gol."idPartido"
+group by pa."idPartido",eqA."nombreEquipo",eqB."nombreEquipo", gru."nombreGrupo"
+ORDER BY pa."idPartido"
+
+/*muestra los equipos con sus num de partidos total, local y visita*/
+SELECT equ."nombreEquipo", count(par."idPartido") as "totPar",
+	(
+		SELECT count(parL."idEquipoA") as "totParL"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoA"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "totParV"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	),(
+		SELECT count(parL."idEquipoB") as "totParV"
+		FROM public.equipo equL
+		INNER JOIN public.partido parL ON (equL."idEquipo" = parL."idEquipoA" OR equL."idEquipo" = parL."idEquipoB")
+		WHERE equ."idEquipo"=equL."idEquipo" AND equ."idEquipo"=parL."idEquipoB"  AND equ."idGrupoEquipo"=16
+		GROUP BY equL."idEquipo"
+	)
+
+FROM public.equipo equ
+INNER JOIN public.partido par ON (equ."idEquipo" = par."idEquipoA" OR equ."idEquipo" = par."idEquipoB")
+WHERE equ."idGrupoEquipo"=16
+GROUP BY equ."idEquipo"
+
+/*muestra el total de goels del partido y los goles de equipo A y B */
+SELECT pa."idPartido", pa."idEquipoA", pa."idEquipoB",
+pa."idGrupo",
+count(gol."idGol") as "golPar",(
+	SELECT count(golA."idGol") as "golEqA"
+	FROM public.partido paA
+	LEFT JOIN public.gol golA ON paA."idPartido" = golA."idPartido"
+	where paA."idPartido" = pa."idPartido" AND paA."idEquipoA" = golA."idEquipo"
+	group by paA."idPartido"	
+	ORDER BY paA."idPartido"
+	),(
+	SELECT count(golB."idGol") as "golEqB"
+	FROM public.partido paB
+	LEFT JOIN public.gol golB ON paB."idPartido" = golB."idPartido"
+	where paB."idPartido" = pa."idPartido" AND paB."idEquipoB" = golB."idEquipo"
+	group by paB."idPartido"	
+	ORDER BY paB."idPartido"
+	)
+FROM public.partido pa
+LEFT JOIN public.gol gol ON pa."idPartido" = gol."idPartido"
+where pa."idGrupo"=16 
+group by pa."idPartido"
+ORDER BY pa."idPartido"
+
+/*muestra los partidos donde gana el local */
+SELECT pa."idPartido", pa."idEquipoA", pa."idEquipoB",
+pa."idGrupo",
+count(gol."idGol") as "golPar",(
+	SELECT count(golA."idGol") as "golEqA"
+	FROM public.partido paA
+	LEFT JOIN public.gol golA ON paA."idPartido" = golA."idPartido"
+	where paA."idPartido" = pa."idPartido" AND paA."idEquipoA" = golA."idEquipo"
+	group by paA."idPartido"	
+	ORDER BY paA."idPartido"
+	),(
+	SELECT count(golB."idGol") as "golEqB"
+	FROM public.partido paB
+	LEFT JOIN public.gol golB ON paB."idPartido" = golB."idPartido"
+	where paB."idPartido" = pa."idPartido" AND paB."idEquipoB" = golB."idEquipo"
+	group by paB."idPartido"	
+	ORDER BY paB."idPartido"
+	)
+FROM public.partido pa
+LEFT JOIN public.gol gol ON pa."idPartido" = gol."idPartido"
+where pa."idGrupo"=16 
+group by pa."idPartido"
+HAVING (
+	SELECT count(golA."idGol") as "golEqA"
+	FROM public.partido paA
+	LEFT JOIN public.gol golA ON paA."idPartido" = golA."idPartido"
+	where paA."idPartido" = pa."idPartido" AND paA."idEquipoA" = golA."idEquipo"
+	group by paA."idPartido"	
+	ORDER BY paA."idPartido"
+	)>(
+	SELECT count(golB."idGol") as "golEqB"
+	FROM public.partido paB
+	LEFT JOIN public.gol golB ON paB."idPartido" = golB."idPartido"
+	where paB."idPartido" = pa."idPartido" AND paB."idEquipoB" = golB."idEquipo"
+	group by paB."idPartido"	
+	ORDER BY paB."idPartido"
+	)
+ORDER BY pa."idPartido"

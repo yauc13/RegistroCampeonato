@@ -9,8 +9,10 @@ import com.fut.model.Equipo;
 import com.fut.model.Gol;
 import com.fut.model.Jugador;
 import com.fut.model.Partido;
+import com.fut.util.SqlAdminFutSal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,19 +22,22 @@ import java.util.List;
  */
 public class GolDao extends Dao{
     
-    public boolean registrar(Gol cam) throws Exception{
+    public boolean insertGol(Gol cam){
         boolean reg = false;
         try{
             this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.gol (\"idJugador\",\"idEquipo\",\"idPartido\") values(?,?,?)");
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_GOL);
             st.setInt(1, cam.getJugador().getIdJugador());
             st.setInt(2, cam.getEquipo().getIdEquipo());
             st.setInt(3, cam.getPartido().getIdPartido());
                      
-            st.executeUpdate();
-            reg = true;
-        }catch(Exception e){
-            throw e;
+            int res = st.executeUpdate();
+            if(res>0){
+                reg = true;
+            }
+            
+        }catch(SQLException e){
+            System.err.println(e);
         }finally{
         this.CloseConection();
         }
@@ -156,8 +161,8 @@ public class GolDao extends Dao{
         return lista;    
     }
     
-        public List<Gol> listarGolesPartidoEquipoJoin(Partido par, Equipo equ) throws Exception{
-            List<Gol> lista;
+        public List<Gol> listarGolesPartidoEquipoJoin(Partido par, Equipo equ) {
+            List<Gol> lista = null;
             ResultSet rs;
             
             try{
@@ -190,8 +195,8 @@ public class GolDao extends Dao{
                     lista.add(cam);
                 
                 }
-            }catch(Exception e){
-                throw e;
+            }catch(SQLException e){
+                System.err.println(e);
             }finally{
                 this.CloseConection();
             }

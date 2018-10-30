@@ -122,7 +122,9 @@ public class EquipoDao extends Dao {
                     Equipo cam = new Equipo();
                     cam.setIdEquipo(rs.getInt("idEquipo"));
                     cam.setNombreEquipo(rs.getString("nombreEquipo"));
-                    
+                    Grupo gru = new Grupo();
+                    gru.setNombreGrupo(rs.getString("nombreGrupo"));
+                    cam.setGrupo(gru);
                     lista.add(cam);                
                 }
             }catch(SQLException e){

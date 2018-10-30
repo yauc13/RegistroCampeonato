@@ -25,7 +25,7 @@ public class SqlAdminFutSal {
     public static final String REMOVE_MATCH_FIXTURE = "UPDATE public.partido SET \"idJornada\" = null WHERE \"idPartido\" = ?";
     public static final String FINISH_MATCH = "UPDATE public.partido SET \"golA\" = ?,\"golB\" = ?,\"estadoPartido\" = ? WHERE \"idPartido\" = ?";
     public static final String LIST_POSITION_TEAM = "SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\" FROM public.partido WHERE (\"golA\">-1 OR \"golA\">-1)AND( \"idEquipoA\"=? OR \"idEquipoB\"=?)";
-    public static final String SELECT_PARTIDOS_JORNADA = "SELECT pa.\"idPartido\", pa.\"idEquipoA\", pa.\"idEquipoB\", pa.\"golA\", pa.\"golB\", pa.\"idGrupo\", ea.\"nombreEquipo\", eb.\"nombreEquipo\", pa.\"estadoPartido\", pa.\"idJornada\" FROM  public.partido pa INNER JOIN public.equipo ea ON (pa.\"idEquipoA\" = ea.\"idEquipo\") JOIN public.equipo eb ON (pa.\"idEquipoB\" = eb.\"idEquipo\" AND pa.\"idJornada\"=?) ORDER BY  pa.\"idPartido\" ASC";
+    public static final String SELECT_PARTIDOS_JORNADA = "SELECT pa.\"idPartido\", pa.\"idEquipoA\", pa.\"idEquipoB\", pa.\"golA\", pa.\"golB\", pa.\"idGrupo\", gr.\"nombreGrupo\", ea.\"nombreEquipo\", eb.\"nombreEquipo\", pa.\"estadoPartido\", pa.\"idJornada\"  FROM  public.partido pa INNER JOIN public.equipo ea ON (pa.\"idEquipoA\" = ea.\"idEquipo\")  JOIN public.equipo eb ON (pa.\"idEquipoB\" = eb.\"idEquipo\") JOIN public.grupo gr ON (pa.\"idGrupo\" = gr.\"idGrupo\") WHERE pa.\"idJornada\"=? ORDER BY  pa.\"idPartido\" ASC";
     public static final String SELECT_PARTIDOS_GRUPO = "SELECT pa.\"idPartido\", pa.\"idEquipoA\", pa.\"idEquipoB\", pa.\"golA\", pa.\"golB\", pa.\"idGrupo\", ea.\"nombreEquipo\", eb.\"nombreEquipo\", pa.\"estadoPartido\", pa.\"idJornada\" FROM  public.partido pa INNER JOIN public.equipo ea ON (pa.\"idEquipoA\" = ea.\"idEquipo\")JOIN public.equipo eb ON (pa.\"idEquipoB\" = eb.\"idEquipo\" AND pa.\"idGrupo\"=?) ORDER BY  pa.\"idPartido\" ASC";
     public static final String SELECT_PARTIDOS_PLAYOFF = "SELECT pa.\"idPartido\", pa.\"idEquipoA\", pa.\"idEquipoB\", pa.\"golA\", pa.\"golB\", pa.\"idGrupo\", ea.\"nombreEquipo\", eb.\"nombreEquipo\", pa.\"estadoPartido\", pa.\"idJornada\" FROM  public.partido pa INNER JOIN public.equipo ea ON (pa.\"idEquipoA\" = ea.\"idEquipo\")JOIN public.equipo eb ON (pa.\"idEquipoB\" = eb.\"idEquipo\" AND pa.\"idPlayOff\"=?) ORDER BY  pa.\"idPartido\" ASC";
     public static final String SELECT_PARTIDOS_GRUPO_JOR = "SELECT pa.\"idPartido\", pa.\"idEquipoA\", pa.\"idEquipoB\", pa.\"golA\", pa.\"golB\", pa.\"idGrupo\", ea.\"nombreEquipo\", eb.\"nombreEquipo\", pa.\"estadoPartido\" FROM  public.partido pa INNER JOIN public.equipo ea ON (pa.\"idEquipoA\" = ea.\"idEquipo\")JOIN public.equipo eb ON (pa.\"idEquipoB\" = eb.\"idEquipo\" AND pa.\"idGrupo\"=? AND pa.\"idJornada\" is null) ORDER BY  pa.\"idPartido\" ASC";
@@ -46,4 +46,10 @@ public class SqlAdminFutSal {
     /*DAO EQUIPO*/
     public static final String  SELECT_TEAM_CLASSIFIED = "SELECT \"idEquipo\", \"nombreEquipo\", \"nombreGrupo\" FROM public.equipo equ INNER JOIN public.grupo  gru ON equ.\"idGrupoEquipo\" = gru.\"idGrupo\" INNER JOIN public.campeonato cam ON gru.\"idCampeonato\" = cam.\"idCampeonato\" WHERE cam.\"idCampeonato\" = ? ORDER BY gru.\"nombreGrupo\" ASC";
 
+    /*DAO GOL*/
+    public static final String  INSERT_GOL = "INSERT INTO public.gol (\"idJugador\",\"idEquipo\",\"idPartido\") values(?,?,?)";
+    
+     /*DAO TARJETA*/
+    public static final String  INSERT_CARD = "INSERT INTO public.tarjeta (\"idJugador\",\"idEquipo\",\"idPartido\",\"tipoTarjeta\") values(?,?,?,?)";
+    
 }

@@ -100,8 +100,8 @@
                                             <p:dataTable id="idTableParJor" var="parJor" value="#{adminChampionShipBean.listarPartidosJornada(jor)}" style=" align-content:  center" 
                                                          rowKey="#{parJor.idPartido}"
                                                          >
-                                                <p:column width="5%">
-                                                    <p:outputLabel value="#{parJor.idGrupo}"/>
+                                                <p:column width="15%">
+                                                    <p:outputLabel value="#{parJor.grupo.nombreGrupo}"/>
                                                 </p:column>
                                                 <p:column width="30%">
                                                     <p:outputLabel value="#{parJor.equipoA.nombreEquipo}"/>
@@ -260,7 +260,7 @@
 
 
                     <p:tab title="Goleadores" id="tab1">
-                        <h:panelGrid columns="2" cellpadding="10" id="panel1">
+                        <h:panelGrid columns="2" cellpadding="10" id="panelTar">
                             <h:form id="frm1">
                                 <p:outputLabel value="#{adminChampionShipBean.campeonato.nombreCampeonato}/"/>
                                 <p:dataTable id="data" value="#{adminChampionShipBean.listaGoleadores}" var="goleador" 
@@ -276,6 +276,40 @@
                                         <p:outputLabel value="#{goleador.nombreJugador}"/>
                                     </p:column>
                                     <p:column headerText="id equ">
+                                        <p:outputLabel value="#{goleador.idEquipoJugador}"/>
+                                    </p:column> 
+                                    <p:column headerText="Goles">
+                                        <p:outputLabel value="#{goleador.numGol}"/>
+                                    </p:column>
+                                    <p:column headerText="Ver">
+                                        <p:commandLink id="linkVPartidos" value="Ver" action="#" 
+                                                       
+                                                       />
+
+                                    </p:column>
+
+                                </p:dataTable>
+                            </h:form>
+                        </h:panelGrid>
+                    </p:tab>
+                    
+                     <p:tab title="Tarjetas" id="tabTar">
+                        <h:panelGrid columns="2" cellpadding="10" id="panel1">
+                            <h:form id="frmTar">
+                                <p:outputLabel value="#{adminChampionShipBean.campeonato.nombreCampeonato}/"/>
+                                <p:dataTable id="data" value="#{adminChampionShipBean.listaGoleadores}" var="goleador" 
+                                             rows="5" paginator="true"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" 
+                                             reflow="true"
+                                             >
+                                    <p:column headerText="pos">
+                                        <p:outputLabel value="#{adminChampionShipBean.listaGoleadores.indexOf(goleador)+1}"/>
+                                    </p:column>
+                                    <p:column headerText="Jugador">
+                                        <p:outputLabel value="#{goleador.nombreJugador}"/>
+                                    </p:column>
+                                    <p:column headerText="Equipo">
                                         <p:outputLabel value="#{goleador.idEquipoJugador}"/>
                                     </p:column> 
                                     <p:column headerText="Goles">
