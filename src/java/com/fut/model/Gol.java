@@ -12,10 +12,15 @@ import java.io.Serializable;
  * @author DIANA G
  */
 public class Gol implements Serializable {
-   int idGol;
-   Jugador jugador;
-   Equipo equipo;
-   Partido partido;
+   private int idGol;
+   private int idJugador;
+   private int idEquipo;
+   private int idPartido;
+   
+   private int idEquipoB;
+   private Jugador jugador;
+   private Equipo equipo;
+   private Partido partido;
 
     public int getIdGol() {
         return idGol;
@@ -48,6 +53,41 @@ public class Gol implements Serializable {
     public void setPartido(Partido partido) {
         this.partido = partido;
     }
+
+    public int getIdEquipoB() {
+        return idEquipoB;
+    }
+
+    public void setIdEquipoB(int idEquipoB) {
+        this.idEquipoB = idEquipoB;
+    }
+
+    public int getIdJugador() {
+        return idJugador;
+    }
+
+    public void setIdJugador(int idJugador) {
+        this.idJugador = idJugador;
+    }
+
+    public int getIdEquipo() {
+        return idEquipo;
+    }
+
+    public void setIdEquipo(int idEquipo) {
+        this.idEquipo = idEquipo;
+    }
+
+    public int getIdPartido() {
+        return idPartido;
+    }
+
+    public void setIdPartido(int idPartido) {
+        this.idPartido = idPartido;
+    }
+    
+    
+    
    
    
 }

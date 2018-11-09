@@ -63,6 +63,7 @@ public class EquipoDao extends Dao {
                     cam.setIdEquipo(rs.getInt("idEquipo"));
                     cam.setNombreEquipo(rs.getString("nombreEquipo"));
                     cam.setIdUsuario(rs.getInt("idUsuario"));
+                    cam.setIdGrupoEquipo(rs.getInt("idGrupoEquipo"));
                     lista.add(cam);                
                 }
             }catch(SQLException e){
@@ -91,11 +92,7 @@ public class EquipoDao extends Dao {
                     cam.setIdEquipo(rs.getInt("idEquipo"));
                     cam.setNombreEquipo(rs.getString("nombreEquipo"));
                     cam.setIdUsuario(rs.getInt("idUsuario"));
-                    
-                    
-                    
-                    lista.add(cam);
-                
+                    lista.add(cam);                
                 }
             }catch(SQLException e){
                 throw e;

@@ -231,8 +231,8 @@ public class PartidoBean implements Serializable{
         partido = (Partido) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("partido");
         
         JugadorDao jugadorDao = new JugadorDao();       
-        listaJugadoresA = jugadorDao.listarJugadoresEquipo(partido.getEquipoA());
-        listaJugadoresB = jugadorDao.listarJugadoresEquipo(partido.getEquipoB());
+        listaJugadoresA = jugadorDao.listarJugadoresEquipo(partido.getEquipoA().getIdEquipo());
+        listaJugadoresB = jugadorDao.listarJugadoresEquipo(partido.getEquipoB().getIdEquipo());
         
         
         }
@@ -253,8 +253,8 @@ public class PartidoBean implements Serializable{
         partido = (Partido) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("partido");
         
         JugadorDao jugadorDao = new JugadorDao();       
-        listaJugadoresA = jugadorDao.listarJugadoresEquipo(partido.getEquipoA());
-        listaJugadoresB = jugadorDao.listarJugadoresEquipo(partido.getEquipoB());
+        listaJugadoresA = jugadorDao.listarJugadoresEquipo(partido.getEquipoA().getIdEquipo());
+        listaJugadoresB = jugadorDao.listarJugadoresEquipo(partido.getEquipoB().getIdEquipo());
   
     }catch(Exception e){   
         throw e;
@@ -575,7 +575,7 @@ public class PartidoBean implements Serializable{
         
         GolDao golDao = new GolDao();       
         try {
-            listaGolesA = golDao.listarGolesPartidoEquipoJoin(partido, partido.getEquipoA());
+            listaGolesA = golDao.listarGolesPartidoEquipoJoin(partido.getIdPartido(), partido.getIdEquipoA());
         } catch (Exception ex) {
             Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -592,7 +592,7 @@ public class PartidoBean implements Serializable{
         
         GolDao golDao = new GolDao();       
         try {
-            listaGolesB = golDao.listarGolesPartidoEquipoJoin(partido, partido.getEquipoB());
+            listaGolesB = golDao.listarGolesPartidoEquipoJoin(partido.getIdPartido(), partido.getIdEquipoB());
         } catch (Exception ex) {
             Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
         }

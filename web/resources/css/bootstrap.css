@@ -9028,8 +9028,19 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 
+/*--------estado partidos--------------*/
 
+.estParPorJug{
+    color: #FF0000;
+}
 
+.estParJug{
+    color: #ffc107;
+}
+
+.estParFin{
+    color: #1c7430;
+}
  
 
 

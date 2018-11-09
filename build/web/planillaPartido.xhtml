@@ -11,7 +11,7 @@
     <h:body id="idBody">
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
-
+<p:growl autoUpdate="true" showDetail="true"/>
         <f:event type="preRenderView" listener="#{planillaPartidoBean.listarPlanillasInicio()}" />
         <p:dialog modal="true" widgetVar="statusDialogPlanilla" header="Cargando..." draggable="false" closable="false" resizable="false">
             <p:graphicImage value="/resources/imagen/gol_celeste.gif"  width="180" height="180"/>
@@ -25,6 +25,22 @@
             }
         </script>
         
+           <div id="miga">
+                    <h:form>
+                        <p:breadCrumb> 
+                            <p:menuitem value="Campeonatos" url="listaCampeonato?faces-redirect=true" />     
+                            <p:menuitem value="#{adminChampionShipBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(adminChampionShipBean.campeonato)}"/> 
+                            
+                        </p:breadCrumb>
+                    </h:form>
+                </div>
+
+                <br/>
+        <h:form>
+            <p:commandButton value="Iniciar Partido" action="#{planillaPartidoBean.iniciarPartido()}"  disabled="#{planillaPartidoBean.dto.enaBtnIniciar}"
+                             ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                     />
+        </h:form>
         <h:form id="frmMarcador">
             <h:panelGrid columns="2" id="panel">
             <p:dataTable id="dataGolesA" value="#{planillaPartidoBean.dto.listaGolesA}" var="golesA" >         
@@ -55,27 +71,31 @@
                     <p:outputLabel value="#{jugadorA.nombreJugador}"/>
                 </p:column>
                 <p:column headerText="Gol">
-                    <p:commandButton  id="btnGolA" value="Gol +" update="frmMarcador:panel" actionListener="#{planillaPartidoBean.anotarGol(jugadorA, planillaPartidoBean.dto.partido.equipoA, planillaPartidoBean.dto.partido)}" 
+                    <p:commandButton  id="btnGolA" value="Gol +" update="frmMarcador:panel" actionListener="#{planillaPartidoBean.anotarGol(jugadorA.idJugador, planillaPartidoBean.dto.partido.idEquipoA, planillaPartidoBean.dto.partido)}" 
                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                      disabled="#{planillaPartidoBean.dto.enaBtngol}"
                                       />
                     
                 </p:column>
                 <p:column headerText="Tarjetas">
                     <p:commandButton  id="btnTarAma" value="Ama" update="frmMarcador:panel" 
-                                      actionListener="#{planillaPartidoBean.anotarTarjeta('AMA', jugadorA, planillaPartidoBean.dto.partido.equipoA, planillaPartidoBean.dto.partido)}" 
+                                      actionListener="#{planillaPartidoBean.anotarTarjeta('AMA', jugadorA.idJugador, planillaPartidoBean.dto.partido.idEquipoA, planillaPartidoBean.dto.partido)}" 
                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                      disabled="#{planillaPartidoBean.dto.enaBtnTar}"
                                       />
                 
                
                     <p:commandButton  id="btnTarAzu" value="Azu" update="frmMarcador:panel" 
-                                      actionListener="#{planillaPartidoBean.anotarTarjeta('AZU', jugadorA, planillaPartidoBean.dto.partido.equipoA, planillaPartidoBean.dto.partido)}" 
+                                      actionListener="#{planillaPartidoBean.anotarTarjeta('AZU', jugadorA.idJugador, planillaPartidoBean.dto.partido.idEquipoA, planillaPartidoBean.dto.partido)}" 
                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                      disabled="#{planillaPartidoBean.dto.enaBtnTar}"
                                       />
                 
                
                     <p:commandButton  id="btnTarRoj" value="Roj" update="frmMarcador:panel"
-                                      actionListener="#{planillaPartidoBean.anotarTarjeta('ROJ', jugadorA, planillaPartidoBean.dto.partido.equipoA, planillaPartidoBean.dto.partido)}" 
+                                      actionListener="#{planillaPartidoBean.anotarTarjeta('ROJ', jugadorA.idJugador, planillaPartidoBean.dto.partido.idEquipoA, planillaPartidoBean.dto.partido)}" 
                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                      disabled="#{planillaPartidoBean.dto.enaBtnTar}"
                                       />
                 </p:column>
               
@@ -100,27 +120,31 @@
                     <p:outputLabel value="#{jugadorB.nombreJugador}"/>
                 </p:column>
                 <p:column headerText="Gol">
-                    <p:commandButton value="Gol +" id="btnGolB" update="frmMarcador:panel"  actionListener="#{planillaPartidoBean.anotarGol(jugadorB, planillaPartidoBean.dto.partido.equipoB , planillaPartidoBean.dto.partido)}"
+                    <p:commandButton value="Gol +" id="btnGolB" update="frmMarcador:panel"  actionListener="#{planillaPartidoBean.anotarGol(jugadorB.idJugador, planillaPartidoBean.dto.partido.idEquipoB , planillaPartidoBean.dto.partido)}"
                                      ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" 
+                                     disabled="#{planillaPartidoBean.dto.enaBtngol}"
                                      />
                     
                 </p:column>
                  <p:column headerText="Tarjetas">
                     <p:commandButton  id="btnTarAma" value="Ama" update="frmMarcador:panel" 
-                                      actionListener="#{planillaPartidoBean.anotarTarjeta('AMA', jugadorB, planillaPartidoBean.dto.partido.equipoB, planillaPartidoBean.dto.partido)}" 
+                                      actionListener="#{planillaPartidoBean.anotarTarjeta('AMA', jugadorB.idJugador, planillaPartidoBean.dto.partido.idEquipoB, planillaPartidoBean.dto.partido)}" 
                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                      disabled="#{planillaPartidoBean.dto.enaBtnTar}"
                                       />
                 
                
                     <p:commandButton  id="btnTarAzu" value="Azu" update="frmMarcador:panel" 
-                                      actionListener="#{planillaPartidoBean.anotarTarjeta('AZU', jugadorB, planillaPartidoBean.dto.partido.equipoB, planillaPartidoBean.dto.partido)}" 
+                                      actionListener="#{planillaPartidoBean.anotarTarjeta('AZU', jugadorB.idJugador, planillaPartidoBean.dto.partido.idEquipoB, planillaPartidoBean.dto.partido)}" 
                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                      disabled="#{planillaPartidoBean.dto.enaBtnTar}"
                                       />
                 
                
                     <p:commandButton  id="btnTarRoj" value="Roj" update="frmMarcador:panel"
-                                      actionListener="#{planillaPartidoBean.anotarTarjeta('ROJ', jugadorB, planillaPartidoBean.dto.partido.equipoB, planillaPartidoBean.dto.partido)}" 
+                                      actionListener="#{planillaPartidoBean.anotarTarjeta('ROJ', jugadorB.idJugador, planillaPartidoBean.dto.partido.idEquipoB, planillaPartidoBean.dto.partido)}" 
                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                      disabled="#{planillaPartidoBean.dto.enaBtnTar}"
                                       />
                 </p:column>
                 
@@ -129,6 +153,7 @@
       </h:panelGrid>
         <h:form>
             <p:commandButton value="Finalizar Partido" action="#{planillaPartidoBean.finalizarPartido()}"
+                             disabled="#{planillaPartidoBean.dto.enaBtnFin}"
                                       onclick="PrimeFaces.monitorDownload(start, stop);"
                                      />
         </h:form>

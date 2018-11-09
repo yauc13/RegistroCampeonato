@@ -11,6 +11,7 @@ import com.fut.dao.JornadaDao;
 import com.fut.dao.JugadorDao;
 import com.fut.dao.PartidoDao;
 import com.fut.dao.PlayOffDao;
+import com.fut.dao.TarjetaDao;
 import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 
@@ -20,6 +21,7 @@ import com.fut.model.Jugador;
 import com.fut.model.Partido;
 import com.fut.model.PlayOff;
 import com.fut.model.TablaEquipos;
+import com.fut.model.Tarjeta;
 import com.fut.model.Usuario;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -51,10 +53,12 @@ public class AdminChampionShipBean implements Serializable{
     private Jornada jornada = new Jornada(); 
     private Jornada jornadaNew = new Jornada();
     private Partido partidoSelecJor;
+    private Tarjeta tarjetaSel = new Tarjeta();
     private List<Grupo> listaGrupo;
     private List<TablaEquipos> listaPosiciones;
     private List<Equipo> listaEquipos;
     private List<Jugador> listaGoleadores;
+    private List<Tarjeta> listaTarjetas;
     private List<Jornada> listaJornada;
     private List<PlayOff> listaPlayOff;
     private List<Partido> listaPartidosJornada;
@@ -72,6 +76,7 @@ public class AdminChampionShipBean implements Serializable{
     private PartidoDao parDao = new PartidoDao();
     private GrupoDao gruDao = new GrupoDao();
     private PlayOffDao plaDao = new PlayOffDao();
+    private TarjetaDao tarDao = new TarjetaDao();
     
     public AdminChampionShipBean() {
         partidoSelecJor = new Partido();
@@ -79,6 +84,7 @@ public class AdminChampionShipBean implements Serializable{
        
       campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");  
       listaGoleadores = jugDao.listarGoleadores(campeonato);
+      listaTarjetas = tarDao.listAllCard();
     }
     
     
@@ -368,6 +374,17 @@ public class AdminChampionShipBean implements Serializable{
         FacesContext.getCurrentInstance().addMessage(null, message);}
         this.listar();  
     }
+    
+    
+    public void cancelarTarjeta(){
+       if(tarDao.cancelarTarjeta(tarjetaSel)){
+           FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Tarjeta Pagada");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+       }else{
+           FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo cancelar", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+       }
+    }
 
     public String habilitarPermisos(Campeonato camp, int i){
         String bol = null;
@@ -400,7 +417,7 @@ public class AdminChampionShipBean implements Serializable{
         PartidoDao partidoDao= new PartidoDao();       
             //listaPosiciones.clear();
             grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
-            listaPosiciones = partidoDao.listarTablaPosiciones(grupo);        
+            listaPosiciones = partidoDao.listarTablaPosiciones(grupo.getIdGrupo());        
     }
     
     public void quitarPartidoJornada(){
@@ -657,6 +674,31 @@ public class AdminChampionShipBean implements Serializable{
     public void setPlaDao(PlayOffDao plaDao) {
         this.plaDao = plaDao;
     }
+
+    public List<Tarjeta> getListaTarjetas() {
+        return listaTarjetas;
+    }
+
+    public void setListaTarjetas(List<Tarjeta> listaTarjetas) {
+        this.listaTarjetas = listaTarjetas;
+    }
+
+    public Tarjeta getTarjetaSel() {
+        return tarjetaSel;
+    }
+
+    public void setTarjetaSel(Tarjeta tarjetaSel) {
+        this.tarjetaSel = tarjetaSel;
+    }
+
+    public TarjetaDao getTarDao() {
+        return tarDao;
+    }
+
+    public void setTarDao(TarjetaDao tarDao) {
+        this.tarDao = tarDao;
+    }
+    
     
     
     

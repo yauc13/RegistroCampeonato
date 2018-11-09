@@ -27,9 +27,11 @@ public class GolDao extends Dao{
         try{
             this.ConectionDataBase();
             PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_GOL);
-            st.setInt(1, cam.getJugador().getIdJugador());
-            st.setInt(2, cam.getEquipo().getIdEquipo());
-            st.setInt(3, cam.getPartido().getIdPartido());
+            st.setInt(1, cam.getIdJugador());
+            st.setInt(2, cam.getIdEquipo());
+            st.setInt(3, cam.getIdPartido());
+          
+            st.setInt(4, cam.getIdEquipoB());
                      
             int res = st.executeUpdate();
             if(res>0){
@@ -161,7 +163,7 @@ public class GolDao extends Dao{
         return lista;    
     }
     
-        public List<Gol> listarGolesPartidoEquipoJoin(Partido par, Equipo equ) {
+        public List<Gol> listarGolesPartidoEquipoJoin(int idPar, int idEqu) {
             List<Gol> lista = null;
             ResultSet rs;
             
@@ -176,8 +178,8 @@ public class GolDao extends Dao{
                                                                 "ON(gol.\"idJugador\" = jug.\"idJugador\""
                                                                 + " AND gol.\"idPartido\" = ? AND gol.\"idEquipo\"= ?)"
                                                                 + "ORDER BY gol.\"idGol\" ASC");
-                st.setInt(1, par.getIdPartido());
-                st.setInt(2, equ.getIdEquipo());
+                st.setInt(1, idPar);
+                st.setInt(2, idEqu);
                 rs = st.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){

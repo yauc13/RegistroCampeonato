@@ -28,6 +28,7 @@ public class Jugador implements Serializable{
     private String fotoJugador;
     private List<Gol> listGolJug; 
     private int numGol;
+    private String nombreEquipo;
 
     public int getNumGol() {
         return numGol;
@@ -118,6 +119,15 @@ public class Jugador implements Serializable{
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
+
+    public String getNombreEquipo() {
+        return nombreEquipo;
+    }
+
+    public void setNombreEquipo(String nombreEquipo) {
+        this.nombreEquipo = nombreEquipo;
+    }
+    
     
     
     

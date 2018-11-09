@@ -18,8 +18,6 @@ import com.fut.model.Partido;
 import com.fut.model.Tarjeta;
 import com.fut.model.Usuario;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -53,23 +51,24 @@ public class PlanillaPartidoBean implements Serializable{
     
     
     
-    public void listarPlanillasInicio() {       
+    public void listarPlanillasInicio() {     
+        
         if(this.isPostBack() == false){                 
-        dto.setListaJugadoresA(daoJug.listarJugadoresEquipo(dto.getPartido().getEquipoA()));
-        dto.setListaJugadoresB(daoJug.listarJugadoresEquipo(dto.getPartido().getEquipoB()));
+        dto.setListaJugadoresA(daoJug.listarJugadoresEquipo(dto.getPartido().getIdEquipoA()));
+        dto.setListaJugadoresB(daoJug.listarJugadoresEquipo(dto.getPartido().getIdEquipoB()));
         listarGoles();        
         }   
     }
     
     public void listarPlanillas(){     
-        dto.setListaJugadoresA(daoJug.listarJugadoresEquipo(dto.getPartido().getEquipoA()));
-        dto.setListaJugadoresB(daoJug.listarJugadoresEquipo(dto.getPartido().getEquipoB()));
+        dto.setListaJugadoresA(daoJug.listarJugadoresEquipo(dto.getPartido().getIdEquipoA()));
+        dto.setListaJugadoresB(daoJug.listarJugadoresEquipo(dto.getPartido().getIdEquipoB()));
         listarGoles();
     }
     
     public void listarGoles() {        
-        dto.setListaGolesA(daoGol.listarGolesPartidoEquipoJoin(dto.getPartido(), dto.getPartido().getEquipoA()));
-        dto.setListaGolesB(daoGol.listarGolesPartidoEquipoJoin(dto.getPartido(), dto.getPartido().getEquipoB()));
+        dto.setListaGolesA(daoGol.listarGolesPartidoEquipoJoin(dto.getPartido().getIdPartido(), dto.getPartido().getIdEquipoA()));
+        dto.setListaGolesB(daoGol.listarGolesPartidoEquipoJoin(dto.getPartido().getIdPartido(), dto.getPartido().getIdEquipoB()));
     }
      
     public String finalizarPartido() {
@@ -85,21 +84,44 @@ public class PlanillaPartidoBean implements Serializable{
         return direccion;
     }
     
-    public void anotarGol(Jugador jug, Equipo equ, Partido par) {
+     public void iniciarPartido() {        
+        boolean resp =daoPar.iniciarPartido(dto.getPartido());
+        if(resp){   
+             enableButtonStartNext();
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "partido iniciado");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "el partido no se pudo iniciar");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }      
+        
+    }
+    
+    public void anotarGol(int jug, int equ, Partido par) {
         Gol gol = new Gol();
-        gol.setJugador(jug);
-        gol.setEquipo(equ);
-        gol.setPartido(par);
+        gol.setIdJugador(jug);
+        gol.setIdEquipo(equ);
+        gol.setIdPartido(par.getIdPartido());
+        if(equ==par.getIdEquipoA()){
+            gol.setIdEquipoB(par.getIdEquipoB());
+        }else{
+            gol.setIdEquipoB(par.getIdEquipoA());
+        }
         daoGol.insertGol(gol);
         this.listarPlanillas();
     }
     
-    public void anotarTarjeta(String typeTar,Jugador jug, Equipo equ, Partido par){
+    public void anotarTarjeta(String typeTar,int jug, int equ, Partido par){
         Tarjeta tar = new Tarjeta();
-        tar.setIdJugador(jug.getIdJugador());
-        tar.setIdEquipo(equ.getIdEquipo());
+        tar.setIdJugador(jug);
+        tar.setIdEquipo(equ);
         tar.setIdPartido(par.getIdPartido());
         tar.setTypeCard(typeTar);
+        if(equ==par.getIdEquipoA()){
+            tar.setIdEquipoB(par.getIdEquipoB());
+        }else{
+            tar.setIdEquipoB(par.getIdEquipoA());
+        }
         if(daoTar.insertTarjeta(tar)){
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Tarjeta Registrada");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -114,6 +136,34 @@ public class PlanillaPartidoBean implements Serializable{
         boolean rta;
         rta= FacesContext.getCurrentInstance().isPostback();
         return rta;
+    }
+    
+    private void enableButtonStart(PlanillaPartidoDTO dto){
+        if(dto.getPartido().getEstadoPartido().equals("Por Jugar")){
+            dto.setEnaBtnIniciar(false);
+            dto.setEnaBtnFin(true);
+            dto.setEnaBtnTar(true);
+            dto.setEnaBtngol(true);
+        }else if(dto.getPartido().getEstadoPartido().equals("Jugando")){
+            dto.setEnaBtnIniciar(true);
+            dto.setEnaBtnFin(false);
+            dto.setEnaBtnTar(false);
+            dto.setEnaBtngol(false);
+        }if(dto.getPartido().getEstadoPartido().equals("Finalizado")){
+            dto.setEnaBtnIniciar(true);
+            dto.setEnaBtnFin(true);
+            dto.setEnaBtnTar(true);
+            dto.setEnaBtngol(true);
+        }
+    }
+    
+     private void enableButtonStartNext(){
+        
+            dto.setEnaBtnIniciar(true);
+            dto.setEnaBtnFin(false);
+            dto.setEnaBtnTar(false);
+            dto.setEnaBtngol(false);
+  
     }
      
 

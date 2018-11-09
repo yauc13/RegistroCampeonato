@@ -110,7 +110,7 @@ public class JugadorDao extends Dao {
                     Jugador cam = new Jugador();
                     cam.setIdJugador(rs.getInt("idJugador"));
                     cam.setNombreJugador(rs.getString("nombreJugador"));                  
-                    cam.setIdEquipoJugador(rs.getInt("idEquipoJugador"));
+                    cam.setNombreEquipo(rs.getString("nombreEquipo"));   
                     cam.setNumGol(rs.getInt("count"));
  
                     lista.add(cam);
@@ -125,7 +125,7 @@ public class JugadorDao extends Dao {
         return lista;   
     }
     
-        public List<Jugador> listarJugadoresEquipo(Equipo camp) {
+        public List<Jugador> listarJugadoresEquipo(int idEquipo) {
             List<Jugador> lista = null;
             ResultSet rs;
             
@@ -133,7 +133,7 @@ public class JugadorDao extends Dao {
                 this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
                 PreparedStatement st = this.getCn().prepareCall("SELECT \"idJugador\",\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\" FROM public.jugador WHERE \"idEquipoJugador\" = ?");
-                st.setInt(1, camp.getIdEquipo());
+                st.setInt(1, idEquipo);
                 rs = st.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){

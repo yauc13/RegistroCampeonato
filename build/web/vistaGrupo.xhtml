@@ -87,14 +87,8 @@
                     <p:tab title="Partidos" id="tabPartidos" >
                         <h:panelGrid columns="2" cellpadding="10" >
                             <h:form id="frm2">
-
-
-
                                 <p:dataTable id="data" value="#{partidoBean.listaPartido}" var="partido"  
-
                                              emptyMessage="No hay Registros...">
-
-
                                     <f:facet  name="header">
                                         <div class="row">
                                             <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
@@ -109,7 +103,6 @@
                                             </div>
                                         </div>
                                     </f:facet>
-
 
                                     <p:column headerText="id">
                                         <p:outputLabel value="#{partido.idPartido}"/>
@@ -126,8 +119,10 @@
                                         <p:outputLabel value="#{partido.equipoB.nombreEquipo}"/>
                                     </p:column>
 
-                                    <p:column headerText="Estado">
-                                        <p:outputLabel value="#{partido.estadoPartido}"/>
+                                    <p:column headerText="Estado" >
+                                        <p:outputLabel value="#{partido.estadoPartido}"
+                                                       styleClass="#{partido.estadoPartido eq 'Finalizado' ? 'estParFin' : partido.estadoPartido eq 'Por Jugar' ? 'estParPorJug' : 'estParJug'}"
+                                                       />
                                     </p:column>
                                     <p:column headerText="Editar">
                                         <p:commandLink  id="linkEPlanilla" value="Planilla" action="#{partidoBean.editarPlanilla(partido)}" update="data"

@@ -28,6 +28,10 @@ public class PlanillaPartidoDTO {
     private List<Gol> listaGolesB;
     private List<Jugador> listaJugadoresA;
     private List<Jugador> listaJugadoresB;
+    private boolean enaBtnIniciar = false;
+    private boolean enaBtnFin = true;
+    private boolean enaBtngol = true;
+    private boolean enaBtnTar = true;
 
     public PlanillaPartidoDTO() {
          partido = new Partido();
@@ -109,6 +113,40 @@ public class PlanillaPartidoDTO {
     public void setListaJugadoresB(List<Jugador> listaJugadoresB) {
         this.listaJugadoresB = listaJugadoresB;
     }
+
+    public boolean isEnaBtnIniciar() {
+        return enaBtnIniciar;
+    }
+
+    public void setEnaBtnIniciar(boolean enaBtnIniciar) {
+        this.enaBtnIniciar = enaBtnIniciar;
+    }
+
+    public boolean isEnaBtnFin() {
+        return enaBtnFin;
+    }
+
+    public void setEnaBtnFin(boolean enaBtnFin) {
+        this.enaBtnFin = enaBtnFin;
+    }
+
+    public boolean isEnaBtngol() {
+        return enaBtngol;
+    }
+
+    public void setEnaBtngol(boolean enaBtngol) {
+        this.enaBtngol = enaBtngol;
+    }
+
+    public boolean isEnaBtnTar() {
+        return enaBtnTar;
+    }
+
+    public void setEnaBtnTar(boolean enaBtnTar) {
+        this.enaBtnTar = enaBtnTar;
+    }
+    
+    
     
     
     

@@ -15,6 +15,12 @@ public class Tarjeta {
     private int idEquipo;
     private int idPartido;
     private String typeCard;
+    private boolean pagoTarjeta;
+    private int idEquipoB;
+    
+    private String nombreJugador;
+    private String nombreEquipo;
+    private String nombreEquipoB;
 
     public int getIdTarjeta() {
         return idTarjeta;
@@ -55,6 +61,50 @@ public class Tarjeta {
     public void setTypeCard(String typeCard) {
         this.typeCard = typeCard;
     }
+
+    public String getNombreJugador() {
+        return nombreJugador;
+    }
+
+    public void setNombreJugador(String nombreJugador) {
+        this.nombreJugador = nombreJugador;
+    }
+
+    public String getNombreEquipo() {
+        return nombreEquipo;
+    }
+
+    public void setNombreEquipo(String nombreEquipo) {
+        this.nombreEquipo = nombreEquipo;
+    }
+
+    public String getNombreEquipoB() {
+        return nombreEquipoB;
+    }
+
+    public void setNombreEquipoB(String nombreEquipoB) {
+        this.nombreEquipoB = nombreEquipoB;
+    }
+
+    public boolean isPagoTarjeta() {
+        return pagoTarjeta;
+    }
+
+    public void setPagoTarjeta(boolean pagoTarjeta) {
+        this.pagoTarjeta = pagoTarjeta;
+    }
+
+    public int getIdEquipoB() {
+        return idEquipoB;
+    }
+
+    public void setIdEquipoB(int idEquipoB) {
+        this.idEquipoB = idEquipoB;
+    }
+    
+    
+    
+    
     
     
     

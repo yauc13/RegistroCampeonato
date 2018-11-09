@@ -219,6 +219,7 @@
                                                 </div>
                                             </f:facet>
 
+                                        
                                         <p:panelGrid columns="1" style=" align-content:  center">
                                             
 
@@ -269,14 +270,14 @@
                                              rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" 
                                              reflow="true"
                                              >
-                                    <p:column headerText="pos">
+                                    <p:column headerText="pos" width="5%">
                                         <p:outputLabel value="#{adminChampionShipBean.listaGoleadores.indexOf(goleador)+1}"/>
                                     </p:column>
                                     <p:column headerText="Jugador">
                                         <p:outputLabel value="#{goleador.nombreJugador}"/>
                                     </p:column>
-                                    <p:column headerText="id equ">
-                                        <p:outputLabel value="#{goleador.idEquipoJugador}"/>
+                                    <p:column headerText="Equipo">
+                                        <p:outputLabel value="#{goleador.nombreEquipo}"/>
                                     </p:column> 
                                     <p:column headerText="Goles">
                                         <p:outputLabel value="#{goleador.numGol}"/>
@@ -297,27 +298,34 @@
                         <h:panelGrid columns="2" cellpadding="10" id="panel1">
                             <h:form id="frmTar">
                                 <p:outputLabel value="#{adminChampionShipBean.campeonato.nombreCampeonato}/"/>
-                                <p:dataTable id="data" value="#{adminChampionShipBean.listaGoleadores}" var="goleador" 
+                                <p:dataTable id="data" value="#{adminChampionShipBean.listaTarjetas}" var="tar" 
                                              rows="5" paginator="true"
                                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                              rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" 
                                              reflow="true"
                                              >
-                                    <p:column headerText="pos">
-                                        <p:outputLabel value="#{adminChampionShipBean.listaGoleadores.indexOf(goleador)+1}"/>
+                                    <p:column headerText="id" width="5%">
+                                        <p:outputLabel value="#{tar.idTarjeta}"/>
                                     </p:column>
                                     <p:column headerText="Jugador">
-                                        <p:outputLabel value="#{goleador.nombreJugador}"/>
+                                        <p:outputLabel value="#{tar.nombreJugador}"/>
                                     </p:column>
                                     <p:column headerText="Equipo">
-                                        <p:outputLabel value="#{goleador.idEquipoJugador}"/>
+                                        <p:outputLabel value="#{tar.nombreEquipo}"/>
                                     </p:column> 
-                                    <p:column headerText="Goles">
-                                        <p:outputLabel value="#{goleador.numGol}"/>
+                                    <p:column headerText="Tipo">
+                                        <p:outputLabel value="#{tar.typeCard}"/>
                                     </p:column>
-                                    <p:column headerText="Ver">
-                                        <p:commandLink id="linkVPartidos" value="Ver" action="#" 
-                                                       
+                                    <p:column headerText="Rival">
+                                        <p:outputLabel value="#{tar.nombreEquipoB}"/>
+                                    </p:column>
+                                    <p:column headerText="pago">
+                                        <p:outputLabel value="#{tar.pagoTarjeta}"/>
+                                    </p:column>
+                                    <p:column headerText="Pagar">
+                                        <p:commandLink id="linkVPartidos" value="Pagar" actionListener="#{adminChampionShipBean.setTarjetaSel(tar)}" 
+                                                       oncomplete="PF('wdgCanTar').show();"
+                                                       update=":dlgCanTar"
                                                        />
 
                                     </p:column>
@@ -376,6 +384,21 @@
                                          update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
                                          />
                         <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgJornada').hide();"/> 
+                    </h:form>
+                </p:dialog>
+                
+                <p:dialog header="Cancelar Tarjeta" widgetVar="wdgCanTar" id="dlgCanTar"
+                          modal="true">
+                    <h:form>
+                      
+                        <p:outputLabel value="Pago Tarjeta?" for="txtJornada"/>
+                        <p:inputText id="txtJornada" required="true" value="#{adminChampionShipBean.tarjetaSel.pagoTarjeta}"/>
+
+                        <p:commandButton value="Aceptar"  actionListener="#{adminChampionShipBean.cancelarTarjeta()}"
+                                         oncomplete="PF('wdgCanTar').hide();"
+                                         update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
+                                         />
+                        <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgCanTar').hide();"/> 
                     </h:form>
                 </p:dialog>
 

@@ -5,6 +5,9 @@
  */
 package com.fut.dao;
 
+import com.fut.model.Equipo;
+import com.fut.model.Jugador;
+import com.fut.model.Partido;
 import com.fut.model.Tarjeta;
 import com.fut.util.SqlAdminFutSal;
 import java.sql.PreparedStatement;
@@ -28,6 +31,8 @@ public class TarjetaDao extends Dao{
             st.setInt(2, tar.getIdEquipo());
             st.setInt(3, tar.getIdPartido());
             st.setString(4, tar.getTypeCard());
+            st.setBoolean(5, false);
+            st.setInt(6, tar.getIdEquipoB());
                      
             int res = st.executeUpdate();
             if(res>0){
@@ -42,41 +47,58 @@ public class TarjetaDao extends Dao{
         return reg;
     }
       
-         public List<Tarjeta> listAllCard() throws Exception{
-            List<Tarjeta> lista;
-            ResultSet rs;
-            
-            try{
-                this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idPartido\" = ? AND \"idEquipo\" = ?");
-                
-                rs = st.executeQuery();
-                lista = new ArrayList();
-                while(rs.next()){
-                    Tarjeta cam = new Tarjeta();
-                    cam.setIdTarjeta(rs.getInt("idGol"));
-                    
-                    JugadorDao jugadorDao = new JugadorDao();
-                    Jugador jugador = jugadorDao.leerID(rs.getInt("idJugador"));
-                    cam.setJugador(jugador);
-                    
-                    EquipoDao equipoDao = new EquipoDao();
-                    Equipo equipo = equipoDao.leerID(rs.getInt("idEquipo"));
-                    cam.setEquipo(equipo);
-                    
-                    PartidoDao partidoDao = new PartidoDao();
-                    Partido partido = partidoDao.leerID(rs.getInt("idPartido"));
-                    cam.setPartido(partido);
-                 
-                    lista.add(cam);
-                
-                }
-            }catch(Exception e){
-                throw e;
-            }finally{
-                this.CloseConection();
+      public boolean cancelarTarjeta(Tarjeta tar){
+        boolean reg = false;
+        try{
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.UPDATE_CARD);
+            st.setBoolean(1, tar.isPagoTarjeta());
+            st.setInt(2, tar.getIdTarjeta());         
+            int res = st.executeUpdate();
+            if(res>0){
+                reg = true;
             }
-        
-        return lista;    
+            
+        }catch(SQLException e){
+            System.err.println(e);
+        }finally{
+        this.CloseConection();
+        }
+        return reg;
     }
+ 
+ 
+    public List<Tarjeta> listAllCard() {
+        List<Tarjeta> lista = null;
+        ResultSet rs;
+
+        try {
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_CARD_PLAYER);
+
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                Tarjeta tar = new Tarjeta();
+                tar.setIdTarjeta(rs.getInt("idTarjeta"));
+                tar.setNombreJugador(rs.getString("nombreJugador"));
+                tar.setNombreEquipo(rs.getString("nombreEquipo"));
+                tar.setNombreEquipoB(rs.getString("nombreEquipoB"));
+                tar.setTypeCard(rs.getString("tipoTarjeta"));
+                tar.setPagoTarjeta(rs.getBoolean("pagoTarjeta"));
+                
+
+                lista.add(tar);
+
+            }
+        } catch (SQLException e) {
+            System.err.println(e);
+        } finally {
+            this.CloseConection();
+        }
+
+        return lista;
+    }
+    
+    
 }
