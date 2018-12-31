@@ -59,6 +59,8 @@ public class AdminChampionShipBean implements Serializable{
     private List<Equipo> listaEquipos;
     private List<Jugador> listaGoleadores;
     private List<Tarjeta> listaTarjetas;
+    private List<Tarjeta> listaTarjetasCan;
+    private List<Tarjeta> listaTarjetasPag;
     private List<Jornada> listaJornada;
     private List<PlayOff> listaPlayOff;
     private List<Partido> listaPartidosJornada;
@@ -81,15 +83,13 @@ public class AdminChampionShipBean implements Serializable{
     public AdminChampionShipBean() {
         partidoSelecJor = new Partido();
         rowSelJor = 0;
-       
-      campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");  
-      listaGoleadores = jugDao.listarGoleadores(campeonato);
-      listaTarjetas = tarDao.listAllCard();
-    }
-    
-    
 
-   
+        campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
+        listaGoleadores = jugDao.listarGoleadores(campeonato);
+        listaTarjetas = tarDao.listAllCard(campeonato.getIdCampeonato());
+        listaTarjetasPag = tarDao.listPagarCard(campeonato.getIdCampeonato());
+        listaTarjetasCan = tarDao.listCanCard(campeonato.getIdCampeonato());
+    }
     
     public int verIdCampeonato(){
         Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
@@ -222,46 +222,41 @@ public class AdminChampionShipBean implements Serializable{
     
 
     
-    public void modificarJornada()  {
-        if(jorDao.modificar(jornadaNew)){
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada creada");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        }else{
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+    public void modificarJornada() {
+        if (jorDao.modificar(jornadaNew)) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada creada");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear");
+            FacesContext.getCurrentInstance().addMessage(null, message);
         }
-        this.listar();    
+        this.listar();
     }
     
-        public void modificarGrupo() {
-    GrupoDao dao;
-    
+    public void modificarGrupo() {
+        GrupoDao dao;
         dao = new GrupoDao();
-        if(dao.updateGroup(grupo)){
-           this.listar();
-           FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Modificado");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        }else{
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo modificar");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        if (dao.updateGroup(grupo)) {
+            this.listar();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo modificar");
+            FacesContext.getCurrentInstance().addMessage(null, message);
         }
-        
-       
     }
         
     public void modificarPlayOff() {
-       
+
         plaDao = new PlayOffDao();
-        if(plaDao.updatePlayOff(playOff)){
-           this.listar();
-           FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Modificado");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        }else{
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo modificar");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        if (plaDao.updatePlayOff(playOff)) {
+            this.listar();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo modificar");
+            FacesContext.getCurrentInstance().addMessage(null, message);
         }
-        
-       
     }
         
     public void agregarPartidoJornada()  {  
@@ -376,14 +371,17 @@ public class AdminChampionShipBean implements Serializable{
     }
     
     
-    public void cancelarTarjeta(){
-       if(tarDao.cancelarTarjeta(tarjetaSel)){
-           FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Tarjeta Pagada");
+    public void payCard() {
+        if (tarDao.cancelarTarjeta(tarjetaSel)) {
+            listaTarjetas = tarDao.listAllCard(campeonato.getIdCampeonato());
+            listaTarjetasPag = tarDao.listPagarCard(campeonato.getIdCampeonato());
+            listaTarjetasCan = tarDao.listCanCard(campeonato.getIdCampeonato());
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Tarjeta Pagada");
             FacesContext.getCurrentInstance().addMessage(null, message);
-       }else{
-           FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo cancelar", "");
+        } else {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo cancelar", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-       }
+        }
     }
 
     public String habilitarPermisos(Campeonato camp, int i){
@@ -698,6 +696,30 @@ public class AdminChampionShipBean implements Serializable{
     public void setTarDao(TarjetaDao tarDao) {
         this.tarDao = tarDao;
     }
+
+    public List<Tarjeta> getListaTarjetasCan() {
+        if(listaTarjetasCan==null){
+            listaTarjetasCan = new ArrayList<>();
+        }
+        return listaTarjetasCan;
+    }
+
+    public void setListaTarjetasCan(List<Tarjeta> listaTarjetasCan) {
+        this.listaTarjetasCan = listaTarjetasCan;
+    }
+
+    public List<Tarjeta> getListaTarjetasPag() {
+        if(listaTarjetasPag==null){
+            listaTarjetasPag = new ArrayList<>();
+        }
+        return listaTarjetasPag;
+    }
+
+    public void setListaTarjetasPag(List<Tarjeta> listaTarjetasPag) {
+        this.listaTarjetasPag = listaTarjetasPag;
+    }
+    
+    
     
     
     

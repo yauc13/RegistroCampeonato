@@ -6,7 +6,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Gestion Campeonato</title>
         <link href="resources/css/listaGrupo.css" rel="stylesheet" type="text/css"/>
     </h:head>
     <h:body>
@@ -43,296 +43,24 @@
                 <p:tabView id="idTabviewVistaCampeonato">
 
                     <p:tab title="Jornadas" id="tab2">
-
-                        <h:panelGrid columns="2" cellpadding="10" id="panel2">
-                            <h:form id="formJornadas">
-                                
-
-                                <p:dataTable id="data" value="#{adminChampionShipBean.listaJornada}" var="jor"
-                                             rowKey="#{jor.idJornada}"
-                                             expandedRow="#{jor.idJornada == adminChampionShipBean.rowSelJor}"  
-                                             
-                                             selection="#{adminChampionShipBean.jornada}" 
-                                             selectionMode="single"
-                                             >
-                                     <f:facet  name="header">
-                                                <div class="row">
-                                                    <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
-                                                        <p:commandButton  value="Nueva jornada" oncomplete="PF('wdgJornada').show();"
-                                                                          actionListener="#{adminChampionShipBean.preparedNewFixture()}"
-                                                                          update=":dlgJornada" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
-                                                                          icon="ui-icon-circle-plus"
-                                                                          />
-                                                    </div>
-                                                   <div class="col-md-10 col-xs-10 col-sm-10">
-                                                        <p:outputLabel value="Jornadas de #{adminChampionShipBean.campeonato.nombreCampeonato}"/>
-                                                    </div>
-                                                </div>
-                                            </f:facet>
-                                    <p:column style="width:50px">
-                                        <p:rowToggler  />
-                                    </p:column>
-                                    <p:column headerText="jornada">
-                                        <p:outputLabel value="#{jor.nombreJornada}"/>
-                                    </p:column>
-                                    <p:column headerText="new">
-                                        <p:commandButton value="Agregar Partido" oncomplete="PF('wdgAddParJor').show();"
-                                                         actionListener="#{adminChampionShipBean.setJornada(jor)}"
-                                                         update=":dlgAddParJor" />
-                                        <p:commandButton icon="ui-icon-trash"
-                                                                     title="Eliminar Jornada" 
-                                                                     update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
-                                                                     actionListener="#{adminChampionShipBean.deleteJornada(jor)}"
-                                                                     
-                                                                     style="margin-left: 7px;"
-                                                                     />
-                                            
-                                       
-                                       
-                                    </p:column>
-
-                                    <p:rowExpansion>
-
-                                        <p:panelGrid  columns="1" columnClasses="label,value" style="width:900px">
-                                            <f:facet name="header">
-
-                                            </f:facet>
-                                            <p:dataTable id="idTableParJor" var="parJor" value="#{adminChampionShipBean.listarPartidosJornada(jor)}" style=" align-content:  center" 
-                                                         rowKey="#{parJor.idPartido}"
-                                                         >
-                                                <p:column width="15%">
-                                                    <p:outputLabel value="#{parJor.grupo.nombreGrupo}"/>
-                                                </p:column>
-                                                <p:column width="30%">
-                                                    <p:outputLabel value="#{parJor.equipoA.nombreEquipo}"/>
-                                                </p:column>
-                                                <p:column width="10%">
-                                                    <p:outputLabel value="#{parJor.golA} - #{parJor.golB}"/>
-                                                </p:column>
-                                                <p:column width="30%">
-                                                    <p:outputLabel value="#{parJor.equipoB.nombreEquipo}"/>
-                                                </p:column>
-                                                <p:column >
-                                                    <p:commandButton icon="ui-icon-trash"
-                                                                     title="Eliminar" 
-                                                                     update="idDiagQuitarParJor"
-                                                                     actionListener="#{adminChampionShipBean.setPartidoSelecJor(parJor)}"
-                                                                     oncomplete="PF('wdgQuitarParJor').show();"
-                                                                     style="margin-left: 7px;"
-                                                                     />
-                                                </p:column>
-                                            </p:dataTable>
-                                            
-                                            
-                                        </p:panelGrid>
-                                    </p:rowExpansion>
-                                </p:dataTable>
-
-                            </h:form>
-                        </h:panelGrid>
+                        <ui:include src="/adminChamp/tab_fixture.xhtml"/>
                     </p:tab>
 
                     <p:tab title="Grupos">
-                       
-
-                            <h:form id="formGrupos">
-                                
-                                    <p:dataGrid var="grupo" value="#{adminChampionShipBean.listaGrupo}" columns="5">
-                                        <f:facet  name="header">
-                                                <div class="row">
-                                                    <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
-                                                        <p:commandButton  value="Nuevo Grupo" oncomplete="PF('wdgCrudGrupo').show();"
-                                                                          actionListener="#{adminChampionShipBean.preparedNewGroup()}"
-                                                                          update=":dlgCrudGrupo" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
-                                                                          icon="ui-icon-circle-plus"
-                                                                          />
-                                                    </div>
-                                                    <div class="col-md-10 col-xs-10 col-sm-10">
-                                                        <p:outputLabel value="Grupos de #{adminChampionShipBean.campeonato.nombreCampeonato}"/>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </f:facet>
-
-                                        <p:panelGrid columns="1" style=" align-content:  center">
-                                            
-
-                                            <f:facet name="header">
-
-                                                <p:commandButton   value="#{grupo.nombreGrupo}" action="#{adminChampionShipBean.verGrupo(grupo)}" 
-                                                                   onclick="PrimeFaces.monitorDownload(start, stop);"
-                                                                   title="Ver Equipos del Grupo"
-                                                                   />
-                                                <p:commandButton icon="ui-icon-pencil"
-                                                                     title="Editar Grupo" 
-                                                                     update=":dlgCrudGrupo"
-                                                                     actionListener="#{adminChampionShipBean.preparedEditGroup(grupo)}"
-                                                                      oncomplete="PF('wdgCrudGrupo').show();"
-                                                                     style="margin-left: 7px;"
-                                                                     />
-                                                <p:commandButton icon="ui-icon-trash"
-                                                                     title="Eliminar Grupo" 
-                                                                     update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
-                                                                     actionListener="#"
-                                                                     
-                                                                     style="margin-left: 7px;"
-                                                                     />
-                                            </f:facet>
-                                            <p:dataTable var="equi" value="#{adminChampionShipBean.getListaEquipos(grupo)}"
-                                                         style=" align-content:  center"
-                                                         rowIndexVar="rowIndex"
-                                                         rowStyleClass="#{rowIndex lt grupo.numClasificados ? 'clasificadosGrupo' : ''}"
-                                                        >
-                                                <p:column width="30%">
-                                                    <p:outputLabel value="#{equi.nombreEquipo}"/>
-                                                </p:column>
-                                            </p:dataTable>
-
-
-                                        </p:panelGrid>
-
-                                    </p:dataGrid>
-                                
-                            </h:form> 
-                        
+                        <ui:include src="/adminChamp/tab_group.xhtml"/>
                     </p:tab>
                     
                     <p:tab title="PlayOff">
-                       
-
-                            <h:form id="formPlayOff">
-                                
-                                    <p:dataGrid var="playOff" value="#{adminChampionShipBean.listaPlayOff}" columns="5">
-                                        <f:facet  name="header">
-                                                <div class="row">
-                                                    <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
-                                                        <p:commandButton  value="Nuevo PlayOff" oncomplete="PF('wdgCrudPlayOff').show();"
-                                                                          actionListener="#{adminChampionShipBean.preparedNewPlayOff()}"
-                                                                          update=":dlgCrudPlayOff" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
-                                                                          icon="ui-icon-circle-plus"
-                                                                          />
-                                                    </div>
-                                                    <div class="col-md-10 col-xs-10 col-sm-10">
-                                                        <p:outputLabel value="PlayOff de #{adminChampionShipBean.campeonato.nombreCampeonato}"/>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </f:facet>
-
-                                        
-                                        <p:panelGrid columns="1" style=" align-content:  center">
-                                            
-
-                                            <f:facet name="header">
-
-                                                <p:commandButton   value="#{playOff.namePlayOff}" action="#{adminChampionShipBean.verPlayOff(playOff)}" 
-                                                                   onclick="PrimeFaces.monitorDownload(start, stop);"
-                                                                   title="Ver Partidos del PlayOff"
-                                                                   />
-                                                <p:commandButton icon="ui-icon-pencil"
-                                                                     title="Editar Grupo" 
-                                                                     update=":dlgCrudGrupo"
-                                                                     actionListener="#{adminChampionShipBean.preparedEditGroup(playOff)}"
-                                                                      oncomplete="PF('wdgCrudPlayOff').show();"
-                                                                     style="margin-left: 7px;"
-                                                                     />
-                                                <p:commandButton icon="ui-icon-trash"
-                                                                     title="Eliminar Grupo" 
-                                                                     update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos, idTabviewVistaCampeonato:formPlayOff"
-                                                                     actionListener="#"
-                                                                     
-                                                                     style="margin-left: 7px;"
-                                                                     />
-                                            </f:facet>
-                                            <p:dataTable var="equi" value="#{adminChampionShipBean.getListaEquipos(grupo)}" style=" align-content:  center">
-                                                <p:column width="30%">
-                                                    <p:outputLabel value="#{playOff.namePlayOff}"/>
-                                                </p:column>
-                                            </p:dataTable>
-
-
-                                        </p:panelGrid>
-
-                                    </p:dataGrid>
-                                
-                            </h:form> 
-                        
+                        <ui:include src="/adminChamp/tab_playoff.xhtml"/>
                     </p:tab>
 
 
                     <p:tab title="Goleadores" id="tab1">
-                        <h:panelGrid columns="2" cellpadding="10" id="panelTar">
-                            <h:form id="frm1">
-                                <p:outputLabel value="#{adminChampionShipBean.campeonato.nombreCampeonato}/"/>
-                                <p:dataTable id="data" value="#{adminChampionShipBean.listaGoleadores}" var="goleador" 
-                                             rows="5" paginator="true"
-                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" 
-                                             reflow="true"
-                                             >
-                                    <p:column headerText="pos" width="5%">
-                                        <p:outputLabel value="#{adminChampionShipBean.listaGoleadores.indexOf(goleador)+1}"/>
-                                    </p:column>
-                                    <p:column headerText="Jugador">
-                                        <p:outputLabel value="#{goleador.nombreJugador}"/>
-                                    </p:column>
-                                    <p:column headerText="Equipo">
-                                        <p:outputLabel value="#{goleador.nombreEquipo}"/>
-                                    </p:column> 
-                                    <p:column headerText="Goles">
-                                        <p:outputLabel value="#{goleador.numGol}"/>
-                                    </p:column>
-                                    <p:column headerText="Ver">
-                                        <p:commandLink id="linkVPartidos" value="Ver" action="#" 
-                                                       
-                                                       />
-
-                                    </p:column>
-
-                                </p:dataTable>
-                            </h:form>
-                        </h:panelGrid>
+                       <ui:include src="/adminChamp/tab_goleador.xhtml"/>
                     </p:tab>
                     
                      <p:tab title="Tarjetas" id="tabTar">
-                        <h:panelGrid columns="2" cellpadding="10" id="panel1">
-                            <h:form id="frmTar">
-                                <p:outputLabel value="#{adminChampionShipBean.campeonato.nombreCampeonato}/"/>
-                                <p:dataTable id="data" value="#{adminChampionShipBean.listaTarjetas}" var="tar" 
-                                             rows="5" paginator="true"
-                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" 
-                                             reflow="true"
-                                             >
-                                    <p:column headerText="id" width="5%">
-                                        <p:outputLabel value="#{tar.idTarjeta}"/>
-                                    </p:column>
-                                    <p:column headerText="Jugador">
-                                        <p:outputLabel value="#{tar.nombreJugador}"/>
-                                    </p:column>
-                                    <p:column headerText="Equipo">
-                                        <p:outputLabel value="#{tar.nombreEquipo}"/>
-                                    </p:column> 
-                                    <p:column headerText="Tipo">
-                                        <p:outputLabel value="#{tar.typeCard}"/>
-                                    </p:column>
-                                    <p:column headerText="Rival">
-                                        <p:outputLabel value="#{tar.nombreEquipoB}"/>
-                                    </p:column>
-                                    <p:column headerText="pago">
-                                        <p:outputLabel value="#{tar.pagoTarjeta}"/>
-                                    </p:column>
-                                    <p:column headerText="Pagar">
-                                        <p:commandLink id="linkVPartidos" value="Pagar" actionListener="#{adminChampionShipBean.setTarjetaSel(tar)}" 
-                                                       oncomplete="PF('wdgCanTar').show();"
-                                                       update=":dlgCanTar"
-                                                       />
-
-                                    </p:column>
-
-                                </p:dataTable>
-                            </h:form>
-                        </h:panelGrid>
+                        <ui:include src="/adminChamp/tab_card.xhtml"/>
                     </p:tab>
 
 
@@ -387,16 +115,17 @@
                     </h:form>
                 </p:dialog>
                 
-                <p:dialog header="Cancelar Tarjeta" widgetVar="wdgCanTar" id="dlgCanTar"
+                <p:dialog header="Pagar Tarjeta" widgetVar="wdgCanTar" id="dlgCanTar"
                           modal="true">
-                    <h:form>
-                      
-                        <p:outputLabel value="Pago Tarjeta?" for="txtJornada"/>
-                        <p:inputText id="txtJornada" required="true" value="#{adminChampionShipBean.tarjetaSel.pagoTarjeta}"/>
-
-                        <p:commandButton value="Aceptar"  actionListener="#{adminChampionShipBean.cancelarTarjeta()}"
+                    <h:form>                      
+                        <p:outputLabel value="Pago Tarjeta?" for="onePago"/>                                               
+                        <p:selectOneMenu id="onePago" required="true" value="#{adminChampionShipBean.tarjetaSel.pagoTarjeta}">                           
+                            <f:selectItem itemLabel="SI PAGO" itemValue="#{true}"/>
+                            <f:selectItem itemLabel="NO PAGO" itemValue="#{false}"/>                                                        
+                        </p:selectOneMenu>
+                        <p:commandButton value="Aceptar"  actionListener="#{adminChampionShipBean.payCard()}"
                                          oncomplete="PF('wdgCanTar').hide();"
-                                         update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
+                                         update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos,idTabviewVistaCampeonato:frmTar"
                                          />
                         <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgCanTar').hide();"/> 
                     </h:form>

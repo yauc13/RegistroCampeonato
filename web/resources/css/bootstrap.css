@@ -9041,7 +9041,12 @@ a.text-dark:hover, a.text-dark:focus {
 .estParFin{
     color: #1c7430;
 }
- 
+
+/*--------color en botones--------------*/
+.btnTarAma{
+   background:#c69500;
+   
+}
 
 
 /*# sourceMappingURL=bootstrap.css.map */

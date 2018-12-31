@@ -5,9 +5,6 @@
  */
 package com.fut.dao;
 
-import com.fut.model.Equipo;
-import com.fut.model.Jugador;
-import com.fut.model.Partido;
 import com.fut.model.Tarjeta;
 import com.fut.util.SqlAdminFutSal;
 import java.sql.PreparedStatement;
@@ -68,14 +65,14 @@ public class TarjetaDao extends Dao{
     }
  
  
-    public List<Tarjeta> listAllCard() {
+    public List<Tarjeta> listAllCard(int idCampeonato) {
         List<Tarjeta> lista = null;
         ResultSet rs;
 
         try {
             this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_CARD_PLAYER);
-
+            PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_CARD_ALL_PLAYER);
+            st.setInt(1, idCampeonato);
             rs = st.executeQuery();
             lista = new ArrayList();
             while (rs.next()) {
@@ -100,5 +97,62 @@ public class TarjetaDao extends Dao{
         return lista;
     }
     
+    
+    public List<Tarjeta> listPagarCard(int idCampeonato) {
+        List<Tarjeta> lista = null;
+        ResultSet rs;
+
+        try {
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_CARD_PAG_PLAYER);
+            st.setInt(1, idCampeonato);
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                Tarjeta tar = new Tarjeta();
+                tar.setIdTarjeta(rs.getInt("idTarjeta"));
+                tar.setNombreJugador(rs.getString("nombreJugador"));
+                tar.setNombreEquipo(rs.getString("nombreEquipo"));
+                tar.setNombreEquipoB(rs.getString("nombreEquipoB"));
+                tar.setTypeCard(rs.getString("tipoTarjeta"));
+                tar.setPagoTarjeta(rs.getBoolean("pagoTarjeta"));                
+                lista.add(tar);
+            }
+        } catch (SQLException e) {
+            System.err.println(e);
+        } finally {
+            this.CloseConection();
+        }
+
+        return lista;
+    }
+    
+    public List<Tarjeta> listCanCard(int idCampeonato) {
+        List<Tarjeta> lista = null;
+        ResultSet rs;
+
+        try {
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_CARD_CAN_PLAYER);
+            st.setInt(1, idCampeonato);
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                Tarjeta tar = new Tarjeta();
+                tar.setIdTarjeta(rs.getInt("idTarjeta"));
+                tar.setNombreJugador(rs.getString("nombreJugador"));
+                tar.setNombreEquipo(rs.getString("nombreEquipo"));
+                tar.setNombreEquipoB(rs.getString("nombreEquipoB"));
+                tar.setTypeCard(rs.getString("tipoTarjeta"));
+                tar.setPagoTarjeta(rs.getBoolean("pagoTarjeta"));                
+                lista.add(tar);
+            }
+        } catch (SQLException e) {
+            System.err.println(e);
+        } finally {
+            this.CloseConection();
+        }
+        return lista;
+    }
     
 }

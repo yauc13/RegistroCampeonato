@@ -47,6 +47,7 @@ public class PlanillaPartidoBean implements Serializable{
         dto.setUsuario((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario"));
         dto.setPartido((Partido) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("partido"));
         dto.setGrupo((Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo"));
+        enableButtonStart(dto);
     }
     
     

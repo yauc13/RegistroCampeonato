@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:panelGrid columns="2" cellpadding="10" id="panel1">
+        <h:form id="frmTar">
+            <p:tabView id="idTabviewTar">
+
+                <p:outputLabel value="#{adminChampionShipBean.campeonato.nombreCampeonato}/"/>
+                <p:tab title="Sin pagar" id="tabTarSin">
+                    <p:dataTable id="dataPagar" value="#{adminChampionShipBean.listaTarjetasPag}" var="tar" 
+                                 rows="5" paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" 
+                                 reflow="true"
+                                 >
+                        <f:facet name="footer">
+                                Registros (#{adminChampionShipBean.listaTarjetasPag.size()})
+                        </f:facet>
+                        <p:column headerText="id" width="5%">
+                            <p:outputLabel value="#{tar.idTarjeta}"/>
+                        </p:column>
+                        <p:column headerText="Jugador">
+                            <p:outputLabel value="#{tar.nombreJugador}"/>
+                        </p:column>
+                        <p:column headerText="Equipo">
+                            <p:outputLabel value="#{tar.nombreEquipo}"/>
+                        </p:column> 
+                        <p:column headerText="Tipo"  width="7%">
+                            <p:outputLabel value="#{tar.typeCard}"/>
+                        </p:column>
+                        <p:column headerText="Rival">
+                            <p:outputLabel value="#{tar.nombreEquipoB}"/>
+                        </p:column>
+                        <p:column headerText="pago" width="7%">
+                            <p:outputLabel value="#{tar.pagoTarjeta eq true? 'SI':'NO'}"/>
+                        </p:column>
+                        <p:column headerText="Pagar">
+                            <p:commandLink id="linkVPartidos" value="Pagar" actionListener="#{adminChampionShipBean.setTarjetaSel(tar)}" 
+                                           oncomplete="PF('wdgCanTar').show();"
+                                           update=":dlgCanTar"
+                                           />
+
+                        </p:column>
+
+                    </p:dataTable>
+                </p:tab>
+
+                <p:tab title="Canceladas" id="tabTarCan">
+                    <p:dataTable id="dataCan" value="#{adminChampionShipBean.listaTarjetasCan}" var="tar" 
+                                 rows="5" paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" 
+                                 reflow="true"
+                                 >
+                        <f:facet name="footer">
+                                Registros (#{adminChampionShipBean.listaTarjetasCan.size()})
+                        </f:facet>
+                        <p:column headerText="id" width="5%">
+                            <p:outputLabel value="#{tar.idTarjeta}"/>
+                        </p:column>
+                        <p:column headerText="Jugador">
+                            <p:outputLabel value="#{tar.nombreJugador}"/>
+                        </p:column>
+                        <p:column headerText="Equipo">
+                            <p:outputLabel value="#{tar.nombreEquipo}"/>
+                        </p:column> 
+                        <p:column headerText="Tipo"  width="7%">
+                            <p:outputLabel value="#{tar.typeCard}"/>
+                        </p:column>
+                        <p:column headerText="Rival">
+                            <p:outputLabel value="#{tar.nombreEquipoB}"/>
+                        </p:column>
+                        <p:column headerText="pago" width="7%">
+                            <p:outputLabel value="#{tar.pagoTarjeta eq true? 'SI':'NO'}"/>
+                        </p:column>
+                        <p:column headerText="Pagar">
+                            <p:commandLink id="linkVPartidos" value="Pagar" actionListener="#{adminChampionShipBean.setTarjetaSel(tar)}" 
+                                           oncomplete="PF('wdgCanTar').show();"
+                                           update=":dlgCanTar"
+                                           />
+
+                        </p:column>
+
+                    </p:dataTable>
+                </p:tab>
+                <p:tab title="Todos" id="tabTarAll">
+                    <p:dataTable id="data" value="#{adminChampionShipBean.listaTarjetas}" var="tar" 
+                                 rows="5" paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" 
+                                 reflow="true"
+                                 >
+                        <f:facet name="footer">
+                                Registros (#{adminChampionShipBean.listaTarjetas.size()})
+                        </f:facet>
+                        <p:column headerText="id" width="5%">
+                            <p:outputLabel value="#{tar.idTarjeta}"/>
+                        </p:column>
+                        <p:column headerText="Jugador">
+                            <p:outputLabel value="#{tar.nombreJugador}"/>
+                        </p:column>
+                        <p:column headerText="Equipo">
+                            <p:outputLabel value="#{tar.nombreEquipo}"/>
+                        </p:column> 
+                        <p:column headerText="Tipo" width="7%">
+                            <p:outputLabel value="#{tar.typeCard}"/>
+                        </p:column>
+                        <p:column headerText="Rival">
+                            <p:outputLabel value="#{tar.nombreEquipoB}"/>
+                        </p:column>
+                        <p:column headerText="pago" width="7%">
+                            <p:outputLabel value="#{tar.pagoTarjeta eq true? 'SI':'NO'}"/>
+                        </p:column>
+                        <p:column headerText="Pagar" width="8%">
+                            <p:commandLink id="linkVPartidos" value="Pagar" actionListener="#{adminChampionShipBean.setTarjetaSel(tar)}" 
+                                           oncomplete="PF('wdgCanTar').show();"
+                                           update=":dlgCanTar"
+                                           />
+
+                        </p:column>
+
+                    </p:dataTable>
+                </p:tab>
+
+
+            </p:tabView>
+        </h:form>
+    </h:panelGrid>
+    
+</ui:composition>
+

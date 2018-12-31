@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:panelGrid columns="2" cellpadding="10" id="panelTar">
+        <h:form id="frm1">
+            <p:outputLabel value="#{adminChampionShipBean.campeonato.nombreCampeonato}/"/>
+            <p:dataTable id="data" value="#{adminChampionShipBean.listaGoleadores}" var="goleador" 
+                         rows="5" paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" 
+                         reflow="true"
+                         >
+                <p:column headerText="pos" width="5%">
+                    <p:outputLabel value="#{adminChampionShipBean.listaGoleadores.indexOf(goleador)+1}"/>
+                </p:column>
+                <p:column headerText="Jugador">
+                    <p:outputLabel value="#{goleador.nombreJugador}"/>
+                </p:column>
+                <p:column headerText="Equipo">
+                    <p:outputLabel value="#{goleador.nombreEquipo}"/>
+                </p:column> 
+                <p:column headerText="Goles">
+                    <p:outputLabel value="#{goleador.numGol}"/>
+                </p:column>
+                <p:column headerText="Ver">
+                    <p:commandLink id="linkVPartidos" value="Ver" action="#" 
+
+                                   />
+
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+    </h:panelGrid>
+
+</ui:composition>
+

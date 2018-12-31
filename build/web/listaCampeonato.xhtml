@@ -51,6 +51,7 @@
                                                       actionListener="#{campeonatoBean.preparedNew()}"
                                                       update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
                                                       icon="ui-icon-circle-plus"
+                                                      
                                                       />
                                 </div>
                                 <div class="col-md-10 col-xs-10 col-sm-10">
@@ -59,7 +60,7 @@
                             </div>
                         </f:facet>
                     <p:column headerText="id" width="5%">
-                        <p:outputLabel value="#{camp.idCampeonato}"  />
+                        <p:outputLabel value="#{camp.idCampeonato}"  styleClass="btnTarAma"/>
                     </p:column>
                     <p:column headerText="Campeonato" width="55%">
                         <p:outputLabel value="#{camp.nombreCampeonato}" />
@@ -87,6 +88,7 @@
                                          actionListener="#{campeonatoBean.preparedEditChampionShip(camp)}"
                                          oncomplete="PF('wdgDelete').show();"
                                          style="margin-left: 7px;"
+                                         
                                          />
                     </p:column>              
                 </p:dataTable>
