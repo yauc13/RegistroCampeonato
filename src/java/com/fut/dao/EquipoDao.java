@@ -190,4 +190,33 @@ public class EquipoDao extends Dao {
         this.CloseConection();
         }
     }
+    
+    public List<Equipo> listarPagoEquipos(int idCampeonato){
+            List<Equipo> lista = null;
+            ResultSet rs;
+            
+            try{
+                this.ConectionDataBase();
+                //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_LIST_TEAM_PAY);
+                st.setInt(1, idCampeonato);
+                rs = st.executeQuery();
+                lista = new ArrayList();
+                while(rs.next()){
+                    Equipo cam = new Equipo();
+                    cam.setIdEquipo(rs.getInt("idEquipo"));
+                    cam.setNombreEquipo(rs.getString("nombreEquipo"));
+                    cam.setTotalPagoEquipo(rs.getInt("totalPago"));
+                    
+                    lista.add(cam);                
+                }
+            }catch(SQLException e){
+                System.err.println(e);
+            }finally{
+                this.CloseConection();
+            }
+        
+        return lista;   
+    } 
+    
 }

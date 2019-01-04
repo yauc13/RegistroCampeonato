@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -528,10 +529,15 @@ public class PartidoBean implements Serializable{
                   listEquipoFinal = listEquipo;                 
             }
             
+            if(!listEquipoFinal.isEmpty()){
             for (Equipo p:listEquipoFinal){                
                 SelectItem selectItem = new SelectItem(p.getIdEquipo(), p.getNombreEquipo());
                 selectItemOneEquipoB.add(selectItem);
                 }
+            }else{
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "El equipo ya ha registrado todos sus partidos");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
                                                     
         } catch (Exception ex) {
             Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);

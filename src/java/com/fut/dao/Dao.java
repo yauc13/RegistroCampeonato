@@ -8,6 +8,8 @@ package com.fut.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -31,7 +33,8 @@ public class Dao {
         cn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/torneo?user=postgres&password=password");
     }catch (ClassNotFoundException | SQLException e){
         System.out.println(e+"EXCEPTION CONEXION DB");
-        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo conectar a la basae de datos");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
     }
     

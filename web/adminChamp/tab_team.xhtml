@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:panelGrid columns="2" cellpadding="10">
+        <h:form id="frmEquipo">
+
+            <p:commandButton value="Nuevo Equipo" oncomplete="PF('wdgDatosEquipo').show();" 
+                             actionListener="#{equipoBean.setAccion('Registrar')}" 
+                             update="idTabviewVistaCampeonato:dlgDatosEquipo" 
+                             />
+
+            <p:dataTable id="dataEquipo" value="#{equipoBean.listaEquipo}" var="equipo" >
+                <p:column headerText="id" width="5%">
+                    <p:outputLabel value="#{equipo.idEquipo}"/>
+                </p:column>
+                <p:column headerText="Equipo">
+                    <p:outputLabel value="#{equipo.nombreEquipo}"/>
+                </p:column>
+                <p:column headerText="pago">
+                    <p:outputLabel value="#{equipo.idUsuario}"/>
+                </p:column> 
+                <p:column headerText="Ver Jugadores">
+                    <p:commandLink value="Ver Jugadores" action="#{equipoBean.verJugadoresEquipo(equipo)}" update="dataEquipo"
+                                   onclick="PrimeFaces.monitorDownload(start, stop);"
+                                   />
+                </p:column>    
+                <p:column headerText="Modificar">
+                    <p:commandLink value="Modificar" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatosEquipo').show();" update="idTabviewVistaCampeonato:dlgDatosEquipo" disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
+                </p:column>
+                <p:column headerText="Eliminar">
+                    <p:commandLink value="Eliminar" actionListener="#{equipoBean.eliminar(equipo)}" update="dataEquipo"   disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+
+
+    </h:panelGrid>
+    
+       <p:dialog header="Registrar o Modificar Equipos" widgetVar="wdgDatosEquipo" id="dlgDatosEquipo">
+                    <h:form>
+                        <p:growl autoUpdate="true" showDetail="true"/>
+                        <p:outputLabel value="Nombre Equipo" for="txtNombre"/>
+                        <p:inputText id="txtNombre" required="true" value="#{equipoBean.equipo.nombreEquipo}"/>
+
+                        <p:commandButton value="#{equipoBean.accion}"  actionListener="#{equipoBean.operar()}"
+                                         oncomplete="PF('wdgDatosEquipo').hide();"
+                                         update="idTabviewVistaCampeonato:frmEquipo"
+                                         />
+                        <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatosEquipo').hide();"/> 
+                    </h:form>
+                </p:dialog>
+
+</ui:composition>
+
+

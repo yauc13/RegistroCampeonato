@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.fut.bean;
+package com.fut.logic;
 
+import com.fut.bean.AdminChampionShipBean;
+import com.fut.bean.PartidoBean;
 import com.fut.dao.EquipoDao;
 import com.fut.dao.GrupoDao;
 import com.fut.dao.JornadaDao;
@@ -14,7 +16,6 @@ import com.fut.dao.PlayOffDao;
 import com.fut.dao.TarjetaDao;
 import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
-
 import com.fut.model.Grupo;
 import com.fut.model.Jornada;
 import com.fut.model.Jugador;
@@ -23,30 +24,22 @@ import com.fut.model.PlayOff;
 import com.fut.model.TablaEquipos;
 import com.fut.model.Tarjeta;
 import com.fut.model.Usuario;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.event.TabChangeEvent;
 
 /**
  *
- * @author Yeison Andres Urrea Chaves
- * 
+ * @author YeisonUrrea
  */
-
-@ManagedBean
-@SessionScoped
-
-public class AdminChampionShipBean implements Serializable{
-    private Grupo grupo = new Grupo();
+public class AdminChampionshipBo {
+    
+     private Grupo grupo = new Grupo();
     private PlayOff playOff = new PlayOff();
     private Campeonato campeonato = new Campeonato();
     private Usuario usuario = new Usuario();
@@ -64,7 +57,6 @@ public class AdminChampionShipBean implements Serializable{
     private List<Jornada> listaJornada;
     private List<PlayOff> listaPlayOff;
     private List<Partido> listaPartidosJornada;
-    private List<Equipo> listaPagoEquipos;
     private String accion;
    
     private int rowSelJor; //columna de jornada expandida
@@ -81,19 +73,8 @@ public class AdminChampionShipBean implements Serializable{
     private GrupoDao gruDao = new GrupoDao();
     private PlayOffDao plaDao = new PlayOffDao();
     private TarjetaDao tarDao = new TarjetaDao();
-    private EquipoDao equDao = new EquipoDao();
     
-    public AdminChampionShipBean() {
-        partidoSelecJor = new Partido();
-        rowSelJor = 0;
 
-        campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
-        listaGoleadores = jugDao.listarGoleadores(campeonato);
-        listaTarjetas = tarDao.listAllCard(campeonato.getIdCampeonato());
-        listaTarjetasPag = tarDao.listPagarCard(campeonato.getIdCampeonato());
-        listaTarjetasCan = tarDao.listCanCard(campeonato.getIdCampeonato());
-        listaPagoEquipos = equDao.listarPagoEquipos(campeonato.getIdCampeonato());
-    }
     
     public int verIdCampeonato(){
         Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
@@ -168,7 +149,7 @@ public class AdminChampionShipBean implements Serializable{
     return parDao.listarPartidosJornada(jor);
     }
     
-    public void deleteJornada(Jornada jor) {
+        public void deleteJornada(Jornada jor) {
     JornadaDao dao;    
         dao = new JornadaDao();
         boolean reg = dao.deleteJornada(jor);
@@ -215,10 +196,14 @@ public class AdminChampionShipBean implements Serializable{
     }
     }
     
-     public void registrarGrupo() {
+        public void registrarGrupo() {
+    GrupoDao dao;
+    
+        dao = new GrupoDao();
+        
         this.grupo.setIdCampeonato(campeonato.getIdCampeonato());
         this.grupo.setIdUsuario(usuario.getIdUsuario());       
-        if(gruDao.insertGroup(grupo)){
+        if(dao.insertGroup(grupo)){
            this.listar();
            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Creado");
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -361,11 +346,6 @@ public class AdminChampionShipBean implements Serializable{
     }
         
 
-    /* Metodos para Equipos*/
-    
-    
-    
-    
     
  private boolean isPostBack(){
         boolean rta;
@@ -402,6 +382,17 @@ public class AdminChampionShipBean implements Serializable{
     
     }
     
+  
+    
+
+
+    
+
+
+    
+
+    
+
     
     public void payCard() {
         if (tarDao.cancelarTarjeta(tarjetaSel)) {
@@ -729,47 +720,7 @@ public class AdminChampionShipBean implements Serializable{
     public void setListaTarjetasPag(List<Tarjeta> listaTarjetasPag) {
         this.listaTarjetasPag = listaTarjetasPag;
     }
-
-    public List<Equipo> getListaPagoEquipos() {
-         if(listaPagoEquipos==null){
-            listaPagoEquipos = new ArrayList<>();
-        }
-        return listaPagoEquipos;
-    }
-
-    public void setListaPagoEquipos(List<Equipo> listaPagoEquipos) {
-        this.listaPagoEquipos = listaPagoEquipos;
-    }
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-    
-    
-    
-   
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-        
-
 }

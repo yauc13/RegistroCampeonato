@@ -23,6 +23,7 @@ public class Equipo implements Serializable{
     int idUsuario;
     Jugador [] jugadoresEquipo;
     Grupo grupo;
+    int totalPagoEquipo;
 
     public int getIdUsuario() {
         return idUsuario;
@@ -116,6 +117,15 @@ public class Equipo implements Serializable{
         this.grupo = grupo;
     }
 
+    public int getTotalPagoEquipo() {
+        return totalPagoEquipo;
+    }
+
+    public void setTotalPagoEquipo(int totalPagoEquipo) {
+        this.totalPagoEquipo = totalPagoEquipo;
+    }
+
+    
     
     
 }

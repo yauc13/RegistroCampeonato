@@ -105,7 +105,7 @@ public class PartidoDao extends Dao{
                     
                     Equipo equipoA = new Equipo();
                     equipoA.setIdEquipo(rs.getInt("idEquipoA"));
-                    equipoA.setNombreEquipo(rs.getString("nombreEquipo"));                   
+                    equipoA.setNombreEquipo(rs.getString("nombreEquipoA"));                   
                     cam.setEquipoA(equipoA);                    
                     Equipo equipoB = new Equipo();
                     equipoB.setIdEquipo(rs.getInt("idEquipoA"));
@@ -142,25 +142,23 @@ public class PartidoDao extends Dao{
                 while(rs.next()){
                     Partido cam = new Partido();
                     //cam.setIdPartido(rs.getInt("idPartido"));
-                    cam.setIdPartido(rs.getInt(1));
-                    cam.setIdEquipoA(rs.getInt(2));
-                    cam.setIdEquipoB(rs.getInt(3));
-                    cam.setGolA(rs.getInt(4));
-                    cam.setGolB(rs.getInt(5));
-                    cam.setIdGrupo(rs.getInt(6));
-                    cam.setEstadoPartido(rs.getString(9));
-                    cam.setIdJornada(rs.getInt(10));
+                    cam.setIdPartido(rs.getInt("idPartido"));
+                    cam.setIdEquipoA(rs.getInt("idEquipoA"));
+                    cam.setIdEquipoB(rs.getInt("idEquipoB"));                  
+                    cam.setIdGrupo(rs.getInt("idGrupo"));
+                    cam.setEstadoPartido(rs.getString("estadoPartido"));
+                    cam.setIdJornada(rs.getInt("idJornada"));
                     
                     Equipo equipoA = new Equipo();
-                    equipoA.setIdEquipo(rs.getInt(2));
-                    equipoA.setNombreEquipo(rs.getString(7));                   
+                    equipoA.setIdEquipo(rs.getInt("idEquipoA"));
+                    equipoA.setNombreEquipo(rs.getString("nombreEquipoA"));                   
                     cam.setEquipoA(equipoA);                    
                     Equipo equipoB = new Equipo();
-                    equipoB.setIdEquipo(rs.getInt(3));
-                    equipoB.setNombreEquipo(rs.getString(8));                    
+                    equipoB.setIdEquipo(rs.getInt("idEquipoB"));
+                    equipoB.setNombreEquipo(rs.getString("nombreEquipoB"));                    
                     cam.setEquipoB(equipoB);
                     Grupo grupo = new Grupo();
-                    grupo.setIdCampeonato(rs.getInt(6));
+                    grupo.setIdCampeonato(rs.getInt("idGrupo"));
                     cam.setGrupo(grupo);
                     
                     lista.add(cam);
@@ -192,24 +190,22 @@ public class PartidoDao extends Dao{
                 while(rs.next()){
                     Partido cam = new Partido();
                     //cam.setIdPartido(rs.getInt("idPartido"));
-                    cam.setIdPartido(rs.getInt(1));
-                    cam.setIdEquipoA(rs.getInt(2));
-                    cam.setIdEquipoB(rs.getInt(3));
-                    cam.setGolA(rs.getInt(4));
-                    cam.setGolB(rs.getInt(5));
-                    cam.setIdGrupo(rs.getInt(6));
-                    cam.setEstadoPartido(rs.getString(9));
+                    cam.setIdPartido(rs.getInt("idPartido"));
+                    cam.setIdEquipoA(rs.getInt("idEquipoA"));
+                    cam.setIdEquipoB(rs.getInt("idEquipoB"));
+                    cam.setIdGrupo(rs.getInt("idGrupo"));
+                    cam.setEstadoPartido(rs.getString("estadoPartido"));
                     
                     Equipo equipoA = new Equipo();
-                    equipoA.setIdEquipo(rs.getInt(2));
-                    equipoA.setNombreEquipo(rs.getString(7));                   
+                    equipoA.setIdEquipo(rs.getInt("idEquipoA"));
+                    equipoA.setNombreEquipo(rs.getString("nombreEquipoA"));                   
                     cam.setEquipoA(equipoA);                    
                     Equipo equipoB = new Equipo();
-                    equipoB.setIdEquipo(rs.getInt(3));
-                    equipoB.setNombreEquipo(rs.getString(8));                    
+                    equipoB.setIdEquipo(rs.getInt("idEquipoB"));
+                    equipoB.setNombreEquipo(rs.getString("nombreEquipoB"));                    
                     cam.setEquipoB(equipoB);
                     Grupo grupo = new Grupo();
-                    grupo.setIdCampeonato(rs.getInt(6));
+                    grupo.setIdCampeonato(rs.getInt("idGrupo"));
                     cam.setGrupo(grupo);
                     
                     lista.add(cam);
@@ -243,24 +239,23 @@ public class PartidoDao extends Dao{
                     cam.setIdPartido(rs.getInt("idPartido"));
                     cam.setIdEquipoA(rs.getInt("idEquipoA"));
                     cam.setIdEquipoB(rs.getInt("idEquipoB"));
-                    cam.setGolA(rs.getInt("golA"));
-                    cam.setGolB(rs.getInt("golB"));
+                    
                     cam.setIdGrupo(rs.getInt("idGrupo"));
                     cam.setEstadoPartido(rs.getString("estadoPartido"));
-                    cam.setIdJornada(rs.getInt(11));
+                    cam.setIdJornada(rs.getInt("idJornada"));
                     
                     Equipo equipoA = new Equipo();
                     equipoA.setIdEquipo(rs.getInt("idEquipoA"));
-                    equipoA.setNombreEquipo(rs.getString(8));                   
+                    equipoA.setNombreEquipo(rs.getString("nombreEquipoA"));                   
                     cam.setEquipoA(equipoA);
                     
                     Equipo equipoB = new Equipo();
                     equipoB.setIdEquipo(rs.getInt("idEquipoB"));
-                    equipoB.setNombreEquipo(rs.getString(9));                    
+                    equipoB.setNombreEquipo(rs.getString("nombreEquipoB"));                    
                     cam.setEquipoB(equipoB);
                     
                     Grupo grupo = new Grupo();
-                    grupo.setIdGrupo(rs.getInt(6));
+                    grupo.setIdGrupo(rs.getInt("idGrupo"));
                     grupo.setNombreGrupo(rs.getString("nombreGrupo"));
                     cam.setGrupo(grupo);
                     
@@ -283,7 +278,7 @@ public class PartidoDao extends Dao{
             
             try{
                 this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\",\"idGrupo\" FROM public.partido WHERE \"idGrupo\" = ? AND \"idEquipoA\"=? OR \"idEquipoB\"=?");
+                PreparedStatement st = this.getCn().prepareCall("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"idGrupo\" FROM public.partido WHERE \"idGrupo\" = ? AND \"idEquipoA\"=? OR \"idEquipoB\"=?");
                 st.setInt(1, camp.getIdGrupo());
                 st.setInt(2, idEquipo);
                 st.setInt(3, idEquipo);
@@ -295,8 +290,7 @@ public class PartidoDao extends Dao{
                     cam.setIdPartido(rs.getInt("idPartido"));
                     cam.setIdEquipoA(rs.getInt("idEquipoA"));
                     cam.setIdEquipoB(rs.getInt("idEquipoB"));
-                    cam.setGolA(rs.getInt("golA"));
-                    cam.setGolB(rs.getInt("golB"));
+                    
                     cam.setIdGrupo(rs.getInt("idGrupo"));
                     EquipoDao equipoDao = new EquipoDao();
                     Equipo equipo = equipoDao.leerID(rs.getInt("idEquipoA"));
