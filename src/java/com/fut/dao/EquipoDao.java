@@ -7,6 +7,7 @@ package com.fut.dao;
 
 import com.fut.model.Equipo;
 import com.fut.model.Grupo;
+import com.fut.model.PagoPlanilla;
 import com.fut.util.SqlAdminFutSal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -191,14 +192,14 @@ public class EquipoDao extends Dao {
         }
     }
     
-    public List<Equipo> listarPagoEquipos(int idCampeonato){
+    public List<Equipo> listarEquiposTotalPago(int idCampeonato){
             List<Equipo> lista = null;
             ResultSet rs;
             
             try{
                 this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_LIST_TEAM_PAY);
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_LIST_TEAM_ALL_PAY);
                 st.setInt(1, idCampeonato);
                 rs = st.executeQuery();
                 lista = new ArrayList();
@@ -218,5 +219,58 @@ public class EquipoDao extends Dao {
         
         return lista;   
     } 
+    
+        public boolean insertPayTeam(PagoPlanilla pago){
+        boolean reg = false;
+        try{
+            this.ConectionDataBase();
+            
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_TEAM_PAY);
+            st.setInt(1, pago.getIdCampeonato());
+            st.setInt(2, pago.getIdEquipo());
+            st.setDate(3, new java.sql.Date((pago.getFechaPago()).getTime()));
+            st.setInt(4, pago.getValorPago());
+            int resp = st.executeUpdate();
+            if(resp>0){
+            reg = true;
+            }
+        }catch(SQLException e){
+            System.err.println(e);
+        }finally{
+        this.CloseConection();
+        }
+        return reg;
+    }
+        
+    public List<PagoPlanilla> listarPagosPorEquipo(int idEquipo){
+            List<PagoPlanilla> lista = null;
+            ResultSet rs;
+            
+            try{
+                this.ConectionDataBase();
+                //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_LIST_PAY_BY_TEAM);
+                st.setInt(1, idEquipo);
+                rs = st.executeQuery();
+                lista = new ArrayList();
+                while(rs.next()){
+                    PagoPlanilla cam = new PagoPlanilla();
+                    cam.setIdPagoEquipo(rs.getInt("idPagoEquipo"));
+                    
+                    cam.setFechaPago(rs.getDate("fechaPago"));
+                    cam.setValorPago(rs.getInt("valorPago"));
+                    
+                    lista.add(cam);                
+                }
+            }catch(SQLException e){
+                System.err.println(e);
+            }finally{
+                this.CloseConection();
+            }
+        
+        return lista;   
+    } 
+    
+    
     
 }

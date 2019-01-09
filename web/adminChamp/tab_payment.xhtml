@@ -3,7 +3,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:panelGrid columns="2" cellpadding="10">
         <h:form id="frmPay">
@@ -18,12 +19,12 @@
                 <p:column headerText="pago">
                     <p:outputLabel value="#{equipo.totalPagoEquipo}"/>
                 </p:column> 
-                 
+
                 <p:column headerText="Agregar pago">
-                    <p:commandLink value="pago" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatosPay').show();" update="idTabviewVistaCampeonato:dlgDatosPay" />
+                    <p:commandLink value="pago" actionListener="#{adminChampionShipBean.selectedTeamPay(equipo)}"  oncomplete="PF('wdgDatosPay').show();" update="idTabviewVistaCampeonato:dlgDatosPay" />
                 </p:column>
                 <p:column headerText="ver">
-                    <p:commandLink value="ver pagos" actionListener="#{equipoBean.eliminar(equipo)}" update="dataEquipo"  />
+                    <p:commandLink value="ver pagos" actionListener="#{adminChampionShipBean.listPayTeam(equipo)}" oncomplete="PF('wdgDatosPayList').show();" update="idTabviewVistaCampeonato:dlgDatosPayList" />
                 </p:column>
 
             </p:dataTable>
@@ -31,20 +32,74 @@
 
 
     </h:panelGrid>
-    
-       <p:dialog header="Agregar un Pago" widgetVar="wdgDatosPay" id="dlgDatosPay">
-                    <h:form>
-                        <p:growl autoUpdate="true" showDetail="true"/>
-                        <p:outputLabel value="Nombre Equipo" for="txtNombre"/>
-                        <p:inputText id="txtNombre" required="true" value="#{equipoBean.equipo.nombreEquipo}"/>
 
-                        <p:commandButton value="#{equipoBean.accion}"  actionListener="#{equipoBean.operar()}"
-                                         oncomplete="PF('wdgDatosPay').hide();"
-                                         update="idTabviewVistaCampeonato:frmPay"
-                                         />
-                        <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatosPay').hide();"/> 
-                    </h:form>
-                </p:dialog>
+    <p:dialog header="Agregar un Pago" widgetVar="wdgDatosPay" id="dlgDatosPay" modal="true">
+        <h:form>
+            <p:growl autoUpdate="true" showDetail="true"/>
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Nombre Equipo" />
+                <p:inputText  value="#{adminChampionShipBean.equipoPago.nombreEquipo}"  readonly="true"/>
+                
+            <p:outputLabel value="Fecha" for="txtFecha"/>
+           
+            <p:calendar id="txtFecha" navigator="true" pattern="yyyy-MM-dd" locale="pt"
+                                        styleClass="dateTimeField"  value="#{adminChampionShipBean.pagoPlanilla.fechaPago}"
+                                         yearRange="c-100:c" required="true"/>
+            <p:outputLabel value="Valor" for="txtValor"/>
+            <p:inputText id="txtValor" required="true" value="#{adminChampionShipBean.pagoPlanilla.valorPago}"/>
+
+            <p:commandButton value="Agregar Pago"  actionListener="#{adminChampionShipBean.payTeam()}"
+                             oncomplete="PF('wdgDatosPay').hide();"
+                             update="idTabviewVistaCampeonato:frmPay"
+                             />
+            <p:commandButton value="Cancelar"  immediate="true" oncomplete="PF('wdgDatosPay').hide();"/> 
+            </h:panelGrid>
+        </h:form>
+    </p:dialog>
+    
+      <p:dialog header="Lista de Pagos" widgetVar="wdgDatosPayList" id="dlgDatosPayList"
+                modal="true" width="70%">
+        <h:form>
+            <p:growl autoUpdate="true" showDetail="true"/>
+             
+                 <h:panelGrid columns="1" class="center_content">
+                
+               
+                <p:dataTable id="dataEquipo" value="#{adminChampionShipBean.listaPagoPlanilla}"
+                          var="pago" >
+                 <f:facet  name="header">
+                     <div class="row">
+                         <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
+                             
+                         </div>
+                         <div class="col-md-10 col-xs-10 col-sm-10">
+                             <p:outputLabel value="Pagos de #{adminChampionShipBean.equipoPago.nombreEquipo} = #{adminChampionShipBean.equipoPago.totalPagoEquipo}"/>
+                         </div>
+                     </div>
+                 </f:facet>
+                 <f:facet name="footer">
+                     Registros (#{adminChampionShipBean.listaPagoPlanilla.size()})
+                                    </f:facet>
+                 
+                <p:column headerText="id" width="5%">
+                    <p:outputLabel value="#{pago.idPagoEquipo}"/>
+                </p:column>
+                <p:column headerText="Fecha">
+                    <p:outputLabel value="#{pago.fechaPago}"/>
+                </p:column>
+                <p:column headerText="Valor">
+                    <p:outputLabel value="#{pago.valorPago}"/>
+                </p:column> 
+
+               
+            </p:dataTable>
+                    
+            <p:commandButton value="Atras"  immediate="true" oncomplete="PF('wdgDatosPayList').hide();"/> 
+            
+            </h:panelGrid>
+            
+        </h:form>
+    </p:dialog>
 
 </ui:composition>
 

@@ -29,6 +29,7 @@ public class JornadaDao extends Dao {
             PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_FIXTURE);
             st.setString(1, d.getNombreJornada());
             st.setInt(2, d.getIdCampeonato());
+            st.setDate(3, new java.sql.Date((d.getFechaJornada()).getTime()));
             int res = st.executeUpdate();
             if(res>0){
             reg = true;
@@ -55,6 +56,7 @@ public class JornadaDao extends Dao {
                     Jornada cam = new Jornada();
                     cam.setIdJornada(rs.getInt("idJornada"));
                     cam.setNombreJornada(rs.getString("nombreJornada"));
+                    cam.setFechaJornada(rs.getDate("fechaJornada"));
                     lista.add(cam);               
                 }
             }catch(SQLException e){

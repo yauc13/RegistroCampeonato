@@ -15,7 +15,10 @@ import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -487,20 +490,27 @@ public class PartidoDao extends Dao{
         }
     }
     
-    public void agregarPartidoJornada(int idJornada, int idPartido) {
-        
+    public boolean agregarPartidoJornada(Jornada jornada, int idPartido, Date hora) {
+        boolean resp= false;
         try{
             this.ConectionDataBase();
             PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.ADD_MATCH_TO_JORNADA);
-            st.setInt(1, idJornada);                          
-            st.setInt(2, idPartido);  
-            st.executeUpdate();
+            int count = 1;
+            st.setInt(count++, jornada.getIdJornada());                                      
+            st.setDate(count++, new java.sql.Date((hora).getTime()));
+            //st.setDate(count++, new java.sql.Date(hora.getTime()));
+            st.setInt(count++, idPartido); 
+            int res=st.executeUpdate();
+            if(res>0){
+                resp=true;
+            }
 
         }catch(SQLException e){
             System.err.println(e);
         }finally{
         this.CloseConection();
         }
+        return resp;
     }
     
         public boolean finalizarPartido(Partido cam){
@@ -508,13 +518,12 @@ public class PartidoDao extends Dao{
         try{
             this.ConectionDataBase();
             PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.FINISH_MATCH);           
-            st.setInt(1, cam.getGolA());  
-            st.setInt(2, cam.getGolB()); 
-            st.setString(3, "Finalizado"); 
-            st.setInt(4, cam.getIdPartido());
+
+            st.setString(1, "Finalizado"); 
+            st.setInt(2, cam.getIdPartido());
              
             int res = st.executeUpdate();
-             if(res>1){
+             if(res>0){
                  resp=true;
              } 
         }catch(SQLException e){

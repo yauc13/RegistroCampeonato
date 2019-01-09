@@ -140,7 +140,7 @@ public class AdminChampionshipBo {
         
     public void agregarPartidoJornada()  {  
         
-        parDao.agregarPartidoJornada(jornada.getIdJornada(), itemPartidoSelected);    
+        //parDao.agregarPartidoJornada(jornada.getIdJornada(), itemPartidoSelected);    
         rowSelJor = jornada.getIdJornada();
         this.listar();    
     }

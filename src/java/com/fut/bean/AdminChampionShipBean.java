@@ -18,13 +18,17 @@ import com.fut.model.Equipo;
 import com.fut.model.Grupo;
 import com.fut.model.Jornada;
 import com.fut.model.Jugador;
+import com.fut.model.PagoPlanilla;
 import com.fut.model.Partido;
 import com.fut.model.PlayOff;
 import com.fut.model.TablaEquipos;
 import com.fut.model.Tarjeta;
 import com.fut.model.Usuario;
 import java.io.Serializable;
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,6 +58,8 @@ public class AdminChampionShipBean implements Serializable{
     private Jornada jornadaNew = new Jornada();
     private Partido partidoSelecJor;
     private Tarjeta tarjetaSel = new Tarjeta();
+    private PagoPlanilla pagoPlanilla;
+    private Equipo equipoPago;
     private List<Grupo> listaGrupo;
     private List<TablaEquipos> listaPosiciones;
     private List<Equipo> listaEquipos;
@@ -65,6 +71,7 @@ public class AdminChampionShipBean implements Serializable{
     private List<PlayOff> listaPlayOff;
     private List<Partido> listaPartidosJornada;
     private List<Equipo> listaPagoEquipos;
+    private List<PagoPlanilla> listaPagoPlanilla; //lista de los pagos de planilla de de un equipo
     private String accion;
    
     private int rowSelJor; //columna de jornada expandida
@@ -73,6 +80,7 @@ public class AdminChampionShipBean implements Serializable{
     private List<SelectItem> selectItemOnePartidos; //para seleccionar grupo segun el campeonato
     private int itemGrupoSelected;
     private int itemPartidoSelected; //partido seleccionado para agregar a una jornada
+    private Date horaPartido; //hora del partido
     
     
     private JugadorDao jugDao = new JugadorDao();
@@ -92,7 +100,7 @@ public class AdminChampionShipBean implements Serializable{
         listaTarjetas = tarDao.listAllCard(campeonato.getIdCampeonato());
         listaTarjetasPag = tarDao.listPagarCard(campeonato.getIdCampeonato());
         listaTarjetasCan = tarDao.listCanCard(campeonato.getIdCampeonato());
-        listaPagoEquipos = equDao.listarPagoEquipos(campeonato.getIdCampeonato());
+        listaPagoEquipos = equDao.listarEquiposTotalPago(campeonato.getIdCampeonato());
     }
     
     public int verIdCampeonato(){
@@ -156,12 +164,26 @@ public class AdminChampionShipBean implements Serializable{
     private void limpiarJornada(){
         this.jornadaNew = new Jornada();
     }
+    
+    public void preparedAddMatchToFixture(Jornada jor){
+        this.jornada = jor;
+        this.horaPartido = jornada.getFechaJornada();
+        System.err.println("---horaPartido:"+horaPartido);
+        
+    }
         
     public void agregarPartidoJornada()  {  
-        
-        parDao.agregarPartidoJornada(jornada.getIdJornada(), itemPartidoSelected);    
-        rowSelJor = jornada.getIdJornada();
-        this.listar();    
+        System.err.println("---horaPartido despues:"+horaPartido);
+        if(parDao.agregarPartidoJornada(jornada, itemPartidoSelected, horaPartido)){
+            rowSelJor = jornada.getIdJornada();
+            this.listar();   
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Partido agregado a la jornada");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo agregar el partido");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+         
     }
     
     public List<Partido> listarPartidosJornada(Jornada jor){
@@ -363,7 +385,31 @@ public class AdminChampionShipBean implements Serializable{
 
     /* Metodos para Equipos*/
     
+    public void selectedTeamPay(Equipo equ){
+        this.equipoPago = equ;
+    }
     
+    public void payTeam(){
+        this.pagoPlanilla.setIdCampeonato(campeonato.getIdCampeonato());
+        this.pagoPlanilla.setIdEquipo(equipoPago.getIdEquipo());
+        if(equDao.insertPayTeam(pagoPlanilla)){
+        this.equipoPago = null;
+        this.pagoPlanilla = null;
+        listaPagoEquipos = equDao.listarEquiposTotalPago(campeonato.getIdCampeonato());
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Se Agrego el pago");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo agregar el pago");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            this.equipoPago = null;
+            this.pagoPlanilla = null;
+        }
+    }
+    
+    public void listPayTeam(Equipo equ){
+        selectedTeamPay(equ);
+        this.listaPagoPlanilla = equDao.listarPagosPorEquipo(equipoPago.getIdEquipo());       
+    }
     
     
     
@@ -740,6 +786,61 @@ public class AdminChampionShipBean implements Serializable{
     public void setListaPagoEquipos(List<Equipo> listaPagoEquipos) {
         this.listaPagoEquipos = listaPagoEquipos;
     }
+
+    public PagoPlanilla getPagoPlanilla() {
+        if(pagoPlanilla==null){
+            pagoPlanilla = new PagoPlanilla();
+        }
+        return pagoPlanilla;
+    }
+
+    public void setPagoPlanilla(PagoPlanilla pagoPlanilla) {
+        this.pagoPlanilla = pagoPlanilla;
+    }
+
+    public EquipoDao getEquDao() {
+        return equDao;
+    }
+
+    public void setEquDao(EquipoDao equDao) {
+        this.equDao = equDao;
+    }
+
+    public Equipo getEquipoPago() {
+        if(equipoPago==null){
+            equipoPago = new Equipo();
+        }
+        return equipoPago;
+    }
+
+    public void setEquipoPago(Equipo equipoPago) {
+        this.equipoPago = equipoPago;
+    }
+
+    public List<PagoPlanilla> getListaPagoPlanilla() {
+        if(listaPagoPlanilla==null){
+            listaPagoPlanilla = new ArrayList<>();
+        }
+        return listaPagoPlanilla;
+    }
+
+    public void setListaPagoPlanilla(List<PagoPlanilla> listaPagoPlanilla) {
+        this.listaPagoPlanilla = listaPagoPlanilla;
+    }
+
+    public Date getHoraPartido() {
+        return horaPartido;
+    }
+
+    public void setHoraPartido(Date horaPartido) {
+        this.horaPartido = horaPartido;
+    }
+    
+    
+    
+    
+    
+    
     
     
     

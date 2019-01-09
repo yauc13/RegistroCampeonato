@@ -110,8 +110,15 @@
                           modal="true">
                     <h:form>
                       
+                        
                         <p:outputLabel value="Nombre Jornada" for="txtJornada"/>
                         <p:inputText id="txtJornada" required="true" value="#{adminChampionShipBean.jornadaNew.nombreJornada}"/>
+                        <p:outputLabel value="Fecha" for="txtFecha"/>
+           
+                         <p:calendar id="txtFecha" navigator="true" pattern="yyyy-MM-dd" locale="pt"
+                                     styleClass="dateTimeField"  value="#{adminChampionShipBean.jornadaNew.fechaJornada}"
+                                         yearRange="c-100:c" required="true"/>
+                        
 
                         <p:commandButton value="#{adminChampionShipBean.accion}"  actionListener="#{adminChampionShipBean.operarJornada()}"
                                          oncomplete="PF('wdgJornada').hide();"
@@ -141,6 +148,7 @@
                           showEffect="fade" hideEffect="fade" resizable="false">
                     <h:form>
                         <p:growl autoUpdate="true" showDetail="true"/>
+                        <h:panelGrid columns="2">
                          <p:outputLabel value="Grupo o playoff:" for="idSelGrupo"/>
                         <p:selectOneMenu id="idSelGrupoplay" required="true" value="#{adminChampionShipBean.itemGrupoSelected}">
                             <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
@@ -161,15 +169,21 @@
                         <p:selectOneMenu id="selPartido" required="true" value="#{adminChampionShipBean.itemPartidoSelected}" >
                             <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
                             <f:selectItems value="#{adminChampionShipBean.selectItemOnePartidos}"/>
-
+                      
                         </p:selectOneMenu>
 
-
+                        <p:outputLabel for="txtFecha" value="Hora:" />
+                        
+                        <p:calendar id="txtFecha" navigator="true" pattern="yyyy-MM-dd HH:mm:ss" locale="pt"
+                                     styleClass="dateTimeField"  value="#{adminChampionShipBean.horaPartido}"
+                                         yearRange="c-100:c" required="true"/>
+                        
                         <p:commandButton value="Agregar"  actionListener="#{adminChampionShipBean.agregarPartidoJornada()}"
                                          oncomplete="PF('wdgAddParJor').hide();"
                                          update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
                                          />
                         <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgAddParJor').hide();"/> 
+                        </h:panelGrid>
                     </h:form>
                 </p:dialog>
                 
