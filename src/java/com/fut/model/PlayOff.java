@@ -16,6 +16,7 @@ public class PlayOff {
    int numPartidos;
    int idCampeonato;
    List<Partido> listMatch;
+   List<Equipo> listTeam;
 
     public int getIdPlayOff() {
         return idPlayOff;
@@ -56,6 +57,16 @@ public class PlayOff {
     public void setListMatch(List<Partido> listMatch) {
         this.listMatch = listMatch;
     }
+
+    public List<Equipo> getListTeam() {
+        return listTeam;
+    }
+
+    public void setListTeam(List<Equipo> listTeam) {
+        this.listTeam = listTeam;
+    }
+    
+    
    
    
 }

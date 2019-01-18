@@ -62,7 +62,7 @@ public class PlayOffDao extends Dao{
         return resp;
     }
      
-    public List<PlayOff> listGroupByChampionShip(Campeonato camp){
+    public List<PlayOff> listPlayoffByChampionShip(int idChampionship){
             List<PlayOff> lista = null;
             ResultSet rs;
             
@@ -70,7 +70,7 @@ public class PlayOffDao extends Dao{
                 this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idGrupo, nombreGrupo,idUsuario FROM grupo WHERE idCampeonato = ?");
                 PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PLAYOFF_BY_CHAMPIONSHIP);
-                st.setInt(1, camp.getIdCampeonato());
+                st.setInt(1, idChampionship);
                 rs = st.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
@@ -89,6 +89,30 @@ public class PlayOffDao extends Dao{
             }
         
         return lista;   
+    }
+    
+    public PlayOff loadLatestMathPlayoff(int idChampionship){
+    PlayOff play=null;
+    ResultSet rs;           
+            try{
+                this.ConectionDataBase();                
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_LATEST_PLAYOFF_BY_CHAMPIONSHIP);
+                st.setInt(1, idChampionship);
+                rs = st.executeQuery();
+               
+                while(rs.next()){
+                    play = new PlayOff();
+                    play.setIdPlayOff(rs.getInt("idPlayOff"));
+                    play.setNamePlayOff(rs.getString("namePlayOff"));
+                    play.setNumPartidos(rs.getInt("numPartidos"));
+                    play.setIdCampeonato(rs.getInt("idCampeonato"));         
+                }
+            }catch(SQLException e){
+                System.err.println(e);
+            }finally{
+                this.CloseConection();
+            }
+    return play;
     }
     
     

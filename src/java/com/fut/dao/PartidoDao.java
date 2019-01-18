@@ -372,6 +372,7 @@ public class PartidoDao extends Dao{
                 int DG = rs.getInt("GF")-rs.getInt("GC");
                 
                 tablaEqui.setNombre(rs.getString("nombreEquipo"));
+                tablaEqui.setIdEquipo(rs.getInt("idEquipo"));
                 tablaEqui.setPuntos(puntos);
                 tablaEqui.setDF(DG);
                 tablaEqui.setGF(rs.getInt("GF"));

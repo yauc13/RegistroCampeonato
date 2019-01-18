@@ -12,6 +12,7 @@ import com.fut.dao.JugadorDao;
 import com.fut.dao.PartidoDao;
 import com.fut.dao.PlayOffDao;
 import com.fut.dao.TarjetaDao;
+import com.fut.logic.AdminChampionshipBo;
 import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 
@@ -91,7 +92,10 @@ public class AdminChampionShipBean implements Serializable{
     private TarjetaDao tarDao = new TarjetaDao();
     private EquipoDao equDao = new EquipoDao();
     
+    private AdminChampionshipBo bo;
+    
     public AdminChampionShipBean() {
+        bo = new AdminChampionshipBo();
         partidoSelecJor = new Partido();
         rowSelJor = 0;
 
@@ -351,8 +355,11 @@ public class AdminChampionShipBean implements Serializable{
     }
     
     public void preparedNewPlayOff(){
+        
         this.accion = "Registrar";
         this.limpiarPlayOff();
+        bo.calculateTeamClassifiedsOfGroups(campeonato.getIdCampeonato());
+        
     }
     
      private void limpiarPlayOff(){
@@ -427,10 +434,10 @@ public class AdminChampionShipBean implements Serializable{
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         
-        listaGrupo = dao.listGroupByChampionShip(campeonato);
+        listaGrupo = dao.listGroupByChampionShip(campeonato.getIdCampeonato());
         listaGoleadores = jugDao.listarGoleadores(campeonato);
         listaJornada = jorDao.listarJornadas(campeonato);
-        listaPlayOff = plaDao.listGroupByChampionShip(campeonato);
+        listaPlayOff = plaDao.listPlayoffByChampionShip(campeonato.getIdCampeonato());
         }
     
     }
@@ -441,10 +448,10 @@ public class AdminChampionShipBean implements Serializable{
         dao = new GrupoDao();
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");        
-        listaGrupo = dao.listGroupByChampionShip(campeonato);
+        listaGrupo = dao.listGroupByChampionShip(campeonato.getIdCampeonato());
         listaGoleadores = jugDao.listarGoleadores(campeonato);
         listaJornada = jorDao.listarJornadas(campeonato);
-        listaPlayOff = plaDao.listGroupByChampionShip(campeonato);
+        listaPlayOff = plaDao.listPlayoffByChampionShip(campeonato.getIdCampeonato());
     
     }
     
@@ -621,7 +628,7 @@ public class AdminChampionShipBean implements Serializable{
          try {
             this.selectItemOneGrupos = new ArrayList<>();
             
-            List<Grupo> listGrupo = gruDao.listGroupByChampionShip(campeonato);
+            List<Grupo> listGrupo = gruDao.listGroupByChampionShip(campeonato.getIdCampeonato());
             selectItemOneGrupos.clear();
             for (Grupo g:listGrupo){
             SelectItem selectItem = new SelectItem(g.getIdGrupo(),g.getNombreGrupo());

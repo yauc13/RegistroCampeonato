@@ -43,8 +43,9 @@ public class SqlAdminFutSal {
     /*DAO PLAYOFF*/
     public static final String INSERT_PLAYOFF = "INSERT INTO public.playoff(\"namePlayOff\", \"numPartidos\", \"idCampeonato\") VALUES (?, ?, ?);";
     public static final String UPDATE_PLAYOFF = "UPDATE public.playoff SET  \"namePlayOff\"=?, \"numPartidos\"=? WHERE \"idPlayOff\"=?;";        
-    public static final String  SELECT_PLAYOFF_BY_CHAMPIONSHIP =  "SELECT \"idPlayOff\", \"namePlayOff\",\"numPartidos\", \"idCampeonato\" FROM public.playoff WHERE \"idCampeonato\" = ? ORDER BY \"idPlayOff\"";;    
-
+    public static final String SELECT_PLAYOFF_BY_CHAMPIONSHIP =  "SELECT \"idPlayOff\", \"namePlayOff\",\"numPartidos\", \"idCampeonato\" FROM public.playoff WHERE \"idCampeonato\" = ? ORDER BY \"idPlayOff\"";;    
+    public static final String SELECT_LATEST_PLAYOFF_BY_CHAMPIONSHIP = "SELECT \"idPlayOff\", \"namePlayOff\", \"numPartidos\", \"idCampeonato\" FROM public.playoff where  \"idCampeonato\" = ? order by \"idPlayOff\" desc limit 1";
+    
     /*DAO EQUIPO*/
     public static final String  SELECT_TEAM_CLASSIFIED = "SELECT \"idEquipo\", \"nombreEquipo\", \"nombreGrupo\" FROM public.equipo equ INNER JOIN public.grupo  gru ON equ.\"idGrupoEquipo\" = gru.\"idGrupo\" INNER JOIN public.campeonato cam ON gru.\"idCampeonato\" = cam.\"idCampeonato\" WHERE cam.\"idCampeonato\" = ? ORDER BY gru.\"nombreGrupo\" ASC";
     

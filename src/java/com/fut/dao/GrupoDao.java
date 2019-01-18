@@ -23,7 +23,7 @@ public class GrupoDao extends Dao {
         boolean reg = false;
         try{
             this.ConectionDataBase();
-            //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO grupo (nombreGrupo,idCampeonato,idUsuario) values(?,?,?)");
+           
             PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_GRUP);
             st.setString(1, group.getNombreGrupo());
             st.setInt(2, group.getNumClasificados());
@@ -42,7 +42,7 @@ public class GrupoDao extends Dao {
         return reg;
     }
         
-    public List<Grupo> listGroupByChampionShip(Campeonato camp){
+    public List<Grupo> listGroupByChampionShip(int idChampionship){
             List<Grupo> lista = null;
             ResultSet rs;
             
@@ -50,7 +50,7 @@ public class GrupoDao extends Dao {
                 this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idGrupo, nombreGrupo,idUsuario FROM grupo WHERE idCampeonato = ?");
                 PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_GROUP_BY_CHAMPIONSHIP);
-                st.setInt(1, camp.getIdCampeonato());
+                st.setInt(1, idChampionship);
                 rs = st.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){

@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class TablaEquipos {
     private String Nombre;
+    private int idEquipo;
     private int puntos;
     private int DF;
     private int GF;
@@ -178,6 +179,15 @@ public class TablaEquipos {
         this.PJ = PJ;
     }
 
+    public int getIdEquipo() {
+        return idEquipo;
+    }
+
+    public void setIdEquipo(int idEquipo) {
+        this.idEquipo = idEquipo;
+    }
+
+    
   
     
     
