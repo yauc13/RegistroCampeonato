@@ -17,7 +17,7 @@
                 <f:event type="preRenderView" listener="#{adminChampionShipBean.listarPosicionesGrupo()}" />
                 <f:event type="preRenderView" listener="#{partidoBean.listarInicio()}" />       
                 <f:event type="preRenderView" listener="#{equipoBean.listarInicio()}" />
-                <p:growl autoUpdate="true" showDetail="true"/>
+                <p:growl autoUpdate="true" showDetail="true" life="3000"/>
                 <div id="miga">
                     <h:form>
                         <p:breadCrumb> 
@@ -182,21 +182,20 @@
 
 
                 <p:dialog header="Registrar o Modificar Partidos" widgetVar="wdgDatos" id="dlgDatos" modal="true">
-                    <p:growl autoUpdate="true" showDetail="true"/>
+                    
                     <h:form>
                         <p:outputLabel value="Equipo A" for="idSelA"/>
 
                         <p:selectOneMenu  id="idSelA" required="true" value="#{partidoBean.codEquipoA}">
-                            <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
-                            <f:selectItems value="#{partidoBean.selectItemOneEquipo}"/>
-                            <p:ajax update="selectEB"/>
+                            <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
+                            <f:selectItems var="equA" value="#{partidoBean.selectItemOneEquipoA}" itemLabel="#{equA.nombreEquipo}" itemValue="#{equA.idEquipo}"/>
+                            <p:ajax update="selectEB" listener="#{partidoBean.loadTeamBMatch()}"/>
                         </p:selectOneMenu>
 
                         <p:outputLabel value="Equipo B" for="selectEB"/>
                         <p:selectOneMenu   id="selectEB" required="true" value="#{partidoBean.codEquipoB}">
                             <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
-                            <f:selectItems value="#{partidoBean.selectItemOneEquipoB}"/>
-
+                            <f:selectItems var="equB"  value="#{partidoBean.selectItemOneEquipoB}" itemLabel="#{equB.nombreEquipo}" itemValue="#{equB.idEquipo}"/>
                         </p:selectOneMenu>              
 
 
@@ -210,7 +209,7 @@
 
                 <p:dialog header="Registrar o Modificar Equipos" widgetVar="wdgDatosEquipo" id="dlgDatosEquipo">
                     <h:form>
-                        <p:growl autoUpdate="true" showDetail="true"/>
+                        
                         <p:outputLabel value="Nombre Equipo" for="txtNombre"/>
                         <p:inputText id="txtNombre" required="true" value="#{equipoBean.equipo.nombreEquipo}"/>
 

@@ -53,11 +53,7 @@
                     <p:tab title="PlayOff">
                         <ui:include src="/adminChamp/tab_playoff.xhtml"/>
                     </p:tab>
-                     <p:tab title="Equipos" id="tabEqu">
-                        <ui:include src="/adminChamp/tab_team.xhtml"/>
-                    </p:tab>
-
-
+                     
                     <p:tab title="Goleadores" id="tab1">
                        <ui:include src="/adminChamp/tab_goleador.xhtml"/>
                     </p:tab>
@@ -174,7 +170,7 @@
 
                         <p:outputLabel for="txtFecha" value="Hora:" />
                         
-                        <p:calendar id="txtFecha" navigator="true" pattern="yyyy-MM-dd HH:mm:ss" locale="pt"
+                        <p:calendar id="txtFecha" navigator="true" pattern="yyyy-MM-dd hh:mm a" locale="pt"
                                      styleClass="dateTimeField"  value="#{adminChampionShipBean.horaPartido}"
                                          yearRange="c-100:c" required="true"/>
                         

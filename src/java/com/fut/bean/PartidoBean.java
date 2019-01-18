@@ -50,8 +50,9 @@ public class PartidoBean implements Serializable{
     private List<Gol> listaGolesB; //
     private List<Partido> listMatchPlayOff;
     
-    private List<SelectItem> selectItemOneEquipo;
-    private List<SelectItem> selectItemOneEquipoB;
+    private List<Equipo> selectItemOneEquipoA;
+    private List<Equipo> selectItemOneEquipoB;
+  
     
     private List<SelectItem> selectItemOnePlayEquipoA;
     private List<SelectItem> selectItemOnePlayEquipoB;
@@ -69,7 +70,22 @@ public class PartidoBean implements Serializable{
     }
 
 
-    
+    public void preparedRegisterMatchGroup(){
+        this.accion = "Registrar";
+        EquipoDao daoEqu = new EquipoDao();
+        this.selectItemOneEquipoA = daoEqu.listar(grupo);
+        limpiarPartido();
+        
+    }
+     
+     public void loadTeamBMatch(){
+        EquipoDao daoEqu = new EquipoDao();
+        this.selectItemOneEquipoB = daoEqu.listarEquipoBPartido(grupo.getIdGrupo(), Integer.parseInt(codEquipoA));
+        if(this.selectItemOneEquipoB.isEmpty()){
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "El equipo ya tiene todos sus partidos");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+     }
           
 
     public String verPartido(Partido u) throws Exception {
@@ -132,13 +148,7 @@ public class PartidoBean implements Serializable{
         this.cargarEquiposPlayOffA();
     }
     
-     public void preparedRegisterMatchGroup(){
-        this.accion = "Registrar";
-        
-        limpiarPartido();
-        
-    }
-    
+
     public void registrar() {
     PartidoDao dao;
     
@@ -465,93 +475,29 @@ public class PartidoBean implements Serializable{
         this.usuario = usuario;
     }
 
-    public List<SelectItem> getSelectItemOneEquipo() {
-        try {
-            this.selectItemOneEquipo = new ArrayList<SelectItem>();
-            EquipoDao dao = new EquipoDao();
-            List<Equipo> listEquipo = dao.listar(grupo);
-            selectItemOneEquipo.clear();
-            for (Equipo p:listEquipo){
-            SelectItem selectItem = new SelectItem(p.getIdEquipo(), p.getNombreEquipo());
-            selectItemOneEquipo.add(selectItem);
-            }                              
-        } catch (Exception ex) {
-            Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
-        }    
-        return selectItemOneEquipo;
+    public List<Equipo> getSelectItemOneEquipoA() {
+        if(selectItemOneEquipoA==null){
+            selectItemOneEquipoA = new ArrayList<>();
+        }
+            
+        return selectItemOneEquipoA;
     }
 
-    public void setSelectItemOneEquipo(List<SelectItem> selectItemOneEquipo) {
-        this.selectItemOneEquipo = selectItemOneEquipo;
+    public void setSelectItemOneEquipoA(List<Equipo> selectItemOneEquipo) {
+        this.selectItemOneEquipoA = selectItemOneEquipo;
     }
 
-    public List<SelectItem> getSelectItemOneEquipoB() {
-        List<Equipo> listEquipoFinal;
-        try {
-            this.selectItemOneEquipoB = new ArrayList<SelectItem>();
-            EquipoDao dao = new EquipoDao();
-            PartidoDao daoPartido = new PartidoDao();
-            
-            List<Equipo> listEquipo = dao.listarEquipoB(grupo,Integer.parseInt(codEquipoA));
-            List<Partido> listPartido = daoPartido.listarPartidosEquipo(grupo,Integer.parseInt(codEquipoA));
-            
-            selectItemOneEquipoB.clear();
-            int listEquipoRivales [];
-            int [] idEquRival; 
-            listEquipoFinal = new ArrayList<>();
-            
-            if(listPartido.size()>0){
-                idEquRival= new int[listPartido.size()];
-                for(Partido par:listPartido){
-                    
-                    if(par.getIdEquipoA()==Integer.parseInt(codEquipoA)){
-                        idEquRival[listPartido.indexOf(par)]=par.getIdEquipoB();
-                        
-                    }else if(par.getIdEquipoB()==Integer.parseInt(codEquipoA)){
-                        idEquRival[listPartido.indexOf(par)]=par.getIdEquipoA();
-                    }               
-                } 
- 
-                for (Equipo equ:listEquipo){
-                    int indice= listEquipo.indexOf(equ);
-
-                    int indRival=0;
-                        for(int i=0; i<idEquRival.length;i++){    
-                            if(idEquRival[i]==equ.getIdEquipo()){                            
-                                indRival++;     
-                            }
-                        }                    
-                        if(indRival==0){
-                        listEquipoFinal.add(equ); 
-                        }
-                }
-            }else{                
-                  listEquipoFinal = listEquipo;                 
-            }
-            
-            if(!listEquipoFinal.isEmpty()){
-            for (Equipo p:listEquipoFinal){                
-                SelectItem selectItem = new SelectItem(p.getIdEquipo(), p.getNombreEquipo());
-                selectItemOneEquipoB.add(selectItem);
-                }
-            }else{
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "El equipo ya ha registrado todos sus partidos");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-            }
-                                                    
-        } catch (Exception ex) {
-            Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
-        }    
+    public List<Equipo> getSelectItemOneEquipoB() {       
+        if(selectItemOneEquipoB==null){
+            selectItemOneEquipoB = new ArrayList<>();
+        }        
         return selectItemOneEquipoB;
     }
 
-    public void setSelectItemOneEquipoB(List<SelectItem> selectItemOneEquipoB) {
+    public void setSelectItemOneEquipoB(List<Equipo> selectItemOneEquipoB) {
         this.selectItemOneEquipoB = selectItemOneEquipoB;
     }
-
-    
-    
-    
+            
     public Partido getVerPartido() {
         return verPartido;
     }

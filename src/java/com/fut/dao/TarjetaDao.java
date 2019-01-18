@@ -83,6 +83,7 @@ public class TarjetaDao extends Dao{
                 tar.setNombreEquipoB(rs.getString("nombreEquipoB"));
                 tar.setTypeCard(rs.getString("tipoTarjeta"));
                 tar.setPagoTarjeta(rs.getBoolean("pagoTarjeta"));
+                tar.setFechaTarjeta(rs.getDate("fechaPartido"));
                 
 
                 lista.add(tar);
@@ -115,7 +116,8 @@ public class TarjetaDao extends Dao{
                 tar.setNombreEquipo(rs.getString("nombreEquipo"));
                 tar.setNombreEquipoB(rs.getString("nombreEquipoB"));
                 tar.setTypeCard(rs.getString("tipoTarjeta"));
-                tar.setPagoTarjeta(rs.getBoolean("pagoTarjeta"));                
+                tar.setPagoTarjeta(rs.getBoolean("pagoTarjeta")); 
+                tar.setFechaTarjeta(rs.getDate("fechaPartido"));
                 lista.add(tar);
             }
         } catch (SQLException e) {
@@ -144,7 +146,8 @@ public class TarjetaDao extends Dao{
                 tar.setNombreEquipo(rs.getString("nombreEquipo"));
                 tar.setNombreEquipoB(rs.getString("nombreEquipoB"));
                 tar.setTypeCard(rs.getString("tipoTarjeta"));
-                tar.setPagoTarjeta(rs.getBoolean("pagoTarjeta"));                
+                tar.setPagoTarjeta(rs.getBoolean("pagoTarjeta"));  
+                tar.setFechaTarjeta(rs.getDate("fechaPartido"));
                 lista.add(tar);
             }
         } catch (SQLException e) {

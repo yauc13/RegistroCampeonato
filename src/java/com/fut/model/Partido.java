@@ -6,6 +6,7 @@
 package com.fut.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -31,6 +32,7 @@ public class Partido implements Serializable  {
     private String estadoPartido;
     private int idJornada;
     private Jornada jornada;
+    private Date fechaPartido;
     
     
 
@@ -189,6 +191,16 @@ public class Partido implements Serializable  {
     public void setPenalB(int penalB) {
         this.penalB = penalB;
     }
+
+    public Date getFechaPartido() {
+        return fechaPartido;
+    }
+
+    public void setFechaPartido(Date fechaPartido) {
+        this.fechaPartido = fechaPartido;
+    }
+    
+    
     
     
     

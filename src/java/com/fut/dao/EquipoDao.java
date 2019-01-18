@@ -192,6 +192,108 @@ public class EquipoDao extends Dao {
         }
     }
     
+    public List<Equipo> listarEquipoBPartido(int idGrupo, int idEquipoA) {
+        List<Equipo> lista = null;
+        ResultSet rs;
+        String array = listarIdRivalesEnGrupo(idGrupo, idEquipoA);
+        try {
+            this.ConectionDataBase();
+
+            String query = SqlAdminFutSal.SELECT_TEAM_NOT_PLAY.replaceAll("array", array);
+            PreparedStatement st = this.getCn().prepareCall(query);
+            st.setInt(1, idGrupo);
+
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                Equipo cam = new Equipo();
+                cam.setIdEquipo(rs.getInt("idEquipo"));
+                cam.setNombreEquipo(rs.getString("nombreEquipo"));
+                
+                lista.add(cam);
+            }
+        } catch (SQLException e) {
+            System.err.println(e);
+        } finally {
+            this.CloseConection();
+        }
+
+        return lista;
+    }
+    
+    private String listarIdRivalesEnGrupo(int idGrupo, int idEquipo) {
+        List<Integer> lista;
+        String cadena = null;
+        ResultSet rs;
+
+        try {
+            this.ConectionDataBase();
+            lista = new ArrayList();
+            lista.add(idEquipo);
+
+            PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_IDTEAM_A_PLAY);
+            st.setInt(1, idGrupo);
+            st.setInt(2, idEquipo);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+                lista.add(rs.getInt("idEquipoA"));
+            }
+
+            st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_IDTEAM_B_PLAY);
+            st.setInt(1, idGrupo);
+            st.setInt(2, idEquipo);
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+                lista.add(rs.getInt("idEquipoB"));
+            }
+            rs.close();
+            st.close();
+
+            StringBuilder obj;
+            obj = new StringBuilder();
+            for (int i = 0; i < lista.size(); i++) {
+                obj.append(lista.get(i));
+                if (i != lista.size() - 1) {
+                    obj.append(",");
+                }
+            }
+            cadena = obj.toString();
+
+        } catch (SQLException e) {
+            System.err.println(e);
+        } finally {
+            this.CloseConection();
+        }
+
+        return cadena;
+    }
+    
+    //no se necesita?
+    public void listarIdRivalB(int idGrupo, int idEquipoA, List<Integer> lista) {
+
+        ResultSet rs;
+
+        try {
+            this.ConectionDataBase();
+
+            PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_TEAM_NOT_PLAY);
+            st.setInt(1, idGrupo);
+            st.setInt(2, idEquipoA);
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                lista.add(rs.getInt("idEquipoB"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            this.CloseConection();
+        }
+    }
+    
+    
     public List<Equipo> listarEquiposTotalPago(int idCampeonato){
             List<Equipo> lista = null;
             ResultSet rs;

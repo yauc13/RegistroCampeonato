@@ -242,6 +242,7 @@ public class PartidoDao extends Dao{
                     cam.setIdPartido(rs.getInt("idPartido"));
                     cam.setIdEquipoA(rs.getInt("idEquipoA"));
                     cam.setIdEquipoB(rs.getInt("idEquipoB"));
+                    cam.setFechaPartido(rs.getTimestamp("fechaPartido"));
                     
                     cam.setIdGrupo(rs.getInt("idGrupo"));
                     cam.setEstadoPartido(rs.getString("estadoPartido"));
@@ -497,7 +498,7 @@ public class PartidoDao extends Dao{
             PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.ADD_MATCH_TO_JORNADA);
             int count = 1;
             st.setInt(count++, jornada.getIdJornada());                                      
-            st.setDate(count++, new java.sql.Date((hora).getTime()));
+            st.setTimestamp(count++, new java.sql.Timestamp((hora).getTime()));
             //st.setDate(count++, new java.sql.Date(hora.getTime()));
             st.setInt(count++, idPartido); 
             int res=st.executeUpdate();

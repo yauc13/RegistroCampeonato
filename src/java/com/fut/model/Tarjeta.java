@@ -5,6 +5,8 @@
  */
 package com.fut.model;
 
+import java.util.Date;
+
 /**
  *
  * @author YeisonUrrea
@@ -21,6 +23,7 @@ public class Tarjeta {
     private String nombreJugador;
     private String nombreEquipo;
     private String nombreEquipoB;
+    private Date fechaTarjeta;
 
     public int getIdTarjeta() {
         return idTarjeta;
@@ -101,6 +104,15 @@ public class Tarjeta {
     public void setIdEquipoB(int idEquipoB) {
         this.idEquipoB = idEquipoB;
     }
+
+    public Date getFechaTarjeta() {
+        return fechaTarjeta;
+    }
+
+    public void setFechaTarjeta(Date fechaTarjeta) {
+        this.fechaTarjeta = fechaTarjeta;
+    }
+    
     
     
     

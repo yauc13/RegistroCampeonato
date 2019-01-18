@@ -36,6 +36,11 @@
                         <p:column headerText="Rival">
                             <p:outputLabel value="#{tar.nombreEquipoB}"/>
                         </p:column>
+                        <p:column headerText="Fecha">
+                            <p:outputLabel value="#{tar.fechaTarjeta}">
+                            <f:convertDateTime pattern="dd-MM-yyyy" />
+                            </p:outputLabel>
+                        </p:column>
                         <p:column headerText="pago" width="7%">
                             <p:outputLabel value="#{tar.pagoTarjeta eq true? 'SI':'NO'}"/>
                         </p:column>
@@ -75,6 +80,11 @@
                         <p:column headerText="Rival">
                             <p:outputLabel value="#{tar.nombreEquipoB}"/>
                         </p:column>
+                        <p:column headerText="Fecha">
+                            <p:outputLabel value="#{tar.fechaTarjeta}">
+                            <f:convertDateTime pattern="dd-MM-yyyy" />
+                            </p:outputLabel>
+                        </p:column>
                         <p:column headerText="pago" width="7%">
                             <p:outputLabel value="#{tar.pagoTarjeta eq true? 'SI':'NO'}"/>
                         </p:column>
@@ -112,6 +122,11 @@
                         </p:column>
                         <p:column headerText="Rival">
                             <p:outputLabel value="#{tar.nombreEquipoB}"/>
+                        </p:column>
+                        <p:column headerText="Fecha">
+                            <p:outputLabel value="#{tar.fechaTarjeta}">
+                                <f:convertDateTime pattern="dd-MM-yyyy" />
+                            </p:outputLabel>
                         </p:column>
                         <p:column headerText="pago" width="7%">
                             <p:outputLabel value="#{tar.pagoTarjeta eq true? 'SI':'NO'}"/>

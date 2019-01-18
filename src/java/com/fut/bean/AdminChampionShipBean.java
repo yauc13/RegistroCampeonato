@@ -556,7 +556,7 @@ public class AdminChampionShipBean implements Serializable{
         }
         return listaEquipos;
     }
-
+   
     public void setListaEquipos(List<Equipo> listaEquipos) {
         this.listaEquipos = listaEquipos;
     }
