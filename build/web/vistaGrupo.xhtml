@@ -184,6 +184,8 @@
                 <p:dialog header="Registrar o Modificar Partidos" widgetVar="wdgDatos" id="dlgDatos" modal="true">
 
                     <h:form>
+                        <p:panelGrid columns="2">
+
                         <p:outputLabel value="Equipo A" for="idSelA"/>
 
                         <p:selectOneMenu  id="idSelA" required="true" value="#{partidoBean.codEquipoA}">
@@ -204,12 +206,13 @@
                                          update="idTabviewVistaGrupo:frmEquipo, idTabviewVistaGrupo:frm2"
                                          />
                         <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
+                        </p:panelGrid>
                     </h:form>
                 </p:dialog>
 
                 <p:dialog header="Registrar o Modificar Equipos" widgetVar="wdgDatosEquipo" id="dlgDatosEquipo">
                     <h:form>
-
+                        <p:panelGrid columns="2">
                         <p:outputLabel value="Nombre Equipo" for="txtNombre"/>
                         <p:inputText id="txtNombre" required="true" value="#{equipoBean.equipo.nombreEquipo}"/>
 
@@ -218,6 +221,7 @@
                                          update="idTabviewVistaGrupo:frmEquipo, idTabviewVistaGrupo:frm2"
                                          />
                         <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatosEquipo').hide();"/> 
+                        </p:panelGrid>
                     </h:form>
                 </p:dialog>
 

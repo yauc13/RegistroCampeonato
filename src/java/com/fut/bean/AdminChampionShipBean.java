@@ -12,6 +12,7 @@ import com.fut.dao.JugadorDao;
 import com.fut.dao.PartidoDao;
 import com.fut.dao.PlayOffDao;
 import com.fut.dao.TarjetaDao;
+import com.fut.dto.AdminChampionShipDTO;
 import com.fut.logic.AdminChampionshipBo;
 import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
@@ -93,9 +94,12 @@ public class AdminChampionShipBean implements Serializable{
     private EquipoDao equDao = new EquipoDao();
     
     private AdminChampionshipBo bo;
+    private AdminChampionShipDTO dto;
     
     public AdminChampionShipBean() {
         bo = new AdminChampionshipBo();
+        dto = new  AdminChampionShipDTO();
+        
         partidoSelecJor = new Partido();
         rowSelJor = 0;
 
@@ -344,6 +348,7 @@ public class AdminChampionShipBean implements Serializable{
         
         plaDao = new PlayOffDao();
         this.playOff.setIdCampeonato(campeonato.getIdCampeonato());
+        this.playOff.setListTeam(dto.getListaEquiposClasificados());
         if (plaDao.insertPlayOff(playOff)) {
             this.listar();
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Play-Off Creado");
@@ -358,7 +363,8 @@ public class AdminChampionShipBean implements Serializable{
         
         this.accion = "Registrar";
         this.limpiarPlayOff();
-        bo.calculateTeamClassifiedsOfGroups(campeonato.getIdCampeonato());
+        dto.setListaEquiposClasificados(bo.listDefineTeamsForPlayoff(campeonato.getIdCampeonato()));
+        
         
     }
     
@@ -842,6 +848,16 @@ public class AdminChampionShipBean implements Serializable{
     public void setHoraPartido(Date horaPartido) {
         this.horaPartido = horaPartido;
     }
+
+    public AdminChampionShipDTO getDto() {
+        return dto;
+    }
+
+    public void setDto(AdminChampionShipDTO dto) {
+        this.dto = dto;
+    }
+    
+    
     
     
     

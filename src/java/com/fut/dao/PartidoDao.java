@@ -144,13 +144,15 @@ public class PartidoDao extends Dao{
                                 
                 while(rs.next()){
                     Partido cam = new Partido();
-                    //cam.setIdPartido(rs.getInt("idPartido"));
+                 
                     cam.setIdPartido(rs.getInt("idPartido"));
                     cam.setIdEquipoA(rs.getInt("idEquipoA"));
                     cam.setIdEquipoB(rs.getInt("idEquipoB"));                  
-                    cam.setIdGrupo(rs.getInt("idGrupo"));
+                    cam.setIdPlayOff(rs.getInt("idPlayOff"));
                     cam.setEstadoPartido(rs.getString("estadoPartido"));
-                    cam.setIdJornada(rs.getInt("idJornada"));
+                   
+                    cam.setGolA(rs.getInt("golEqA"));
+                    cam.setGolB(rs.getInt("golEqB"));
                     
                     Equipo equipoA = new Equipo();
                     equipoA.setIdEquipo(rs.getInt("idEquipoA"));
@@ -160,10 +162,7 @@ public class PartidoDao extends Dao{
                     equipoB.setIdEquipo(rs.getInt("idEquipoB"));
                     equipoB.setNombreEquipo(rs.getString("nombreEquipoB"));                    
                     cam.setEquipoB(equipoB);
-                    Grupo grupo = new Grupo();
-                    grupo.setIdCampeonato(rs.getInt("idGrupo"));
-                    cam.setGrupo(grupo);
-                    
+
                     lista.add(cam);
                 
                 }

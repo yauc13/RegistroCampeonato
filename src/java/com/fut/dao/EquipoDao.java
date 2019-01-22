@@ -133,6 +133,32 @@ public class EquipoDao extends Dao {
         
         return lista;   
     }
+     
+    public List<Equipo> listTeamByPlayOffA(int idPlayOff){
+            List<Equipo> lista = null;
+            ResultSet rs;
+            
+            try{
+                this.ConectionDataBase();
+                
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_TEAM_A_BY_R_PLAY_OFF);
+                st.setInt(1, idPlayOff);
+                rs = st.executeQuery();
+                lista = new ArrayList();
+                while(rs.next()){
+                    Equipo cam = new Equipo();
+                    cam.setIdEquipo(rs.getInt("idEquipo"));
+                    cam.setNombreEquipo(rs.getString("nombreEquipo"));                   
+                    lista.add(cam);                
+                }
+            }catch(SQLException e){
+                System.err.println(e);
+            }finally{
+                this.CloseConection();
+            }
+        
+        return lista;   
+    }
     
     public Equipo leerID(int idEquipo) throws Exception{
         Equipo usus = null;

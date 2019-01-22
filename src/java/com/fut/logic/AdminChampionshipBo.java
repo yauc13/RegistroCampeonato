@@ -32,7 +32,7 @@ public class AdminChampionshipBo {
     private final PlayOffDao plaDao = new PlayOffDao();
     private final TarjetaDao tarDao = new TarjetaDao();
     
-    public List<Equipo> calculateTeamClassifiedsOfGroups(int idChampionship){
+    private List<Equipo> calculateTeamClassifiedsOfGroups(int idChampionship){
         List<Equipo> list = new ArrayList<>();
         //lsitar grupos por campeonato
         List<Grupo> listGroup = gruDao.listGroupByChampionShip(idChampionship);
@@ -45,6 +45,7 @@ public class AdminChampionshipBo {
                      equ.setIdEquipo(tE.getIdEquipo());
                      equ.setNombreEquipo(tE.getNombre());
                      equ.setGrupo(gru);
+                     list.add(equ);
                  }
              }
         
@@ -65,11 +66,23 @@ public class AdminChampionshipBo {
     return list;
     }
     
-    public List<Equipo> calculateTeamClassifiedsOfPlayOff(int idChampionship, int idPlayoff){
+    private List<Equipo> calculateTeamClassifiedsOfPlayOff(int idChampionship, int idPlayoff){
     List<Equipo> list = new ArrayList<>();
     List<Partido> listPar = parDao.listarPartidosPlayOff(idPlayoff);
     for(Partido par: listPar){
         //consultar los goles de cada equipo y el que tenga la diferencia gana
+        if(par.getGolA()>par.getGolB()){
+            list.add(par.getEquipoA());
+        }else if(par.getGolA()<par.getGolB()){
+            list.add(par.getEquipoB());
+        }else if(par.getGolA()==par.getGolB()){
+            if(par.getPenalA()>par.getPenalB()){
+                list.add(par.getEquipoA());
+            }else if(par.getPenalA()<par.getPenalB()){
+                list.add(par.getEquipoB());
+            }
+            
+        }
     }
     return list;
     }

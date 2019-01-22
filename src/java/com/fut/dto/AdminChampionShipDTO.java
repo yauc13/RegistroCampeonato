@@ -35,6 +35,7 @@ public class AdminChampionShipDTO {
     private List<Grupo> listaGrupo;
     private List<TablaEquipos> listaPosiciones;
     private List<Equipo> listaEquipos;
+    private List<Equipo> listaEquiposClasificados;
     private List<Jugador> listaGoleadores;
     private List<Tarjeta> listaTarjetas;
     private List<Tarjeta> listaTarjetasCan;
@@ -301,6 +302,19 @@ public class AdminChampionShipDTO {
 
     public void setItemPartidoSelected(int itemPartidoSelected) {
         this.itemPartidoSelected = itemPartidoSelected;
+    }
+    
+       public List<Equipo> getListaEquiposClasificados() {
+        if(listaEquiposClasificados==null){
+        
+            listaEquiposClasificados = new ArrayList<>();
+                    }
+        
+        return listaEquiposClasificados;
+    }
+
+    public void setListaEquiposClasificados(List<Equipo> listaEquiposClasificados) {
+        this.listaEquiposClasificados = listaEquiposClasificados;
     }
     
     

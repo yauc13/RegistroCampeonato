@@ -87,18 +87,21 @@
         
         <p:dialog header="Registrar o Modificar Partidos" widgetVar="wdgDatos" id="dlgDatos">
             <h:form>
+                <p:panelGrid columns="2">
                 <p:outputLabel value="Equipo A"/>
                 
                 <p:selectOneMenu  value="#{partidoBean.codEquipoA}">
-                        <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
-                        <f:selectItems value="#{partidoBean.selectItemOnePlayEquipoA}"/>
-                        <p:ajax update="selectEB"/>
+                        <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
+                        <f:selectItems value="#{partidoBean.selectItemOnePlayEquipoA}" var="eA"
+                                       itemLabel="#{eA.nombreEquipo}" itemValue="#{eA.idEquipo}"/>
+                        <p:ajax update="selectEB" listener="#{partidoBean.cargarEquiposPlayOffB()}"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Equipo B"/>
                 <p:selectOneMenu   id="selectEB" value="#{partidoBean.codEquipoB}">
-                        <f:selectItem itemLabel="--Seleccione--" itemValue=""/>
-                        <f:selectItems value="#{partidoBean.selectItemOnePlayEquipoA}"/>
+                        <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
+                        <f:selectItems value="#{partidoBean.selectItemOnePlayEquipoB}" var="eB"
+                                       itemLabel="#{eB.nombreEquipo}" itemValue="#{eB.idEquipo}"/>
                         
                 </p:selectOneMenu>              
                 
@@ -107,6 +110,7 @@
                                  oncomplete="PF('wdgDatos').hide();" update=":frm2:data"
                                  ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"/>
                 <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgDatos').hide();"/> 
+                </p:panelGrid>
             </h:form>
         </p:dialog>
             </ui:define>           

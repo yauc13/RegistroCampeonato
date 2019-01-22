@@ -6,6 +6,7 @@
 package com.fut.dao;
 
 import com.fut.model.Campeonato;
+import com.fut.model.Equipo;
 import com.fut.model.PlayOff;
 import com.fut.util.SqlAdminFutSal;
 import java.sql.PreparedStatement;
@@ -13,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  *
@@ -21,20 +23,44 @@ import java.util.List;
 public class PlayOffDao extends Dao{
     public boolean insertPlayOff(PlayOff play){
         boolean reg = false;
+        ResultSet rs;
         try{
-            this.ConectionDataBase();
+             this.cn = this.ConectionDataBase();
+             this.cn.setAutoCommit(false);
             
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_PLAYOFF);
+            PreparedStatement st = this.cn.prepareStatement(SqlAdminFutSal.INSERT_PLAYOFF);
             st.setString(1, play.getNamePlayOff());
             st.setInt(2, play.getNumPartidos());
             st.setInt(3, play.getIdCampeonato());
             
-            int exRes = st.executeUpdate();
-            if(exRes>0){
-            reg = true;
+            rs= st.executeQuery();
+            int idPlayOff=0;
+            while(rs.next()){                   
+                idPlayOff = rs.getInt("idPlayOff");                                
+                }
+            int r=0;
+            if(idPlayOff>0){
+            for(Equipo e:play.getListTeam()){
+                st = this.cn.prepareStatement(SqlAdminFutSal.INSERT_R_TEAM_PLAYOFF);
+                 st.setInt(1, idPlayOff);
+                st.setInt(2, e.getIdEquipo());
+                int ins=st.executeUpdate();
+                r= r+ins;
             }
+            }
+            if(r>0){
+                reg=true;
+            }
+            this.cn.commit();
+            
         }catch(SQLException e){
+            try {
+                this.cn.rollback();
+            } catch (SQLException ex) {
+                System.err.println(ex);
+            }
             System.out.println(e);
+            
         }finally{
         this.CloseConection();
         }

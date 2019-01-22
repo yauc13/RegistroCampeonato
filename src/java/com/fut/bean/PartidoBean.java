@@ -54,8 +54,8 @@ public class PartidoBean implements Serializable{
     private List<Equipo> selectItemOneEquipoB;
   
     
-    private List<SelectItem> selectItemOnePlayEquipoA;
-    private List<SelectItem> selectItemOnePlayEquipoB;
+    private List<Equipo> selectItemOnePlayEquipoA;
+    private List<Equipo> selectItemOnePlayEquipoB;
     
     private String codEquipoA;
     private String codEquipoB;
@@ -325,75 +325,15 @@ public class PartidoBean implements Serializable{
         this.listar();   
     }
     
-    public void cargarEquiposPlayOffA(){
-        List<SelectItem> listSelecPlay = null;
-        
-            listSelecPlay = new ArrayList<>();
+    public void cargarEquiposPlayOffA(){       
             EquipoDao dao = new EquipoDao();
-            List<Equipo> listEquipo = dao.listarEquiposClasificados(campeonato.getIdCampeonato());
-            listSelecPlay.clear();
-            for (Equipo p:listEquipo){
-            SelectItem selectItem = new SelectItem(p.getIdEquipo(), p.getGrupo().getNombreGrupo()+": "+p.getNombreEquipo());
-            listSelecPlay.add(selectItem);
-            }                                   
-       selectItemOnePlayEquipoA = listSelecPlay;
+            selectItemOnePlayEquipoA  = dao.listTeamByPlayOffA(playOff.getIdPlayOff());                           
     }
     
     
     public void cargarEquiposPlayOffB(){
-    List<Equipo> listEquipoFinal;
-    List<SelectItem> listSelecPlay = null;
-        try {
-            listSelecPlay = new ArrayList<>();
-            EquipoDao dao = new EquipoDao();
-            PartidoDao daoPartido = new PartidoDao();
-            
-            List<Equipo> listEquipo = dao.listarEquipoB(grupo,Integer.parseInt(codEquipoA));
-            List<Partido> listPartido = daoPartido.listarPartidosEquipo(grupo,Integer.parseInt(codEquipoA));
-            
-            listSelecPlay.clear();
-            int listEquipoRivales [];
-            int [] idEquRival; 
-            listEquipoFinal = new ArrayList<>();
-            
-            if(listPartido.size()>0){
-                idEquRival= new int[listPartido.size()];
-                for(Partido par:listPartido){
-                    
-                    if(par.getIdEquipoA()==Integer.parseInt(codEquipoA)){
-                        idEquRival[listPartido.indexOf(par)]=par.getIdEquipoB();
-                        
-                    }else if(par.getIdEquipoB()==Integer.parseInt(codEquipoA)){
-                        idEquRival[listPartido.indexOf(par)]=par.getIdEquipoA();
-                    }               
-                } 
- 
-                for (Equipo equ:listEquipo){
-                    int indice= listEquipo.indexOf(equ);
-
-                    int indRival=0;
-                        for(int i=0; i<idEquRival.length;i++){    
-                            if(idEquRival[i]==equ.getIdEquipo()){                            
-                                indRival++;     
-                            }
-                        }                    
-                        if(indRival==0){
-                        listEquipoFinal.add(equ); 
-                        }
-                }
-            }else{                
-                  listEquipoFinal = listEquipo;                 
-            }
-            
-            for (Equipo p:listEquipoFinal){                
-                SelectItem selectItem = new SelectItem(p.getIdEquipo(), p.getNombreEquipo());
-                listSelecPlay.add(selectItem);
-                }
-                                                    
-        } catch (Exception ex) {
-            Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
-        }    
-        selectItemOnePlayEquipoB = listSelecPlay;
+        EquipoDao dao = new EquipoDao();
+        selectItemOnePlayEquipoB = dao.listTeamByPlayOffA(playOff.getIdPlayOff());
     }
     
 
@@ -571,19 +511,19 @@ public class PartidoBean implements Serializable{
         this.playOff = playOff;
     }
 
-    public List<SelectItem> getSelectItemOnePlayEquipoA() {
+    public List<Equipo> getSelectItemOnePlayEquipoA() {
         return selectItemOnePlayEquipoA;
     }
 
-    public void setSelectItemOnePlayEquipoA(List<SelectItem> selectItemOnePlayEquipoA) {
+    public void setSelectItemOnePlayEquipoA(List<Equipo> selectItemOnePlayEquipoA) {
         this.selectItemOnePlayEquipoA = selectItemOnePlayEquipoA;
     }
 
-    public List<SelectItem> getSelectItemOnePlayEquipoB() {
+    public List<Equipo> getSelectItemOnePlayEquipoB() {
         return selectItemOnePlayEquipoB;
     }
 
-    public void setSelectItemOnePlayEquipoB(List<SelectItem> selectItemOnePlayEquipoB) {
+    public void setSelectItemOnePlayEquipoB(List<Equipo> selectItemOnePlayEquipoB) {
         this.selectItemOnePlayEquipoB = selectItemOnePlayEquipoB;
     }
 

@@ -6,8 +6,10 @@
 package com.fut.dao;
 
 import com.fut.model.Usuario;
+import com.fut.util.SqlAdminFutSal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,13 +66,14 @@ public class UsuarioDao extends Dao {
         return lista;   
     }
     
-    public Usuario leerID(Usuario usu) throws Exception{
+    public Usuario leerID(Usuario usu){
         Usuario usus = null;
         ResultSet rs;
             try{
                 this.ConectionDataBase();
+                if(this.cn !=null){
                 //PreparedStatement st = this.getCn().prepareStatement("SELECT idUsuario, loginUsuario, passwordUsuario, rolUsuario FROM usuario WHERE loginUsuario = ? and passwordUsuario = ?");
-                PreparedStatement st = this.getCn().prepareStatement("SELECT \"idUsuario\", \"loginUsuario\", \"passwordUsuario\", \"rolUsuario\" FROM public.usuario WHERE \"loginUsuario\" = ? and \"passwordUsuario\" = ?");
+                PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.GET_LOGIN_USER);
                 st.setString(1, usu.getLoginUsuario());
                 st.setString(2, usu.getPasswordUsuario());
                 rs = st.executeQuery();
@@ -82,9 +85,9 @@ public class UsuarioDao extends Dao {
                     usus.setRolUsuario(rs.getString("rolUsuario"));
                     
                 }
-                
-            }catch(Exception e){
-                throw e;
+                }
+            }catch(SQLException e){
+                 System.err.println(e);
             }finally{
                 this.CloseConection();
             }   

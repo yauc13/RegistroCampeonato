@@ -32,14 +32,14 @@
                     <h:form>
                         <p:breadCrumb> 
                             <p:menuitem value="Campeonatos" action="listaCampeonato?faces-redirect=true"/> 
-                            
+
                             <p:menuitem value="#{adminChampionShipBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(adminChampionShipBean.campeonato)}"/>   
                         </p:breadCrumb>
                     </h:form>
                 </div> 
 
                 <br/>
-                
+
                 <p:tabView id="idTabviewVistaCampeonato">
 
                     <p:tab title="Jornadas" id="tab2">
@@ -49,16 +49,16 @@
                     <p:tab title="Grupos">
                         <ui:include src="/adminChamp/tab_group.xhtml"/>
                     </p:tab>
-                    
+
                     <p:tab title="PlayOff">
                         <ui:include src="/adminChamp/tab_playoff.xhtml"/>
                     </p:tab>
-                     
+
                     <p:tab title="Goleadores" id="tab1">
-                       <ui:include src="/adminChamp/tab_goleador.xhtml"/>
+                        <ui:include src="/adminChamp/tab_goleador.xhtml"/>
                     </p:tab>
-                    
-                     <p:tab title="Tarjetas" id="tabTar">
+
+                    <p:tab title="Tarjetas" id="tabTar">
                         <ui:include src="/adminChamp/tab_card.xhtml"/>
                     </p:tab>
                     <p:tab title="Pagos" id="tabPay">
@@ -71,33 +71,62 @@
                 <p:dialog header="Registrar o Modificar Grupos" widgetVar="wdgCrudGrupo" id="dlgCrudGrupo" modal="true">
                     <h:form id="formCrudGrupo">
                         <p:panelGrid columns="2">
-                        <p:outputLabel value="Nombre Grupo" for="txtNombre"/>
-                        <p:inputText id="txtNombre" required="true" value="#{adminChampionShipBean.grupo.nombreGrupo}"/>
-                        
-                        <p:outputLabel value="No clasificados" for="txtClasi"/>
-                        <p:inputText id="txtClasi" required="true" type="number" value="#{adminChampionShipBean.grupo.numClasificados}"/>
+                            <p:outputLabel value="Nombre Grupo" for="txtNombre"/>
+                            <p:inputText id="txtNombre" required="true" value="#{adminChampionShipBean.grupo.nombreGrupo}"/>
 
-                        <p:commandButton value="#{adminChampionShipBean.accion}"  actionListener="#{adminChampionShipBean.operarGroup()}" 
-                                         oncomplete="PF('wdgCrudGrupo').hide();" 
-                                         update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"/>
-                        <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgCrudGrupo').hide();"/> 
+                            <p:outputLabel value="No clasificados" for="txtClasi"/>
+                            <p:inputText id="txtClasi" required="true" type="number" value="#{adminChampionShipBean.grupo.numClasificados}"/>
+
+                            <p:commandButton value="#{adminChampionShipBean.accion}"  actionListener="#{adminChampionShipBean.operarGroup()}" 
+                                             oncomplete="PF('wdgCrudGrupo').hide();" 
+                                             update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"/>
+                            <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgCrudGrupo').hide();"/> 
                         </p:panelGrid>
                     </h:form>
                 </p:dialog>
-                
-                 <p:dialog header="Registrar o Modificar PlayOff" widgetVar="wdgCrudPlayOff" id="dlgCrudPlayOff" modal="true">
-                    <h:form id="formCrudPlayOff">
-                        <p:panelGrid columns="2">
-                        <p:outputLabel value="Nombre PlayOff" for="txtNombre"/>
-                        <p:inputText id="txtNombre" required="true" value="#{adminChampionShipBean.playOff.namePlayOff}"/>
-                        
-                        <p:outputLabel value="No Partidos" for="txtClasi"/>
-                        <p:inputText id="txtClasi" required="true" type="number" value="#{adminChampionShipBean.playOff.numPartidos}"/>
 
-                        <p:commandButton value="#{adminChampionShipBean.accion}"  actionListener="#{adminChampionShipBean.operatePlayOff()}" 
-                                         oncomplete="PF('wdgCrudPlayOff').hide();" 
-                                         update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos, idTabviewVistaCampeonato:formPlayOff"/>
-                        <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgCrudPlayOff').hide();"/> 
+                <p:dialog header="Registrar o Modificar PlayOff" widgetVar="wdgCrudPlayOff" id="dlgCrudPlayOff" modal="true"  width="50%">
+                    <h:form id="formCrudPlayOff">
+
+                        <p:dataTable id="data" value="#{adminChampionShipBean.dto.listaEquiposClasificados}" var="team"  
+                                     rows="8" paginator="true"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="8,16" paginatorPosition="bottom" 
+                                     reflow="true"
+                                     >
+                            <f:facet  name="header">
+                                <div class="row">
+                                    <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
+
+                                    </div>
+                                    <div class="col-md-10 col-xs-10 col-sm-10">
+                                        <p:outputLabel value="Equipos Clasificados"/>
+                                    </div>
+                                </div>
+                            </f:facet>
+
+
+                            <p:column headerText="id" width="10%">
+                                <p:outputLabel value="#{team.idEquipo}" />
+                            </p:column>
+
+                            <p:column headerText="Equipo" >
+                                <p:outputLabel value="#{team.nombreEquipo}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:panelGrid columns="2">
+
+                            <p:outputLabel value="Nombre PlayOff" for="txtNombre"/>
+                            <p:inputText id="txtNombre" required="true" value="#{adminChampionShipBean.playOff.namePlayOff}"/>
+
+                            <p:outputLabel value="No Partidos" for="txtClasi"/>
+                            <p:inputText id="txtClasi" required="true" type="number" value="#{adminChampionShipBean.playOff.numPartidos}"/>
+
+                            <p:commandButton value="#{adminChampionShipBean.accion}"  actionListener="#{adminChampionShipBean.operatePlayOff()}" 
+                                             oncomplete="PF('wdgCrudPlayOff').hide();" 
+                                             update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos, idTabviewVistaCampeonato:formPlayOff"/>
+                            <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgCrudPlayOff').hide();"/> 
                         </p:panelGrid>
                     </h:form>
                 </p:dialog>
@@ -105,16 +134,16 @@
                 <p:dialog header="Registrar o Modificar Jornada" widgetVar="wdgJornada" id="dlgJornada"
                           modal="true">
                     <h:form>
-                      
-                        
+
+
                         <p:outputLabel value="Nombre Jornada" for="txtJornada"/>
                         <p:inputText id="txtJornada" required="true" value="#{adminChampionShipBean.jornadaNew.nombreJornada}"/>
                         <p:outputLabel value="Fecha" for="txtFecha"/>
-           
-                         <p:calendar id="txtFecha" navigator="true" pattern="yyyy-MM-dd" locale="pt"
-                                     styleClass="dateTimeField"  value="#{adminChampionShipBean.jornadaNew.fechaJornada}"
-                                         yearRange="c-100:c" required="true"/>
-                        
+
+                        <p:calendar id="txtFecha" navigator="true" pattern="yyyy-MM-dd" locale="pt"
+                                    styleClass="dateTimeField"  value="#{adminChampionShipBean.jornadaNew.fechaJornada}"
+                                    yearRange="c-100:c" required="true"/>
+
 
                         <p:commandButton value="#{adminChampionShipBean.accion}"  actionListener="#{adminChampionShipBean.operarJornada()}"
                                          oncomplete="PF('wdgJornada').hide();"
@@ -123,7 +152,7 @@
                         <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgJornada').hide();"/> 
                     </h:form>
                 </p:dialog>
-                
+
                 <p:dialog header="Pagar Tarjeta" widgetVar="wdgCanTar" id="dlgCanTar"
                           modal="true">
                     <h:form>                      
@@ -145,80 +174,80 @@
                     <h:form>
                         <p:growl autoUpdate="true" showDetail="true"/>
                         <h:panelGrid columns="2">
-                         <p:outputLabel value="Grupo o playoff:" for="idSelGrupo"/>
-                        <p:selectOneMenu id="idSelGrupoplay" required="true" value="#{adminChampionShipBean.itemGrupoSelected}">
-                            <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
-                            <f:selectItem itemLabel="Grupo" itemValue="#{1}"/>
-                            <f:selectItem itemLabel="Playoff" itemValue="#{2}"/>
-                            
-                            <p:ajax update="idSelGrupo"/>
-                        </p:selectOneMenu>
-                        
-                        <p:outputLabel value="Grupo:" for="idSelGrupo"/>
-                        <p:selectOneMenu id="idSelGrupo" required="true" value="#{adminChampionShipBean.itemGrupoSelected}">
-                            <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
-                            <f:selectItems value="#{adminChampionShipBean.selectItemOneGrupos}"/>
-                            <p:ajax update="selPartido"/>
-                        </p:selectOneMenu>
+                            <p:outputLabel value="Grupo o playoff:" for="idSelGrupo"/>
+                            <p:selectOneMenu id="idSelGrupoplay" required="true" value="#{adminChampionShipBean.itemGrupoSelected}">
+                                <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
+                                <f:selectItem itemLabel="Grupo" itemValue="#{1}"/>
+                                <f:selectItem itemLabel="Playoff" itemValue="#{2}"/>
 
-                        <p:outputLabel value="Partido" for="selPartido"/>
-                        <p:selectOneMenu id="selPartido" required="true" value="#{adminChampionShipBean.itemPartidoSelected}" >
-                            <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
-                            <f:selectItems value="#{adminChampionShipBean.selectItemOnePartidos}"/>
-                      
-                        </p:selectOneMenu>
+                                <p:ajax update="idSelGrupo"/>
+                            </p:selectOneMenu>
 
-                        <p:outputLabel for="txtFecha" value="Hora:" />
-                        
-                        <p:calendar id="txtFecha" navigator="true" pattern="yyyy-MM-dd hh:mm a" locale="pt"
-                                     styleClass="dateTimeField"  value="#{adminChampionShipBean.horaPartido}"
-                                         yearRange="c-100:c" required="true"/>
-                        
-                        <p:commandButton value="Agregar"  actionListener="#{adminChampionShipBean.agregarPartidoJornada()}"
-                                         oncomplete="PF('wdgAddParJor').hide();"
-                                         update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
-                                         />
-                        <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgAddParJor').hide();"/> 
+                            <p:outputLabel value="Grupo:" for="idSelGrupo"/>
+                            <p:selectOneMenu id="idSelGrupo" required="true" value="#{adminChampionShipBean.itemGrupoSelected}">
+                                <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
+                                <f:selectItems value="#{adminChampionShipBean.selectItemOneGrupos}"/>
+                                <p:ajax update="selPartido"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Partido" for="selPartido"/>
+                            <p:selectOneMenu id="selPartido" required="true" value="#{adminChampionShipBean.itemPartidoSelected}" >
+                                <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
+                                <f:selectItems value="#{adminChampionShipBean.selectItemOnePartidos}"/>
+
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="txtFecha" value="Hora:" />
+
+                            <p:calendar id="txtFecha" navigator="true" pattern="yyyy-MM-dd hh:mm a" locale="pt"
+                                        styleClass="dateTimeField"  value="#{adminChampionShipBean.horaPartido}"
+                                        yearRange="c-100:c" required="true"/>
+
+                            <p:commandButton value="Agregar"  actionListener="#{adminChampionShipBean.agregarPartidoJornada()}"
+                                             oncomplete="PF('wdgAddParJor').hide();"
+                                             update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
+                                             />
+                            <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgAddParJor').hide();"/> 
                         </h:panelGrid>
                     </h:form>
                 </p:dialog>
-                
+
                 <p:dialog showEffect="fade" modal="true" id="idDiagQuitarParJor"
                           hideEffect="fade" widgetVar="wdgQuitarParJor"
                           header="Quitar Partido de la Jornada">
-                    
+
                     <h:form>
-                      <h:panelGrid columns="2">  
-                    <p:outputLabel id="txtParJorDel" value="id Par: #{adminChampionShipBean.partidoSelecJor.equipoA.nombreEquipo} vs #{adminChampionShipBean.partidoSelecJor.equipoB.nombreEquipo}"/>
-                    <p:outputLabel value=""/>
-                    <p:commandButton value="Aceptar"  icon="ui-icon-check" 
-                                     style="float: right" actionListener="#{adminChampionShipBean.quitarPartidoJornada()}"
-                                     oncomplete="PF('wdgQuitarParJor').hide();"
-                                     update="idTabviewVistaCampeonato:formJornadas"
-                                     />
-                    <p:commandButton  value="Cancelar"  icon="ui-icon-close" style="float: left" oncomplete="PF('wdgQuitarParJor').hide();"/>
-                     </h:panelGrid>
+                        <h:panelGrid columns="2">  
+                            <p:outputLabel id="txtParJorDel" value="id Par: #{adminChampionShipBean.partidoSelecJor.equipoA.nombreEquipo} vs #{adminChampionShipBean.partidoSelecJor.equipoB.nombreEquipo}"/>
+                            <p:outputLabel value=""/>
+                            <p:commandButton value="Aceptar"  icon="ui-icon-check" 
+                                             style="float: right" actionListener="#{adminChampionShipBean.quitarPartidoJornada()}"
+                                             oncomplete="PF('wdgQuitarParJor').hide();"
+                                             update="idTabviewVistaCampeonato:formJornadas"
+                                             />
+                            <p:commandButton  value="Cancelar"  icon="ui-icon-close" style="float: left" oncomplete="PF('wdgQuitarParJor').hide();"/>
+                        </h:panelGrid>
                     </h:form>
-                       
+
                 </p:dialog>
-                
+
                 <p:dialog showEffect="fade" modal="true" id="idDiagDeleteJor"
                           hideEffect="fade" widgetVar="wdgDeleteJor"
                           header="Eliminar Jornada">
-                    
+
                     <h:form>
-                      <h:panelGrid columns="2">  
-                          <p:outputLabel id="txtParJorDel" value="#{adminChampionShipBean.jornada}"/>
-                    <p:outputLabel value=""/>
-                    <p:commandButton value="Aceptar"  icon="ui-icon-check" 
-                                     style="float: right" actionListener="#{adminChampionShipBean.quitarPartidoJornada()}"
-                                     oncomplete="PF('wdgDeleteJor').hide();"
-                                     update="idTabviewVistaCampeonato:formJornadas"
-                                     />
-                    <p:commandButton  value="Cancelar"  icon="ui-icon-close" style="float: left" oncomplete="PF('wdgDeleteJor').hide();"/>
-                     </h:panelGrid>
+                        <h:panelGrid columns="2">  
+                            <p:outputLabel id="txtParJorDel" value="#{adminChampionShipBean.jornada}"/>
+                            <p:outputLabel value=""/>
+                            <p:commandButton value="Aceptar"  icon="ui-icon-check" 
+                                             style="float: right" actionListener="#{adminChampionShipBean.quitarPartidoJornada()}"
+                                             oncomplete="PF('wdgDeleteJor').hide();"
+                                             update="idTabviewVistaCampeonato:formJornadas"
+                                             />
+                            <p:commandButton  value="Cancelar"  icon="ui-icon-close" style="float: left" oncomplete="PF('wdgDeleteJor').hide();"/>
+                        </h:panelGrid>
                     </h:form>
-                       
+
                 </p:dialog>
 
             </ui:define>           
