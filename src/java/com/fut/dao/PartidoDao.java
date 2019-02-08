@@ -10,6 +10,7 @@ import com.fut.model.Grupo;
 import com.fut.model.Jornada;
 import com.fut.model.Partido;
 import com.fut.model.TablaEquipos;
+import com.fut.util.Cons;
 import com.fut.util.SqlAdminFutSal;
 import java.sql.Array;
 import java.sql.PreparedStatement;
@@ -68,7 +69,7 @@ public class PartidoDao extends Dao{
             st.setInt(2, par.getIdEquipoB());
             st.setInt(3, par.getIdPlayOff());
             st.setInt(4, par.getIdUsuario());
-            st.setString(5, "Por Jugar");
+            st.setString(5, Cons.STATE_MATCH_POR);
 
             int res = st.executeUpdate();
             if(res>0){
@@ -162,6 +163,49 @@ public class PartidoDao extends Dao{
                     equipoB.setIdEquipo(rs.getInt("idEquipoB"));
                     equipoB.setNombreEquipo(rs.getString("nombreEquipoB"));                    
                     cam.setEquipoB(equipoB);
+
+                    lista.add(cam);
+                
+                }
+            }catch(SQLException e){
+                System.err.println(e);
+            }finally{
+                this.CloseConection();
+            }
+       
+        return lista;   
+    }
+    
+    public List<Partido> listarPartidosPlayOffJor(int idPlay){
+        //lista los partidos del play off que no esten en una jornada
+            List<Partido> lista = null;
+            ResultSet rs;
+            
+            try{
+                this.ConectionDataBase();
+                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_PLAYOFF_JOR);
+                st.setInt(1, idPlay);
+                rs = st.executeQuery();
+                lista = new ArrayList();
+                                
+                while(rs.next()){
+                    Partido cam = new Partido();
+                 
+                    cam.setIdPartido(rs.getInt("idPartido"));
+                    cam.setIdEquipoA(rs.getInt("idEquipoA"));
+                    cam.setIdEquipoB(rs.getInt("idEquipoB"));
+                    cam.setIdPlayOff(rs.getInt("idPlayOff"));
+                    cam.setEstadoPartido(rs.getString("estadoPartido"));
+                    
+                    Equipo equipoA = new Equipo();
+                    equipoA.setIdEquipo(rs.getInt("idEquipoA"));
+                    equipoA.setNombreEquipo(rs.getString("nombreEquipoA"));                   
+                    cam.setEquipoA(equipoA);                    
+                    Equipo equipoB = new Equipo();
+                    equipoB.setIdEquipo(rs.getInt("idEquipoB"));
+                    equipoB.setNombreEquipo(rs.getString("nombreEquipoB"));                    
+                    cam.setEquipoB(equipoB);
+                    
 
                     lista.add(cam);
                 
@@ -341,12 +385,8 @@ public class PartidoDao extends Dao{
                     usus.setEquipoB(equipo);
                     GrupoDao grupoDao = new GrupoDao();
                     Grupo grupo = grupoDao.leerID(rs.getInt("idGrupo"));
-                    usus.setGrupo(grupo);
-                    
-                }
-                
-                
-                
+                    usus.setGrupo(grupo);                    
+                }                                                
             }catch(Exception e){
                 System.err.println(e);
             }finally{
@@ -398,7 +438,7 @@ public class PartidoDao extends Dao{
             ResultSet rs;
         List<Equipo> listEquipo = null;
         EquipoDao equipoDao = new EquipoDao();
-            listEquipo = equipoDao.listar(grup); //se llena la lista de los equipos del grupo
+            listEquipo = equipoDao.listar(grup.getIdGrupo()); //se llena la lista de los equipos del grupo
             lista = new ArrayList();
             try{
                 this.ConectionDataBase();
@@ -520,7 +560,28 @@ public class PartidoDao extends Dao{
             this.ConectionDataBase();
             PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.FINISH_MATCH);           
 
-            st.setString(1, "Finalizado"); 
+            st.setString(1, Cons.STATE_MATCH_FIN); 
+            st.setInt(2, cam.getIdPartido());
+             
+            int res = st.executeUpdate();
+             if(res>0){
+                 resp=true;
+             } 
+        }catch(SQLException e){
+            System.err.println(e);
+        }finally{
+        this.CloseConection();
+        }
+        return resp;
+    }
+        
+         public boolean finalizarPenalties(Partido cam){
+         boolean resp=false;
+        try{
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.FINISH_PENALTIES);           
+
+            st.setBoolean(1, true); 
             st.setInt(2, cam.getIdPartido());
              
             int res = st.executeUpdate();
@@ -540,7 +601,7 @@ public class PartidoDao extends Dao{
         try{
             this.ConectionDataBase();
             PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.START_MATCH);                        
-            st.setString(1, "Jugando"); 
+            st.setString(1, Cons.STATE_MATCH_JUG); 
             st.setInt(2, cam.getIdPartido());             
             int res = st.executeUpdate();
              if(res>0){

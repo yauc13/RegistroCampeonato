@@ -11,7 +11,7 @@
     <h:body id="idBody">
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
-<p:growl autoUpdate="true" showDetail="true"/>
+        <p:growl autoUpdate="true" showDetail="true"/>
         <f:event type="preRenderView" listener="#{planillaPartidoBean.listarPlanillasInicio()}" />
         <p:dialog modal="true" widgetVar="statusDialogPlanilla" header="Cargando..." draggable="false" closable="false" resizable="false">
             <p:graphicImage value="/resources/imagen/gol_celeste.gif"  width="180" height="180"/>
@@ -54,14 +54,11 @@
                     <p:outputLabel value="#{golesB.jugador.nombreJugador}"/>
                 </p:column>               
             </p:dataTable>  
-            </h:panelGrid>
-            
-           
+            </h:panelGrid>                      
         </h:form>  
         
         <h:panelGrid  id="panelGridPlanilla" columns="2">
-        <h:form id="frm1">
-            
+        <h:form id="frm1">            
             <p:outputLabel value="Equipo A: #{planillaPartidoBean.dto.partido.equipoA.nombreEquipo}"/>
             <p:dataTable id="data" value="#{planillaPartidoBean.dto.listaJugadoresA}" var="jugadorA" >
                 <p:column headerText="No" width="9%">
@@ -106,20 +103,13 @@
                                       icon="ui-icon-note"
                                       
                                       />
-                </p:column>
-              
-           
-                
-            </p:dataTable>
-            
-            
+                </p:column>                                         
+            </p:dataTable>                        
         </h:form>
               
         
         
-        <h:form id="frm2">
-            
-                
+        <h:form id="frm2">                            
             <p:outputLabel value="Equipo B: #{planillaPartidoBean.dto.partido.equipoB.nombreEquipo}"/>
             <p:dataTable id="data" value="#{planillaPartidoBean.dto.listaJugadoresB}" var="jugadorB" >
                 <p:column headerText="No" width="9%">
@@ -170,29 +160,38 @@
         <h:form>
             <p:commandButton value="Finalizar Partido" action="#{planillaPartidoBean.finalizarPartido()}"
                              disabled="#{planillaPartidoBean.dto.enaBtnFin}"
-                                      onclick="PrimeFaces.monitorDownload(start, stop);"
+                             ajax="false"
+                             onclick="PrimeFaces.monitorDownload(start, stop);"
                                      />
         </h:form>
-                
-                <h:form id="frmPenal">
+                <h:panelGrid  id="panelGridPenalties"  rendered="#{planillaPartidoBean.dto.renPanelPenal}" >
+                    <h:form id="frmPenal" >
+                    <p:outputLabel value="Penaltis"/>
+                    <p:panelGrid columns="3">
                     <p:outputLabel value="Equipo A: #{planillaPartidoBean.dto.partido.equipoA.nombreEquipo}"/>
                     <p:commandButton  id="btnPenA" value="Gol" update="frmPenal"
-                                      actionListener="#{planillaPartidoBean.anotarGol(jugadorA.idJugador, planillaPartidoBean.dto.partido.idEquipoA, planillaPartidoBean.dto.partido)}" 
+                                      actionListener="#{planillaPartidoBean.anotarPenal(0, planillaPartidoBean.dto.partido.idEquipoA, planillaPartidoBean.dto.partido)}" 
                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
-                                      disabled="#{planillaPartidoBean.dto.enaBtngol}"
+                                      disabled="#{planillaPartidoBean.dto.enaBtnPenal}"
                                       icon="ui-icon-circle-plus"
                                       />
+                    <p:outputLabel value="#{planillaPartidoBean.dto.listaPenalesA.size()}"/>
                     
                     <p:outputLabel value="Equipo B: #{planillaPartidoBean.dto.partido.equipoB.nombreEquipo}"/>
                     <p:commandButton  id="btnPenB" value="Gol" update="frmPenal"
-                                      actionListener="#{planillaPartidoBean.anotarGol(jugadorA.idJugador, planillaPartidoBean.dto.partido.idEquipoA, planillaPartidoBean.dto.partido)}" 
+                                      actionListener="#{planillaPartidoBean.anotarPenal(0, planillaPartidoBean.dto.partido.idEquipoB, planillaPartidoBean.dto.partido)}" 
                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
-                                      disabled="#{planillaPartidoBean.dto.enaBtngol}"
+                                      disabled="#{planillaPartidoBean.dto.enaBtnPenal}"
                                       icon="ui-icon-circle-plus"
                                       />
-                    
+                    <p:outputLabel value="#{planillaPartidoBean.dto.listaPenalesB.size()}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="Finalizar Penaltis" action="#{planillaPartidoBean.finalizarPenalties()}"
+                                     disabled="#{planillaPartidoBean.dto.enaBtnPenal}"
+                                     onclick="PrimeFaces.monitorDownload(start, stop);"
+                                     />
                 </h:form>
-                
+                </h:panelGrid>
              
         
          </ui:define>           

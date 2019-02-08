@@ -48,7 +48,7 @@ public class EquipoDao extends Dao {
     
 
         
-    public List<Equipo> listar(Grupo camp){
+    public List<Equipo> listar(int idGroup){
             List<Equipo> lista = null;
             ResultSet rs;
             
@@ -56,7 +56,7 @@ public class EquipoDao extends Dao {
                 this.ConectionDataBase();
                 //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
                 PreparedStatement st = this.getCn().prepareCall("SELECT \"idEquipo\", \"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idGrupoEquipo\" = ? ORDER BY \"nombreEquipo\"");
-                st.setInt(1, camp.getIdGrupo());
+                st.setInt(1, idGroup);
                 rs = st.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){

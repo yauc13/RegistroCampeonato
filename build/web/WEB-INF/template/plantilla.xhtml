@@ -22,10 +22,18 @@
             <ui:insert name="top">
                 <h:form>
                     <p:menubar>
-                        <p:menuitem  value="Login: #{usuarioBean.usuario.loginUsuario}"/>
+                        <p:menuitem  value="Login: #{usuarioBean.usuario.loginUsuario}"/>                        
+                        
                         <f:facet name="options" >
-                            <p:commandButton  value="Cerrar" action="#{usuarioBean.cerrarSesion()}"
+                            <p:outputLabel  value="Ip: #{usuarioBean.ip}" styleClass="font-size: xx-small" />
+                        <br/>
+                        <p:outputLabel  value="Mac: #{usuarioBean.mac}" class="font-size: xx-small"/>
+                        </f:facet>
+                        
+                        <f:facet name="options" >
+                            <p:commandButton  value="Cerrar Sesion" action="#{usuarioBean.cerrarSesion()}"
                                               icon="ui-icon-close"/>
+                            <br/>
                         </f:facet>
                        
                     </p:menubar>  

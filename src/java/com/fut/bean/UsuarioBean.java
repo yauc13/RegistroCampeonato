@@ -7,6 +7,7 @@ package com.fut.bean;
 
 import com.fut.dao.UsuarioDao;
 import com.fut.model.Usuario;
+import com.fut.util.Util;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -28,7 +29,8 @@ public class UsuarioBean implements Serializable{
     private List<Usuario> listaUsuario;
     
     private String accion;
-    
+    private String ip;
+    private String mac;
 
 
     
@@ -71,6 +73,7 @@ public class UsuarioBean implements Serializable{
             if(u !=null){
                 this.usuario = u;
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", u);
+                getIpMac();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "inicion sesion"));
                redireccion = "listaCampeonato?faces-redirect=true";
                
@@ -221,6 +224,27 @@ public class UsuarioBean implements Serializable{
        }
         
     return bol;
+    }
+    
+    private void getIpMac() {
+        this.ip = Util.getIpAddress();
+        this.mac = Util.getMacAddress();
+    }
+    
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getMac() {
+        return mac;
+    }
+
+    public void setMac(String mac) {
+        this.mac = mac;
     }
     
     

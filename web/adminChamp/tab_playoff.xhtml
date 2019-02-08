@@ -5,6 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
     <h:form id="formPlayOff">
 
         <p:dataGrid var="playOff" value="#{adminChampionShipBean.listaPlayOff}" columns="5">
@@ -49,7 +50,7 @@
                                      style="margin-left: 7px;"
                                      />
                 </f:facet>
-                <p:dataTable var="equi" value="#{adminChampionShipBean.getListaEquipos(grupo)}" style=" align-content:  center">
+                <p:dataTable var="equi" value="#{adminChampionShipBean.loadListTeamByGroup(0)}" style=" align-content:  center">
                     <p:column width="30%">
                         <p:outputLabel value="#{playOff.namePlayOff}"/>
                     </p:column>

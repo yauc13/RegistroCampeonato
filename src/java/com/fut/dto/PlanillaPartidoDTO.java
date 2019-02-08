@@ -10,8 +10,10 @@ import com.fut.model.Gol;
 import com.fut.model.Grupo;
 import com.fut.model.Jugador;
 import com.fut.model.Partido;
+import com.fut.model.Penal;
 import com.fut.model.PlayOff;
 import com.fut.model.Usuario;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,12 +28,16 @@ public class PlanillaPartidoDTO {
     private Campeonato campeonato;
     private List<Gol> listaGolesA;
     private List<Gol> listaGolesB;
+    private List<Penal> listaPenalesA;
+    private List<Penal> listaPenalesB;
     private List<Jugador> listaJugadoresA;
     private List<Jugador> listaJugadoresB;
     private boolean enaBtnIniciar = false;
     private boolean enaBtnFin = true;
     private boolean enaBtngol = true;
     private boolean enaBtnTar = true;
+    private boolean enaBtnPenal = true;
+    private boolean renPanelPenal = false;
 
     public PlanillaPartidoDTO() {
          partido = new Partido();
@@ -145,6 +151,49 @@ public class PlanillaPartidoDTO {
     public void setEnaBtnTar(boolean enaBtnTar) {
         this.enaBtnTar = enaBtnTar;
     }
+
+    public boolean isRenPanelPenal() {
+        return renPanelPenal;
+    }
+
+    public void setRenPanelPenal(boolean renPanelPenal) {
+        this.renPanelPenal = renPanelPenal;
+    }
+
+    public boolean isEnaBtnPenal() {
+        return enaBtnPenal;
+    }
+
+    public void setEnaBtnPenal(boolean enaBtnPenal) {
+        this.enaBtnPenal = enaBtnPenal;
+    }
+
+    public List<Penal> getListaPenalesA() {
+        if(listaPenalesA==null){
+            listaPenalesA = new ArrayList<>();
+        }
+        return listaPenalesA;
+    }
+
+    public void setListaPenalesA(List<Penal> listaPenalesA) {
+        this.listaPenalesA = listaPenalesA;
+    }
+
+    public List<Penal> getListaPenalesB() {
+        if(listaPenalesB==null){
+            listaPenalesB = new ArrayList<>();
+        }
+        return listaPenalesB;
+    }
+
+    public void setListaPenalesB(List<Penal> listaPenalesB) {
+        this.listaPenalesB = listaPenalesB;
+    }
+    
+    
+    
+    
+    
     
     
     

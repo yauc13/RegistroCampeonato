@@ -17,6 +17,7 @@ import com.fut.model.Jugador;
 import com.fut.model.Partido;
 import com.fut.model.PlayOff;
 import com.fut.model.Usuario;
+import com.fut.util.Util;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 
 /**
  *
@@ -73,7 +73,7 @@ public class PartidoBean implements Serializable{
     public void preparedRegisterMatchGroup(){
         this.accion = "Registrar";
         EquipoDao daoEqu = new EquipoDao();
-        this.selectItemOneEquipoA = daoEqu.listar(grupo);
+        this.selectItemOneEquipoA = daoEqu.listar(grupo.getIdGrupo());
         limpiarPartido();
         
     }
@@ -82,8 +82,7 @@ public class PartidoBean implements Serializable{
         EquipoDao daoEqu = new EquipoDao();
         this.selectItemOneEquipoB = daoEqu.listarEquipoBPartido(grupo.getIdGrupo(), Integer.parseInt(codEquipoA));
         if(this.selectItemOneEquipoB.isEmpty()){
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "El equipo ya tiene todos sus partidos");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            Util.setMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El equipo ya tiene todos sus partidos");
         }
      }
           

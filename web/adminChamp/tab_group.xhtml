@@ -48,7 +48,7 @@
                                      style="margin-left: 7px;"
                                      />
                 </f:facet>
-                <p:dataTable var="equi" value="#{adminChampionShipBean.getListaEquipos(grupo)}"
+                <p:dataTable var="equi" value="#{adminChampionShipBean.loadListTeamByGroup(grupo.idGrupo)}"
                              style=" align-content:  center"
                              rowIndexVar="rowIndex"
                              rowStyleClass="#{rowIndex lt grupo.numClasificados ? 'clasificadosGrupo' : ''}"

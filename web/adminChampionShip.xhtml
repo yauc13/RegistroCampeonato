@@ -135,7 +135,7 @@
                           modal="true">
                     <h:form>
 
-
+                        <h:panelGrid columns="2">
                         <p:outputLabel value="Nombre Jornada" for="txtJornada"/>
                         <p:inputText id="txtJornada" required="true" value="#{adminChampionShipBean.jornadaNew.nombreJornada}"/>
                         <p:outputLabel value="Fecha" for="txtFecha"/>
@@ -150,6 +150,7 @@
                                          update="idTabviewVistaCampeonato:formJornadas, idTabviewVistaCampeonato:formGrupos"
                                          />
                         <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgJornada').hide();"/> 
+                        </h:panelGrid>
                     </h:form>
                 </p:dialog>
 
@@ -171,29 +172,41 @@
 
                 <p:dialog header="Agregar Partido a la Jornada" widgetVar="wdgAddParJor" id="dlgAddParJor" modal="true"
                           showEffect="fade" hideEffect="fade" resizable="false">
-                    <h:form>
+                    <h:form id="frmDlgAddMatchJor">
                         <p:growl autoUpdate="true" showDetail="true"/>
-                        <h:panelGrid columns="2">
+                        <h:panelGrid id="panDlgAddMatchJor" columns="2">
                             <p:outputLabel value="Grupo o playoff:" for="idSelGrupo"/>
-                            <p:selectOneMenu id="idSelGrupoplay" required="true" value="#{adminChampionShipBean.itemGrupoSelected}">
+                            <p:selectOneMenu id="idSelGrupoplay" required="true" value="#{adminChampionShipBean.dto.itemGroupPlaySelJor}">
                                 <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
                                 <f:selectItem itemLabel="Grupo" itemValue="#{1}"/>
                                 <f:selectItem itemLabel="Playoff" itemValue="#{2}"/>
 
-                                <p:ajax update="idSelGrupo"/>
+                                <p:ajax update="frmDlgAddMatchJor" listener="#{adminChampionShipBean.loadListGroupOrPlayoff()}" />
                             </p:selectOneMenu>
 
-                            <p:outputLabel value="Grupo:" for="idSelGrupo"/>
-                            <p:selectOneMenu id="idSelGrupo" required="true" value="#{adminChampionShipBean.itemGrupoSelected}">
+                            <p:outputLabel id="idLGroup" value="Grupo:" for="idSelGrupo" rendered="#{adminChampionShipBean.dto.renItemGroup}"/>
+                            <p:selectOneMenu id="idSelGrupo" required="true" value="#{adminChampionShipBean.dto.itemGroupJor}"
+                                             rendered="#{adminChampionShipBean.dto.renItemGroup}">
                                 <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
-                                <f:selectItems value="#{adminChampionShipBean.selectItemOneGrupos}"/>
-                                <p:ajax update="selPartido"/>
+                                <f:selectItems value="#{adminChampionShipBean.dto.listGruposItemJor}" var="g" 
+                                               itemValue="#{g.idGrupo}" itemLabel="#{g.nombreGrupo}"/>
+                                <p:ajax update="selPartido" listener="#{adminChampionShipBean.loadListMatchByGroupOrPlay(1)}"/>
+                            </p:selectOneMenu>
+                            
+                            <p:outputLabel id="idLPlay" value="PlayOff:" for="idSelPlayoff" rendered="#{adminChampionShipBean.dto.renItemPlayoff}"/>
+                            <p:selectOneMenu id="idSelPlayoff" required="true" value="#{adminChampionShipBean.dto.itemPlayoffJor}"
+                                             rendered="#{adminChampionShipBean.dto.renItemPlayoff}">
+                                <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
+                                <f:selectItems value="#{adminChampionShipBean.dto.listPlayoffItemJor}" var="po"
+                                               itemValue="#{po.idPlayOff}" itemLabel="#{po.namePlayOff}"/>
+                                <p:ajax update="selPartido" listener="#{adminChampionShipBean.loadListMatchByGroupOrPlay(2)}"/>
                             </p:selectOneMenu>
 
                             <p:outputLabel value="Partido" for="selPartido"/>
-                            <p:selectOneMenu id="selPartido" required="true" value="#{adminChampionShipBean.itemPartidoSelected}" >
+                            <p:selectOneMenu id="selPartido" required="true" value="#{adminChampionShipBean.dto.itemMatchSelJor}" >
                                 <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
-                                <f:selectItems value="#{adminChampionShipBean.selectItemOnePartidos}"/>
+                                <f:selectItems value="#{adminChampionShipBean.dto.listPartidosItemJor}" var="p"
+                                               itemValue="#{p.idPartido}" itemLabel="#{p.equipoA.nombreEquipo} VS #{p.equipoB.nombreEquipo}"/>
 
                             </p:selectOneMenu>
 

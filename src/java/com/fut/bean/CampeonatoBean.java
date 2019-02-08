@@ -8,11 +8,15 @@ package com.fut.bean;
 import com.fut.dao.CampeonatoDao;
 import com.fut.model.Campeonato;
 import com.fut.model.Usuario;
+import com.fut.util.Util;
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
@@ -22,7 +26,7 @@ import javax.faces.context.FacesContext;
  */
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 
 
 public class CampeonatoBean implements Serializable{
@@ -31,7 +35,17 @@ public class CampeonatoBean implements Serializable{
     private List<Campeonato> listaCampeonato;
     private String loginUsuario;
     private String accion;
+    
 
+    public CampeonatoBean() {        
+        usuario = (Usuario) Util.getObjectOfContext("usuario");
+           
+    }
+
+  
+    
+    
+    
     public Usuario getUsuario() {
         return usuario;
     }
@@ -159,7 +173,7 @@ public class CampeonatoBean implements Serializable{
     CampeonatoDao dao;    
         if(this.isPostBack() == false){
         dao = new CampeonatoDao();
-        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        
         listaCampeonato = dao.listar();
         }    
     }
@@ -167,7 +181,7 @@ public class CampeonatoBean implements Serializable{
     public void listarCampeonatos(){
     CampeonatoDao dao;    
         dao = new CampeonatoDao();
-        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        
         listaCampeonato = dao.listar();
     }
     
@@ -220,5 +234,17 @@ public class CampeonatoBean implements Serializable{
         
     return bol;
     }
+    
+    public String getLoginUsuario() {
+        return loginUsuario;
+    }
+
+    public void setLoginUsuario(String loginUsuario) {
+        this.loginUsuario = loginUsuario;
+    }
+
+    
+    
+    
     
 }

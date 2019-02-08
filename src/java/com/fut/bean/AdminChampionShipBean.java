@@ -26,6 +26,7 @@ import com.fut.model.PlayOff;
 import com.fut.model.TablaEquipos;
 import com.fut.model.Tarjeta;
 import com.fut.model.Usuario;
+import com.fut.util.Util;
 import java.io.Serializable;
 import java.sql.Time;
 import java.time.LocalTime;
@@ -38,6 +39,7 @@ import javax.faces.application.FacesMessage;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.event.TabChangeEvent;
@@ -49,7 +51,7 @@ import org.primefaces.event.TabChangeEvent;
  */
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 
 public class AdminChampionShipBean implements Serializable{
     private Grupo grupo = new Grupo();
@@ -80,14 +82,13 @@ public class AdminChampionShipBean implements Serializable{
     
     private List<SelectItem> selectItemOneGrupos; //para seleccionar grupo segun el campeonato
     private List<SelectItem> selectItemOnePartidos; //para seleccionar grupo segun el campeonato
-    private int itemGrupoSelected;
-    private int itemPartidoSelected; //partido seleccionado para agregar a una jornada
+    
     private Date horaPartido; //hora del partido
     
     
     private JugadorDao jugDao = new JugadorDao();
     private JornadaDao jorDao = new JornadaDao();
-    private PartidoDao parDao = new PartidoDao();
+    private PartidoDao daoPar = new PartidoDao();
     private GrupoDao gruDao = new GrupoDao();
     private PlayOffDao plaDao = new PlayOffDao();
     private TarjetaDao tarDao = new TarjetaDao();
@@ -144,8 +145,7 @@ public class AdminChampionShipBean implements Serializable{
         jornadaNew.setIdUsuario(usuario.getIdUsuario());
         boolean reg = jorDao.registrar(jornadaNew);
         if(reg){
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada creada");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+            Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada creada");       
         }else{
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear Jornada");
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -155,8 +155,7 @@ public class AdminChampionShipBean implements Serializable{
     
     public void modificarJornada() {
         if (jorDao.modificar(jornadaNew)) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada creada");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada modificada");                   
         } else {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -174,19 +173,47 @@ public class AdminChampionShipBean implements Serializable{
     }
     
     public void preparedAddMatchToFixture(Jornada jor){
+        dto.setRenItemGroup(false);
+        dto.setRenItemPlayoff(false);
+        dto.setItemGroupPlaySelJor(0);
+        dto.setItemGroupJor(0);
+        dto.setItemPlayoffJor(0);
         this.jornada = jor;
         this.horaPartido = jornada.getFechaJornada();
-        System.err.println("---horaPartido:"+horaPartido);
+        
         
     }
+       
+    public void loadListGroupOrPlayoff(){
+        if(dto.getItemGroupPlaySelJor()==1){
+            dto.setRenItemGroup(true);
+            dto.setRenItemPlayoff(false);
+            dto.setListGruposItemJor(gruDao.listGroupByChampionShip(campeonato.getIdCampeonato()));
+        }else if (dto.getItemGroupPlaySelJor()==2){
+            dto.setRenItemGroup(false);
+            dto.setRenItemPlayoff(true);
+            dto.setListPlayoffItemJor(plaDao.listPlayoffByChampionShip(campeonato.getIdCampeonato()));
+        }
+    }
+    
+    public void loadListMatchByGroupOrPlay(int origin){
+         if(origin==1){
+             //desde grupo
+            dto.setListPartidosItemJor(daoPar.listarPartidosGrupoJor(dto.getItemGroupJor()));
+        }else if (origin==2){
+            dto.setListPartidosItemJor(daoPar.listarPartidosPlayOffJor(dto.getItemPlayoffJor()));
+        }
         
+    
+    }
+    
+    
     public void agregarPartidoJornada()  {  
         System.err.println("---horaPartido despues:"+horaPartido);
-        if(parDao.agregarPartidoJornada(jornada, itemPartidoSelected, horaPartido)){
+        if(daoPar.agregarPartidoJornada(jornada, dto.getItemMatchSelJor(), horaPartido)){
             rowSelJor = jornada.getIdJornada();
             this.listar();   
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Partido agregado a la jornada");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Partido agregado a la jornada");                   
         }else{
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo agregar el partido");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -195,7 +222,7 @@ public class AdminChampionShipBean implements Serializable{
     }
     
     public List<Partido> listarPartidosJornada(Jornada jor){
-    return parDao.listarPartidosJornada(jor);
+    return daoPar.listarPartidosJornada(jor);
     }
     
     public void deleteJornada(Jornada jor) {
@@ -203,8 +230,7 @@ public class AdminChampionShipBean implements Serializable{
         dao = new JornadaDao();
         boolean reg = dao.deleteJornada(jor);
          if(reg){
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada Eliminada");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+             Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada Eliminada");          
         }else{
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo Eliminar", "porque tiene partidos asociados");
         FacesContext.getCurrentInstance().addMessage(null, message);}
@@ -214,10 +240,9 @@ public class AdminChampionShipBean implements Serializable{
             
     public void quitarPartidoJornada(){
         rowSelJor = partidoSelecJor.getIdJornada();
-        boolean resp = parDao.quitarPartidoJornada(partidoSelecJor);
+        boolean resp = daoPar.quitarPartidoJornada(partidoSelecJor);
         if(resp){
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Partido quitado de la jornada");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+            Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Partido quitado de la jornada"); 
         }else{
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "el partido no se pudo quitar");
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -250,8 +275,7 @@ public class AdminChampionShipBean implements Serializable{
         this.grupo.setIdUsuario(usuario.getIdUsuario());       
         if(gruDao.insertGroup(grupo)){
            this.listar();
-           FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Creado");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+           Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Creado");           
         }else{
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo Crear");
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -264,8 +288,7 @@ public class AdminChampionShipBean implements Serializable{
         dao = new GrupoDao();
         if (dao.updateGroup(grupo)) {
             this.listar();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Modificado");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Modificado");             
         } else {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo modificar");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -325,6 +348,17 @@ public class AdminChampionShipBean implements Serializable{
             //listaPosiciones.clear();
             grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
             listaPosiciones = partidoDao.listarTablaPosiciones(grupo.getIdGrupo());        
+    }
+        
+        
+    public List<Equipo> loadListTeamByGroup(int idGroup) {
+        EquipoDao equipoDao = new EquipoDao();
+        try {
+            listaEquipos = equipoDao.listar(idGroup);
+        } catch (Exception ex) {
+            Logger.getLogger(AdminChampionShipBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listaEquipos;
     }
 
     
@@ -466,12 +500,10 @@ public class AdminChampionShipBean implements Serializable{
         if (tarDao.cancelarTarjeta(tarjetaSel)) {
             listaTarjetas = tarDao.listAllCard(campeonato.getIdCampeonato());
             listaTarjetasPag = tarDao.listPagarCard(campeonato.getIdCampeonato());
-            listaTarjetasCan = tarDao.listCanCard(campeonato.getIdCampeonato());
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Tarjeta Pagada");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            listaTarjetasCan = tarDao.listCanCard(campeonato.getIdCampeonato());            
+            Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Tarjeta Pagada");
         } else {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo cancelar", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            Util.setMessage(FacesMessage.SEVERITY_ERROR, "Error", "Tarjeta no Pagada");
         }
     }
 
@@ -560,12 +592,9 @@ public class AdminChampionShipBean implements Serializable{
         this.accion = accion;
     }
 
-    public List<Equipo> getListaEquipos(Grupo gru) {
-        EquipoDao equipoDao = new EquipoDao();
-        try {
-            listaEquipos = equipoDao.listar(gru);
-        } catch (Exception ex) {
-            Logger.getLogger(AdminChampionShipBean.class.getName()).log(Level.SEVERE, null, ex);
+    public List<Equipo> getListaEquipos() {
+        if(listaEquipos==null){
+            listaEquipos = new ArrayList<>();
         }
         return listaEquipos;
     }
@@ -622,12 +651,12 @@ public class AdminChampionShipBean implements Serializable{
         this.listaPartidosJornada = listaPartidosJornada;
     }
 
-    public PartidoDao getParDao() {
-        return parDao;
+    public PartidoDao getDaoPar() {
+        return daoPar;
     }
 
-    public void setParDao(PartidoDao parDao) {
-        this.parDao = parDao;
+    public void setDaoPar(PartidoDao daoPar) {
+        this.daoPar = daoPar;
     }
 
     public List<SelectItem> getSelectItemOneGrupos() {
@@ -659,41 +688,10 @@ public class AdminChampionShipBean implements Serializable{
         this.gruDao = gruDao;
     }
 
-    public int getItemGrupoSelected() {
-        return itemGrupoSelected;
-    }
+   
+  
 
-    public void setItemGrupoSelected(int itemGrupoSelected) {
-        this.itemGrupoSelected = itemGrupoSelected;
-    }
 
-    public List<SelectItem> getSelectItemOnePartidos() {
-        try {
-            this.selectItemOnePartidos = new ArrayList<>();
-            
-            List<Partido> listPartido = parDao.listarPartidosGrupoJor(itemGrupoSelected);
-            selectItemOnePartidos.clear();
-            for (Partido p:listPartido){
-            SelectItem selectItem = new SelectItem(p.getIdPartido(),p.getEquipoA().getNombreEquipo()+" - "+p.getEquipoB().getNombreEquipo());
-            selectItemOnePartidos.add(selectItem);
-            }                              
-        } catch (Exception ex) {
-            Logger.getLogger(PartidoBean.class.getName()).log(Level.SEVERE, null, ex);
-        }    
-        return selectItemOnePartidos;
-    }
-
-    public void setSelectItemOnePartidos(List<SelectItem> selectItemOnePartidos) {
-        this.selectItemOnePartidos = selectItemOnePartidos;
-    }
-
-    public int getItemPartidoSelected() {
-        return itemPartidoSelected;
-    }
-
-    public void setItemPartidoSelected(int itemPartidoSelected) {
-        this.itemPartidoSelected = itemPartidoSelected;
-    }
 
     public int getRowSelJor() {
         return rowSelJor;
