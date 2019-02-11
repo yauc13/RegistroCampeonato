@@ -30,6 +30,16 @@ public class Util {
         return obj;
     }
     
+    public static final void setObjectOfContext(String id, Object obj){
+       FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(id, obj);        
+    }
+    
+    /**
+     *Coloca mensaje en la vista
+     * @param severity
+     * @param summary
+     * @param details
+     */
     public static final void setMessage(FacesMessage.Severity severity,String summary, String details){       
        FacesMessage message = new FacesMessage(severity, summary, details);
        FacesContext.getCurrentInstance().addMessage(null, message);

@@ -103,8 +103,8 @@ public class AdminChampionShipBean implements Serializable{
         
         partidoSelecJor = new Partido();
         rowSelJor = 0;
-
-        campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
+        usuario = (Usuario) Util.getObjectOfContext("usuario");
+        campeonato = (Campeonato) Util.getObjectOfContext("campeonato");        
         listaGoleadores = jugDao.listarGoleadores(campeonato);
         listaTarjetas = tarDao.listAllCard(campeonato.getIdCampeonato());
         listaTarjetasPag = tarDao.listPagarCard(campeonato.getIdCampeonato());
@@ -112,10 +112,9 @@ public class AdminChampionShipBean implements Serializable{
         listaPagoEquipos = equDao.listarEquiposTotalPago(campeonato.getIdCampeonato());
     }
     
-    public int verIdCampeonato(){
-        Campeonato camp = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
-        int idCamp = camp.getIdCampeonato();
-    return idCamp;
+    public int verIdCampeonato(){        
+        int idCamp = campeonato.getIdCampeonato();
+        return idCamp;
     }
     
     public void onTabChange(TabChangeEvent event) {
@@ -157,8 +156,7 @@ public class AdminChampionShipBean implements Serializable{
         if (jorDao.modificar(jornadaNew)) {
             Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada modificada");                   
         } else {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            Util.setMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear");             
         }
         this.listar();
     }
@@ -209,7 +207,7 @@ public class AdminChampionShipBean implements Serializable{
     
     
     public void agregarPartidoJornada()  {  
-        System.err.println("---horaPartido despues:"+horaPartido);
+        
         if(daoPar.agregarPartidoJornada(jornada, dto.getItemMatchSelJor(), horaPartido)){
             rowSelJor = jornada.getIdJornada();
             this.listar();   
@@ -244,11 +242,8 @@ public class AdminChampionShipBean implements Serializable{
         if(resp){
             Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Partido quitado de la jornada"); 
         }else{
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "el partido no se pudo quitar");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+            Util.setMessage(FacesMessage.SEVERITY_ERROR, "Error", "el partido no se pudo quitar"); 
         }
-        //rowSelJor = jornada.getIdJornada();
-        
         partidoSelecJor = new Partido();
         this.listar();
     }
@@ -321,8 +316,8 @@ public class AdminChampionShipBean implements Serializable{
     public String verGrupo(Grupo grup){
     
     String direccion = null; 
-        //sirve para pasar datos entres los beans
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("grupo", grup);
+        //sirve para pasar datos entres los beans        
+        Util.setObjectOfContext("grupo", grup);
         direccion = "vistaGrupo?faces-redirect=true";
     return direccion;
     }
@@ -397,9 +392,7 @@ public class AdminChampionShipBean implements Serializable{
         
         this.accion = "Registrar";
         this.limpiarPlayOff();
-        dto.setListaEquiposClasificados(bo.listDefineTeamsForPlayoff(campeonato.getIdCampeonato()));
-        
-        
+        dto.setListaEquiposClasificados(bo.listDefineTeamsForPlayoff(campeonato.getIdCampeonato()));    
     }
     
      private void limpiarPlayOff(){
@@ -443,11 +436,9 @@ public class AdminChampionShipBean implements Serializable{
         this.equipoPago = null;
         this.pagoPlanilla = null;
         listaPagoEquipos = equDao.listarEquiposTotalPago(campeonato.getIdCampeonato());
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Se Agrego el pago");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+        Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Se Agrego el pago");        
         }else{
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo agregar el pago");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            Util.setMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo agregar el pago");          
             this.equipoPago = null;
             this.pagoPlanilla = null;
         }
@@ -470,10 +461,7 @@ public class AdminChampionShipBean implements Serializable{
     GrupoDao dao;
     
         if(this.isPostBack() == false){
-        dao = new GrupoDao();
-        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
-        
+        dao = new GrupoDao();        
         listaGrupo = dao.listGroupByChampionShip(campeonato.getIdCampeonato());
         listaGoleadores = jugDao.listarGoleadores(campeonato);
         listaJornada = jorDao.listarJornadas(campeonato);
@@ -485,9 +473,7 @@ public class AdminChampionShipBean implements Serializable{
     public void listar() {
     GrupoDao dao;
     
-        dao = new GrupoDao();
-        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");        
+        dao = new GrupoDao();       
         listaGrupo = dao.listGroupByChampionShip(campeonato.getIdCampeonato());
         listaGoleadores = jugDao.listarGoleadores(campeonato);
         listaJornada = jorDao.listarJornadas(campeonato);

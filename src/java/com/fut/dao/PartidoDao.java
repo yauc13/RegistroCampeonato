@@ -9,6 +9,7 @@ import com.fut.model.Equipo;
 import com.fut.model.Grupo;
 import com.fut.model.Jornada;
 import com.fut.model.Partido;
+import com.fut.model.PlayOff;
 import com.fut.model.TablaEquipos;
 import com.fut.util.Cons;
 import com.fut.util.SqlAdminFutSal;
@@ -305,6 +306,11 @@ public class PartidoDao extends Dao{
                     grupo.setIdGrupo(rs.getInt("idGrupo"));
                     grupo.setNombreGrupo(rs.getString("nombreGrupo"));
                     cam.setGrupo(grupo);
+                    
+                    PlayOff play = new PlayOff();
+                    play.setIdPlayOff(rs.getInt("idPlayOff"));
+                    play.setNamePlayOff(rs.getString("namePlayOff"));
+                    cam.setPlayOff(play);
                     
                     lista.add(cam);
                 

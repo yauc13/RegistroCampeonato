@@ -72,7 +72,9 @@
                 </p:column>
                 
                 <p:column headerText="Estado">
-                    <p:outputLabel value="#{partido.estadoPartido}"/>
+                    <p:outputLabel value="#{partido.estadoPartido}"
+                                   styleClass="#{partido.estadoPartido eq 'Finalizado' ? 'estParFin' : partido.estadoPartido eq 'Por Jugar' ? 'estParPorJug' : 'estParJug'}"
+                                   />
                 </p:column>
                 <p:column headerText="Editar Planilla">
                     <p:commandLink  id="linkEPlanilla" value="Editar Planilla" action="#{partidoBean.editarPlanilla(partido)}" update="data"
