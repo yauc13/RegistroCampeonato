@@ -5,6 +5,7 @@
  */
 package com.fut.dto;
 
+import com.fut.model.Arbitro;
 import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 import com.fut.model.Grupo;
@@ -38,7 +39,21 @@ public class AdminChampionShipDTO {
     private boolean renItemPlayoff;
     private List<Grupo> listGruposItemJor;
     private List<PlayOff> listPlayoffItemJor;
+    private List<Arbitro> listArbitro;
 
+    public List<Arbitro> getListArbitro() {
+         if (listArbitro == null) {
+            listArbitro = new ArrayList<>();
+        }
+        return listArbitro;
+    }
+
+    public void setListArbitro(List<Arbitro> listArbitro) {
+        this.listArbitro = listArbitro;
+    }
+
+    
+    
     
     public List<Grupo> getListGruposItemJor() {
         if (listGruposItemJor == null) {
