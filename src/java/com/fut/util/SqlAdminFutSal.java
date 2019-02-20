@@ -82,8 +82,8 @@ public class SqlAdminFutSal {
     public static final String  SELECT_CARD_ALL_PLAYER = "SELECT \"idTarjeta\", ju.\"nombreJugador\", eq.\"nombreEquipo\", \"tipoTarjeta\", eqB.\"nombreEquipo\" as\"nombreEquipoB\",  \"pagoTarjeta\", pa.\"fechaPartido\" FROM public.tarjeta ta INNER JOIN public.jugador ju on ta.\"idJugador\" = ju.\"idJugador\" INNER JOIN public.partido pa on ta.\"idPartido\" = pa.\"idPartido\" INNER JOIN public.equipo eq ON ta.\"idEquipo\" = eq.\"idEquipo\" INNER JOIN public.equipo eqB ON ta.\"idEquipoB\" = eqB.\"idEquipo\" INNER JOIN public.grupo  gru ON eq.\"idGrupoEquipo\" = gru.\"idGrupo\" INNER JOIN public.campeonato  cam ON gru.\"idCampeonato\"  = cam.\"idCampeonato\" WHERE  cam.\"idCampeonato\" = ? ORDER BY ta.\"idTarjeta\" DESC";
     
     /*DAO ARBITRO*/
-    public static final String  INSERT_ARBITRO = "";
-    public static final String SELECT_ARBITRO_BY_CAMPEONATO = "";
+    public static final String  INSERT_ARBITRO = "INSERT INTO public.arbitro( \"nombreArbitro\", \"idCampeonato\") VALUES ( ?, ?);";
+    public static final String SELECT_ARBITRO_BY_CAMPEONATO = "SELECT * FROM public.arbitro WHERE \"idCampeonato\" = ?;";
     
     
     

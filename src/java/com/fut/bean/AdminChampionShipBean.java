@@ -56,7 +56,7 @@ import org.primefaces.event.TabChangeEvent;
 public class AdminChampionShipBean implements Serializable{
     private Grupo grupo = new Grupo();
     private PlayOff playOff = new PlayOff();
-    private Campeonato campeonato = new Campeonato();
+    
     private Usuario usuario = new Usuario();
     private Jornada jornada = new Jornada(); 
     private Jornada jornadaNew = new Jornada();
@@ -104,16 +104,16 @@ public class AdminChampionShipBean implements Serializable{
         partidoSelecJor = new Partido();
         rowSelJor = 0;
         usuario = (Usuario) Util.getObjectOfContext("usuario");
-        campeonato = (Campeonato) Util.getObjectOfContext("campeonato");        
-        listaGoleadores = jugDao.listarGoleadores(campeonato);
-        listaTarjetas = tarDao.listAllCard(campeonato.getIdCampeonato());
-        listaTarjetasPag = tarDao.listPagarCard(campeonato.getIdCampeonato());
-        listaTarjetasCan = tarDao.listCanCard(campeonato.getIdCampeonato());
-        listaPagoEquipos = equDao.listarEquiposTotalPago(campeonato.getIdCampeonato());
+        dto.setCampeonato((Campeonato) Util.getObjectOfContext("campeonato"));        
+        listaGoleadores = jugDao.listarGoleadores(dto.getCampeonato());
+        listaTarjetas = tarDao.listAllCard(dto.getCampeonato().getIdCampeonato());
+        listaTarjetasPag = tarDao.listPagarCard(dto.getCampeonato().getIdCampeonato());
+        listaTarjetasCan = tarDao.listCanCard(dto.getCampeonato().getIdCampeonato());
+        listaPagoEquipos = equDao.listarEquiposTotalPago(dto.getCampeonato().getIdCampeonato());
     }
     
     public int verIdCampeonato(){        
-        int idCamp = campeonato.getIdCampeonato();
+        int idCamp = dto.getCampeonato().getIdCampeonato();
         return idCamp;
     }
     
@@ -140,7 +140,7 @@ public class AdminChampionShipBean implements Serializable{
     }
         
     public void registrarJornada() {       
-        jornadaNew.setIdCampeonato(campeonato.getIdCampeonato());
+        jornadaNew.setIdCampeonato(dto.getCampeonato().getIdCampeonato());
         jornadaNew.setIdUsuario(usuario.getIdUsuario());
         boolean reg = jorDao.registrar(jornadaNew);
         if(reg){
@@ -186,11 +186,11 @@ public class AdminChampionShipBean implements Serializable{
         if(dto.getItemGroupPlaySelJor()==1){
             dto.setRenItemGroup(true);
             dto.setRenItemPlayoff(false);
-            dto.setListGruposItemJor(gruDao.listGroupByChampionShip(campeonato.getIdCampeonato()));
+            dto.setListGruposItemJor(gruDao.listGroupByChampionShip(dto.getCampeonato().getIdCampeonato()));
         }else if (dto.getItemGroupPlaySelJor()==2){
             dto.setRenItemGroup(false);
             dto.setRenItemPlayoff(true);
-            dto.setListPlayoffItemJor(plaDao.listPlayoffByChampionShip(campeonato.getIdCampeonato()));
+            dto.setListPlayoffItemJor(plaDao.listPlayoffByChampionShip(dto.getCampeonato().getIdCampeonato()));
         }
     }
     
@@ -266,7 +266,7 @@ public class AdminChampionShipBean implements Serializable{
     }
     
      public void registrarGrupo() {
-        this.grupo.setIdCampeonato(campeonato.getIdCampeonato());
+        this.grupo.setIdCampeonato(dto.getCampeonato().getIdCampeonato());
         this.grupo.setIdUsuario(usuario.getIdUsuario());       
         if(gruDao.insertGroup(grupo)){
            this.listar();
@@ -376,7 +376,7 @@ public class AdminChampionShipBean implements Serializable{
     public void registrarPlayOff() {
         
         plaDao = new PlayOffDao();
-        this.playOff.setIdCampeonato(campeonato.getIdCampeonato());
+        this.playOff.setIdCampeonato(dto.getCampeonato().getIdCampeonato());
         this.playOff.setListTeam(dto.getListaEquiposClasificados());
         if (plaDao.insertPlayOff(playOff)) {
             this.listar();
@@ -392,7 +392,7 @@ public class AdminChampionShipBean implements Serializable{
         
         this.accion = "Registrar";
         this.limpiarPlayOff();
-        dto.setListaEquiposClasificados(bo.listDefineTeamsForPlayoff(campeonato.getIdCampeonato()));    
+        dto.setListaEquiposClasificados(bo.listDefineTeamsForPlayoff(dto.getCampeonato().getIdCampeonato()));    
     }
     
      private void limpiarPlayOff(){
@@ -430,12 +430,12 @@ public class AdminChampionShipBean implements Serializable{
     }
     
     public void payTeam(){
-        this.pagoPlanilla.setIdCampeonato(campeonato.getIdCampeonato());
+        this.pagoPlanilla.setIdCampeonato(dto.getCampeonato().getIdCampeonato());
         this.pagoPlanilla.setIdEquipo(equipoPago.getIdEquipo());
         if(equDao.insertPayTeam(pagoPlanilla)){
         this.equipoPago = null;
         this.pagoPlanilla = null;
-        listaPagoEquipos = equDao.listarEquiposTotalPago(campeonato.getIdCampeonato());
+        listaPagoEquipos = equDao.listarEquiposTotalPago(dto.getCampeonato().getIdCampeonato());
         Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Se Agrego el pago");        
         }else{
             Util.setMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo agregar el pago");          
@@ -462,10 +462,10 @@ public class AdminChampionShipBean implements Serializable{
     
         if(this.isPostBack() == false){
         dao = new GrupoDao();        
-        listaGrupo = dao.listGroupByChampionShip(campeonato.getIdCampeonato());
-        listaGoleadores = jugDao.listarGoleadores(campeonato);
-        listaJornada = jorDao.listarJornadas(campeonato);
-        listaPlayOff = plaDao.listPlayoffByChampionShip(campeonato.getIdCampeonato());
+        listaGrupo = dao.listGroupByChampionShip(dto.getCampeonato().getIdCampeonato());
+        listaGoleadores = jugDao.listarGoleadores(dto.getCampeonato());
+        listaJornada = jorDao.listarJornadas(dto.getCampeonato());
+        listaPlayOff = plaDao.listPlayoffByChampionShip(dto.getCampeonato().getIdCampeonato());
         }
     
     }
@@ -474,23 +474,33 @@ public class AdminChampionShipBean implements Serializable{
     GrupoDao dao;
     
         dao = new GrupoDao();       
-        listaGrupo = dao.listGroupByChampionShip(campeonato.getIdCampeonato());
-        listaGoleadores = jugDao.listarGoleadores(campeonato);
-        listaJornada = jorDao.listarJornadas(campeonato);
-        listaPlayOff = plaDao.listPlayoffByChampionShip(campeonato.getIdCampeonato());
+        listaGrupo = dao.listGroupByChampionShip(dto.getCampeonato().getIdCampeonato());
+        listaGoleadores = jugDao.listarGoleadores(dto.getCampeonato());
+        listaJornada = jorDao.listarJornadas(dto.getCampeonato());
+        listaPlayOff = plaDao.listPlayoffByChampionShip(dto.getCampeonato().getIdCampeonato());
     
     }
     
     
     public void payCard() {
         if (tarDao.cancelarTarjeta(tarjetaSel)) {
-            listaTarjetas = tarDao.listAllCard(campeonato.getIdCampeonato());
-            listaTarjetasPag = tarDao.listPagarCard(campeonato.getIdCampeonato());
-            listaTarjetasCan = tarDao.listCanCard(campeonato.getIdCampeonato());            
+            listaTarjetas = tarDao.listAllCard(dto.getCampeonato().getIdCampeonato());
+            listaTarjetasPag = tarDao.listPagarCard(dto.getCampeonato().getIdCampeonato());
+            listaTarjetasCan = tarDao.listCanCard(dto.getCampeonato().getIdCampeonato());            
             Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Tarjeta Pagada");
         } else {
             Util.setMessage(FacesMessage.SEVERITY_ERROR, "Error", "Tarjeta no Pagada");
         }
+    }
+    
+    
+    /*metodos arbitro*/
+    public void registrarArbitro() {  
+        bo.registrarArbitro(dto);
+    }
+    
+    public void listarArbitro() {  
+        bo.listarArbitros(dto);
     }
 
     public String habilitarPermisos(Campeonato camp, int i){
@@ -551,15 +561,6 @@ public class AdminChampionShipBean implements Serializable{
     public void setGrupo(Grupo grupo) {
         this.grupo = grupo;
     }
-
-    public Campeonato getCampeonato() {
-        return campeonato;
-    }
-
-    public void setCampeonato(Campeonato campeonato) {
-        this.campeonato = campeonato;
-    }
-
 
 
     public List<Grupo> getListaGrupo() {
@@ -649,7 +650,7 @@ public class AdminChampionShipBean implements Serializable{
          try {
             this.selectItemOneGrupos = new ArrayList<>();
             
-            List<Grupo> listGrupo = gruDao.listGroupByChampionShip(campeonato.getIdCampeonato());
+            List<Grupo> listGrupo = gruDao.listGroupByChampionShip(dto.getCampeonato().getIdCampeonato());
             selectItemOneGrupos.clear();
             for (Grupo g:listGrupo){
             SelectItem selectItem = new SelectItem(g.getIdGrupo(),g.getNombreGrupo());

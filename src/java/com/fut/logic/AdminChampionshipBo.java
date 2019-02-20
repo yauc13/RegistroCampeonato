@@ -5,19 +5,24 @@
  */
 package com.fut.logic;
 
+import com.fut.dao.ArbitroDao;
 import com.fut.dao.GrupoDao;
 import com.fut.dao.JornadaDao;
 import com.fut.dao.JugadorDao;
 import com.fut.dao.PartidoDao;
 import com.fut.dao.PlayOffDao;
 import com.fut.dao.TarjetaDao;
+import com.fut.dto.AdminChampionShipDTO;
 import com.fut.model.Equipo;
 import com.fut.model.Grupo;
 import com.fut.model.Partido;
 import com.fut.model.PlayOff;
 import com.fut.model.TablaEquipos;
+import com.fut.util.Util;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -31,7 +36,11 @@ public class AdminChampionshipBo {
     private final GrupoDao gruDao = new GrupoDao();
     private final PlayOffDao plaDao = new PlayOffDao();
     private final TarjetaDao tarDao = new TarjetaDao();
+    private final ArbitroDao arbDao = new ArbitroDao();
     
+    
+    
+    /*metodos play off*/
     private List<Equipo> calculateTeamClassifiedsOfGroups(int idChampionship){
         List<Equipo> list = new ArrayList<>();
         //lsitar grupos por campeonato
@@ -86,6 +95,25 @@ public class AdminChampionshipBo {
     }
     return list;
     }
+    
+    
+    /*metodos arbitro*/
+    
+    public void registrarArbitro(AdminChampionShipDTO dto) {  
+        
+        boolean reg = arbDao.registrarArbitro(dto.getArbitro());
+        if(reg){
+            Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Arbitro creado");  
+            dto.setListArbitro(arbDao.listarArbitros(dto.getCampeonato().getIdCampeonato()));
+        }else{
+            Util.setMessage(FacesMessage.SEVERITY_FATAL,  "Error", "no se pudo crear Arbitro");   
+        }
+        
+    }
+    
+   public void listarArbitros(AdminChampionShipDTO dto){
+       dto.setListArbitro(arbDao.listarArbitros(dto.getCampeonato().getIdCampeonato()));
+   }
     
     
     

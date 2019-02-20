@@ -36,14 +36,16 @@ public class ArbitroDao extends Dao {
         return reg;
     }
 
-    public List<Arbitro> listar() {
+    public List<Arbitro> listarArbitros(int idCampeonato) {
         List<Arbitro> lista = null;
         ResultSet rs;
 
         try {
             this.ConectionDataBase();
             PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_ARBITRO_BY_CAMPEONATO);
+            st.setInt(1, idCampeonato);
             rs = st.executeQuery();
+            
             lista = new ArrayList();
             while (rs.next()) {
                 Arbitro cam = new Arbitro();

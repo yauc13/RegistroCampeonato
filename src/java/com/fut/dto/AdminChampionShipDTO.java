@@ -40,6 +40,32 @@ public class AdminChampionShipDTO {
     private List<Grupo> listGruposItemJor;
     private List<PlayOff> listPlayoffItemJor;
     private List<Arbitro> listArbitro;
+    private Arbitro arbitro; //objeto para insertar y actualizar
+    private Campeonato campeonato;
+
+    
+    public Campeonato getCampeonato() {
+        if (campeonato == null) {
+            campeonato = new Campeonato();
+        }
+        return campeonato;
+    }
+
+    public void setCampeonato(Campeonato campeonato) {
+        this.campeonato = campeonato;
+    }
+    
+
+    public Arbitro getArbitro() {
+        if (arbitro == null) {
+            arbitro = new Arbitro();
+        }
+        return arbitro;
+    }
+
+    public void setArbitro(Arbitro arbitro) {
+        this.arbitro = arbitro;
+    }
 
     public List<Arbitro> getListArbitro() {
          if (listArbitro == null) {
