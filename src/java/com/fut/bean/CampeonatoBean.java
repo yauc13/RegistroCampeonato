@@ -6,6 +6,7 @@
 package com.fut.bean;
 
 import com.fut.dao.CampeonatoDao;
+import com.fut.dto.CampeonatoDTO;
 import com.fut.model.Campeonato;
 import com.fut.model.Usuario;
 import com.fut.util.Util;
@@ -30,62 +31,17 @@ import javax.faces.context.FacesContext;
 
 
 public class CampeonatoBean implements Serializable{
-    private Campeonato campeonato = new Campeonato();
-    private Usuario usuario = new Usuario();
-    private List<Campeonato> listaCampeonato;
-    private String loginUsuario;
-    private String accion;
     
+    CampeonatoDTO dto;
 
-    public CampeonatoBean() {        
-        usuario = (Usuario) Util.getObjectOfContext("usuario");
+    public CampeonatoBean() { 
+        dto = new CampeonatoDTO();
+        dto.setUsuario((Usuario) Util.getObjectOfContext("usuario"));
            
     }
 
-  
-    
-    
-    
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-    
-    
-    
-
-    public Campeonato getCampeonato() {
-        return campeonato;
-    }
-
-    public void setCampeonato(Campeonato campeonato) {
-        this.campeonato = campeonato;
-    }
-
-    public List<Campeonato> getListaCampeonato() {
-        return listaCampeonato;
-    }
-
-    public void setListaCampeonato(List<Campeonato> listaCampeonato) {
-        this.listaCampeonato = listaCampeonato;
-    }
-
-    public String getAccion() {
-        return accion;
-    }
-
-    public void setAccion(String accion) {
-        this.accion = accion;
-    }
-
-    
-    
-    
     public void operar() throws Exception{
-    switch(accion){
+    switch(dto.getAccion()){
         case "Registrar":
             this.registrar();
             this.limpiarCampeonato();
@@ -98,35 +54,30 @@ public class CampeonatoBean implements Serializable{
     }
     
     public void limpiarCampeonato(){
-        this.campeonato = new Campeonato();
+        dto.setCampeonato(new Campeonato());
     }
     
     public void preparedNew(){
-        this.setAccion("Registrar");
+        dto.setAccion("Registrar");
         limpiarCampeonato();
     }
     
     
     
-    public void registrar() throws Exception {
+    public void registrar() {
     CampeonatoDao dao;
-    
-    try{
+
         dao = new CampeonatoDao();
         
-        this.campeonato.setIdUsuario(usuario.getIdUsuario());
-        boolean reg= dao.registrar(campeonato);
+        dto.getCampeonato().setIdUsuario(dto.getUsuario().getIdUsuario());
+        boolean reg= dao.registrar(dto.getCampeonato());
         if(reg){
-            
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Campeonato creado");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+           Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Campeonato creado");        
         }else{
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear");
-        FacesContext.getCurrentInstance().addMessage(null, message);}
+            Util.setMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo crear");       
+        }
         this.listarCampeonatos();
-    }catch(Exception e){  
-        throw e;
-    }   
+     
     }
     
     public void modificar() throws Exception {
@@ -134,7 +85,7 @@ public class CampeonatoBean implements Serializable{
     try{
         
         dao = new CampeonatoDao();
-        boolean reg = dao.modificar(campeonato);
+        boolean reg = dao.modificar(dto.getCampeonato());
         if(reg){
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Campeonato Modificado");
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -235,13 +186,6 @@ public class CampeonatoBean implements Serializable{
     return bol;
     }
     
-    public String getLoginUsuario() {
-        return loginUsuario;
-    }
-
-    public void setLoginUsuario(String loginUsuario) {
-        this.loginUsuario = loginUsuario;
-    }
 
     
     
