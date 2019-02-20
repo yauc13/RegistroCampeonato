@@ -29,10 +29,10 @@
                                    />
                 </p:column>    
                 <p:column headerText="Modificar">
-                    <p:commandLink value="Modificar" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatosEquipo').show();" update="idTabviewVistaCampeonato:dlgDatosEquipo" disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
+                    <p:commandLink value="Modificar" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatosEquipo').show();" update="idTabviewVistaCampeonato:dlgDatosEquipo"/>
                 </p:column>
                 <p:column headerText="Eliminar">
-                    <p:commandLink value="Eliminar" actionListener="#{equipoBean.eliminar(equipo)}" update="dataEquipo"   disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
+                    <p:commandLink value="Eliminar" actionListener="#{equipoBean.eliminar(equipo)}" update="dataEquipo"  />
                 </p:column>
 
             </p:dataTable>

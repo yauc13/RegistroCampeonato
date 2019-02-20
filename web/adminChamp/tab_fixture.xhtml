@@ -19,7 +19,7 @@
                         <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
                             <p:commandButton  value="Nueva jornada" oncomplete="PF('wdgJornada').show();"
                                               actionListener="#{adminChampionShipBean.preparedNewFixture()}"
-                                              update=":dlgJornada" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
+                                              update=":dlgJornada" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.dto.campeonato,2)}"
                                               icon="ui-icon-circle-plus"
                                               />
                         </div>

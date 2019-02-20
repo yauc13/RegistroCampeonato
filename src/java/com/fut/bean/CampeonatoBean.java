@@ -11,11 +11,6 @@ import com.fut.model.Campeonato;
 import com.fut.model.Usuario;
 import com.fut.util.Util;
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -99,18 +94,11 @@ public class CampeonatoBean implements Serializable{
     }
     
 
-    public String verGruposCampeonato(Campeonato camp) throws Exception {
-    
-    String direccion = null;
-    try{
+    public String verGruposCampeonato(Campeonato camp) {
         //sirve para pasar datos entres los beans
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("campeonato", camp);
-        direccion = "adminChampionShip?faces-redirect=true";
-        
-        
-    }catch(Exception e){  
-        throw e;
-    }   
+         String direccion = "adminChampionShip?faces-redirect=true";
+
     return direccion;
     }
         
@@ -124,22 +112,20 @@ public class CampeonatoBean implements Serializable{
     CampeonatoDao dao;    
         if(this.isPostBack() == false){
         dao = new CampeonatoDao();
-        
-        listaCampeonato = dao.listar();
+        dto.setListaCampeonato( dao.listar());        
         }    
     }
     
     public void listarCampeonatos(){
-    CampeonatoDao dao;    
+        CampeonatoDao dao;    
         dao = new CampeonatoDao();
-        
-        listaCampeonato = dao.listar();
+        dto.setListaCampeonato( dao.listar()); 
     }
     
     
-    public void preparedEditChampionShip (Campeonato usu) throws Exception{
-            this.campeonato = usu; 
-            this.accion = "Modificar";
+    public void preparedEditChampionShip (Campeonato cam) throws Exception{
+            dto.setCampeonato(cam);  
+            dto.setAccion("Modificar");
     }
     
 
@@ -148,13 +134,12 @@ public class CampeonatoBean implements Serializable{
     CampeonatoDao dao;
     
         dao = new CampeonatoDao();
-        boolean reg =dao.deleteCampeonato(campeonato);
+        boolean reg =dao.deleteCampeonato(dto.getCampeonato());
         if(reg){
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Campeonato Eliminado");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+            Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso",  "Campeonato Eliminado");        
         }else{
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo Eliminar", "porque tiene jornadas o grupos asociados");
-        FacesContext.getCurrentInstance().addMessage(null, message);}
+            Util.setMessage(FacesMessage.SEVERITY_FATAL,"Error:no se pudo Eliminar",  "porque tiene jornadas o grupos asociados");  
+        }
         this.listarCampeonatos();
       
     }
@@ -164,7 +149,7 @@ public class CampeonatoBean implements Serializable{
        switch (i){
            case 1:
                //habilitar deleteCampeonato y editar
-               if(camp.getIdUsuario() == usuario.getIdUsuario() || "Administrador".equals(usuario.getRolUsuario())){
+               if(camp.getIdUsuario() == dto.getUsuario().getIdUsuario() || "Administrador".equals(dto.getUsuario().getRolUsuario())){
                     bol = "false";
                 }else{
                     bol = "true";
@@ -174,7 +159,7 @@ public class CampeonatoBean implements Serializable{
             case 2:
                           
                 //habilitar boton nuevo
-               if("Organizador".equals(usuario.getRolUsuario()) || "Administrador".equals(usuario.getRolUsuario())){
+               if("Organizador".equals(dto.getUsuario().getRolUsuario()) || "Administrador".equals(dto.getUsuario().getRolUsuario())){
                     bol = "false";
                 }else{
                     bol = "true";
@@ -184,6 +169,14 @@ public class CampeonatoBean implements Serializable{
        }
         
     return bol;
+    }
+
+    public CampeonatoDTO getDto() {
+        return dto;
+    }
+
+    public void setDto(CampeonatoDTO dto) {
+        this.dto = dto;
     }
     
 

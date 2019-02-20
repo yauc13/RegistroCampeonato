@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:panelGrid columns="2" cellpadding="10" id="panel2">
+        <h:form id="formReferee">
+
+
+            <p:dataTable id="data" value="#{adminChampionShipBean.listaJornada}" var="jor"
+                         rowKey="#{jor.idJornada}"
+                         expandedRow="#{jor.idJornada == adminChampionShipBean.rowSelJor}"  
+
+                         >
+                <f:facet  name="header">
+                    <div class="row">
+                        <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
+                            <p:commandButton  value="Nueva jornada" oncomplete="PF('wdgJornada').show();"
+                                              actionListener="#{adminChampionShipBean.preparedNewFixture()}"
+                                              update=":dlgJornada"
+                                              icon="ui-icon-circle-plus"
+                                              />
+                        </div>
+                        <div class="col-md-10 col-xs-10 col-sm-10">
+                            <p:outputLabel value="Jornadas de #{adminChampionShipBean.campeonato.nombreCampeonato}"/>
+                        </div>
+                    </div>
+                </f:facet>
+                <f:facet name="footer">
+                    Registros (#{adminChampionShipBean.listaJornada.size()})
+                </f:facet>
+
+                <p:column headerText="nombre arbitro">
+                    <p:outputLabel value="#{jor.nombreJornada}"/>
+                </p:column>
+                <p:column headerText="new">
+                    <p:commandButton icon="ui-icon-pencil"
+                                     title="Editar Arbitro" 
+                                     update="idTabviewVistaCampeonato:formReferee, idTabviewVistaCampeonato:formGrupos"
+                                     actionListener="#{adminChampionShipBean.deleteJornada(jor)}"
+
+                                     style="margin-left: 7px;"
+                                     />
+                   
+                    <p:commandButton icon="ui-icon-trash"
+                                     title="Eliminar Jornada" 
+                                     update="idTabviewVistaCampeonato:formReferee, idTabviewVistaCampeonato:formGrupos"
+                                     actionListener="#{adminChampionShipBean.deleteJornada(jor)}"
+
+                                     style="margin-left: 7px;"
+                                     />
+
+
+
+                </p:column>
+
+               
+            </p:dataTable>
+
+        </h:form>
+    </h:panelGrid>
+
+</ui:composition>
+
+

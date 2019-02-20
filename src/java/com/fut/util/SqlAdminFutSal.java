@@ -14,9 +14,11 @@ public class SqlAdminFutSal {
     public static final String GET_LOGIN_USER = "SELECT \"idUsuario\", \"loginUsuario\", \"passwordUsuario\", \"rolUsuario\" FROM public.usuario WHERE \"loginUsuario\" = ? and \"passwordUsuario\" = ?";
     
     /* DAO CAMPEONATO*/
-    public static final String SELECT_CAMPEONATO = "SELECT \"idCampeonato\", \"nombreCampeonato\", \"idUsuario\" FROM public.campeonato";
-    public static final String REGISTER_CAMPEONATO = "INSERT INTO public.campeonato (\"nombreCampeonato\", \"idUsuario\") values(?,?)";
-    public static final String EDIT_CAMPEONATO = "";
+    public static final String SELECT_CAMPEONATO = "SELECT * FROM public.campeonato";
+    public static final String REGISTER_CAMPEONATO = "INSERT INTO public.campeonato (\"nombreCampeonato\", \"idUsuario\",\"costoPlanilla\", \"costoTarAma\", \"costoTarAzu\", \"costoTarRoj\") values(?,?, ?, ?, ?, ?)";
+    public static final String EDIT_CAMPEONATO = "UPDATE public.campeonato SET \"nombreCampeonato\" = ?, \"costoPlanilla\"=?, \"costoTarAma\"=?, \"costoTarAzu\"=?, \"costoTarRoj\"=? WHERE \"idCampeonato\" = ? ";
+    public static final String DELETE_CAMPEONATO = "DELETE FROM public.campeonato  WHERE \"idCampeonato\" = ?";
+    
     /* DAO JUGADOR*/
     public static final String INSERT_PLAYER = "INSERT INTO public.jugador (\"nombreJugador\",birthday,\"golJugador\",\"idEquipoJugador\",\"idUsuario\",\"fotoJugador\") values(?,?,?,?,?,?)";
     public static final String UPDATE_PLAYER = "UPDATE public.jugador SET \"nombreJugador\" = ?,birthday=?, \"fotoJugador\" = ? WHERE \"idJugador\" = ?";

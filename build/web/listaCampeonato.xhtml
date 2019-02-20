@@ -33,7 +33,7 @@
                 <h:form id="frm1">
                     <br/> 
                     <div  class="col-md-10 col-md-offset-8 ">
-                        <p:dataTable id="data" value="#{campeonatoBean.listaCampeonato}" var="camp"  
+                        <p:dataTable id="data" value="#{campeonatoBean.dto.listaCampeonato}" var="camp"  
 
                                      >
 
@@ -42,7 +42,7 @@
                                     <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
                                         <p:commandButton  value="Nuevo Campeonato" oncomplete="PF('wdgDatos').show();"
                                                           actionListener="#{campeonatoBean.preparedNew()}"
-                                                          update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
+                                                          update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.dto.campeonato,2)}"
                                                           icon="ui-icon-circle-plus"
 
                                                           />
@@ -63,7 +63,7 @@
                             </p:column>                
                             <p:column headerText="Ver" width="15%">
                                 <p:commandLink value="Ver" action="#{campeonatoBean.verGruposCampeonato(camp)}" update="data"
-                                               ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+                                               
                                                />
                             </p:column>
                             <p:column  width="15%">
@@ -90,23 +90,23 @@
                 </h:form>
             </div>
         </div>
-        <p:dialog header="#{campeonatoBean.accion} Campeonatos" widgetVar="wdgDatos" id="dlgDatos">
+        <p:dialog header="#{campeonatoBean.dto.accion} Campeonatos" widgetVar="wdgDatos" id="dlgDatos">
             <h:form>
                 <p:growl autoUpdate="true" showDetail="true"/>
                 <p:panelGrid columns="2">
                     <p:outputLabel value="Nombre Campeonato" for="txtNombre"/>
-                    <p:inputText id="txtNombre" required="true" value="#{campeonatoBean.campeonato.nombreCampeonato}"/>
+                    <p:inputText id="txtNombre" required="true" value="#{campeonatoBean.dto.campeonato.nombreCampeonato}"/>
                     <p:outputLabel value="Costo Planilla" for="txtPla"/>
-                    <p:inputText id="txtPla" required="true" value="#{campeonatoBean.campeonato.nombreCampeonato}"/>
+                    <p:inputText id="txtPla" required="true" value="#{campeonatoBean.dto.campeonato.costoPlanilla}"/>
                     <p:outputLabel value="Costo Amarilla" for="txtAma"/>
-                    <p:inputText id="txtAma" required="true" value="#{campeonatoBean.campeonato.nombreCampeonato}"/>
+                    <p:inputText id="txtAma" required="true" value="#{campeonatoBean.dto.campeonato.costoAma}"/>
                     <p:outputLabel value="Costo Azul" for="txtAzu"/>
-                    <p:inputText id="txtAzu" required="true" value="#{campeonatoBean.campeonato.nombreCampeonato}"/>
+                    <p:inputText id="txtAzu" required="true" value="#{campeonatoBean.dto.campeonato.costoAzu}"/>
                     <p:outputLabel value="Costo Roja" for="txtRoj"/>
-                    <p:inputText id="txtRoj" required="true" value="#{campeonatoBean.campeonato.nombreCampeonato}"/>
+                    <p:inputText id="txtRoj" required="true" value="#{campeonatoBean.dto.campeonato.costoRoj}"/>
 
 
-                    <p:commandButton  id="btnRegistrar" value="#{campeonatoBean.accion}"  actionListener="#{campeonatoBean.operar()}"
+                    <p:commandButton  id="btnRegistrar" value="#{campeonatoBean.dto.accion}"  actionListener="#{campeonatoBean.operar()}"
                                       oncomplete="PF('wdgDatos').hide();" update=":frm1:data"/>
 
                     <p:commandButton value="Cancelar"  immediate="True"  
@@ -118,7 +118,7 @@
 
 
         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" 
-                         widgetVar="wdgDelete" id="dlgDelete" message="Eliminar Campeonato #{campeonatoBean.campeonato.nombreCampeonato}?" >
+                         widgetVar="wdgDelete" id="dlgDelete" message="Eliminar Campeonato #{campeonatoBean.dto.campeonato.nombreCampeonato}?" >
 
             <h:form>
 
