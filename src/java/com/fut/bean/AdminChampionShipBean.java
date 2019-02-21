@@ -29,8 +29,6 @@ import com.fut.model.Tarjeta;
 import com.fut.model.Usuario;
 import com.fut.util.Util;
 import java.io.Serializable;
-import java.sql.Time;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,7 +37,6 @@ import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -467,6 +464,7 @@ public class AdminChampionShipBean implements Serializable{
         listaGoleadores = jugDao.listarGoleadores(dto.getCampeonato());
         listaJornada = jorDao.listarJornadas(dto.getCampeonato());
         listaPlayOff = plaDao.listPlayoffByChampionShip(dto.getCampeonato().getIdCampeonato());
+        bo.listarArbitros(dto);
         }
     
     }
@@ -479,7 +477,7 @@ public class AdminChampionShipBean implements Serializable{
         listaGoleadores = jugDao.listarGoleadores(dto.getCampeonato());
         listaJornada = jorDao.listarJornadas(dto.getCampeonato());
         listaPlayOff = plaDao.listPlayoffByChampionShip(dto.getCampeonato().getIdCampeonato());
-    
+        bo.listarArbitros(dto);
     }
     
     
@@ -525,19 +523,12 @@ public class AdminChampionShipBean implements Serializable{
     }
     
     public void modificarArbitro() {  
-        bo.registrarArbitro(dto);
+        bo.modificarArbitro(dto);
     }
     
-     public void deleteArbitro(Jornada jor) {
-    JornadaDao dao;    
-        dao = new JornadaDao();
-        boolean reg = dao.deleteJornada(jor);
-         if(reg){
-             Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada Eliminada");          
-        }else{
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo Eliminar", "porque tiene partidos asociados");
-        FacesContext.getCurrentInstance().addMessage(null, message);}
-        this.listar();  
+    public void deleteArbitro(Arbitro arb) {
+        dto.setArbitro(arb);
+        bo.deleteArbitro(dto);
     }
     
     public void listarArbitro() {  

@@ -100,7 +100,7 @@ public class AdminChampionshipBo {
     /*metodos arbitro*/
     
     public void registrarArbitro(AdminChampionShipDTO dto) {  
-        
+        dto.getArbitro().setIdCampeonato(dto.getCampeonato().getIdCampeonato());
         boolean reg = arbDao.registrarArbitro(dto.getArbitro());
         if(reg){
             Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Arbitro creado");  
@@ -124,11 +124,9 @@ public class AdminChampionshipBo {
     }
     
      public void deleteArbitro(AdminChampionShipDTO dto) {
-    
-        
         boolean reg = arbDao.deleteReferee(dto.getArbitro().getIdArbitro());
          if(reg){
-             Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada Eliminada");          
+             Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Arbitro Eliminado");          
         }else{
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo Eliminar", "porque tiene partidos asociados");
         FacesContext.getCurrentInstance().addMessage(null, message);}

@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:panelGrid columns="2" cellpadding="10" id="panel2">
+    <h:panelGrid columns="2" cellpadding="10" id="panelReferee">
         <h:form id="formReferee">
 
 
@@ -15,9 +15,10 @@
                 <f:facet  name="header">
                     <div class="row">
                         <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
-                            <p:commandButton  value="Nueva jornada" oncomplete="PF('wdgJornada').show();"
+                            <p:commandButton  value="Nuevo Arbitro" oncomplete="PF('wdgCrudArb').show();"
                                               actionListener="#{adminChampionShipBean.preparedNewReferee()}"
-                                              update=":dlgJornada"
+                                              update="idTabviewVistaCampeonato:dlgCrudArb"
+                                              
                                               icon="ui-icon-circle-plus"
                                               />
                         </div>
@@ -36,7 +37,8 @@
                 <p:column headerText="">
                     <p:commandButton icon="ui-icon-pencil"
                                      title="Editar Arbitro" 
-                                     update="idTabviewVistaCampeonato:formReferee"
+                                     update="idTabviewVistaCampeonato:dlgCrudArb"
+                                     oncomplete="PF('wdgCrudArb').show();"
                                      actionListener="#{adminChampionShipBean.preparedEditReferee(item)}"
                                      style="margin-left: 7px;"
                                      />
@@ -44,19 +46,34 @@
                     <p:commandButton icon="ui-icon-trash"
                                      title="Eliminar Arbitro" 
                                      update="idTabviewVistaCampeonato:formReferee"
-                                     actionListener="#{adminChampionShipBean.deleteJornada(item)}"
+                                     actionListener="#{adminChampionShipBean.deleteArbitro(item)}"
 
                                      style="margin-left: 7px;"
-                                     />
+                                     >
+                        <p:confirm header="Confirmation" message="Desea Eliminar #{item.nombreArbitro}?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                 </p:column>
             </p:dataTable>
-
-            
-            
-            
-            
         </h:form>
     </h:panelGrid>
+    
+      <p:dialog header="Registrar o Modificar Arbitra" widgetVar="wdgCrudArb" id="dlgCrudArb" modal="true">
+          <h:form>
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Nombre Arbitro" for="txtNombre"/>
+                            <p:inputText id="txtNombre" required="true" value="#{adminChampionShipBean.dto.arbitro.nombreArbitro}"/>
+                            
+                            <p:commandButton value="#{adminChampionShipBean.accion}"  actionListener="#{adminChampionShipBean.operateReferee()}" 
+                                             oncomplete="PF('wdgCrudArb').hide();" 
+                                             update="idTabviewVistaCampeonato:formReferee"/>
+                            <p:commandButton value="Cancelar"  immediate="True" oncomplete="PF('wdgCrudArb').hide();"/> 
+                        </p:panelGrid>
+              </h:form>     
+                </p:dialog>
 
 </ui:composition>
 

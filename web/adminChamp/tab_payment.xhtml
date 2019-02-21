@@ -21,10 +21,12 @@
                 </p:column> 
 
                 <p:column headerText="Agregar pago">
-                    <p:commandLink value="pago" actionListener="#{adminChampionShipBean.selectedTeamPay(equipo)}"  oncomplete="PF('wdgDatosPay').show();" update="idTabviewVistaCampeonato:dlgDatosPay" />
+                    <p:commandLink value="pago" actionListener="#{adminChampionShipBean.selectedTeamPay(equipo)}" 
+                                   oncomplete="PF('wdgDatosPay').show();" update="idTabviewVistaCampeonato:dlgDatosPay" />
                 </p:column>
                 <p:column headerText="ver">
-                    <p:commandLink value="ver pagos" actionListener="#{adminChampionShipBean.listPayTeam(equipo)}" oncomplete="PF('wdgDatosPayList').show();" update="idTabviewVistaCampeonato:dlgDatosPayList" />
+                    <p:commandLink value="ver pagos" actionListener="#{adminChampionShipBean.listPayTeam(equipo)}" 
+                                   oncomplete="PF('wdgDatosPayList').show();" update="idTabviewVistaCampeonato:dlgDatosPayList" />
                 </p:column>
 
             </p:dataTable>

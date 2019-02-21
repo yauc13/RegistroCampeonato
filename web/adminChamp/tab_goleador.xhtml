@@ -6,7 +6,7 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:panelGrid columns="2" cellpadding="10" id="panelTar">
         <h:form id="frm1">
-            <p:outputLabel value="#{adminChampionShipBean.campeonato.nombreCampeonato}/"/>
+            <p:outputLabel value="#{adminChampionShipBean.dto.campeonato.nombreCampeonato}/"/>
             <p:dataTable id="data" value="#{adminChampionShipBean.listaGoleadores}" var="goleador" 
                          rows="5" paginator="true"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

@@ -33,7 +33,7 @@
                         <p:breadCrumb> 
                             <p:menuitem value="Campeonatos" action="listaCampeonato?faces-redirect=true"/> 
 
-                            <p:menuitem value="#{adminChampionShipBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(adminChampionShipBean.campeonato)}"/>   
+                            <p:menuitem value="#{adminChampionShipBean.dto.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(adminChampionShipBean.dto.campeonato)}"/>   
                         </p:breadCrumb>
                     </h:form>
                 </div> 
@@ -60,6 +60,9 @@
 
                     <p:tab title="Tarjetas" id="tabTar">
                         <ui:include src="/adminChamp/tab_card.xhtml"/>
+                    </p:tab>
+                    <p:tab title="Arbitros" id="tabArb">
+                        <ui:include src="/adminChamp/tab_referee.xhtml"/>
                     </p:tab>
                     <p:tab title="Pagos" id="tabPay">
                         <ui:include src="/adminChamp/tab_payment.xhtml"/>

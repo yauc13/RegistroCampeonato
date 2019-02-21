@@ -19,12 +19,12 @@
                         <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
                             <p:commandButton  value="Nueva jornada" oncomplete="PF('wdgJornada').show();"
                                               actionListener="#{adminChampionShipBean.preparedNewFixture()}"
-                                              update=":dlgJornada" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.dto.campeonato,2)}"
+                                              update=":dlgJornada" 
                                               icon="ui-icon-circle-plus"
                                               />
                         </div>
                         <div class="col-md-10 col-xs-10 col-sm-10">
-                            <p:outputLabel value="Jornadas de #{adminChampionShipBean.campeonato.nombreCampeonato}"/>
+                            <p:outputLabel value="Jornadas de #{adminChampionShipBean.dto.campeonato.nombreCampeonato}"/>
                         </div>
                     </div>
                 </f:facet>
