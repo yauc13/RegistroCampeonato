@@ -83,6 +83,7 @@ public class SqlAdminFutSal {
     
     /*DAO ARBITRO*/
     public static final String  INSERT_ARBITRO = "INSERT INTO public.arbitro( \"nombreArbitro\", \"idCampeonato\") VALUES ( ?, ?);";
+    public static final String  UPDATE_ARBITRO = "UPDATE public.arbitro SET \"nombreArbitro\"=? WHERE  \"idArbitro\"=?;";
     public static final String SELECT_ARBITRO_BY_CAMPEONATO = "SELECT * FROM public.arbitro WHERE \"idCampeonato\" = ?;";
     
     

@@ -26,14 +26,54 @@ public class ArbitroDao extends Dao {
             PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_ARBITRO);
             st.setString(1, arb.getNombreArbitro());
             st.setInt(2, arb.getIdCampeonato());
-            st.executeUpdate();
+            int res=st.executeUpdate();
+            if(res>0){
             reg = true;
+            }
         } catch (SQLException e) {
             System.err.println(e);
         } finally {
             this.CloseConection();
         }
         return reg;
+    }
+    
+     public boolean modificarArbitro(Arbitro arb) {
+        boolean reg = false;
+        try {
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.UPDATE_ARBITRO);
+            st.setString(1, arb.getNombreArbitro());
+            st.setInt(2, arb.getIdArbitro());
+            int res=st.executeUpdate();
+            if(res>0){
+            reg = true;
+            }
+        } catch (SQLException e) {
+            System.err.println(e);
+        } finally {
+            this.CloseConection();
+        }
+        return reg;
+    }
+     
+     
+    public boolean deleteReferee(int idArbitro){
+        boolean resp= false;
+        try{
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.arbitro  WHERE \"idArbitro\" = ?");
+            st.setInt(1, idArbitro);          
+            int res = st.executeUpdate();
+            if(res>0){
+            resp = true;
+            }
+        }catch(SQLException e){
+            System.err.println(e);
+        }finally{           
+                this.CloseConection();     
+        }
+        return resp;
     }
 
     public List<Arbitro> listarArbitros(int idCampeonato) {

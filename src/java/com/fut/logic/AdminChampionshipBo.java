@@ -111,6 +111,30 @@ public class AdminChampionshipBo {
         
     }
     
+    public void modificarArbitro(AdminChampionShipDTO dto) {  
+        
+        boolean reg = arbDao.modificarArbitro(dto.getArbitro());
+        if(reg){
+            Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Arbitro editado");  
+            dto.setListArbitro(arbDao.listarArbitros(dto.getCampeonato().getIdCampeonato()));
+        }else{
+            Util.setMessage(FacesMessage.SEVERITY_FATAL,  "Error", "no se pudo editar Arbitro");   
+        }
+        
+    }
+    
+     public void deleteArbitro(AdminChampionShipDTO dto) {
+    
+        
+        boolean reg = arbDao.deleteReferee(dto.getArbitro().getIdArbitro());
+         if(reg){
+             Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada Eliminada");          
+        }else{
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo Eliminar", "porque tiene partidos asociados");
+        FacesContext.getCurrentInstance().addMessage(null, message);}
+       dto.setListArbitro(arbDao.listarArbitros(dto.getCampeonato().getIdCampeonato()));
+    }
+    
    public void listarArbitros(AdminChampionShipDTO dto){
        dto.setListArbitro(arbDao.listarArbitros(dto.getCampeonato().getIdCampeonato()));
    }

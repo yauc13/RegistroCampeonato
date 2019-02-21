@@ -14,6 +14,7 @@ import com.fut.dao.PlayOffDao;
 import com.fut.dao.TarjetaDao;
 import com.fut.dto.AdminChampionShipDTO;
 import com.fut.logic.AdminChampionshipBo;
+import com.fut.model.Arbitro;
 import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 
@@ -495,8 +496,48 @@ public class AdminChampionShipBean implements Serializable{
     
     
     /*metodos arbitro*/
+    public void operateReferee() {
+        switch (accion) {
+            case "Registrar":
+                this.registrarArbitro();
+                
+                break;
+            case "Modificar":
+                this.modificarArbitro();
+                dto.setArbitro(new Arbitro());
+                break;
+        }
+    }
+    
+    public void preparedNewReferee(){        
+        this.accion = "Registrar";
+       dto.setArbitro(new Arbitro());          
+    }
+    
+    public void preparedEditReferee (Arbitro arb){
+            dto.setArbitro(arb);
+            this.accion = "Modificar";
+    }
+    
+    
     public void registrarArbitro() {  
         bo.registrarArbitro(dto);
+    }
+    
+    public void modificarArbitro() {  
+        bo.registrarArbitro(dto);
+    }
+    
+     public void deleteArbitro(Jornada jor) {
+    JornadaDao dao;    
+        dao = new JornadaDao();
+        boolean reg = dao.deleteJornada(jor);
+         if(reg){
+             Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Jornada Eliminada");          
+        }else{
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error:no se pudo Eliminar", "porque tiene partidos asociados");
+        FacesContext.getCurrentInstance().addMessage(null, message);}
+        this.listar();  
     }
     
     public void listarArbitro() {  
