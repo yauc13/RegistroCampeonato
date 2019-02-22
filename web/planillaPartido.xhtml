@@ -29,7 +29,7 @@
                     <h:form>
                         <p:breadCrumb> 
                             <p:menuitem value="Campeonatos" url="listaCampeonato?faces-redirect=true" />     
-                            <p:menuitem value="#{adminChampionShipBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(adminChampionShipBean.campeonato)}"/> 
+                            <p:menuitem value="#{adminChampionShipBean.dto.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(adminChampionShipBean.dto.campeonato)}"/> 
                             <p:menuitem value="#{adminChampionShipBean.grupo.nombreGrupo}"  action="#{adminChampionShipBean.verGrupo(grupo)}"/>
                         </p:breadCrumb>
                     </h:form>
@@ -54,7 +54,13 @@
                     <p:outputLabel value="#{golesB.jugador.nombreJugador}"/>
                 </p:column>               
             </p:dataTable>  
-            </h:panelGrid>                      
+            </h:panelGrid> 
+            <p:outputLabel value="Arbitro" for="oneArb"/>                                               
+            <p:selectOneMenu id="oneArb" value="#{planillaPartidoBean.dto.idArbitro}">                           
+                <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
+                 <f:selectItems value="#{planillaPartidoBean.dto.listaArbitros}" var="item" 
+                                itemValue="#{item.idArbitro}" itemLabel="#{item.nombreArbitro}"/>                                                       
+            </p:selectOneMenu>
         </h:form>  
         
         <h:panelGrid  id="panelGridPlanilla" columns="2">

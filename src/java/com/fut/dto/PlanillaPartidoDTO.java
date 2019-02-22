@@ -5,6 +5,7 @@
  */
 package com.fut.dto;
 
+import com.fut.model.Arbitro;
 import com.fut.model.Campeonato;
 import com.fut.model.Gol;
 import com.fut.model.Grupo;
@@ -32,12 +33,14 @@ public class PlanillaPartidoDTO {
     private List<Penal> listaPenalesB;
     private List<Jugador> listaJugadoresA;
     private List<Jugador> listaJugadoresB;
+    private List<Arbitro> listaArbitros;
     private boolean enaBtnIniciar = false;
     private boolean enaBtnFin = true;
     private boolean enaBtngol = true;
     private boolean enaBtnTar = true;
     private boolean enaBtnPenal = true;
     private boolean renPanelPenal = false;
+    private int idArbitro;
 
     public PlanillaPartidoDTO() {
          partido = new Partido();
@@ -189,6 +192,28 @@ public class PlanillaPartidoDTO {
     public void setListaPenalesB(List<Penal> listaPenalesB) {
         this.listaPenalesB = listaPenalesB;
     }
+
+    public List<Arbitro> getListaArbitros() {
+        if(listaArbitros==null){
+            listaArbitros = new ArrayList<>();
+        }
+        return listaArbitros;
+    }
+
+    public void setListaArbitros(List<Arbitro> listaArbitros) {
+        this.listaArbitros = listaArbitros;
+    }
+
+    public int getIdArbitro() {
+        return idArbitro;
+    }
+
+    public void setIdArbitro(int idArbitro) {
+        this.idArbitro = idArbitro;
+    }
+    
+    
+    
     
     
     

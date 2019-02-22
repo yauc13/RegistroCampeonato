@@ -29,7 +29,7 @@
                 <h:form>
                     <p:breadCrumb> 
                         <p:menuitem value="Campeonatos" url="#" />     
-                        <p:menuitem value="#{adminChampionShipBean.campeonato.nombreCampeonato}" action="#{campeonatoBean.verGruposCampeonato(partidoBean.campeonato)}" />   
+                        <p:menuitem value="#{adminChampionShipBean.dto.campeonato.nombreCampeonato}" action="#{campeonatoBean.verGruposCampeonato(partidoBean.campeonato)}" />   
                         <p:menuitem value="#{partidoBean.playOff.namePlayOff}"  action="#"  />
                     </p:breadCrumb>
                 </h:form>
@@ -45,12 +45,12 @@
                             <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
                                 <p:commandButton  value="Nuevo Partido" oncomplete="PF('wdgDatos').show();" 
                                                   actionListener="#{partidoBean.preparedRegisterMatchPlayOff()}"
-                                                  update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
+                                                  update=":dlgDatos" 
                                                   icon="ui-icon-circle-plus"
                                                   />
                             </div>
                             <div class="col-md-10 col-xs-10 col-sm-10">
-                                <p:outputLabel value="#{partidoBean.playOff.namePlayOff} de #{adminChampionShipBean.campeonato.nombreCampeonato}"/>
+                                <p:outputLabel value="#{partidoBean.playOff.namePlayOff} de #{adminChampionShipBean.dto.campeonato.nombreCampeonato}"/>
                             </div>
                         </div>
                     </f:facet>

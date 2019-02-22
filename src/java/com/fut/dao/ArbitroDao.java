@@ -99,7 +99,7 @@ public class ArbitroDao extends Dao {
         } finally {
             this.CloseConection();
         }
-
+        System.err.println("lista arbotro" +lista.size());
         return lista;
     }
 

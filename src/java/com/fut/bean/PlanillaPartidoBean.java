@@ -11,6 +11,8 @@ import com.fut.dao.PartidoDao;
 import com.fut.dao.PenalDao;
 import com.fut.dao.TarjetaDao;
 import com.fut.dto.PlanillaPartidoDTO;
+import com.fut.logic.PlanillaPartidoBo;
+import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 import com.fut.model.Gol;
 import com.fut.model.Grupo;
@@ -20,6 +22,7 @@ import com.fut.model.Penal;
 import com.fut.model.Tarjeta;
 import com.fut.model.Usuario;
 import com.fut.util.Cons;
+import com.fut.util.Util;
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -36,6 +39,7 @@ import javax.faces.context.FacesContext;
 public class PlanillaPartidoBean implements Serializable{
     
     private PlanillaPartidoDTO dto;
+    private final PlanillaPartidoBo bo;
     private final PartidoDao daoPar;
     private final JugadorDao daoJug;  
     private final GolDao daoGol;
@@ -44,6 +48,8 @@ public class PlanillaPartidoBean implements Serializable{
 
     public PlanillaPartidoBean() {
         dto = new PlanillaPartidoDTO();
+        bo = new PlanillaPartidoBo();
+                
         daoPar = new PartidoDao();
         daoJug = new JugadorDao();
         daoGol = new GolDao();
@@ -52,7 +58,9 @@ public class PlanillaPartidoBean implements Serializable{
         dto.setUsuario((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario"));
         dto.setPartido((Partido) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("partido"));
         dto.setGrupo((Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo"));
+        dto.setCampeonato((Campeonato) Util.getObjectOfContext("campeonato"));
         enableButtonStart(dto);
+        bo.listarArbitros(dto);
     }
     
     
@@ -64,6 +72,8 @@ public class PlanillaPartidoBean implements Serializable{
         dto.setListaJugadoresB(daoJug.listarJugadoresEquipo(dto.getPartido().getIdEquipoB()));
         listarGoles();  
         listarPenales();
+        
+        
         }   
     }
     
@@ -72,6 +82,7 @@ public class PlanillaPartidoBean implements Serializable{
         dto.setListaJugadoresB(daoJug.listarJugadoresEquipo(dto.getPartido().getIdEquipoB()));
         listarGoles();
         listarPenales();
+        
     }
     
     public void listarGoles() {        
