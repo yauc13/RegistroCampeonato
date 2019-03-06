@@ -18,6 +18,7 @@ public class Partido implements Serializable  {
     int idEquipoB;
     int idGrupo;
     int idPlayOff;
+    int idArbitro;
     int golA;
     int golB;
     int penalA;
@@ -43,8 +44,16 @@ public class Partido implements Serializable  {
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
     }
+
+    public int getIdArbitro() {
+        return idArbitro;
+    }
+
+    public void setIdArbitro(int idArbitro) {
+        this.idArbitro = idArbitro;
+    }
     
-        
+    
 
     public int getGolA() {
         return golA;

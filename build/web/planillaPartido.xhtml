@@ -56,11 +56,12 @@
             </p:dataTable>  
             </h:panelGrid> 
             <p:outputLabel value="Arbitro" for="oneArb"/>                                               
-            <p:selectOneMenu id="oneArb" value="#{planillaPartidoBean.dto.idArbitro}">                           
+            <p:selectOneMenu id="oneArb" value="#{planillaPartidoBean.dto.partido.idArbitro}">                           
                 <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
                  <f:selectItems value="#{planillaPartidoBean.dto.listaArbitros}" var="item" 
                                 itemValue="#{item.idArbitro}" itemLabel="#{item.nombreArbitro}"/>                                                       
             </p:selectOneMenu>
+            <p:outputLabel value="id: #{planillaPartidoBean.dto.partido.idArbitro}" />      
         </h:form>  
         
         <h:panelGrid  id="panelGridPlanilla" columns="2">

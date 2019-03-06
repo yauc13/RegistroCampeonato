@@ -11,7 +11,7 @@
         <link href="resources/css/bootstrap.css" rel="stylesheet" type="text/css"/>
         <link href="resources/css/fontawesome.css" rel="stylesheet" type="text/css"/>
         <link rel="icon" type="image/jpg" href="resources/imagen/iconBall.jpg" />
-        <title>Registro Futsal</title>
+        <title>AdminFutSal</title>
         <f:event type="preRenderView" listener="#{usuarioBean.verificarSesion()}"/>
         
     </h:head>
@@ -22,7 +22,7 @@
             <ui:insert name="top">
                 <h:form>
                     <p:menubar>
-                        <p:menuitem  value="Login: #{usuarioBean.usuario.loginUsuario}"/>                        
+                        <p:menuitem  value="   #{usuarioBean.usuario.loginUsuario}" icon="fa fa-user"/>                        
                         
                         <f:facet name="options" >
                             <p:outputLabel  value="Ip: #{usuarioBean.ip}" styleClass="font-size: xx-small" />

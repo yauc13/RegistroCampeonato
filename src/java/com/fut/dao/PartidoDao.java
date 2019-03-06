@@ -18,6 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.sql.Types;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -151,6 +152,7 @@ public class PartidoDao extends Dao{
                     cam.setIdEquipoA(rs.getInt("idEquipoA"));
                     cam.setIdEquipoB(rs.getInt("idEquipoB"));                  
                     cam.setIdPlayOff(rs.getInt("idPlayOff"));
+                    cam.setIdArbitro(rs.getInt("idArbitro"));
                     cam.setEstadoPartido(rs.getString("estadoPartido"));
                    
                     cam.setGolA(rs.getInt("golEqA"));
@@ -630,6 +632,31 @@ public class PartidoDao extends Dao{
             st.setInt(1, par.getIdPartido());  
             st.executeUpdate();
             resp= true;
+        }catch(SQLException e){
+            System.err.println(e);
+        }finally{
+        this.CloseConection();
+        }
+        return resp;
+    }
+    
+     public boolean agregarArbitroPartido(int idArbitro,int idPartido) {
+        boolean resp= false;
+        try{
+            this.ConectionDataBase();
+            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.ADD_REFEREE_TO_MATCH);
+            int count = 1;
+            if(idArbitro==0){
+                st.setNull(count++, Types.INTEGER);
+            }else{
+                st.setInt(count++, idArbitro); 
+            }
+            st.setInt(count++, idPartido); 
+            int res=st.executeUpdate();
+            if(res>0){
+                resp=true;
+            }
+
         }catch(SQLException e){
             System.err.println(e);
         }finally{

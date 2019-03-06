@@ -55,9 +55,10 @@ public class PlanillaPartidoBean implements Serializable{
         daoGol = new GolDao();
         daoTar = new TarjetaDao();
         daoPen = new PenalDao();
-        dto.setUsuario((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario"));
-        dto.setPartido((Partido) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("partido"));
-        dto.setGrupo((Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo"));
+        
+        dto.setUsuario((Usuario)Util.getObjectOfContext("usuario"));
+        dto.setPartido((Partido) Util.getObjectOfContext("partido"));
+        dto.setGrupo((Grupo) Util.getObjectOfContext("grupo"));
         dto.setCampeonato((Campeonato) Util.getObjectOfContext("campeonato"));
         enableButtonStart(dto);
         bo.listarArbitros(dto);
@@ -65,15 +66,12 @@ public class PlanillaPartidoBean implements Serializable{
     
     
     
-    public void listarPlanillasInicio() {     
-        
+    public void listarPlanillasInicio() {             
         if(this.isPostBack() == false){                 
         dto.setListaJugadoresA(daoJug.listarJugadoresEquipo(dto.getPartido().getIdEquipoA()));
         dto.setListaJugadoresB(daoJug.listarJugadoresEquipo(dto.getPartido().getIdEquipoB()));
         listarGoles();  
         listarPenales();
-        
-        
         }   
     }
     
@@ -96,23 +94,7 @@ public class PlanillaPartidoBean implements Serializable{
     }
      
     public String finalizarPartido() {
-        String direccion = "";
-        daoPar.finalizarPartido(dto.getPartido());
-        if (dto.getPartido().getIdGrupo() != 0) {
-            
-            if (dto.getGrupo() != null) {
-                direccion = "vistaGrupo?faces-redirect=true";
-            } 
-        } else if (dto.getPartido().getIdPlayOff() != 0) {
-          if(dto.getListaGolesA().size()==dto.getListaGolesB().size()){
-              enablePanelPenalties();
-          }else{
-            if (dto.getPlayOff() != null) {
-                direccion = "listaPartidoPlayOff?faces-redirect=true";
-            }
-          }
-          
-        }
+        String direccion = bo.finalizarPartido(dto);        
         return direccion;
     }
     
@@ -128,15 +110,18 @@ public class PlanillaPartidoBean implements Serializable{
     
      public void iniciarPartido() {        
         boolean resp =daoPar.iniciarPartido(dto.getPartido());
-        if(resp){   
-             enableButtonStartNext();
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "partido iniciado");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        if(resp){ 
+            agregarArbitroPartido();
+            enableButtonStartNext();
+            Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "partido iniciado");        
         }else{
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "el partido no se pudo iniciar");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+            Util.setMessage(FacesMessage.SEVERITY_FATAL, "Error", "el partido no se pudo iniciar");
         }      
         
+    }
+     
+    private void agregarArbitroPartido(){
+        bo.asignarArbitroPartido(dto.getPartido().getIdArbitro(), dto.getPartido().getIdPartido());
     }
     
     public void anotarGol(int jug, int equ, Partido par) {
@@ -206,28 +191,7 @@ public class PlanillaPartidoBean implements Serializable{
     }
     
     private void enableButtonStart(PlanillaPartidoDTO dto){
-        if(dto.getPartido().getEstadoPartido().equals(Cons.STATE_MATCH_POR)){
-            dto.setEnaBtnIniciar(false);
-            dto.setEnaBtnFin(true);
-            dto.setEnaBtnTar(true);
-            dto.setEnaBtngol(true);
-            dto.setRenPanelPenal(false);
-            dto.setRenPanelPenal(true); 
-        }else if(dto.getPartido().getEstadoPartido().equals(Cons.STATE_MATCH_JUG)){
-            dto.setEnaBtnIniciar(true);
-            dto.setEnaBtnFin(false);
-            dto.setEnaBtnTar(false);
-            dto.setEnaBtngol(false);
-            dto.setRenPanelPenal(false);
-            dto.setRenPanelPenal(true); 
-        }if(dto.getPartido().getEstadoPartido().equals(Cons.STATE_MATCH_FIN)){
-            dto.setEnaBtnIniciar(true);
-            dto.setEnaBtnFin(true);
-            dto.setEnaBtnTar(true);
-            dto.setEnaBtngol(true);
-            dto.setRenPanelPenal(true);
-            dto.setRenPanelPenal(true); 
-        }
+        bo.enableButtonStart(dto);
     }
     
      private void enableButtonStartNext(){
@@ -239,13 +203,7 @@ public class PlanillaPartidoBean implements Serializable{
   
     }
      
-    private void enablePanelPenalties() {
-        dto.setEnaBtnTar(true);
-        dto.setEnaBtngol(true);
-        dto.setEnaBtnFin(true);
-        dto.setEnaBtnPenal(false);
-        dto.setRenPanelPenal(true);
-    }
+    
      
 
     public PlanillaPartidoDTO getDto() {
