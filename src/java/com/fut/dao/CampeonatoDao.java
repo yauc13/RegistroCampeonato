@@ -6,7 +6,9 @@
 package com.fut.dao;
 
 import com.fut.model.Campeonato;
+import com.fut.util.DaoUtil;
 import com.fut.util.SqlAdminFutSal;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,35 +17,38 @@ import java.util.List;
 
 /**
  *
- * @author Yeison
+ * @author Yeison Urrea
  */
-public class CampeonatoDao extends Dao{
+public class CampeonatoDao {
+    private Connection cx;
+    private PreparedStatement stmt;
+    private ResultSet rs;
     public boolean registrar(Campeonato cam) {
         boolean reg = false;
+        
         try{
-            this.ConectionDataBase();            
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.REGISTER_CAMPEONATO);
-            st.setString(1, cam.getNombreCampeonato());
-            st.setInt(2, cam.getIdUsuario());
+            cx = DaoUtil.ConectionDataBase();            
+            stmt = cx.prepareStatement(SqlAdminFutSal.REGISTER_CAMPEONATO);
+            stmt.setString(1, cam.getNombreCampeonato());
+            stmt.setInt(2, cam.getIdUsuario());
             
-            st.executeUpdate();
+            stmt.executeUpdate();
             reg = true;
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.CloseConection();
+            DaoUtil.closeConection(cx, stmt, rs);
         }
         return reg;
     }
         
     public List<Campeonato> listar() {
             List<Campeonato> lista = null;
-            ResultSet rs;
             
             try{
-                this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_CAMPEONATO);
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDataBase();  
+                stmt = cx.prepareCall(SqlAdminFutSal.SELECT_CAMPEONATO);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Campeonato cam = new Campeonato();
@@ -61,7 +66,7 @@ public class CampeonatoDao extends Dao{
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;   
@@ -69,14 +74,15 @@ public class CampeonatoDao extends Dao{
     
     public Campeonato leerID(Campeonato cam){
         Campeonato usus = null;
-        ResultSet rs;
+        
             try{
-                this.ConectionDataBase();
+                cx = DaoUtil.ConectionDataBase();  
+
                 //PreparedStatement st = this.getCn().prepareStatement("SELECT idCampeonato, nombreCampeonato,idUsuario FROM campeonato WHERE idCampeonato = ?");
-                PreparedStatement st = this.getCn().prepareStatement("SELECT \"idCampeonato\", \"nombreCampeonato\", \"idUsuario\" FROM public.campeonato WHERE \"idCampeonato\" = ?");
-                st.setInt(1, cam.getIdCampeonato());
-                st.setString(2, cam.getNombreCampeonato());
-                rs = st.executeQuery();
+                stmt = cx.prepareStatement("SELECT \"idCampeonato\", \"nombreCampeonato\", \"idUsuario\" FROM public.campeonato WHERE \"idCampeonato\" = ?");
+                stmt.setInt(1, cam.getIdCampeonato());
+                stmt.setString(2, cam.getNombreCampeonato());
+                rs = stmt.executeQuery();
                 while(rs.next()){
                     usus = new Campeonato();
                     usus.setIdCampeonato(rs.getInt("idCampeonato"));
@@ -87,7 +93,7 @@ public class CampeonatoDao extends Dao{
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }   
             return usus;
     }
@@ -98,17 +104,17 @@ public class CampeonatoDao extends Dao{
         boolean reg = false;
         
         try{
-            this.ConectionDataBase();
+            cx = DaoUtil.ConectionDataBase();  
             
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.EDIT_CAMPEONATO);
+            stmt = cx.prepareStatement(SqlAdminFutSal.EDIT_CAMPEONATO);
             int count = 1;
-            st.setString(count++, cam.getNombreCampeonato());                                  
-            st.setInt(count++, cam.getCostoPlanilla());
-            st.setInt(count++, cam.getCostoAma());
-            st.setInt(count++, cam.getCostoAzu());
-            st.setInt(count++, cam.getCostoRoj());
-            st.setInt(count++, cam.getIdCampeonato()); 
-            int res=st.executeUpdate();
+            stmt.setString(count++, cam.getNombreCampeonato());                                  
+            stmt.setInt(count++, cam.getCostoPlanilla());
+            stmt.setInt(count++, cam.getCostoAma());
+            stmt.setInt(count++, cam.getCostoAzu());
+            stmt.setInt(count++, cam.getCostoRoj());
+            stmt.setInt(count++, cam.getIdCampeonato()); 
+            int res=stmt.executeUpdate();
             if(res>0){
             reg = true;
             }
@@ -117,7 +123,7 @@ public class CampeonatoDao extends Dao{
             System.err.println(e); 
             
         }finally{
-        this.CloseConection();
+            DaoUtil.closeConection(cx, stmt, rs);
         }
         return reg;
     }
@@ -125,17 +131,17 @@ public class CampeonatoDao extends Dao{
     public boolean deleteCampeonato(Campeonato cam){
         boolean reg=false;
         try{
-            this.ConectionDataBase();            
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.DELETE_CAMPEONATO);
-            st.setInt(1, cam.getIdCampeonato());          
-            int res = st.executeUpdate();  
+            cx = DaoUtil.ConectionDataBase();             
+            stmt = cx.prepareStatement(SqlAdminFutSal.DELETE_CAMPEONATO);
+            stmt.setInt(1, cam.getIdCampeonato());          
+            int res = stmt.executeUpdate();  
             if(res>0){
             reg = true;
             }
         }catch(SQLException e){            
             System.err.println(e);
         }finally{          
-                this.CloseConection();          
+           DaoUtil.closeConection(cx, stmt, rs);          
         }
         return reg;
     }

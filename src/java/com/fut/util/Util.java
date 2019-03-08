@@ -45,6 +45,10 @@ public class Util {
        FacesContext.getCurrentInstance().addMessage(null, message);
     }
     
+    /**
+     *retorna la ip del equipo
+     * @return
+     */
     public static final String getIpAddress() {
         String address = "";
         InetAddress ip;
@@ -58,6 +62,10 @@ public class Util {
         return address;
     }
 
+    /**
+     *retorna la mac del equipo
+     * @return
+     */
     public static final String getMacAddress() {
         String address = "";
         InetAddress ip;
