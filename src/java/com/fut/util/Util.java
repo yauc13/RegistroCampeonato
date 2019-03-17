@@ -20,7 +20,7 @@ import javax.faces.context.FacesContext;
 public class Util {
 
     /**
-     *retorna un objeto capturado desde el context mediante el id
+     * retorna un objeto capturado desde el context mediante el id
      * @param id
      * @return 
      */
@@ -35,7 +35,7 @@ public class Util {
     }
     
     /**
-     *Coloca mensaje en la vista
+     * Coloca mensaje en la vista
      * @param severity
      * @param summary
      * @param details

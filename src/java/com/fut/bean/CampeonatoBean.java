@@ -112,14 +112,14 @@ public class CampeonatoBean implements Serializable{
     CampeonatoDao dao;    
         if(this.isPostBack() == false){
         dao = new CampeonatoDao();
-        dto.setListaCampeonato( dao.listar());        
+        dto.setListaCampeonato( dao.listarCampeonato());        
         }    
     }
     
     public void listarCampeonatos(){
         CampeonatoDao dao;    
         dao = new CampeonatoDao();
-        dto.setListaCampeonato( dao.listar()); 
+        dto.setListaCampeonato( dao.listarCampeonato()); 
     }
     
     

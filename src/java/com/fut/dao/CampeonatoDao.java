@@ -32,8 +32,10 @@ public class CampeonatoDao {
             stmt.setString(1, cam.getNombreCampeonato());
             stmt.setInt(2, cam.getIdUsuario());
             
-            stmt.executeUpdate();
+            int res = stmt.executeUpdate();
+            if(res>0){
             reg = true;
+            }
         }catch(SQLException e){
             System.err.println(e);
         }finally{
@@ -42,7 +44,7 @@ public class CampeonatoDao {
         return reg;
     }
         
-    public List<Campeonato> listar() {
+    public List<Campeonato> listarCampeonato() {
             List<Campeonato> lista = null;
             
             try{

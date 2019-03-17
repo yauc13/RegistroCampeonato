@@ -228,7 +228,7 @@ public class UsuarioBean implements Serializable{
     
     private void getIpMac() {
         this.ip = Util.getIpAddress();
-        this.mac = Util.getMacAddress();
+       // this.mac = Util.getMacAddress();
     }
     
     public String getIp() {

@@ -66,8 +66,11 @@
         
         <h:panelGrid  id="panelGridPlanilla" columns="2">
         <h:form id="frm1">            
-            <p:outputLabel value="Equipo A: #{planillaPartidoBean.dto.partido.equipoA.nombreEquipo}"/>
+            
             <p:dataTable id="data" value="#{planillaPartidoBean.dto.listaJugadoresA}" var="jugadorA" >
+                <f:facet  name="header">
+                    <p:outputLabel value="Equipo A: #{planillaPartidoBean.dto.partido.equipoA.nombreEquipo}"/>
+                </f:facet>
                 <p:column headerText="No" width="9%">
                     <p:inputText />
                 </p:column>
@@ -80,6 +83,7 @@
                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
                                       disabled="#{planillaPartidoBean.dto.enaBtngol}"
                                       icon="ui-icon-circle-plus"
+                                      title="Anotar Gol"
                                       />
                     
                 </p:column>
@@ -90,6 +94,7 @@
                                       disabled="#{planillaPartidoBean.dto.enaBtnTar}"
                                       style="background:#c69500;"
                                       icon="ui-icon-note"
+                                      title="Tarjeta Amarilla"
                                       />
                 
                
@@ -99,6 +104,7 @@
                                       disabled="#{planillaPartidoBean.dto.enaBtnTar}"
                                       style="background:#002752;"
                                       icon="ui-icon-note"
+                                      title="Tarjeta Azul"
                                       />
                 
                
@@ -108,7 +114,7 @@
                                       disabled="#{planillaPartidoBean.dto.enaBtnTar}"
                                       style="background:#FF0000;"
                                       icon="ui-icon-note"
-                                      
+                                      title="Tarjeta Roja"
                                       />
                 </p:column>                                         
             </p:dataTable>                        
@@ -117,8 +123,11 @@
         
         
         <h:form id="frm2">                            
-            <p:outputLabel value="Equipo B: #{planillaPartidoBean.dto.partido.equipoB.nombreEquipo}"/>
+            
             <p:dataTable id="data" value="#{planillaPartidoBean.dto.listaJugadoresB}" var="jugadorB" >
+                <f:facet  name="header" >
+                   <p:outputLabel value="Equipo B: #{planillaPartidoBean.dto.partido.equipoB.nombreEquipo}"/>
+                </f:facet>
                 <p:column headerText="No" width="9%">
                     <p:inputText />
                 </p:column>
@@ -130,6 +139,7 @@
                                      ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" 
                                      disabled="#{planillaPartidoBean.dto.enaBtngol}"
                                      icon="ui-icon-circle-plus"
+                                     title="Anotar Gol"
                                      />
                     
                 </p:column>
@@ -140,6 +150,7 @@
                                       disabled="#{planillaPartidoBean.dto.enaBtnTar}"
                                       icon="ui-icon-note"
                                       style="background:#c69500;"
+                                      title="Tarjeta Amarilla"
                                       />
                 
                
@@ -149,6 +160,7 @@
                                       disabled="#{planillaPartidoBean.dto.enaBtnTar}"
                                       style="background:#002752;"
                                       icon="ui-icon-note"
+                                      title="Tarjeta Azul"
                                       />
                 
                
@@ -157,6 +169,7 @@
                                       ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
                                       disabled="#{planillaPartidoBean.dto.enaBtnTar}"
                                       icon="ui-icon-note"
+                                      title="Tarjeta Roja"
                                       style="background:#FF0000;"
                                       />
                 </p:column>
