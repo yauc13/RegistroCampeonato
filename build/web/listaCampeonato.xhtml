@@ -18,7 +18,6 @@
             <h:form>
                 <p:breadCrumb class="divmiga" > 
                     <p:menuitem value="Campeonatos" url="#" />     
-
                 </p:breadCrumb>
             </h:form>
         </div>       
@@ -44,7 +43,6 @@
                                                           actionListener="#{campeonatoBean.preparedNew()}"
                                                           update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.dto.campeonato,2)}"
                                                           icon="fa fa-plus"
-
                                                           />
                                     </div>
                                     <div class="col-md-10 col-xs-10 col-sm-10">
@@ -81,7 +79,6 @@
                                                  actionListener="#{campeonatoBean.preparedEditChampionShip(camp)}"
                                                  oncomplete="PF('wdgDelete').show();"
                                                  style="margin-left: 7px;"
-
                                                  />
                             </p:column>              
                         </p:dataTable>
@@ -121,17 +118,12 @@
                          widgetVar="wdgDelete" id="dlgDelete" message="Eliminar Campeonato #{campeonatoBean.dto.campeonato.nombreCampeonato}?" >
 
             <h:form>
-
                 <p:commandButton value="SI" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" 
                                  actionListener="#{campeonatoBean.deleteCampeonato()}"
                                  oncomplete="PF('wdgDelete').hide();" update=":frm1:data"/>
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </h:form>
         </p:confirmDialog>
-
-
-
-
     </ui:define>
 
 </ui:composition>

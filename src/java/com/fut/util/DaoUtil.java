@@ -25,6 +25,7 @@ import javax.sql.DataSource;
  */
 public class DaoUtil {
     
+    private static final String DRIVE_MANAGE_POSTGRES = "jdbc:postgresql://localhost:5432/torneo?user=postgres&password=password";
     private static final String DATASOURCE = "adminfutsal/torneo";
     private static DataSource ds;
     
@@ -64,7 +65,7 @@ public class DaoUtil {
     try{
         Class.forName("org.postgresql.Driver");
        // cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/torneo?user=root&password=");
-        cn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/torneo?user=postgres&password=password");
+        cn = DriverManager.getConnection(DRIVE_MANAGE_POSTGRES);
     }catch (ClassNotFoundException | SQLException e){
         System.out.println(e+"EXCEPTION CONEXION DB");
         Util.setMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo conectar a la base de datos");        

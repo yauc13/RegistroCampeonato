@@ -87,28 +87,20 @@ public class PartidoBean implements Serializable{
      }
           
 
-    public String verPartido(Partido u) throws Exception {
+    public String verPartido(Partido u) {
     
-    String direccion = null;
-    try{
-        //sirve para pasar datos entre los beans
-        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("verPartido", u);
+    String direccion = null;          
         this.verPartido = u;
         EquipoDao equipoDao = new EquipoDao();
         this.equipoA = equipoDao.leerID(u.getIdEquipoA());
         this.equipoB = equipoDao.leerID(u.getIdEquipoB());
-        direccion = "planillaPartido?faces-redirect=true";
-        
-        
-    }catch(Exception e){  
-        throw e;
-    }   
+        direccion = "planillaPartido?faces-redirect=true";                       
     return direccion;
     }    
     
   
     
-    public void operar() throws Exception{
+    public void operar(){
         switch(accion){
             case "Registrar":
                 this.registrar();
@@ -176,15 +168,11 @@ public class PartidoBean implements Serializable{
      
     }
     
-    public void modificar() throws Exception {
-    PartidoDao dao;
-    try{
+    public void modificar(){
+    PartidoDao dao;    
         dao = new PartidoDao();
         dao.modificar(partido);
-        this.listar();
-    }catch(Exception e){  
-        throw e;
-    }   
+        this.listar();       
     }
     
     
@@ -300,7 +288,7 @@ public class PartidoBean implements Serializable{
     }
     
     //
-    public String finalizarPartido() throws Exception{
+    public String finalizarPartido(){
         String direccion="";
         PartidoDao dao;
         dao = new PartidoDao();

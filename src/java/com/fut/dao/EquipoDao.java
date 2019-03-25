@@ -160,7 +160,7 @@ public class EquipoDao extends Dao {
         return lista;   
     }
     
-    public Equipo leerID(int idEquipo) throws Exception{
+    public Equipo leerID(int idEquipo) {
         Equipo usus = null;
         ResultSet rs;
             try{
@@ -178,7 +178,7 @@ public class EquipoDao extends Dao {
                 }
                 
             }catch(SQLException e){
-                throw e;
+                System.err.println(e);
             }finally{
                 this.CloseConection();
             }   

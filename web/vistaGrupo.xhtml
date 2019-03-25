@@ -22,7 +22,7 @@
                     <h:form>
                         <p:breadCrumb> 
                             <p:menuitem value="Campeonatos" url="listaCampeonato?faces-redirect=true" />     
-                            <p:menuitem value="#{adminChampionShipBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(adminChampionShipBean.campeonato)}"/> 
+                            <p:menuitem value="#{adminChampionShipBean.dto.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(adminChampionShipBean.dto.campeonato)}"/> 
                             <p:menuitem value="#{adminChampionShipBean.grupo.nombreGrupo}"  action="#{adminChampionShipBean.verGrupo(grupo)}"/>
                         </p:breadCrumb>
                     </h:form>
@@ -94,7 +94,7 @@
                                             <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
                                                 <p:commandButton  value="Nuevo Partido" oncomplete="PF('wdgDatos').show();" 
                                                                   actionListener="#{partidoBean.preparedRegisterMatchGroup()}"
-                                                                  update=":dlgDatos" disabled="#{campeonatoBean.habilitarPermisos(campeonatoBean.campeonato,2)}"
+                                                                  update=":dlgDatos"
                                                                   icon="ui-icon-circle-plus"
                                                                   />
                                             </div>

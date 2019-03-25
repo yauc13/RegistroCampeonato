@@ -15,7 +15,7 @@
                     <h:form>
                         <p:breadCrumb> 
                             <p:menuitem value="Campeonatos" action="#{campeonatoBean.listarCampeonatosInicio()}"/>     
-                            <p:menuitem value="#{adminChampionShipBean.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(adminChampionShipBean.campeonato)}"/>   
+                            <p:menuitem value="#{adminChampionShipBean.dto.campeonato.nombreCampeonato}"  action="#{campeonatoBean.verGruposCampeonato(adminChampionShipBean.dto.campeonato)}"/>   
                             <p:menuitem value="#{jugadorBean.grupo.nombreGrupo}"  action="#{adminChampionShipBean.verGrupo(grupo)}" />
                             <p:menuitem value="#{jugadorBean.equipo.nombreEquipo}" action="#"/>
                         </p:breadCrumb>
