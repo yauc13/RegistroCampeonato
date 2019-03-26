@@ -9,6 +9,7 @@ import com.fut.model.Arbitro;
 import com.fut.model.Campeonato;
 import com.fut.model.Gol;
 import com.fut.model.Grupo;
+import com.fut.model.Jornada;
 import com.fut.model.Jugador;
 import com.fut.model.Partido;
 import com.fut.model.Penal;
@@ -26,6 +27,7 @@ public class PlanillaPartidoDTO {
     private Grupo grupo;
     private Usuario usuario;
     private PlayOff playOff;
+    private Jornada jornada;
     private Campeonato campeonato;
     private List<Gol> listaGolesA;
     private List<Gol> listaGolesB;
@@ -211,6 +213,19 @@ public class PlanillaPartidoDTO {
     public void setIdArbitro(int idArbitro) {
         this.idArbitro = idArbitro;
     }
+
+    public Jornada getJornada() {
+        if(jornada==null){
+            jornada = new Jornada();
+        }
+        return jornada;
+    }
+
+    public void setJornada(Jornada jornada) {
+        this.jornada = jornada;
+    }
+    
+    
     
     
     

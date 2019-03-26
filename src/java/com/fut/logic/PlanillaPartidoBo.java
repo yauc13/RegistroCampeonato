@@ -33,17 +33,21 @@ public class PlanillaPartidoBo {
             
             if (dto.getGrupo() != null) {
                 direccion = "vistaGrupo?faces-redirect=true";
-            } 
+            }else if (dto.getJornada() != null){
+                direccion = "adminChampionShip?faces-redirect=true";
+            }
         } else if (dto.getPartido().getIdPlayOff() != 0) {
           if(dto.getListaGolesA().size()==dto.getListaGolesB().size()){
               enablePanelPenalties(dto);
           }else{
             if (dto.getPlayOff() != null) {
                 direccion = "listaPartidoPlayOff?faces-redirect=true";
+            }else if (dto.getJornada() != null){
+                direccion = "adminChampionShip?faces-redirect=true";
             }
           }
           
-        }
+        } 
         return direccion;
     }
     

@@ -13,6 +13,7 @@ import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 import com.fut.model.Gol;
 import com.fut.model.Grupo;
+import com.fut.model.Jornada;
 import com.fut.model.Jugador;
 import com.fut.model.Partido;
 import com.fut.model.PlayOff;
@@ -41,6 +42,7 @@ public class PartidoBean implements Serializable{
     private Grupo grupo = new Grupo();
     private Usuario usuario = new Usuario();
     private PlayOff playOff = new PlayOff();
+    private Jornada jornada = new Jornada();
     private Campeonato campeonato = new Campeonato();
     private List<Partido> listaPartido;
     private List<Partido> listaPartidoPlayOff;
@@ -67,6 +69,7 @@ public class PartidoBean implements Serializable{
     public PartidoBean() {
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         playOff = (PlayOff) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("play");
+        jornada = (Jornada) Util.getObjectOfContext("jornada");
     }
 
 
@@ -282,9 +285,16 @@ public class PartidoBean implements Serializable{
     public String editarPlanilla(Partido par) {   
     String direccion = null;   
         //sirve para pasar datos entres los beans
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("partido", par);
+        Util.setObjectOfContext("partido", par);        
         direccion = "planillaPartido?faces-redirect=true";
     return direccion;
+    }
+    
+    public String verPartidoJornada(Partido par, Jornada jor) {       
+        Util.setObjectOfContext("jornada", jor);
+        Util.setObjectOfContext("grupo", null);
+        Util.setObjectOfContext("playoff", null);
+    return editarPlanilla(par);
     }
     
     //
@@ -299,7 +309,9 @@ public class PartidoBean implements Serializable{
             direccion = "vistaGrupo?faces-redirect=true";
         } else if (playOff != null) {
             direccion = "listaPartidoPlayOff?faces-redirect=true";
-        }       
+        } else if (jornada != null) {
+            direccion = "listaPartidoPlayOff?faces-redirect=true";
+        }      
         return direccion;
     }
     

@@ -215,8 +215,8 @@
 
                             <p:outputLabel for="txtFecha" value="Hora:" />
 
-                            <p:calendar id="txtFecha" navigator="true" pattern="yyyy-MM-dd hh:mm a" locale="pt"
-                                        styleClass="dateTimeField"  value="#{adminChampionShipBean.horaPartido}"
+                            <p:calendar id="txtFecha" navigator="true" pattern="yyyy-MM-dd hh:mm a" locale="pt" minHour="7"
+                                        styleClass="dateTimeField"   value="#{adminChampionShipBean.horaPartido}"
                                         yearRange="c-100:c" required="true"/>
 
                             <p:commandButton value="Agregar"  actionListener="#{adminChampionShipBean.agregarPartidoJornada()}"

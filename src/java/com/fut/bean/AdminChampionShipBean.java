@@ -27,6 +27,7 @@ import com.fut.model.PlayOff;
 import com.fut.model.TablaEquipos;
 import com.fut.model.Tarjeta;
 import com.fut.model.Usuario;
+import com.fut.util.Cons;
 import com.fut.util.Util;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -281,10 +282,9 @@ public class AdminChampionShipBean implements Serializable{
         dao = new GrupoDao();
         if (dao.updateGroup(grupo)) {
             this.listar();
-            Util.setMessage(FacesMessage.SEVERITY_INFO, "Exitoso", "Grupo Modificado");             
+            Util.setMessage(FacesMessage.SEVERITY_INFO, Cons.MSG_SUCCESSFUL, "Grupo Modificado");             
         } else {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo modificar");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            Util.setMessage(FacesMessage.SEVERITY_FATAL, Cons.MSG_ERROR, "no se pudo modificar");    
         }
     }
         
@@ -316,11 +316,13 @@ public class AdminChampionShipBean implements Serializable{
     String direccion = null; 
         //sirve para pasar datos entres los beans        
         Util.setObjectOfContext("grupo", grup);
+        Util.setObjectOfContext("jornada", null);
+        Util.setObjectOfContext("playoff", null);
         direccion = "vistaGrupo?faces-redirect=true";
     return direccion;
     }
     
-         public String verPartidosGrupo()  {    
+    public String verPartidosGrupo()  {    
     String direccion;
         //sirve para pasar datos entres los beans
         grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");

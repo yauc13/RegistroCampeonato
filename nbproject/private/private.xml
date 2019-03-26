@@ -5,8 +5,16 @@
         <group>
             <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/bean/PartidoBean.java</file>
             <file>file:/D:/AdminFutSal/RegistroCampeonato/web/vistaGrupo.xhtml</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/dto/PlanillaPartidoDTO.java</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/web/adminChampionShip.xhtml</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/logic/PlanillaPartidoBo.java</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/util/Util.java</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/web/adminChamp/tab_fixture.xhtml</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/web/listaPartidoPlayOff.xhtml</file>
             <file>file:/D:/AdminFutSal/RegistroCampeonato/web/planillaPartido.xhtml</file>
-            <file>file:/D:/AdminFutSal/RegistroCampeonato/web/resources/css/bootstrap.css</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/web/adminChamp/tab_group.xhtml</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/bean/AdminChampionShipBean.java</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/bean/PlanillaPartidoBean.java</file>
         </group>
     </open-files>
 </project-private>
