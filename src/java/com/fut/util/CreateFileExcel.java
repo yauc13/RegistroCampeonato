@@ -9,6 +9,7 @@ import com.fut.model.Jornada;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import org.apache.poi.ss.util.CellRangeAddress; //celdas por convinadas excel
@@ -23,7 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class CreateFileExcel {
     
-    public static String generateFileExcelFixture(List<Jornada> dR, List<String> columnsStatic) {
+    public static String generateFileExcelFixture(List<Jornada> data, List<String> columnsStatic) {
 
         String fileExcel = null;
 
@@ -37,34 +38,67 @@ public class CreateFileExcel {
 
                 //insertar encabezado tabla
                 XSSFRow row = sheet.createRow(0);
-
+/*
                 for (int i = 0; i < columnsStatic.size(); i++) {
                     XSSFCell cell = row.createCell(i);
                     cell.setCellValue(columnsStatic.get(i));
-                }
+                } */
+                int initCel = 1;
+                int rowIndex=1;
+                XSSFCell cell;
+                //Insertar datos de las jornadas                
+                for (int i = initCel; i < data.size() + initCel; i++) {
 
-                //Insertar datos de las personas en cada campo                
-                for (int i = 1; i < dR.size() + 1; i++) {
+                    row = sheet.createRow(rowIndex);
+                    //cell = row.createCell(0);
+                    //cell.setCellValue(data.get(i - initCel).getFechaJornada());
+                    /*recorre las columnas de jornada*/
+                    for (int j = 0; j < 3; j++) {
 
-                    row = sheet.createRow(i);
-
-                    for (int j = 0; j < columnsStatic.size(); j++) {
-
-                        XSSFCell cell = row.createCell(j);
+                        cell = row.createCell(j);
                         switch (j) {
                             case 0:
-                                cell.setCellValue(dR.get(i - 1).getIdJornada());
+                                cell.setCellValue(data.get(i - initCel).getIdJornada());
                                 break;
                             case 1:
-                                cell.setCellValue(dR.get(i - 1).getFechaJornada());
+                                cell.setCellValue(data.get(i - initCel).getFechaJornada());
                                 break;
                             case 2:
-                                cell.setCellValue(dR.get(i - 1).getNombreJornada());
+                                cell.setCellValue(data.get(i - initCel).getNombreJornada());
                                 break;
                           
 
                         }
 
+                    }
+                    rowIndex++;
+                    /*recorre los partidos*/
+                    for (int p = 0; p < data.get(i - initCel).getListMatch().size(); p++) {
+                        row = sheet.createRow(rowIndex);
+                        
+                        for (int cp = 0; cp < 4; cp++) {
+                            
+                            cell = row.createCell(cp);
+                            switch (cp) {
+                                case 0:
+                                    cell.setCellValue(new SimpleDateFormat(" hh:mm a").format(new Date(
+                                            data.get(i - initCel).getListMatch().get(p).getFechaPartido().getTime())));
+                                    break;
+                                case 1:
+                                    cell.setCellValue(data.get(i - initCel).getListMatch().get(p).getEquipoA().getNombreEquipo());
+                                    break;
+                                case 2:
+                                    cell.setCellValue(data.get(i - initCel).getListMatch().get(p).getGolA()+" - "+
+                                            data.get(i - initCel).getListMatch().get(p).getGolB());
+                                    break;
+                                case 3:
+                                    cell.setCellValue(data.get(i - initCel).getListMatch().get(p).getEquipoB().getNombreEquipo());
+                                    break;
+
+                            }
+
+                        }
+                        rowIndex++;
                     }
 
                 }
@@ -88,4 +122,6 @@ public class CreateFileExcel {
         return fileExcel;
 
     }
+    
+    
 }

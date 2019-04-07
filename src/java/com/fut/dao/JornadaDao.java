@@ -51,11 +51,14 @@ public class JornadaDao extends Dao {
                 rs = st.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
-                    Jornada cam = new Jornada();
-                    cam.setIdJornada(rs.getInt("idJornada"));
-                    cam.setNombreJornada(rs.getString("nombreJornada"));
-                    cam.setFechaJornada(rs.getDate("fechaJornada"));
-                    lista.add(cam);               
+                    Jornada jor = new Jornada();
+                    jor.setIdJornada(rs.getInt("idJornada"));
+                    jor.setNombreJornada(rs.getString("nombreJornada"));
+                    jor.setFechaJornada(rs.getDate("fechaJornada"));
+                    PartidoDao dao = new PartidoDao();
+                    jor.setListMatch(dao.listarPartidosJornada(jor));
+                    
+                    lista.add(jor);               
                 }
             }catch(SQLException e){
                 System.out.println(e);

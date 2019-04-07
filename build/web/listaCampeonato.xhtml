@@ -21,17 +21,17 @@
                 </p:breadCrumb>
             </h:form>
         </div>       
-        <p:growl id="message" showDetail="true" autoUpdate="true" sticky="true"/>
+        <p:growl id="message" showDetail="true" sticky="true"><p:autoUpdate/> </p:growl>
         <f:event type="preRenderView" listener="#{campeonatoBean.listarCampeonatosInicio()}" />
         <p:dialog modal="true" widgetVar="statusDialog1" header="Cargando..." draggable="false" closable="false" resizable="false">
             <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
         </p:dialog>
 
-        <div class="row"> 
-            <div class="container-fluid row" >
                 <h:form id="frm1">
                     <br/> 
-                    <div  class="col-md-10 col-md-offset-8 ">
+                    <div class=""> 
+                    
+                    <div  class="col-md-10 col-md-offset-2 ">
                         <p:dataTable id="data" value="#{campeonatoBean.dto.listaCampeonato}" var="camp"  
 
                                      >
@@ -83,10 +83,10 @@
                             </p:column>              
                         </p:dataTable>
                     </div>
+                 </div>
 
                 </h:form>
-            </div>
-        </div>
+           
         <p:dialog header="#{campeonatoBean.dto.accion} Campeonatos" widgetVar="wdgDatos" id="dlgDatos">
             <h:form>
                 <p:growl autoUpdate="true" showDetail="true"/>

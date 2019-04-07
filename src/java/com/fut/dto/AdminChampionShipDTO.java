@@ -28,6 +28,7 @@ public class AdminChampionShipDTO {
    
     
     private List<Equipo> listaEquiposClasificados;  //lista de equipos clasificados precargada
+    private List<Jornada> listaJornada; 
     
     // dialogo agregar partido a la jornada
     private int itemGroupPlaySelJor; //dto selesccion de grupo o playoffg
@@ -185,6 +186,17 @@ public class AdminChampionShipDTO {
 
     public void setItemMatchSelJor(int itemMatchSelJor) {
         this.itemMatchSelJor = itemMatchSelJor;
+    }
+
+    public List<Jornada> getListaJornada() {
+        if(listaJornada==null){
+            listaJornada = new ArrayList<>();
+        }
+        return listaJornada;
+    }
+
+    public void setListaJornada(List<Jornada> listaJornada) {
+        this.listaJornada = listaJornada;
     }
 
   

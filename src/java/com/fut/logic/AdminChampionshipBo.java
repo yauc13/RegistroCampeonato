@@ -18,6 +18,7 @@ import com.fut.model.Grupo;
 import com.fut.model.Partido;
 import com.fut.model.PlayOff;
 import com.fut.model.TablaEquipos;
+import com.fut.util.CreateFileExcel;
 import com.fut.util.Util;
 import java.util.ArrayList;
 import java.util.List;
@@ -137,6 +138,12 @@ public class AdminChampionshipBo {
        dto.setListArbitro(arbDao.listarArbitros(dto.getCampeonato().getIdCampeonato()));
    }
     
+   
+   /*Metodos Jornadas*/
+   
+   public void generateExcelFixture(AdminChampionShipDTO dto){
+       CreateFileExcel.generateFileExcelFixture(dto.getListaJornada(), new ArrayList<String>());
+   }
     
     
 }
