@@ -56,6 +56,9 @@ public class SqlAdminFutSal {
     public static final String SELECT_LATEST_PLAYOFF_BY_CHAMPIONSHIP = "SELECT \"idPlayOff\", \"namePlayOff\", \"numPartidos\", \"idCampeonato\" FROM public.playoff where  \"idCampeonato\" = ? order by \"idPlayOff\" desc limit 1";
     
     /*DAO EQUIPO*/
+    public static final String INSERT_TEAM = "INSERT INTO public.equipo (\"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\") values(?,?,?,?,?,?,?,?)";
+    public static final String UPDATE_TEAM = "UPDATE public.equipo SET \"nombreEquipo\" = ? WHERE \"idEquipo\" = ?";
+    public static final String SELECT_TEAM_BY_GROUP = "SELECT \"idEquipo\", \"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idGrupoEquipo\" = ? ORDER BY \"nombreEquipo\"";
     public static final String SELECT_TEAM_CLASSIFIED = "SELECT \"idEquipo\", \"nombreEquipo\", \"nombreGrupo\" FROM public.equipo equ INNER JOIN public.grupo  gru ON equ.\"idGrupoEquipo\" = gru.\"idGrupo\" INNER JOIN public.campeonato cam ON gru.\"idCampeonato\" = cam.\"idCampeonato\" WHERE cam.\"idCampeonato\" = ? ORDER BY gru.\"nombreGrupo\" ASC";
     public static final String SELECT_TEAM_A_BY_R_PLAY_OFF = "SELECT * FROM  public.r_playoff_equipo r INNER JOIN public.equipo e ON r.\"idEquipo\" = e.\"idEquipo\" WHERE r.\"idPlayOff\" = ?";
     public static final String SELECT_LIST_TEAM_ALL_PAY = "SELECT e.\"idEquipo\", e.\"nombreEquipo\",SUM (\"valorPago\") AS \"totalPago\" FROM public.pago_planilla_equipo ppe RIGHT JOIN public.equipo e ON ppe.\"idEquipo\" = e.\"idEquipo\" INNER JOIN public.grupo g ON e.\"idGrupoEquipo\" = g.\"idGrupo\" INNER JOIN public.campeonato c ON c.\"idCampeonato\" = g.\"idCampeonato\" WHERE c.\"idCampeonato\" = ?	GROUP BY e.\"idEquipo\", e.\"nombreEquipo\" ORDER BY e.\"nombreEquipo\" asc";

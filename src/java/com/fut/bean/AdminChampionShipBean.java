@@ -354,7 +354,7 @@ public class AdminChampionShipBean implements Serializable{
     public List<Equipo> loadListTeamByGroup(int idGroup) {
         EquipoDao equipoDao = new EquipoDao();
         try {
-            listaEquipos = equipoDao.listar(idGroup);
+            listaEquipos = equipoDao.listarEquiposPorGrupo(idGroup);
         } catch (Exception ex) {
             Logger.getLogger(AdminChampionShipBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -542,37 +542,6 @@ public class AdminChampionShipBean implements Serializable{
         bo.listarArbitros(dto);
     }
 
-    public String habilitarPermisos(Campeonato camp, int i){
-        String bol = null;
-       switch (i){
-           case 1:
-               //habilitar deleteGroup y editar
-               if(camp.getIdUsuario() == usuario.getIdUsuario() || "Administrador".equals(usuario.getRolUsuario())){
-                    bol = "false";
-                }else{
-                    bol = "true";
-                }
-               break;
-               
-            case 2:
-                          
-                //habilitar boton nuevo
-               if("Organizador".equals(usuario.getRolUsuario()) || "Administrador".equals(usuario.getRolUsuario())){
-                    bol = "false";
-                }else{
-                    bol = "true";
-                }
-               break;
-       
-       }
-        
-    return bol;
-    }
-    
-
-    
-
-   
     
      public Usuario getUsuario() {
         return usuario;

@@ -8,7 +8,9 @@ package com.fut.dao;
 import com.fut.model.Equipo;
 import com.fut.model.Grupo;
 import com.fut.model.PagoPlanilla;
+import com.fut.util.DaoUtil;
 import com.fut.util.SqlAdminFutSal;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,44 +22,58 @@ import java.util.List;
  *
  * @author Yeison
  */
-public class EquipoDao extends Dao {
-    public boolean registrar(Equipo cam) throws Exception{
+public class EquipoDao {
+    private PreparedStatement stmt;
+    private Connection cx;
+    private ResultSet rs;
+    
+    
+    public boolean registrarEquipo(Equipo equ) {
         boolean reg = false;
         try{
-            this.ConectionDataBase();
-            //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO equipo (nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario) values(?,?,?,?,?,?,?,?)");
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.equipo (\"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\") values(?,?,?,?,?,?,?,?)");
-            st.setString(1, cam.getNombreEquipo());
-            st.setInt(2, cam.getPgEquipo());
-            st.setInt(3, cam.getPeEquipo());
-            st.setInt(4, cam.getPpEquipo());
-            st.setInt(5, cam.getGfEquipo());
-            st.setInt(6, cam.getGcEquipo());
-            st.setInt(7, cam.getIdGrupoEquipo());
-            st.setInt(8, cam.getIdUsuario());
+            cx = cx = DaoUtil.ConectionDriveDB();           
+            stmt = cx.prepareStatement(SqlAdminFutSal.INSERT_TEAM);
+            stmt.setString(1, equ.getNombreEquipo());
+            stmt.setInt(2, equ.getPgEquipo());
+            stmt.setInt(3, equ.getPeEquipo());
+            stmt.setInt(4, equ.getPpEquipo());
+            stmt.setInt(5, equ.getGfEquipo());
+            stmt.setInt(6, equ.getGcEquipo());
+            stmt.setInt(7, equ.getIdGrupoEquipo());
+            stmt.setInt(8, equ.getIdUsuario());
             
-            st.executeUpdate();
+            stmt.executeUpdate();
             reg = true;
         }catch(SQLException e){
-            throw e;
+            System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return reg;
     }
     
-
+    public void modificarEquipo(Equipo cam){
         
-    public List<Equipo> listar(int idGroup){
-            List<Equipo> lista = null;
-            ResultSet rs;
-            
+        try{
+            cx = DaoUtil.ConectionDriveDB();           
+            stmt = cx.prepareStatement(SqlAdminFutSal.UPDATE_TEAM);
+            stmt.setString(1, cam.getNombreEquipo());                      
+            stmt.setInt(2, cam.getIdEquipo());          
+            stmt.executeUpdate();
+        }catch(SQLException e){
+            System.err.println(e);
+        }finally{
+            DaoUtil.closeConection(cx, stmt, rs);
+        }
+    }
+        
+    public List<Equipo> listarEquiposPorGrupo(int idGroup){
+            List<Equipo> lista = null;                        
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idEquipo\", \"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idGrupoEquipo\" = ? ORDER BY \"nombreEquipo\"");
-                st.setInt(1, idGroup);
-                rs = st.executeQuery();
+                cx = cx = DaoUtil.ConectionDriveDB();                
+                stmt = cx.prepareCall(SqlAdminFutSal.SELECT_TEAM_BY_GROUP);
+                stmt.setInt(1, idGroup);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Equipo cam = new Equipo();
@@ -70,23 +86,20 @@ public class EquipoDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;   
     }
     
-        public List<Equipo> listarEquipoB(Grupo camp, int idEquipoA) throws Exception{
-            List<Equipo> lista;
-            ResultSet rs;
-            
+        public List<Equipo> listarEquipoB(Grupo camp, int idEquipoA) {
+            List<Equipo> lista = null;                        
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idEquipo\", \"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idGrupoEquipo\" = ? AND \"idEquipo\" != ?");
-                st.setInt(1, camp.getIdGrupo());
-                st.setInt(2, idEquipoA);
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();               
+               stmt = cx.prepareCall("SELECT \"idEquipo\", \"nombreEquipo\",\"pgEquipo\",\"peEquipo\",\"ppEquipo\",\"gfEquipo\",\"gcEquipo\",\"idGrupoEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idGrupoEquipo\" = ? AND \"idEquipo\" != ?");
+                stmt.setInt(1, camp.getIdGrupo());
+                stmt.setInt(2, idEquipoA);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Equipo cam = new Equipo();
@@ -96,9 +109,9 @@ public class EquipoDao extends Dao {
                     lista.add(cam);                
                 }
             }catch(SQLException e){
-                throw e;
+                System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;   
@@ -106,15 +119,12 @@ public class EquipoDao extends Dao {
         
         
      public List<Equipo> listarEquiposClasificados(int idChampionShip){
-            List<Equipo> lista = null;
-            ResultSet rs;
-            
+            List<Equipo> lista = null;                        
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_TEAM_CLASSIFIED);
-                st.setInt(1, idChampionShip);
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();                
+                stmt = cx.prepareCall(SqlAdminFutSal.SELECT_TEAM_CLASSIFIED);
+                stmt.setInt(1, idChampionShip);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Equipo cam = new Equipo();
@@ -128,22 +138,21 @@ public class EquipoDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;   
     }
      
     public List<Equipo> listTeamByPlayOffA(int idPlayOff){
-            List<Equipo> lista = null;
-            ResultSet rs;
+            List<Equipo> lista = null;            
             
             try{
-                this.ConectionDataBase();
+                cx = DaoUtil.ConectionDriveDB();
                 
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_TEAM_A_BY_R_PLAY_OFF);
-                st.setInt(1, idPlayOff);
-                rs = st.executeQuery();
+                stmt = cx.prepareCall(SqlAdminFutSal.SELECT_TEAM_A_BY_R_PLAY_OFF);
+                stmt.setInt(1, idPlayOff);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Equipo cam = new Equipo();
@@ -154,7 +163,7 @@ public class EquipoDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;   
@@ -162,14 +171,14 @@ public class EquipoDao extends Dao {
     
     public Equipo leerID(int idEquipo) {
         Equipo usus = null;
-        ResultSet rs;
+        
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareStatement("SELECT idEquipo, nombreEquipo,idUsuario FROM equipo WHERE idEquipo = ?");
-                PreparedStatement st = this.getCn().prepareStatement("SELECT \"idEquipo\", \"nombreEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idEquipo\" = ?");
-                st.setInt(1, idEquipo);
+                cx = DaoUtil.ConectionDriveDB();
+                //stmt = cx.prepareStatement("SELECT idEquipo, nombreEquipo,idUsuario FROM equipo WHERE idEquipo = ?");
+                stmt = cx.prepareStatement("SELECT \"idEquipo\", \"nombreEquipo\",\"idUsuario\" FROM public.equipo WHERE \"idEquipo\" = ?");
+                stmt.setInt(1, idEquipo);
                 
-                rs = st.executeQuery();
+                rs = stmt.executeQuery();
                 while(rs.next()){
                     usus = new Equipo();
                     usus.setIdEquipo(rs.getInt("idEquipo"));
@@ -180,56 +189,41 @@ public class EquipoDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }   
             return usus;
     }
     
         
     
-    public void modificar(Equipo cam) throws Exception{
-        
-        try{
-            this.ConectionDataBase();
-            //PreparedStatement st = this.getCn().prepareStatement("UPDATE equipo SET nombreEquipo = ? WHERE idEquipo = ?");
-            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.equipo SET \"nombreEquipo\" = ? WHERE \"idEquipo\" = ?");
-            st.setString(1, cam.getNombreEquipo());                      
-            st.setInt(2, cam.getIdEquipo());          
-            st.executeUpdate();
-        }catch(SQLException e){
-            throw e;
-        }finally{
-        this.CloseConection();
-        }
-    }
     
-    public void eliminar(Equipo cam) throws Exception{
+    
+    public void eliminar(Equipo cam){
         
         try{
-            this.ConectionDataBase();
-            //PreparedStatement st = this.getCn().prepareStatement("DELETE FROM equipo  WHERE idEquipo = ?");
-            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.equipo  WHERE \"idEquipo\" = ?");
-            st.setInt(1, cam.getIdEquipo());          
-            st.executeUpdate();
+            cx = DaoUtil.ConectionDriveDB();            
+            stmt = cx.prepareStatement("DELETE FROM public.equipo  WHERE \"idEquipo\" = ?");
+            stmt.setInt(1, cam.getIdEquipo());          
+            stmt.executeUpdate();
         }catch(SQLException e){
-            throw e;
+            System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
     }
     
     public List<Equipo> listarEquipoBPartido(int idGrupo, int idEquipoA) {
         List<Equipo> lista = null;
-        ResultSet rs;
+        
         String array = listarIdRivalesEnGrupo(idGrupo, idEquipoA);
         try {
-            this.ConectionDataBase();
+            cx = DaoUtil.ConectionDriveDB();
 
             String query = SqlAdminFutSal.SELECT_TEAM_NOT_PLAY.replaceAll("array", array);
-            PreparedStatement st = this.getCn().prepareCall(query);
-            st.setInt(1, idGrupo);
+            stmt = cx.prepareCall(query);
+            stmt.setInt(1, idGrupo);
 
-            rs = st.executeQuery();
+            rs = stmt.executeQuery();
             lista = new ArrayList();
             while (rs.next()) {
                 Equipo cam = new Equipo();
@@ -241,7 +235,7 @@ public class EquipoDao extends Dao {
         } catch (SQLException e) {
             System.err.println(e);
         } finally {
-            this.CloseConection();
+            DaoUtil.closeConection(cx, stmt, rs);
         }
 
         return lista;
@@ -250,32 +244,32 @@ public class EquipoDao extends Dao {
     private String listarIdRivalesEnGrupo(int idGrupo, int idEquipo) {
         List<Integer> lista;
         String cadena = null;
-        ResultSet rs;
+        
 
         try {
-            this.ConectionDataBase();
+            cx = DaoUtil.ConectionDriveDB();
             lista = new ArrayList();
             lista.add(idEquipo);
 
-            PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_IDTEAM_A_PLAY);
-            st.setInt(1, idGrupo);
-            st.setInt(2, idEquipo);
-            rs = st.executeQuery();
+            stmt = cx.prepareCall(SqlAdminFutSal.SELECT_IDTEAM_A_PLAY);
+            stmt.setInt(1, idGrupo);
+            stmt.setInt(2, idEquipo);
+            rs = stmt.executeQuery();
 
             while (rs.next()) {
                 lista.add(rs.getInt("idEquipoA"));
             }
 
-            st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_IDTEAM_B_PLAY);
-            st.setInt(1, idGrupo);
-            st.setInt(2, idEquipo);
-            rs = st.executeQuery();
+            stmt = cx.prepareCall(SqlAdminFutSal.SELECT_IDTEAM_B_PLAY);
+            stmt.setInt(1, idGrupo);
+            stmt.setInt(2, idEquipo);
+            rs = stmt.executeQuery();
 
             while (rs.next()) {
                 lista.add(rs.getInt("idEquipoB"));
             }
             rs.close();
-            st.close();
+            stmt.close();
 
             StringBuilder obj;
             obj = new StringBuilder();
@@ -290,7 +284,7 @@ public class EquipoDao extends Dao {
         } catch (SQLException e) {
             System.err.println(e);
         } finally {
-            this.CloseConection();
+            DaoUtil.closeConection(cx, stmt, rs);
         }
 
         return cadena;
@@ -299,15 +293,15 @@ public class EquipoDao extends Dao {
     //no se necesita?
     public void listarIdRivalB(int idGrupo, int idEquipoA, List<Integer> lista) {
 
-        ResultSet rs;
+        
 
         try {
-            this.ConectionDataBase();
+            cx = DaoUtil.ConectionDriveDB() ;
 
-            PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_TEAM_NOT_PLAY);
-            st.setInt(1, idGrupo);
-            st.setInt(2, idEquipoA);
-            rs = st.executeQuery();
+            stmt = cx.prepareCall(SqlAdminFutSal.SELECT_TEAM_NOT_PLAY);
+            stmt.setInt(1, idGrupo);
+            stmt.setInt(2, idEquipoA);
+            rs = stmt.executeQuery();
             lista = new ArrayList();
             while (rs.next()) {
                 lista.add(rs.getInt("idEquipoB"));
@@ -315,21 +309,21 @@ public class EquipoDao extends Dao {
         } catch (SQLException e) {
             System.out.println(e);
         } finally {
-            this.CloseConection();
+            DaoUtil.closeConection(cx, stmt, rs);
         }
     }
     
     
     public List<Equipo> listarEquiposTotalPago(int idCampeonato){
             List<Equipo> lista = null;
-            ResultSet rs;
+            
             
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_LIST_TEAM_ALL_PAY);
-                st.setInt(1, idCampeonato);
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();
+                //stmt = cx.prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
+                stmt = cx.prepareStatement(SqlAdminFutSal.SELECT_LIST_TEAM_ALL_PAY);
+                stmt.setInt(1, idCampeonato);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Equipo cam = new Equipo();
@@ -342,7 +336,7 @@ public class EquipoDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;   
@@ -351,35 +345,35 @@ public class EquipoDao extends Dao {
         public boolean insertPayTeam(PagoPlanilla pago){
         boolean reg = false;
         try{
-            this.ConectionDataBase();
+            cx = DaoUtil.ConectionDriveDB();
             
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_TEAM_PAY);
-            st.setInt(1, pago.getIdCampeonato());
-            st.setInt(2, pago.getIdEquipo());
-            st.setDate(3, new java.sql.Date((pago.getFechaPago()).getTime()));
-            st.setInt(4, pago.getValorPago());
-            int resp = st.executeUpdate();
+            stmt = cx.prepareStatement(SqlAdminFutSal.INSERT_TEAM_PAY);
+            stmt.setInt(1, pago.getIdCampeonato());
+            stmt.setInt(2, pago.getIdEquipo());
+            stmt.setDate(3, new java.sql.Date((pago.getFechaPago()).getTime()));
+            stmt.setInt(4, pago.getValorPago());
+            int resp = stmt.executeUpdate();
             if(resp>0){
             reg = true;
             }
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return reg;
     }
         
     public List<PagoPlanilla> listarPagosPorEquipo(int idEquipo){
             List<PagoPlanilla> lista = null;
-            ResultSet rs;
+            
             
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_LIST_PAY_BY_TEAM);
-                st.setInt(1, idEquipo);
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();
+                //stmt = cx.prepareCall("SELECT idEquipo, nombreEquipo,pgEquipo,peEquipo,ppEquipo,gfEquipo,gcEquipo,idGrupoEquipo,idUsuario FROM equipo WHERE idGrupoEquipo = ?");
+                stmt = cx.prepareCall(SqlAdminFutSal.SELECT_LIST_PAY_BY_TEAM);
+                stmt.setInt(1, idEquipo);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     PagoPlanilla cam = new PagoPlanilla();
@@ -393,7 +387,7 @@ public class EquipoDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;   

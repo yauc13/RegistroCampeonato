@@ -76,7 +76,7 @@ public class PartidoBean implements Serializable{
     public void preparedRegisterMatchGroup(){
         this.accion = "Registrar";
         EquipoDao daoEqu = new EquipoDao();
-        this.selectItemOneEquipoA = daoEqu.listar(grupo.getIdGrupo());
+        this.selectItemOneEquipoA = daoEqu.listarEquiposPorGrupo(grupo.getIdGrupo());
         limpiarPartido();
         
     }

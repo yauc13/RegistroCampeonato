@@ -19,9 +19,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Types;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,9 +29,9 @@ import java.util.List;
  * @author Yeison
  */
 public class PartidoDao extends Dao{
-    PreparedStatement stmt;
-    Connection cx;
-    ResultSet rs;
+    private PreparedStatement stmt;
+    private Connection cx;
+    private ResultSet rs;
     
     
     public boolean registrarPartido(Partido par) {
@@ -453,7 +451,7 @@ public class PartidoDao extends Dao{
             ResultSet rs;
         List<Equipo> listEquipo = null;
         EquipoDao equipoDao = new EquipoDao();
-            listEquipo = equipoDao.listar(grup.getIdGrupo()); //se llena la lista de los equipos del grupo
+            listEquipo = equipoDao.listarEquiposPorGrupo(grup.getIdGrupo()); //se llena la lista de los equipos del grupo
             lista = new ArrayList();
             try{
                 this.ConectionDataBase();

@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:panelGrid columns="2" cellpadding="10" id="panel2">
+    
         <h:form id="formJornadas">
 
 
@@ -67,7 +67,7 @@
 
                 <p:rowExpansion>
 
-                   
+                    <div class="col-md-10 offset-1">
                         <p:dataTable id="idTableParJor" var="parJor" 
                                      value="#{jor.listMatch}" 
                                      style=" align-content:  center" 
@@ -96,8 +96,9 @@
                             <p:column headerText="Equipo A">
                                 <p:outputLabel value="#{parJor.equipoA.nombreEquipo}"/>
                             </p:column>
-                            <p:column width="8%">
-                                <p:outputLabel value="#{parJor.golA} - #{parJor.golB}"/>
+                            <p:column width="8%" class="text-center">
+                                <p:outputLabel value="#{parJor.golA} - #{parJor.golB}" rendered="#{parJor.estadoPartido eq  'Finalizado' ? 'true':'false'}"/>
+                                <p:outputLabel value=" - " rendered="#{parJor.estadoPartido eq  'Por Jugar' ? 'true':'false'}"/>
                             </p:column>
                             <p:column headerText="Equipo B">
                                 <p:outputLabel value="#{parJor.equipoB.nombreEquipo}"/>
@@ -125,14 +126,12 @@
                                                  />
                             </p:column>
                         </p:dataTable>
-
-
-                   
+                </div>                   
                 </p:rowExpansion>
             </p:dataTable>
 
         </h:form>
-    </h:panelGrid>
+    
 
 </ui:composition>
 

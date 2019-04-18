@@ -119,7 +119,7 @@ public class EquipoBean implements Serializable{
         dao = new EquipoDao();
         this.equipo.setIdGrupoEquipo(grupo.getIdGrupo());
         this.equipo.setIdUsuario(usuario.getIdUsuario());
-        dao.registrar(equipo);
+        dao.registrarEquipo(equipo);
         this.listar();
     }catch(Exception e){  
         throw e;
@@ -130,7 +130,7 @@ public class EquipoBean implements Serializable{
     EquipoDao dao;
     try{
         dao = new EquipoDao();
-        dao.modificar(equipo);
+        dao.modificarEquipo(equipo);
         this.listar();
     }catch(Exception e){  
         throw e;
@@ -153,7 +153,7 @@ public class EquipoBean implements Serializable{
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         //Grupo camp = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
-        listaEquipo = dao.listar(grupo.getIdGrupo());
+        listaEquipo = dao.listarEquiposPorGrupo(grupo.getIdGrupo());
         }
     }catch(Exception e){   
         throw e;
@@ -168,7 +168,7 @@ public class EquipoBean implements Serializable{
         
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        listaEquipo = dao.listar(grupo.getIdGrupo());
+        listaEquipo = dao.listarEquiposPorGrupo(grupo.getIdGrupo());
     }
     
     

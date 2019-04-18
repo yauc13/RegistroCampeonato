@@ -6,38 +6,39 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <h:panelGrid columns="2" cellpadding="10">
-        <h:form id="frmPay">
+    
+    <h:form id="frmPay">
+        <p:tabView id="idTabPay">      
+            <p:tab title="Equipos" id="tabTeam">   
+                <p:dataTable id="dataEquipo" value="#{adminChampionShipBean.listaPagoEquipos}" var="equipo" >
+                    <p:column headerText="id" width="5%">
+                        <p:outputLabel value="#{equipo.idEquipo}"/>
+                    </p:column>
+                    <p:column headerText="Equipo">
+                        <p:outputLabel value="#{equipo.nombreEquipo}"/>
+                    </p:column>
+                    <p:column headerText="pago">
+                        <p:outputLabel value="#{equipo.totalPagoEquipo}"/>
+                    </p:column> 
+                    <p:column headerText="Agregar pago">
+                        <p:commandLink value="pago" actionListener="#{adminChampionShipBean.selectedTeamPay(equipo)}" 
+                                       oncomplete="PF('wdgDatosPay').show();" update="idTabviewVistaCampeonato:dlgDatosPay" />
+                    </p:column>
+                    <p:column headerText="ver">
+                        <p:commandLink value="ver pagos" actionListener="#{adminChampionShipBean.listPayTeam(equipo)}" 
+                                       oncomplete="PF('wdgDatosPayList').show();" update="idTabviewVistaCampeonato:dlgDatosPayList" />
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+            <p:tab title="Todo" id="tabAll">
 
-            <p:dataTable id="dataEquipo" value="#{adminChampionShipBean.listaPagoEquipos}" var="equipo" >
-                <p:column headerText="id" width="5%">
-                    <p:outputLabel value="#{equipo.idEquipo}"/>
-                </p:column>
-                <p:column headerText="Equipo">
-                    <p:outputLabel value="#{equipo.nombreEquipo}"/>
-                </p:column>
-                <p:column headerText="pago">
-                    <p:outputLabel value="#{equipo.totalPagoEquipo}"/>
-                </p:column> 
+            </p:tab>
+        </p:tabView>
+    </h:form>
 
-                <p:column headerText="Agregar pago">
-                    <p:commandLink value="pago" actionListener="#{adminChampionShipBean.selectedTeamPay(equipo)}" 
-                                   oncomplete="PF('wdgDatosPay').show();" update="idTabviewVistaCampeonato:dlgDatosPay" />
-                </p:column>
-                <p:column headerText="ver">
-                    <p:commandLink value="ver pagos" actionListener="#{adminChampionShipBean.listPayTeam(equipo)}" 
-                                   oncomplete="PF('wdgDatosPayList').show();" update="idTabviewVistaCampeonato:dlgDatosPayList" />
-                </p:column>
-
-            </p:dataTable>
-        </h:form>
-
-
-    </h:panelGrid>
 
     <p:dialog header="Agregar un Pago" widgetVar="wdgDatosPay" id="dlgDatosPay" modal="true">
-        <h:form>
-            <p:growl autoUpdate="true" showDetail="true"/>
+        <h:form>            
             <h:panelGrid columns="2">
                 <p:outputLabel value="Nombre Equipo" />
                 <p:inputText  value="#{adminChampionShipBean.equipoPago.nombreEquipo}"  readonly="true"/>
@@ -61,9 +62,7 @@
     
       <p:dialog header="Lista de Pagos" widgetVar="wdgDatosPayList" id="dlgDatosPayList"
                 modal="true" width="70%">
-        <h:form>
-            <p:growl autoUpdate="true" showDetail="true"/>
-             
+        <h:form>            
                  <h:panelGrid columns="1" class="center_content">
                 
                
