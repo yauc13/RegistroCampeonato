@@ -29,7 +29,7 @@ public class SqlAdminFutSal {
     public static final String ADD_MATCH_TO_JORNADA = "UPDATE public.partido SET \"idJornada\" = ?, \"fechaPartido\" = ? WHERE \"idPartido\" = ?";
     public static final String ADD_REFEREE_TO_MATCH = "UPDATE public.partido SET \"idArbitro\" = ? WHERE \"idPartido\" = ?";
     public static final String REMOVE_MATCH_FIXTURE = "UPDATE public.partido SET \"idJornada\" = null, \"fechaPartido\" = null WHERE \"idPartido\" = ?";
-    public static final String FINISH_MATCH = "UPDATE public.partido SET \"estadoPartido\" = ? WHERE \"idPartido\" = ?";
+    public static final String FINISH_MATCH = "UPDATE public.partido SET \"estadoPartido\" = ?, \"obsPartido\" = ? WHERE \"idPartido\" = ?";
     public static final String FINISH_PENALTIES = "UPDATE public.partido SET \"finPenal\" = ? WHERE \"idPartido\" = ?";
     public static final String START_MATCH = "UPDATE public.partido SET \"estadoPartido\" = ? WHERE \"idPartido\" = ?";
     public static final String LIST_POSITION_TEAM = "SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\" FROM public.partido WHERE (\"golA\">-1 OR \"golA\">-1)AND( \"idEquipoA\"=? OR \"idEquipoB\"=?) AND \"idGrupo\"=?";

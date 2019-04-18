@@ -3,17 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/AdminFutSal/RegistroCampeonato/web/WEB-INF/template/plantilla.xhtml</file>
-            <file>file:/D:/AdminFutSal/RegistroCampeonato/web/vistaGrupo.xhtml</file>
-            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/util/CreateFileExcel.java</file>
-            <file>file:/D:/AdminFutSal/RegistroCampeonato/web/adminChampionShip.xhtml</file>
-            <file>file:/D:/AdminFutSal/RegistroCampeonato/web/listaCampeonato.xhtml</file>
-            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/model/Jornada.java</file>
-            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/bean/VistaGrupoBean.java</file>
-            <file>file:/D:/AdminFutSal/RegistroCampeonato/web/adminChamp/tab_fixture.xhtml</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/dto/PlanillaPartidoDTO.java</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/util/SqlAdminFutSal.java</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/logic/PlanillaPartidoBo.java</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/dao/PartidoDao.java</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/dao/Dao.java</file>
             <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/model/Partido.java</file>
-            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/logic/AdminChampionshipBo.java</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/web/planillaPartido.xhtml</file>
             <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/bean/AdminChampionShipBean.java</file>
+            <file>file:/D:/AdminFutSal/RegistroCampeonato/src/java/com/fut/bean/PlanillaPartidoBean.java</file>
         </group>
     </open-files>
 </project-private>

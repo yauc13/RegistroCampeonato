@@ -34,6 +34,7 @@ public class Partido implements Serializable  {
     private int idJornada;
     private Jornada jornada;
     private Date fechaPartido;
+    private String obsPartido;
     
     
 
@@ -207,6 +208,14 @@ public class Partido implements Serializable  {
 
     public void setFechaPartido(Date fechaPartido) {
         this.fechaPartido = fechaPartido;
+    }
+
+    public String getObsPartido() {
+        return obsPartido;
+    }
+
+    public void setObsPartido(String obsPartido) {
+        this.obsPartido = obsPartido;
     }
     
     

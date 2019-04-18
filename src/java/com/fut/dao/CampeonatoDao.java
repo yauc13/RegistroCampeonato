@@ -27,10 +27,15 @@ public class CampeonatoDao {
         boolean reg = false;
         
         try{
-            cx = DaoUtil.ConectionDataBase();            
+            cx = DaoUtil.ConectionDriveDB();            
             stmt = cx.prepareStatement(SqlAdminFutSal.REGISTER_CAMPEONATO);
-            stmt.setString(1, cam.getNombreCampeonato());
-            stmt.setInt(2, cam.getIdUsuario());
+            int count = 1;
+            stmt.setString(count++, cam.getNombreCampeonato());
+            stmt.setInt(count++, cam.getIdUsuario());
+            stmt.setInt(count++, cam.getCostoPlanilla());
+            stmt.setInt(count++, cam.getCostoAma());
+            stmt.setInt(count++, cam.getCostoAzu());
+            stmt.setInt(count++, cam.getCostoRoj());
             
             int res = stmt.executeUpdate();
             if(res>0){
@@ -48,7 +53,7 @@ public class CampeonatoDao {
             List<Campeonato> lista = null;
             
             try{
-                cx = DaoUtil.ConectionDataBase();  
+                cx = DaoUtil.ConectionDriveDB();  
                 stmt = cx.prepareCall(SqlAdminFutSal.SELECT_CAMPEONATO);
                 rs = stmt.executeQuery();
                 lista = new ArrayList();
@@ -78,7 +83,7 @@ public class CampeonatoDao {
         Campeonato usus = null;
         
             try{
-                cx = DaoUtil.ConectionDataBase();  
+                cx = DaoUtil.ConectionDriveDB();  
 
                 //PreparedStatement st = this.getCn().prepareStatement("SELECT idCampeonato, nombreCampeonato,idUsuario FROM campeonato WHERE idCampeonato = ?");
                 stmt = cx.prepareStatement("SELECT \"idCampeonato\", \"nombreCampeonato\", \"idUsuario\" FROM public.campeonato WHERE \"idCampeonato\" = ?");
@@ -106,7 +111,7 @@ public class CampeonatoDao {
         boolean reg = false;
         
         try{
-            cx = DaoUtil.ConectionDataBase();  
+            cx = DaoUtil.ConectionDriveDB();  
             
             stmt = cx.prepareStatement(SqlAdminFutSal.EDIT_CAMPEONATO);
             int count = 1;
@@ -133,7 +138,7 @@ public class CampeonatoDao {
     public boolean deleteCampeonato(Campeonato cam){
         boolean reg=false;
         try{
-            cx = DaoUtil.ConectionDataBase();             
+            cx = DaoUtil.ConectionDriveDB();             
             stmt = cx.prepareStatement(SqlAdminFutSal.DELETE_CAMPEONATO);
             stmt.setInt(1, cam.getIdCampeonato());          
             int res = stmt.executeUpdate();  

@@ -12,8 +12,10 @@ import com.fut.model.Partido;
 import com.fut.model.PlayOff;
 import com.fut.model.TablaEquipos;
 import com.fut.util.Cons;
+import com.fut.util.DaoUtil;
 import com.fut.util.SqlAdminFutSal;
 import java.sql.Array;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,6 +31,11 @@ import java.util.List;
  * @author Yeison
  */
 public class PartidoDao extends Dao{
+    PreparedStatement stmt;
+    Connection cx;
+    ResultSet rs;
+    
+    
     public boolean registrarPartido(Partido par) {
         boolean reg = false;
         String query;
@@ -42,22 +49,22 @@ public class PartidoDao extends Dao{
             idRepla = par.getIdPlayOff();
         }
         try{
-            this.ConectionDataBase();
+            cx = DaoUtil.ConectionDriveDB();
             query = SqlAdminFutSal.INSERT_PARTIDO.replaceAll("remplazo", repla);
             
-            PreparedStatement st = this.getCn().prepareStatement(query);
-            st.setInt(1, par.getIdEquipoA());
-            st.setInt(2, par.getIdEquipoB());
-            st.setInt(3,  idRepla);
-            st.setInt(4, par.getIdUsuario());
-            st.setString(5, "Por Jugar");
+            stmt = cx.prepareStatement(query);
+            stmt.setInt(1, par.getIdEquipoA());
+            stmt.setInt(2, par.getIdEquipoB());
+            stmt.setInt(3,  idRepla);
+            stmt.setInt(4, par.getIdUsuario());
+            stmt.setString(5, "Por Jugar");
 
-            st.executeUpdate();
+            stmt.executeUpdate();
             reg = true;
         }catch(SQLException e){
             System.out.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return reg;
     }
@@ -65,41 +72,40 @@ public class PartidoDao extends Dao{
         public boolean registrarPartidoPlayOff(Partido par) {
         boolean reg = false;
         try{
-            this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_PARTIDO_PLAYOFF);
-            st.setInt(1, par.getIdEquipoA());
-            st.setInt(2, par.getIdEquipoB());
-            st.setInt(3, par.getIdPlayOff());
-            st.setInt(4, par.getIdUsuario());
-            st.setString(5, Cons.STATE_MATCH_POR);
+            cx = DaoUtil.ConectionDriveDB();
+            stmt = cx.prepareStatement(SqlAdminFutSal.INSERT_PARTIDO_PLAYOFF);
+            stmt.setInt(1, par.getIdEquipoA());
+            stmt.setInt(2, par.getIdEquipoB());
+            stmt.setInt(3, par.getIdPlayOff());
+            stmt.setInt(4, par.getIdUsuario());
+            stmt.setString(5, Cons.STATE_MATCH_POR);
 
-            int res = st.executeUpdate();
+            int res = stmt.executeUpdate();
             if(res>0){
             reg = true;
             }
         }catch(SQLException e){
             System.out.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return reg;
     }
     
    public List<Partido> listarJoin(int idGrupo){
             List<Partido> lista = null;
-            ResultSet rs;
+            
             
             try{
-                this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_GRUPO);
-                st.setInt(1, idGrupo);
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();
+                stmt = cx.prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_GRUPO);
+                stmt.setInt(1, idGrupo);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 
                 
                 while(rs.next()){
-                    Partido cam = new Partido();
-                    //cam.setIdPartido(rs.getInt("idPartido"));
+                    Partido cam = new Partido();                    
                     cam.setIdPartido(rs.getInt("idPartido"));
                     cam.setIdEquipoA(rs.getInt("idEquipoA"));
                     cam.setIdEquipoB(rs.getInt("idEquipoB"));
@@ -128,7 +134,7 @@ public class PartidoDao extends Dao{
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
        
         return lista;   
@@ -140,9 +146,9 @@ public class PartidoDao extends Dao{
             
             try{
                 this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_PLAYOFF);
-                st.setInt(1, idPlay);
-                rs = st.executeQuery();
+                PreparedStatement stmt = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_PLAYOFF);
+                stmt.setInt(1, idPlay);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                                 
                 while(rs.next()){
@@ -186,9 +192,9 @@ public class PartidoDao extends Dao{
             
             try{
                 this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_PLAYOFF_JOR);
-                st.setInt(1, idPlay);
-                rs = st.executeQuery();
+                PreparedStatement stmt = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_PLAYOFF_JOR);
+                stmt.setInt(1, idPlay);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                                 
                 while(rs.next()){
@@ -230,9 +236,9 @@ public class PartidoDao extends Dao{
             
             try{
                 this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_GRUPO_JOR);
-                st.setInt(1, idGrupo);
-                rs = st.executeQuery();
+                PreparedStatement stmt = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_GRUPO_JOR);
+                stmt.setInt(1, idGrupo);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 
                 
@@ -276,9 +282,9 @@ public class PartidoDao extends Dao{
             
             try{
                 this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_JORNADA);
-                st.setInt(1, jor.getIdJornada());
-                rs = st.executeQuery();
+                PreparedStatement stmt = this.getCn().prepareCall(SqlAdminFutSal.SELECT_PARTIDOS_JORNADA);
+                stmt.setInt(1, jor.getIdJornada());
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 
                 
@@ -334,12 +340,12 @@ public class PartidoDao extends Dao{
             
             try{
                 this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"idGrupo\" FROM public.partido WHERE \"idGrupo\" = ? AND \"idEquipoA\"=? OR \"idEquipoB\"=?");
-                st.setInt(1, camp.getIdGrupo());
-                st.setInt(2, idEquipo);
-                st.setInt(3, idEquipo);
+                PreparedStatement stmt = this.getCn().prepareCall("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"idGrupo\" FROM public.partido WHERE \"idGrupo\" = ? AND \"idEquipoA\"=? OR \"idEquipoB\"=?");
+                stmt.setInt(1, camp.getIdGrupo());
+                stmt.setInt(2, idEquipo);
+                stmt.setInt(3, idEquipo);
                 
-                rs = st.executeQuery();
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Partido cam = new Partido();
@@ -374,10 +380,10 @@ public class PartidoDao extends Dao{
         ResultSet rs;
             try{
                 this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareStatement("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\",\"idGrupo\" FROM public.partido WHERE \"idPartido\" = ?");
-                st.setInt(1, idPartido);
+                PreparedStatement stmt = this.getCn().prepareStatement("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"golA\",\"golB\",\"idGrupo\" FROM public.partido WHERE \"idPartido\" = ?");
+                stmt.setInt(1, idPartido);
                
-                rs = st.executeQuery();
+                rs = stmt.executeQuery();
                 while(rs.next()){
                     usus = new Partido();
                     EquipoDao equipoDao = new EquipoDao();
@@ -410,10 +416,10 @@ public class PartidoDao extends Dao{
         lista = new ArrayList();
         try {
             this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.LIST_POSITION_TEAM_GROUP.replaceAll("\"idGru\"", idGrupo+""));
+            PreparedStatement stmt = this.getCn().prepareCall(SqlAdminFutSal.LIST_POSITION_TEAM_GROUP.replaceAll("\"idGru\"", idGrupo+""));
             
 
-            rs = st.executeQuery();
+            rs = stmt.executeQuery();
             while (rs.next()) {
                 TablaEquipos tablaEqui = new TablaEquipos();
                 int puntos = ((rs.getInt("PGL")+rs.getInt("PGV"))*3)+((rs.getInt("PEL")+rs.getInt("PEV"))*1)+((rs.getInt("PPL")+rs.getInt("PPV"))*0);
@@ -453,12 +459,12 @@ public class PartidoDao extends Dao{
                 this.ConectionDataBase();
                 //se recorre la lista de equipos del grupo
                 for(Equipo e: listEquipo){
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.LIST_POSITION_TEAM);
-                //st.setInt(1, grup.getIdGrupo());
-                st.setInt(1, e.getIdEquipo());
-                st.setInt(2, e.getIdEquipo());
-                st.setInt(3, e.getIdGrupoEquipo());
-                rs = st.executeQuery();
+                PreparedStatement stmt = this.getCn().prepareCall(SqlAdminFutSal.LIST_POSITION_TEAM);
+                //stmt.setInt(1, grup.getIdGrupo());
+                stmt.setInt(1, e.getIdEquipo());
+                stmt.setInt(2, e.getIdEquipo());
+                stmt.setInt(3, e.getIdGrupoEquipo());
+                rs = stmt.executeQuery();
                 
                 TablaEquipos tablaEqui= new TablaEquipos();
                 
@@ -508,14 +514,14 @@ public class PartidoDao extends Dao{
         
         try{
             this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement("UPDATE partido SET idEquipoA = ?,idEquipoB = ?,golA = ?,golB = ?,idGrupo = ? WHERE idPartido = ?");
-            st.setInt(1, cam.getIdEquipoA());  
-            st.setInt(2, cam.getIdEquipoB());
-            st.setInt(3, cam.getGolA());  
-            st.setInt(4, cam.getGolB());  
-            st.setInt(5, cam.getIdGrupo());
-            st.setInt(6, cam.getIdPartido());  
-            st.executeUpdate();
+            PreparedStatement stmt = this.getCn().prepareStatement("UPDATE partido SET idEquipoA = ?,idEquipoB = ?,golA = ?,golB = ?,idGrupo = ? WHERE idPartido = ?");
+            stmt.setInt(1, cam.getIdEquipoA());  
+            stmt.setInt(2, cam.getIdEquipoB());
+            stmt.setInt(3, cam.getGolA());  
+            stmt.setInt(4, cam.getGolB());  
+            stmt.setInt(5, cam.getIdGrupo());
+            stmt.setInt(6, cam.getIdPartido());  
+            stmt.executeUpdate();
             
                         
             List<Integer> idGolEA;
@@ -523,14 +529,14 @@ public class PartidoDao extends Dao{
             for(int i=0; i<cam.getGolEA().length;i++){
                 idGolEA.add(cam.getGolEA()[i].getIdGol());
             }
-            st.setArray(7, (Array) idGolEA);
+            stmt.setArray(7, (Array) idGolEA);
             
             List<Integer> idGolEB;
             idGolEB = new ArrayList<>();             
             for(int i=0; i<cam.getGolEB().length;i++){
                 idGolEB.add(cam.getGolEB()[i].getIdGol());
             }
-            st.setArray(8, (Array) idGolEB);
+            stmt.setArray(8, (Array) idGolEB);
 
             
         }catch(SQLException e){
@@ -544,13 +550,13 @@ public class PartidoDao extends Dao{
         boolean resp= false;
         try{
             this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.ADD_MATCH_TO_JORNADA);
+            PreparedStatement stmt = this.getCn().prepareStatement(SqlAdminFutSal.ADD_MATCH_TO_JORNADA);
             int count = 1;
-            st.setInt(count++, jornada.getIdJornada());                                      
-            st.setTimestamp(count++, new java.sql.Timestamp((hora).getTime()));
-            //st.setDate(count++, new java.sql.Date(hora.getTime()));
-            st.setInt(count++, idPartido); 
-            int res=st.executeUpdate();
+            stmt.setInt(count++, jornada.getIdJornada());                                      
+            stmt.setTimestamp(count++, new java.sql.Timestamp((hora).getTime()));
+            //stmt.setDate(count++, new java.sql.Date(hora.getTime()));
+            stmt.setInt(count++, idPartido); 
+            int res=stmt.executeUpdate();
             if(res>0){
                 resp=true;
             }
@@ -566,20 +572,21 @@ public class PartidoDao extends Dao{
         public boolean finalizarPartido(Partido cam){
          boolean resp=false;
         try{
-            this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.FINISH_MATCH);           
-
-            st.setString(1, Cons.STATE_MATCH_FIN); 
-            st.setInt(2, cam.getIdPartido());
+            cx = DaoUtil.ConectionDriveDB();
+            stmt = cx.prepareStatement(SqlAdminFutSal.FINISH_MATCH);           
+            int count = 1;
+            stmt.setString(count++, Cons.STATE_MATCH_FIN); 
+            stmt.setString(count++, cam.getObsPartido()); 
+            stmt.setInt(count++, cam.getIdPartido());
              
-            int res = st.executeUpdate();
+            int res = stmt.executeUpdate();
              if(res>0){
                  resp=true;
              } 
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return resp;
     }
@@ -588,12 +595,12 @@ public class PartidoDao extends Dao{
          boolean resp=false;
         try{
             this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.FINISH_PENALTIES);           
+            PreparedStatement stmt = this.getCn().prepareStatement(SqlAdminFutSal.FINISH_PENALTIES);           
 
-            st.setBoolean(1, true); 
-            st.setInt(2, cam.getIdPartido());
+            stmt.setBoolean(1, true); 
+            stmt.setInt(2, cam.getIdPartido());
              
-            int res = st.executeUpdate();
+            int res = stmt.executeUpdate();
              if(res>0){
                  resp=true;
              } 
@@ -609,10 +616,10 @@ public class PartidoDao extends Dao{
         boolean resp=false;
         try{
             this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.START_MATCH);                        
-            st.setString(1, Cons.STATE_MATCH_JUG); 
-            st.setInt(2, cam.getIdPartido());             
-            int res = st.executeUpdate();
+            PreparedStatement stmt = this.getCn().prepareStatement(SqlAdminFutSal.START_MATCH);                        
+            stmt.setString(1, Cons.STATE_MATCH_JUG); 
+            stmt.setInt(2, cam.getIdPartido());             
+            int res = stmt.executeUpdate();
              if(res>0){
                  resp=true;
              }                         
@@ -628,10 +635,10 @@ public class PartidoDao extends Dao{
         boolean resp= false;
         try{
             this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.REMOVE_MATCH_FIXTURE);
+            PreparedStatement stmt = this.getCn().prepareStatement(SqlAdminFutSal.REMOVE_MATCH_FIXTURE);
                                   
-            st.setInt(1, par.getIdPartido());  
-            st.executeUpdate();
+            stmt.setInt(1, par.getIdPartido());  
+            stmt.executeUpdate();
             resp= true;
         }catch(SQLException e){
             System.err.println(e);
@@ -645,15 +652,15 @@ public class PartidoDao extends Dao{
         boolean resp= false;
         try{
             this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.ADD_REFEREE_TO_MATCH);
+            PreparedStatement stmt = this.getCn().prepareStatement(SqlAdminFutSal.ADD_REFEREE_TO_MATCH);
             int count = 1;
             if(idArbitro==0){
-                st.setNull(count++, Types.INTEGER);
+                stmt.setNull(count++, Types.INTEGER);
             }else{
-                st.setInt(count++, idArbitro); 
+                stmt.setInt(count++, idArbitro); 
             }
-            st.setInt(count++, idPartido); 
-            int res=st.executeUpdate();
+            stmt.setInt(count++, idPartido); 
+            int res=stmt.executeUpdate();
             if(res>0){
                 resp=true;
             }
@@ -670,9 +677,9 @@ public class PartidoDao extends Dao{
         
         try{
             this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM partido  WHERE idPartido = ?");
-            st.setInt(1, cam.getIdPartido());          
-            st.executeUpdate();
+            PreparedStatement stmt = this.getCn().prepareStatement("DELETE FROM partido  WHERE idPartido = ?");
+            stmt.setInt(1, cam.getIdPartido());          
+            stmt.executeUpdate();
         }catch(SQLException e){
             System.err.println(e);
         }finally{

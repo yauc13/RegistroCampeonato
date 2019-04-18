@@ -60,7 +60,7 @@ public class DaoUtil {
         }
     }
     
-    public static Connection ConectionDataBase() {
+    public static Connection ConectionDriveDB() {
         Connection cn = null;
     try{
         Class.forName("org.postgresql.Driver");

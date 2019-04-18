@@ -67,12 +67,7 @@
 
                 <p:rowExpansion>
 
-                    <p:panelGrid  columns="1" columnClasses="label,value" >
-                        <f:facet name="header">
-                           <h:outputText value="#{jor.fechaJornada}">
-                        <f:convertDateTime pattern="dd-MM-yyyy" />
-                    </h:outputText>
-                        </f:facet>
+                   
                         <p:dataTable id="idTableParJor" var="parJor" 
                                      value="#{jor.listMatch}" 
                                      style=" align-content:  center" 
@@ -132,7 +127,7 @@
                         </p:dataTable>
 
 
-                    </p:panelGrid>
+                   
                 </p:rowExpansion>
             </p:dataTable>
 
