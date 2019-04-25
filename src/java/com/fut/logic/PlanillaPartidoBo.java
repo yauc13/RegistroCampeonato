@@ -8,8 +8,16 @@ package com.fut.logic;
 import com.fut.dao.ArbitroDao;
 import com.fut.dao.PartidoDao;
 import com.fut.dto.PlanillaPartidoDTO;
+import com.fut.model.Partido;
 import com.fut.util.Cons;
 import com.fut.util.Util;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 
 /**
@@ -64,6 +72,34 @@ public class PlanillaPartidoBo {
             Util.setMessage(FacesMessage.SEVERITY_ERROR, "Error", "Arbitro  NO asignado al partido");
         }
     }
+    
+    
+    public String verFotoPlanilla(Partido par) {
+        String img = par.getIdPartido()+".JPG";
+        String ruta = "C:\\payara5\\images\\";
+        String encodedfile = "";
+        File file = new File(ruta + img);
+        System.err.println("ruta " + ruta);
+        System.err.println("Imagen " + img);
+        if (file.exists()) {
+            System.err.println("existe la imagen " + file.getPath());
+            
+            try {
+                FileInputStream fileInputStreamReader = new FileInputStream(file);
+                byte[] bytes = new byte[(int) file.length()];
+                fileInputStreamReader.read(bytes);
+                encodedfile = Base64.getEncoder().encodeToString(bytes);
+
+            } catch (FileNotFoundException e) {
+                System.err.println(e);
+            } catch (IOException e) {
+                System.err.println(e);
+            }
+        }
+        return encodedfile;
+    }
+    
+    
     
     private void enablePanelPenalties(PlanillaPartidoDTO dto) {
         dto.setEnaBtnTar(true);

@@ -105,6 +105,7 @@ public class PartidoDao extends Dao{
                 while(rs.next()){
                     Partido cam = new Partido();                    
                     cam.setIdPartido(rs.getInt("idPartido"));
+                    cam.setIdArbitro(rs.getInt("idArbitro"));
                     cam.setIdEquipoA(rs.getInt("idEquipoA"));
                     cam.setIdEquipoB(rs.getInt("idEquipoB"));
                     cam.setGolA(rs.getInt("golEqA"));
@@ -290,6 +291,7 @@ public class PartidoDao extends Dao{
                     Partido par = new Partido();
                     
                     par.setIdPartido(rs.getInt("idPartido"));
+                    par.setIdArbitro(rs.getInt("idArbitro"));
                     par.setIdEquipoA(rs.getInt("idEquipoA"));
                     par.setIdEquipoB(rs.getInt("idEquipoB"));
                     par.setFechaPartido(rs.getTimestamp("fechaPartido"));                    
@@ -593,7 +595,7 @@ public class PartidoDao extends Dao{
          boolean resp=false;
         try{
             this.ConectionDataBase();
-            PreparedStatement stmt = this.getCn().prepareStatement(SqlAdminFutSal.FINISH_PENALTIES);           
+            stmt = this.getCn().prepareStatement(SqlAdminFutSal.FINISH_PENALTIES);           
 
             stmt.setBoolean(1, true); 
             stmt.setInt(2, cam.getIdPartido());
@@ -614,7 +616,7 @@ public class PartidoDao extends Dao{
         boolean resp=false;
         try{
             this.ConectionDataBase();
-            PreparedStatement stmt = this.getCn().prepareStatement(SqlAdminFutSal.START_MATCH);                        
+            stmt = this.getCn().prepareStatement(SqlAdminFutSal.START_MATCH);                        
             stmt.setString(1, Cons.STATE_MATCH_JUG); 
             stmt.setInt(2, cam.getIdPartido());             
             int res = stmt.executeUpdate();

@@ -22,6 +22,7 @@
                     </h:form>
                 </div> 
                 <f:event type="preRenderView" listener="#{jugadorBean.listarInicio()}" />
+                <p:growl showDetail="true"><p:autoUpdate/></p:growl>
                 <h:form id="frm1">
 
                     <br/>         
@@ -71,9 +72,9 @@
                     </p:dataGrid>
                 </h:form>
 
-                <p:dialog header="Registrar o Modificar Jugadors" widgetVar="wdgDatos" id="dlgDatos">
+                <p:dialog header="Registrar o Modificar Jugadores" widgetVar="wdgDatos" id="dlgDatos">
                     <h:form>
-                        <p:growl autoUpdate="true" showDetail="true"/>
+                        
                         <div class="col-md-6 paddingRight30">
                             <div class="row space1">
                                 <p:panel id="image_file_ver" 

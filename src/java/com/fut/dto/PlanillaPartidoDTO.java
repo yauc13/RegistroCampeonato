@@ -17,6 +17,7 @@ import com.fut.model.PlayOff;
 import com.fut.model.Usuario;
 import java.util.ArrayList;
 import java.util.List;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -43,6 +44,8 @@ public class PlanillaPartidoDTO {
     private boolean enaBtnPenal = true;
     private boolean renPanelPenal = false;
     private int idArbitro;
+    private String fotoPlanilla;
+    private UploadedFile imgFile; 
 
     public PlanillaPartidoDTO() {
          partido = new Partido();
@@ -223,6 +226,22 @@ public class PlanillaPartidoDTO {
 
     public void setJornada(Jornada jornada) {
         this.jornada = jornada;
+    }
+
+    public String getFotoPlanilla() {
+        return fotoPlanilla;
+    }
+
+    public void setFotoPlanilla(String fotoPlanilla) {
+        this.fotoPlanilla = fotoPlanilla;
+    }
+
+    public UploadedFile getImgFile() {
+        return imgFile;
+    }
+
+    public void setImgFile(UploadedFile imgFile) {
+        this.imgFile = imgFile;
     }
     
     

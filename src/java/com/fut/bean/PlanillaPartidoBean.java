@@ -23,11 +23,14 @@ import com.fut.model.Tarjeta;
 import com.fut.model.Usuario;
 import com.fut.util.Cons;
 import com.fut.util.Util;
+import java.io.File;
 import java.io.Serializable;
+import java.util.Base64;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.event.FileUploadEvent;
 
 /**
  *
@@ -62,6 +65,7 @@ public class PlanillaPartidoBean implements Serializable{
         dto.setCampeonato((Campeonato) Util.getObjectOfContext("campeonato"));
         enableButtonStart(dto);
         bo.listarArbitros(dto);
+        
     }
     
     
@@ -182,6 +186,25 @@ public class PlanillaPartidoBean implements Serializable{
         FacesContext.getCurrentInstance().addMessage(null, message);
         }
         
+    }
+    
+    public void loadFotoPlanilla(){
+        dto.setFotoPlanilla(bo.verFotoPlanilla(dto.getPartido()));
+    }
+    
+     public void handleFileUpload(FileUploadEvent event) {
+        dto.setImgFile(event.getFile());              
+        if(dto.getImgFile()!=null){
+        String img = dto.getPartido().getIdPartido()+".JPG";
+        String ruta = "C:\\payara5\\images\\";
+        byte imageData[] = dto.getImgFile().getContents();
+        dto.setFotoPlanilla(Base64.getEncoder().encodeToString(imageData));
+        System.err.println("nombre actual: "+dto.getImgFile().getFileName());
+        File f = (File) dto.getImgFile();
+        File foto = new File(f,ruta+img);
+        System.err.println("nombre final: ");
+        }
+         
     }
 
     private boolean isPostBack(){

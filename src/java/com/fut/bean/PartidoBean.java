@@ -281,39 +281,19 @@ public class PartidoBean implements Serializable{
             this.partido = usu; 
             this.accion = "Modificar";
     }
-    
-    public String editarPlanilla(Partido par) {   
-    String direccion = null;   
-        //sirve para pasar datos entres los beans
-        Util.setObjectOfContext("partido", par);        
-        direccion = "planillaPartido?faces-redirect=true";
-    return direccion;
-    }
+      
     
     public String verPartidoJornada(Partido par, Jornada jor) {       
         Util.setObjectOfContext("jornada", jor);
         Util.setObjectOfContext("grupo", null);
         Util.setObjectOfContext("playoff", null);
-    return editarPlanilla(par);
+        Util.setObjectOfContext("partido", par);        
+        String  direccion = "planillaPartido?faces-redirect=true";
+        return direccion;
     }
     
     //
-    public String finalizarPartido(){
-        String direccion="";
-        PartidoDao dao;
-        dao = new PartidoDao();
-        partido.setGolA(listaGolesA.size());
-        partido.setGolB(listaGolesB.size());
-        dao.finalizarPartido(partido);
-        if (grupo != null) {
-            direccion = "vistaGrupo?faces-redirect=true";
-        } else if (playOff != null) {
-            direccion = "listaPartidoPlayOff?faces-redirect=true";
-        } else if (jornada != null) {
-            direccion = "listaPartidoPlayOff?faces-redirect=true";
-        }      
-        return direccion;
-    }
+
     
 
    

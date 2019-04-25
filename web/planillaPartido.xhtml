@@ -210,6 +210,10 @@
                         <div class="row col-md-6">
                         <p:outputLabel value="Observaciones"/>
                         <p:inputTextarea  value="#{planillaPartidoBean.dto.partido.obsPartido}"/>
+                        <p:commandLink value="Ver Planilla fisica" actionListener="#{planillaPartidoBean.loadFotoPlanilla()}"    
+                                       oncomplete="PF('wdgDlgFotoPlanilla').show();" update="idDlgFotoPlanilla"
+                                     />
+                        
                         </div>
                         </div>
                 </h:form>
@@ -248,9 +252,41 @@
                     </div>
                     <div class="col-md-6">
                         
+                       
                     </div>   
                 </div>
+                
+        <p:dialog header="Foto Planilla Partido" widgetVar="wdgDlgFotoPlanilla" id="idDlgFotoPlanilla"
+                  width="60%" height="400" modal="true"
+                  >
+            <h:form>
+                <div class="row">
+                    <div class="col-md-12">
+                <p:outputLabel value="Foto " />
+                            <p:fileUpload fileUploadListener="#{jugadorBean.handleFileUpload}"
+                                          update="idDlgFotoPlanilla"
+                                          mode="advanced"
+                                          fileLimit="1" 
+                                          dragDropSupport="true"
+                                          label="Escoger imagen" 
+                                          invalidFileMessage="error al cargar" 
+                                          invalidSizeMessage="archivo muy grande" 
+                                          uploadLabel="uploaded" 
+                                          fileLimitMessage="subir un archivo a la vez"
+                                          validatorMessage="Debe subir un archivo para poder continuar con el proceso" required="true" 
 
+                                          sizeLimit="209715200"
+                                          allowTypes="/(\.|\/)(gif|jpe?g|png|jpg)$/"
+                                          styleClass="upload-view-button"
+                                          />
+                             </div>   
+                </div>
+                <img style="width: 400px; height: 400px;" src="data:image/png;base64,#{planillaPartidoBean.dto.fotoPlanilla}" />
+
+                   
+            </h:form>
+        </p:dialog>
+                
             </ui:define>           
         </ui:composition>
     </h:body>
