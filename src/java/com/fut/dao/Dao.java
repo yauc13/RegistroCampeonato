@@ -10,6 +10,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 /**
  *
@@ -17,6 +21,8 @@ import javax.faces.context.FacesContext;
  */
 public class Dao {
     Connection cn;
+    private static DataSource ds;
+    private static final String DATASOURCE = "adminfutsal/torneo";
 
     public Connection getCn() {
         return cn;
@@ -26,7 +32,23 @@ public class Dao {
         this.cn = cn;
     }
     
-    public Connection ConectionDataBase() {
+    public Connection ConectionDataBase() throws NamingException {
+        cn = null;
+    try{
+        Context context = new InitialContext();
+            ds = (DataSource)context.lookup(DATASOURCE);
+            if (ds != null) {
+                cn = ds.getConnection();
+            }
+    }catch (NamingException | SQLException e){
+        System.out.println(e+"EXCEPTION CONEXION DB");
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo conectar a la base de datos");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    return cn;
+    }
+    
+    public Connection ConectionDataBaseOld() {
         cn = null;
     try{
         Class.forName("org.postgresql.Driver");

@@ -25,22 +25,22 @@ import javax.sql.DataSource;
  */
 public class DaoUtil {
     
-    private static final String DRIVE_MANAGE_POSTGRES = "jdbc:postgresql://localhost:5432/torneo?user=postgres&password=password";
+    private static final String DRIVE_MANAGE_POSTGRES = "jdbc:postgresql://localhost:5432/torneo?user=postgres&password=postgres";
     private static final String DATASOURCE = "adminfutsal/torneo";
     private static DataSource ds;
     
     public static Connection getConnection(){
-        Connection conn = null;
-        try {
-            Context context = new InitialContext();
-            ds = (DataSource)context.lookup(DATASOURCE);
-            if (ds != null) {
-                conn = ds.getConnection();
-            }
-        } catch(NamingException | SQLException e) {
-            System.out.println("[DAO] "+e);
-        }
-        return conn;
+          Connection cn = null;
+    try{
+        Class.forName("org.postgresql.Driver");
+       // cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/torneo?user=root&password=");
+        cn = DriverManager.getConnection(DRIVE_MANAGE_POSTGRES);
+    }catch (ClassNotFoundException | SQLException e){
+        System.out.println(e+"EXCEPTION CONEXION DB");
+        Util.setMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo conectar a la base de datos");        
+    }
+    return cn;
+        
     }
     
     
@@ -61,16 +61,18 @@ public class DaoUtil {
     }
     
     public static Connection ConectionDriveDB() {
-        Connection cn = null;
-    try{
-        Class.forName("org.postgresql.Driver");
-       // cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/torneo?user=root&password=");
-        cn = DriverManager.getConnection(DRIVE_MANAGE_POSTGRES);
-    }catch (ClassNotFoundException | SQLException e){
-        System.out.println(e+"EXCEPTION CONEXION DB");
-        Util.setMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo conectar a la base de datos");        
-    }
-    return cn;
+     Connection conn = null;
+        try {
+            Context context = new InitialContext();
+            ds = (DataSource)context.lookup(DATASOURCE);
+            if (ds != null) {
+                conn = ds.getConnection();
+            }
+        } catch(NamingException | SQLException e) {
+            System.out.println(e+"EXCEPTION CONEXION POOL DB");
+            Util.setMessage(FacesMessage.SEVERITY_FATAL, "Error", "no se pudo conectar al pool de la base de datos");     
+        }
+        return conn;
     }
     
     public void CloseConection(Connection cn) {

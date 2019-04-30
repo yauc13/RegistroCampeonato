@@ -6,7 +6,9 @@
 package com.fut.dao;
 
 import com.fut.model.Penal;
+import com.fut.util.DaoUtil;
 import com.fut.util.SqlAdminFutSal;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,19 +19,23 @@ import java.util.List;
  *
  * @author YeisonUrrea
  */
-public class PenalDao extends Dao{
+public class PenalDao{
+    private PreparedStatement stmt;
+    private Connection cx;
+    private ResultSet rs;
+    
     public boolean insertPenal(Penal p){
         boolean reg = false;
         try{
-            cn =this.ConectionDataBase();
-            PreparedStatement st = this.cn.prepareStatement(SqlAdminFutSal.INSERT_PENAL);
+            cx = DaoUtil.ConectionDriveDB();
+            stmt = cx.prepareStatement(SqlAdminFutSal.INSERT_PENAL);
             int count=1;
-            st.setInt(count++, p.getIdJugador());
-            st.setInt(count++, p.getIdEquipo());
-            st.setInt(count++, p.getIdPartido());          
-            st.setInt(count++, p.getIdEquipoB());
+            stmt.setInt(count++, p.getIdJugador());
+            stmt.setInt(count++, p.getIdEquipo());
+            stmt.setInt(count++, p.getIdPartido());          
+            stmt.setInt(count++, p.getIdEquipoB());
                      
-            int res = st.executeUpdate();
+            int res = stmt.executeUpdate();
             if(res>0){
                 reg = true;
             }
@@ -37,21 +43,21 @@ public class PenalDao extends Dao{
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return reg;
     }
     
      public List<Penal> listarPenalesPartidoEquipo(int idPar, int idEqu) {
             List<Penal> lista = null;
-            ResultSet rs;
+            
             
             try{
-                this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.LIST_PENAL_BY_TEAM_MATH);
-                st.setInt(1, idPar);
-                st.setInt(2, idEqu);
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();
+                stmt = cx.prepareCall(SqlAdminFutSal.LIST_PENAL_BY_TEAM_MATH);
+                stmt.setInt(1, idPar);
+                stmt.setInt(2, idEqu);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Penal cam = new Penal();
@@ -61,7 +67,7 @@ public class PenalDao extends Dao{
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;    

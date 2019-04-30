@@ -7,7 +7,9 @@ package com.fut.dao;
 
 import com.fut.model.Campeonato;
 import com.fut.model.Grupo;
+import com.fut.util.DaoUtil;
 import com.fut.util.SqlAdminFutSal;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,40 +20,43 @@ import java.util.List;
  *
  * @author Yeison
  */
-public class GrupoDao extends Dao {
+public class GrupoDao{
+    private PreparedStatement stmt;
+    private Connection cx;
+    private ResultSet rs;
     public boolean insertGroup(Grupo group){
         boolean reg = false;
         try{
-            this.ConectionDataBase();
+            cx = DaoUtil.ConectionDriveDB();
            
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_GRUP);
-            st.setString(1, group.getNombreGrupo());
-            st.setInt(2, group.getNumClasificados());
-            st.setInt(3, group.getIdCampeonato());
-            st.setInt(4, group.getIdUsuario());
+            stmt = cx.prepareStatement(SqlAdminFutSal.INSERT_GRUP);
+            stmt.setString(1, group.getNombreGrupo());
+            stmt.setInt(2, group.getNumClasificados());
+            stmt.setInt(3, group.getIdCampeonato());
+            stmt.setInt(4, group.getIdUsuario());
             
-            int exRes = st.executeUpdate();
+            int exRes = stmt.executeUpdate();
             if(exRes>0){
             reg = true;
             }
         }catch(SQLException e){
             System.out.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return reg;
     }
         
     public List<Grupo> listGroupByChampionShip(int idChampionship){
             List<Grupo> lista = null;
-            ResultSet rs;
+            
             
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareCall("SELECT idGrupo, nombreGrupo,idUsuario FROM grupo WHERE idCampeonato = ?");
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_GROUP_BY_CHAMPIONSHIP);
-                st.setInt(1, idChampionship);
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();
+                //stmt = cx.prepareCall("SELECT idGrupo, nombreGrupo,idUsuario FROM grupo WHERE idCampeonato = ?");
+                stmt = cx.prepareCall(SqlAdminFutSal.SELECT_GROUP_BY_CHAMPIONSHIP);
+                stmt.setInt(1, idChampionship);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Grupo cam = new Grupo();
@@ -64,7 +69,7 @@ public class GrupoDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;   
@@ -72,14 +77,14 @@ public class GrupoDao extends Dao {
     
     public Grupo leerID(int idGrupo) {
         Grupo usus = null;
-        ResultSet rs;
+        
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareStatement("SELECT idGrupo, nombreGrupo, idUsuario FROM grupo WHERE idGrupo = ?");
-                PreparedStatement st = this.getCn().prepareStatement("SELECT \"idGrupo\", \"nombreGrupo\", \"idUsuario\" FROM public.grupo WHERE \"idGrupo\" = ?");
-                st.setInt(1, idGrupo);
+                cx = DaoUtil.ConectionDriveDB();
+                //stmt = cx.prepareStatement("SELECT idGrupo, nombreGrupo, idUsuario FROM grupo WHERE idGrupo = ?");
+                stmt = cx.prepareStatement("SELECT \"idGrupo\", \"nombreGrupo\", \"idUsuario\" FROM public.grupo WHERE \"idGrupo\" = ?");
+                stmt.setInt(1, idGrupo);
                 
-                rs = st.executeQuery();
+                rs = stmt.executeQuery();
                 while(rs.next()){
                     usus = new Grupo();
                     usus.setIdGrupo(rs.getInt("idGrupo"));
@@ -91,7 +96,7 @@ public class GrupoDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }   
             return usus;
     }
@@ -101,20 +106,20 @@ public class GrupoDao extends Dao {
     public boolean updateGroup(Grupo gru){
         boolean resp=false;
         try{
-            this.ConectionDataBase();
-            //PreparedStatement st = this.getCn().prepareStatement("UPDATE grupo SET nombreGrupo = ? WHERE idGrupo = ?");
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.UPDATE_GRUP);
-            st.setString(1, gru.getNombreGrupo());                      
-            st.setInt(2, gru.getNumClasificados());          
-            st.setInt(3, gru.getIdGrupo());  
-            int exRes = st.executeUpdate();
+            cx = DaoUtil.ConectionDriveDB();
+            //stmt = cx.prepareStatement("UPDATE grupo SET nombreGrupo = ? WHERE idGrupo = ?");
+            stmt = cx.prepareStatement(SqlAdminFutSal.UPDATE_GRUP);
+            stmt.setString(1, gru.getNombreGrupo());                      
+            stmt.setInt(2, gru.getNumClasificados());          
+            stmt.setInt(3, gru.getIdGrupo());  
+            int exRes = stmt.executeUpdate();
             if(exRes>0){
             resp = true;
             }
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return resp;
     }
@@ -122,15 +127,15 @@ public class GrupoDao extends Dao {
     public void deleteGroup(Grupo grupo){
         
         try{
-            this.ConectionDataBase();
-            //PreparedStatement st = this.getCn().prepareStatement("DELETE FROM grupo  WHERE idGrupo = ?");
-            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.grupo  WHERE \"idGrupo\" = ?");
-            st.setInt(1, grupo.getIdGrupo());          
-            st.executeUpdate();
+            cx = DaoUtil.ConectionDriveDB();
+            //stmt = cx.prepareStatement("DELETE FROM grupo  WHERE idGrupo = ?");
+            stmt = cx.prepareStatement("DELETE FROM public.grupo  WHERE \"idGrupo\" = ?");
+            stmt.setInt(1, grupo.getIdGrupo());          
+            stmt.executeUpdate();
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
     }
 }

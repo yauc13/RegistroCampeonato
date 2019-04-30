@@ -6,7 +6,9 @@
 package com.fut.dao;
 
 import com.fut.model.Tarjeta;
+import com.fut.util.DaoUtil;
 import com.fut.util.SqlAdminFutSal;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,21 +19,23 @@ import java.util.List;
  *
  * @author YeisonUrrea
  */
-public class TarjetaDao extends Dao{
-    
+public class TarjetaDao{
+     private PreparedStatement stmt;
+    private Connection cx;
+    private ResultSet rs;
       public boolean insertTarjeta(Tarjeta tar){
         boolean reg = false;
         try{
-            this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_CARD);
-            st.setInt(1, tar.getIdJugador());
-            st.setInt(2, tar.getIdEquipo());
-            st.setInt(3, tar.getIdPartido());
-            st.setString(4, tar.getTypeCard());
-            st.setBoolean(5, false);
-            st.setInt(6, tar.getIdEquipoB());
+            cx = DaoUtil.ConectionDriveDB();
+            stmt = cx.prepareStatement(SqlAdminFutSal.INSERT_CARD);
+            stmt.setInt(1, tar.getIdJugador());
+            stmt.setInt(2, tar.getIdEquipo());
+            stmt.setInt(3, tar.getIdPartido());
+            stmt.setString(4, tar.getTypeCard());
+            stmt.setBoolean(5, false);
+            stmt.setInt(6, tar.getIdEquipoB());
                      
-            int res = st.executeUpdate();
+            int res = stmt.executeUpdate();
             if(res>0){
                 reg = true;
             }
@@ -39,7 +43,7 @@ public class TarjetaDao extends Dao{
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return reg;
     }
@@ -47,11 +51,11 @@ public class TarjetaDao extends Dao{
       public boolean cancelarTarjeta(Tarjeta tar){
         boolean reg = false;
         try{
-            this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.UPDATE_CARD);
-            st.setBoolean(1, tar.isPagoTarjeta());
-            st.setInt(2, tar.getIdTarjeta());         
-            int res = st.executeUpdate();
+            cx = DaoUtil.ConectionDriveDB();
+            stmt = cx.prepareStatement(SqlAdminFutSal.UPDATE_CARD);
+            stmt.setBoolean(1, tar.isPagoTarjeta());
+            stmt.setInt(2, tar.getIdTarjeta());         
+            int res = stmt.executeUpdate();
             if(res>0){
                 reg = true;
             }
@@ -59,7 +63,7 @@ public class TarjetaDao extends Dao{
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return reg;
     }
@@ -67,13 +71,13 @@ public class TarjetaDao extends Dao{
  
     public List<Tarjeta> listAllCard(int idCampeonato) {
         List<Tarjeta> lista = null;
-        ResultSet rs;
+        
 
         try {
-            this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_CARD_ALL_PLAYER);
-            st.setInt(1, idCampeonato);
-            rs = st.executeQuery();
+            cx = DaoUtil.ConectionDriveDB();
+            stmt = cx.prepareCall(SqlAdminFutSal.SELECT_CARD_ALL_PLAYER);
+            stmt.setInt(1, idCampeonato);
+            rs = stmt.executeQuery();
             lista = new ArrayList();
             while (rs.next()) {
                 Tarjeta tar = new Tarjeta();
@@ -92,7 +96,7 @@ public class TarjetaDao extends Dao{
         } catch (SQLException e) {
             System.err.println(e);
         } finally {
-            this.CloseConection();
+            DaoUtil.closeConection(cx, stmt, rs);
         }
 
         return lista;
@@ -101,13 +105,13 @@ public class TarjetaDao extends Dao{
     
     public List<Tarjeta> listPagarCard(int idCampeonato) {
         List<Tarjeta> lista = null;
-        ResultSet rs;
+        
 
         try {
-            this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_CARD_PAG_PLAYER);
-            st.setInt(1, idCampeonato);
-            rs = st.executeQuery();
+            cx = DaoUtil.ConectionDriveDB();
+            stmt = cx.prepareCall(SqlAdminFutSal.SELECT_CARD_PAG_PLAYER);
+            stmt.setInt(1, idCampeonato);
+            rs = stmt.executeQuery();
             lista = new ArrayList();
             while (rs.next()) {
                 Tarjeta tar = new Tarjeta();
@@ -123,7 +127,7 @@ public class TarjetaDao extends Dao{
         } catch (SQLException e) {
             System.err.println(e);
         } finally {
-            this.CloseConection();
+            DaoUtil.closeConection(cx, stmt, rs);
         }
 
         return lista;
@@ -131,13 +135,12 @@ public class TarjetaDao extends Dao{
     
     public List<Tarjeta> listCanCard(int idCampeonato) {
         List<Tarjeta> lista = null;
-        ResultSet rs;
-
+        
         try {
-            this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_CARD_CAN_PLAYER);
-            st.setInt(1, idCampeonato);
-            rs = st.executeQuery();
+            cx = DaoUtil.ConectionDriveDB();
+            stmt = cx.prepareCall(SqlAdminFutSal.SELECT_CARD_CAN_PLAYER);
+            stmt.setInt(1, idCampeonato);
+            rs = stmt.executeQuery();
             lista = new ArrayList();
             while (rs.next()) {
                 Tarjeta tar = new Tarjeta();
@@ -153,7 +156,7 @@ public class TarjetaDao extends Dao{
         } catch (SQLException e) {
             System.err.println(e);
         } finally {
-            this.CloseConection();
+            DaoUtil.closeConection(cx, stmt, rs);
         }
         return lista;
     }

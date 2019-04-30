@@ -9,7 +9,9 @@ import com.fut.model.Equipo;
 import com.fut.model.Gol;
 import com.fut.model.Jugador;
 import com.fut.model.Partido;
+import com.fut.util.DaoUtil;
 import com.fut.util.SqlAdminFutSal;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,20 +22,23 @@ import java.util.List;
  *
  * @author DIANA G
  */
-public class GolDao extends Dao{
+public class GolDao{
+    private PreparedStatement stmt;
+    private Connection cx;
+    private ResultSet rs;
     
     public boolean insertGol(Gol cam){
         boolean reg = false;
         try{
-            this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_GOL);
-            st.setInt(1, cam.getIdJugador());
-            st.setInt(2, cam.getIdEquipo());
-            st.setInt(3, cam.getIdPartido());
+            cx = DaoUtil.ConectionDriveDB();
+            stmt = cx.prepareStatement(SqlAdminFutSal.INSERT_GOL);
+            stmt.setInt(1, cam.getIdJugador());
+            stmt.setInt(2, cam.getIdEquipo());
+            stmt.setInt(3, cam.getIdPartido());
           
-            st.setInt(4, cam.getIdEquipoB());
+            stmt.setInt(4, cam.getIdEquipoB());
                      
-            int res = st.executeUpdate();
+            int res = stmt.executeUpdate();
             if(res>0){
                 reg = true;
             }
@@ -41,22 +46,22 @@ public class GolDao extends Dao{
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return reg;
     }
     
 
         
-    public List<Gol> listarGolesJugador(Jugador camp) throws Exception{
-            List<Gol> lista;
-            ResultSet rs;
+    public List<Gol> listarGolesJugador(Jugador camp) {
+            List<Gol> lista = null;
+            
             
             try{
-                this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idJugador\" = ?");
-                st.setInt(1, camp.getIdJugador());
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();
+                stmt = cx.prepareCall("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idJugador\" = ?");
+                stmt.setInt(1, camp.getIdJugador());
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Gol cam = new Gol();
@@ -78,23 +83,23 @@ public class GolDao extends Dao{
                 
                 }
             }catch(Exception e){
-                throw e;
+                System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;   
     }
     
-    public List<Gol> listarGolesEquipo(Equipo equi) throws Exception{
-            List<Gol> lista;
-            ResultSet rs;
+    public List<Gol> listarGolesEquipo(Equipo equi) {
+            List<Gol> lista = null;
+            
             
             try{
-                this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idEquipo\" = ?");
-                st.setInt(1, equi.getIdEquipo());
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();
+                stmt = cx.prepareCall("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idEquipo\" = ?");
+                stmt.setInt(1, equi.getIdEquipo());
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Gol cam = new Gol();
@@ -116,24 +121,24 @@ public class GolDao extends Dao{
                 
                 }
             }catch(Exception e){
-                throw e;
+                System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;    
     }
     
-     public List<Gol> listarGolesPartidoEquipo(Partido par, Equipo equ) throws Exception{
-            List<Gol> lista;
-            ResultSet rs;
+     public List<Gol> listarGolesPartidoEquipo(Partido par, Equipo equ) {
+            List<Gol> lista = null;
+            
             
             try{
-                this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idPartido\" = ? AND \"idEquipo\" = ?");
-                st.setInt(1, par.getIdPartido());
-                st.setInt(2, equ.getIdEquipo());
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();
+                stmt = cx.prepareCall("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idPartido\" = ? AND \"idEquipo\" = ?");
+                stmt.setInt(1, par.getIdPartido());
+                stmt.setInt(2, equ.getIdEquipo());
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Gol cam = new Gol();
@@ -155,9 +160,9 @@ public class GolDao extends Dao{
                 
                 }
             }catch(Exception e){
-                throw e;
+                System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;    
@@ -165,11 +170,11 @@ public class GolDao extends Dao{
     
         public List<Gol> listarGolesPartidoEquipoJoin(int idPar, int idEqu) {
             List<Gol> lista = null;
-            ResultSet rs;
+            
             
             try{
-                this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareCall("SELECT gol.\"idGol\", gol.\"idJugador\", gol.\"idEquipo\", gol.\"idPartido\""
+                cx = DaoUtil.ConectionDriveDB();
+                stmt = cx.prepareCall("SELECT gol.\"idGol\", gol.\"idJugador\", gol.\"idEquipo\", gol.\"idPartido\""
                                                                 + ",equ.\"nombreEquipo\", jug.\"nombreJugador\"\n" +
                                                                 "FROM public.gol gol\n" +
                                                                 "INNER JOIN public.equipo equ\n" +
@@ -178,9 +183,9 @@ public class GolDao extends Dao{
                                                                 "ON(gol.\"idJugador\" = jug.\"idJugador\""
                                                                 + " AND gol.\"idPartido\" = ? AND gol.\"idEquipo\"= ?)"
                                                                 + "ORDER BY gol.\"idGol\" ASC");
-                st.setInt(1, idPar);
-                st.setInt(2, idEqu);
-                rs = st.executeQuery();
+                stmt.setInt(1, idPar);
+                stmt.setInt(2, idEqu);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Gol cam = new Gol();
@@ -200,21 +205,21 @@ public class GolDao extends Dao{
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;    
     }
     
-    public Gol leerID(int idGol) throws Exception{
+    public Gol leerID(int idGol) {
         Gol cam = null;
-        ResultSet rs;
+        
             try{
-                this.ConectionDataBase();
-                PreparedStatement st = this.getCn().prepareStatement("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idGol\" = ?");
-                st.setInt(1, idGol);
+                cx = DaoUtil.ConectionDriveDB();
+                stmt = cx.prepareStatement("SELECT \"idGol\",\"idJugador\",\"idEquipo\",\"idPartido\" FROM public.gol WHERE \"idGol\" = ?");
+                stmt.setInt(1, idGol);
                
-                rs = st.executeQuery();
+                rs = stmt.executeQuery();
                 while(rs.next()){
                    
                     cam.setIdGol(rs.getInt("idGol"));
@@ -234,43 +239,43 @@ public class GolDao extends Dao{
                 }
     
             }catch(Exception e){
-                throw e;
+                System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }   
             return cam;
     }
     
         
     
-    public void modificar(Gol cam) throws Exception{
+    public void modificar(Gol cam) {
         
         try{
-            this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.gol SET \"idJugador\"=?,\"idEquipo\"=?,\"idPartido\"=? WHERE \"idGol\" = ?");
-            st.setInt(1, cam.getJugador().getIdJugador());  
-            st.setInt(2, cam.getEquipo().getIdEquipo());
-            st.setInt(3, cam.getPartido().getIdPartido());  
+            cx = DaoUtil.ConectionDriveDB();
+            stmt = cx.prepareStatement("UPDATE public.gol SET \"idJugador\"=?,\"idEquipo\"=?,\"idPartido\"=? WHERE \"idGol\" = ?");
+            stmt.setInt(1, cam.getJugador().getIdJugador());  
+            stmt.setInt(2, cam.getEquipo().getIdEquipo());
+            stmt.setInt(3, cam.getPartido().getIdPartido());  
 
-            st.executeUpdate();
+            stmt.executeUpdate();
         }catch(Exception e){
-            throw e;
+            System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
     }
     
-    public void eliminar(Gol cam) throws Exception{
+    public void eliminar(Gol cam) {
         
         try{
-            this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.gol  WHERE \"idGol\" = ?");
-            st.setInt(1, cam.getIdGol());          
-            st.executeUpdate();
+            cx = DaoUtil.ConectionDriveDB();
+            stmt = cx.prepareStatement("DELETE FROM public.gol  WHERE \"idGol\" = ?");
+            stmt.setInt(1, cam.getIdGol());          
+            stmt.executeUpdate();
         }catch(Exception e){
-            throw e;
+            System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
     }    
 }

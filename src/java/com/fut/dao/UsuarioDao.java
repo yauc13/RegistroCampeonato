@@ -6,7 +6,9 @@
 package com.fut.dao;
 
 import com.fut.model.Usuario;
+import com.fut.util.DaoUtil;
 import com.fut.util.SqlAdminFutSal;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,35 +19,41 @@ import java.util.List;
  *
  * @author DIANA G
  */
-public class UsuarioDao extends Dao {
-    public boolean registrar(Usuario usu) throws Exception{
+public class UsuarioDao {
+    
+    private PreparedStatement stmt;
+    private Connection cx;
+    private ResultSet rs;
+    
+    public boolean registrar(Usuario usu){
         boolean reg = false;
         try{
-            this.ConectionDataBase();
-            //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO usuario (loginUsuario, passwordUsuario, rolUsuario) values(?, ?, ?)");
-            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO public.usuario(\"loginUsuario\",\"passwordUsuario\",\"rolUsuario\") VALUES (?, ?, ?);");
-            st.setString(1, usu.getLoginUsuario());
-            st.setString(2, usu.getPasswordUsuario());
-            st.setString(3, usu.getRolUsuario());
-            st.executeUpdate();
+            cx = DaoUtil.ConectionDriveDB();
+            
+            //stmt = cxprepareStatement("INSERT INTO usuario (loginUsuario, passwordUsuario, rolUsuario) values(?, ?, ?)");
+            stmt = cx.prepareStatement("INSERT INTO public.usuario(\"loginUsuario\",\"passwordUsuario\",\"rolUsuario\") VALUES (?, ?, ?);");
+            stmt.setString(1, usu.getLoginUsuario());
+            stmt.setString(2, usu.getPasswordUsuario());
+            stmt.setString(3, usu.getRolUsuario());
+            stmt.executeUpdate();
             reg = true;
         }catch(Exception e){
-            throw e;
+            System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return reg;
     }
         
     public List<Usuario> listar() throws Exception{
             List<Usuario> lista;
-            ResultSet rs;
+            
             
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareCall("SELECT idUsuario, loginUsuario, passwordUsuario, rolUsuario FROM usuario");
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idUsuario\", \"loginUsuario\", \"passwordUsuario\", \"rolUsuario\" FROM public.usuario");
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();
+                //stmt = cxprepareCall("SELECT idUsuario, loginUsuario, passwordUsuario, rolUsuario FROM usuario");
+                stmt = cx.prepareStatement("SELECT \"idUsuario\", \"loginUsuario\", \"passwordUsuario\", \"rolUsuario\" FROM public.usuario");
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Usuario usu = new Usuario();
@@ -60,7 +68,7 @@ public class UsuarioDao extends Dao {
             }catch(Exception e){
                 throw e;
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;   
@@ -68,15 +76,15 @@ public class UsuarioDao extends Dao {
     
     public Usuario leerID(Usuario usu){
         Usuario usus = null;
-        ResultSet rs;
+        
             try{
-                this.ConectionDataBase();
-                if(this.cn !=null){
-                //PreparedStatement st = this.getCn().prepareStatement("SELECT idUsuario, loginUsuario, passwordUsuario, rolUsuario FROM usuario WHERE loginUsuario = ? and passwordUsuario = ?");
-                PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.GET_LOGIN_USER);
-                st.setString(1, usu.getLoginUsuario());
-                st.setString(2, usu.getPasswordUsuario());
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();
+                if(cx !=null){
+                //stmt = cxprepareStatement("SELECT idUsuario, loginUsuario, passwordUsuario, rolUsuario FROM usuario WHERE loginUsuario = ? and passwordUsuario = ?");
+                stmt = cx.prepareStatement(SqlAdminFutSal.GET_LOGIN_USER);
+                stmt.setString(1, usu.getLoginUsuario());
+                stmt.setString(2, usu.getPasswordUsuario());
+                rs = stmt.executeQuery();
                 while(rs.next()){
                     usus = new Usuario();
                     usus.setIdUsuario(rs.getInt("idUsuario"));
@@ -89,21 +97,21 @@ public class UsuarioDao extends Dao {
             }catch(SQLException e){
                  System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }   
             return usus;
     }
     
-        public Usuario leerIDRegistro(Usuario usu) throws Exception{
+        public Usuario leerIDRegistro(Usuario usu){
         Usuario usus = null;
-        ResultSet rs;
+        
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareStatement("SELECT idUsuario, loginUsuario, passwordUsuario, rolUsuario FROM usuario WHERE  loginUsuario = ?");
-                PreparedStatement st = this.getCn().prepareStatement("SELECT \"idUsuario\", \"loginUsuario\", \"passwordUsuario\", \"rolUsuario\" FROM public.usuario WHERE  \"loginUsuario\" = ?");
-                st.setString(1, usu.getLoginUsuario());
+                cx = DaoUtil.ConectionDriveDB();
+                //stmt = cxprepareStatement("SELECT idUsuario, loginUsuario, passwordUsuario, rolUsuario FROM usuario WHERE  loginUsuario = ?");
+                stmt = cx.prepareStatement("SELECT \"idUsuario\", \"loginUsuario\", \"passwordUsuario\", \"rolUsuario\" FROM public.usuario WHERE  \"loginUsuario\" = ?");
+                stmt.setString(1, usu.getLoginUsuario());
                 
-                rs = st.executeQuery();
+                rs = stmt.executeQuery();
                 while(rs.next()){
                     usus = new Usuario();
                     usus.setIdUsuario(rs.getInt("idUsuario"));
@@ -114,39 +122,39 @@ public class UsuarioDao extends Dao {
                 }
                 
             }catch(Exception e){
-                throw e;
+                System.out.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }   
             return usus;
     }
     
-    public void modificar(Usuario usu) throws Exception{
+    public void modificar(Usuario usu){
         
         try{
-            this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement("UPDATE public.usuario SET  \"passwordUsuario\"=?");
-            st.setString(1, usu.getPasswordUsuario());                      
-            st.setInt(2, usu.getIdUsuario());          
-            st.executeUpdate();
+            cx = DaoUtil.ConectionDriveDB();
+            stmt = cx.prepareStatement("UPDATE public.usuario SET  \"passwordUsuario\"=?");
+            stmt.setString(1, usu.getPasswordUsuario());                      
+            stmt.setInt(2, usu.getIdUsuario());          
+            stmt.executeUpdate();
         }catch(Exception e){
-            throw e;
+            System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
     }
     
-    public void eliminar(Usuario usu) throws Exception{
+    public void eliminar(Usuario usu) {
         
         try{
-            this.ConectionDataBase();
-            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.usuario  WHERE \"idUsuario\" = ?");
-            st.setInt(1, usu.getIdUsuario());          
-            st.executeUpdate();
+            cx = DaoUtil.ConectionDriveDB();
+            stmt = cx.prepareStatement("DELETE FROM public.usuario  WHERE \"idUsuario\" = ?");
+            stmt.setInt(1, usu.getIdUsuario());          
+            stmt.executeUpdate();
         }catch(Exception e){
-            throw e;
+            System.out.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
     }    
 }

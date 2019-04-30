@@ -8,8 +8,10 @@ package com.fut.dao;
 import com.fut.model.Campeonato;
 import com.fut.model.Equipo;
 import com.fut.model.Jugador;
+import com.fut.util.DaoUtil;
 import com.fut.util.SqlAdminFutSal;
 import com.fut.util.Util;
+import java.sql.Connection;
 import java.sql.Date;
 
 
@@ -24,7 +26,10 @@ import java.util.List;
  *
  * @author Yeison
  */
-public class JugadorDao extends Dao {
+public class JugadorDao{
+    private PreparedStatement stmt;
+    private Connection cx;
+    private ResultSet rs;
     public boolean registrar(Jugador cam){
         boolean reg = false;
         Date birth = null;
@@ -32,17 +37,16 @@ public class JugadorDao extends Dao {
            birth = new java.sql.Date((cam.getBirthday()).getTime());
         }
         try{
-            this.ConectionDataBase();
-            //PreparedStatement st = this.getCn().prepareStatement("INSERT INTO jugador (nombreJugador,fechaNacimiento,golJugador,idEquipoJugador,idUsuario) values(?,?,?,?,?)");
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.INSERT_PLAYER);
-            st.setString(1, cam.getNombreJugador());
-            st.setDate(2, birth);
-            st.setInt(3, cam.getGolJugador());
-            st.setInt(4, cam.getIdEquipoJugador());
-            st.setInt(5, cam.getIdUsuario());
-            st.setString(6, cam.getFotoJugador());
+            cx = DaoUtil.ConectionDriveDB();            
+            stmt = cx.prepareStatement(SqlAdminFutSal.INSERT_PLAYER);
+            stmt.setString(1, cam.getNombreJugador());
+            stmt.setDate(2, birth);
+            stmt.setInt(3, cam.getGolJugador());
+            stmt.setInt(4, cam.getIdEquipoJugador());
+            stmt.setInt(5, cam.getIdUsuario());
+            stmt.setString(6, cam.getFotoJugador());
                        
-            int resul =st.executeUpdate();
+            int resul =stmt.executeUpdate();
             if(resul>0){
             reg = true;
             }
@@ -50,7 +54,7 @@ public class JugadorDao extends Dao {
         }catch(SQLException e){
             System.out.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return reg;
     }
@@ -59,14 +63,12 @@ public class JugadorDao extends Dao {
         
     public List<Jugador> listar(Equipo camp){
             List<Jugador> lista = null;
-            ResultSet rs;
-            
+
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idJugador\",\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\", \"fotoJugador\" , birthday FROM public.jugador WHERE \"idEquipoJugador\" = ? ORDER BY \"idJugador\"");
-                st.setInt(1, camp.getIdEquipo());
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();                
+                stmt = cx.prepareCall("SELECT \"idJugador\",\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\", \"fotoJugador\" , birthday FROM public.jugador WHERE \"idEquipoJugador\" = ? ORDER BY \"idJugador\"");
+                stmt.setInt(1, camp.getIdEquipo());
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Jugador cam = new Jugador();
@@ -89,7 +91,7 @@ public class JugadorDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;   
@@ -97,14 +99,14 @@ public class JugadorDao extends Dao {
     
     public List<Jugador> listarGoleadores(Campeonato camp){
             List<Jugador> lista = null;
-            ResultSet rs;
+            
             
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
-                PreparedStatement st = this.getCn().prepareCall(SqlAdminFutSal.SELECT_GOLEADORES);
-                st.setInt(1, camp.getIdCampeonato());
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();
+                //stmt = cx.prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
+                stmt = cx.prepareCall(SqlAdminFutSal.SELECT_GOLEADORES);
+                stmt.setInt(1, camp.getIdCampeonato());
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Jugador cam = new Jugador();
@@ -119,7 +121,7 @@ public class JugadorDao extends Dao {
             }catch(SQLException e){
                 
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;   
@@ -127,14 +129,14 @@ public class JugadorDao extends Dao {
     
         public List<Jugador> listarJugadoresEquipo(int idEquipo) {
             List<Jugador> lista = null;
-            ResultSet rs;
+            
             
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
-                PreparedStatement st = this.getCn().prepareCall("SELECT \"idJugador\",\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\" FROM public.jugador WHERE \"idEquipoJugador\" = ?");
-                st.setInt(1, idEquipo);
-                rs = st.executeQuery();
+                cx = DaoUtil.ConectionDriveDB();
+                //stmt = cx.prepareCall("SELECT idJugador,nombreJugador,fechaNacimiento,idEquipoJugador,idUsuario FROM jugador WHERE idEquipoJugador = ?");
+                stmt = cx.prepareCall("SELECT \"idJugador\",\"nombreJugador\",\"fechaNacimiento\",\"idEquipoJugador\",\"idUsuario\" FROM public.jugador WHERE \"idEquipoJugador\" = ?");
+                stmt.setInt(1, idEquipo);
+                rs = stmt.executeQuery();
                 lista = new ArrayList();
                 while(rs.next()){
                     Jugador cam = new Jugador();
@@ -150,22 +152,22 @@ public class JugadorDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
         
         return lista;   
     }
         public byte[] traerImageByte(String productId) {
-            ResultSet rs;
+            
 		
 		
 		byte[] productImage = null;
  
 		try {
-                    this.ConectionDataBase();
-		PreparedStatement st = this.getCn().prepareCall("SELECT \"fotoJugador\" FROM public.jugador WHERE \"idJugador\"=?");
-		st.setString(1, productId);
-		rs = st.executeQuery();
+                    cx = DaoUtil.ConectionDriveDB();
+		stmt = cx.prepareCall("SELECT \"fotoJugador\" FROM public.jugador WHERE \"idJugador\"=?");
+		stmt.setString(1, productId);
+		rs = stmt.executeQuery();
  
 		while (rs.next()) {
 			productImage = rs.getBytes("fotoJugador");
@@ -174,21 +176,21 @@ public class JugadorDao extends Dao {
 			System.out.println(e);
 			System.exit(0);
 		}finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }
 		return productImage;
 	}
     
     public Jugador leerID(int idJugador){
         Jugador usus = null;
-        ResultSet rs;
+        
             try{
-                this.ConectionDataBase();
-                //PreparedStatement st = this.getCn().prepareStatement("SELECT idJugador, nombreJugador,idUsuario FROM jugador WHERE idJugador = ?");
-                PreparedStatement st = this.getCn().prepareStatement("SELECT \"idJugador\", \"nombreJugador\",\"idUsuario\" FROM public.jugador WHERE \"idJugador\" = ?");
-                st.setInt(1, idJugador);
+                cx = DaoUtil.ConectionDriveDB();
+                //stmt = cx.prepareStatement("SELECT idJugador, nombreJugador,idUsuario FROM jugador WHERE idJugador = ?");
+                stmt = cx.prepareStatement("SELECT \"idJugador\", \"nombreJugador\",\"idUsuario\" FROM public.jugador WHERE \"idJugador\" = ?");
+                stmt.setInt(1, idJugador);
                 
-                rs = st.executeQuery();
+                rs = stmt.executeQuery();
                 while(rs.next()){
                     usus = new Jugador();
                     usus.setIdJugador(rs.getInt("idJugador"));
@@ -200,7 +202,7 @@ public class JugadorDao extends Dao {
             }catch(SQLException e){
                 System.err.println(e);
             }finally{
-                this.CloseConection();
+                DaoUtil.closeConection(cx, stmt, rs);
             }   
             return usus;
     }
@@ -214,21 +216,21 @@ public class JugadorDao extends Dao {
            birth = new java.sql.Date((cam.getBirthday()).getTime());
         }
         try{
-            this.ConectionDataBase();
-            //PreparedStatement st = this.getCn().prepareStatement("UPDATE jugador SET nombreJugador = ? WHERE idJugador = ?");
-            PreparedStatement st = this.getCn().prepareStatement(SqlAdminFutSal.UPDATE_PLAYER);
-            st.setString(1, cam.getNombreJugador());
-            st.setDate(2, birth);
-            st.setString(3, cam.getFotoJugador());
-            st.setInt(4, cam.getIdJugador());          
-            int resul =st.executeUpdate();
+            cx = DaoUtil.ConectionDriveDB();
+            //stmt = cx.prepareStatement("UPDATE jugador SET nombreJugador = ? WHERE idJugador = ?");
+            stmt = cx.prepareStatement(SqlAdminFutSal.UPDATE_PLAYER);
+            stmt.setString(1, cam.getNombreJugador());
+            stmt.setDate(2, birth);
+            stmt.setString(3, cam.getFotoJugador());
+            stmt.setInt(4, cam.getIdJugador());          
+            int resul =stmt.executeUpdate();
             if(resul>0){
             resp = true;
             }
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
         return resp;
     }
@@ -236,15 +238,15 @@ public class JugadorDao extends Dao {
     public void eliminar(Jugador cam) {
         
         try{
-            this.ConectionDataBase();
-            //PreparedStatement st = this.getCn().prepareStatement("DELETE FROM jugador  WHERE idJugador = ?");
-            PreparedStatement st = this.getCn().prepareStatement("DELETE FROM public.jugador  WHERE \"idJugador\" = ?");
-            st.setInt(1, cam.getIdJugador());          
-            st.executeUpdate();
+            cx = DaoUtil.ConectionDriveDB();
+            //stmt = cx.prepareStatement("DELETE FROM jugador  WHERE idJugador = ?");
+            stmt = cx.prepareStatement("DELETE FROM public.jugador  WHERE \"idJugador\" = ?");
+            stmt.setInt(1, cam.getIdJugador());          
+            stmt.executeUpdate();
         }catch(SQLException e){
             System.err.println(e);
         }finally{
-        this.CloseConection();
+        DaoUtil.closeConection(cx, stmt, rs);
         }
     }    
 }

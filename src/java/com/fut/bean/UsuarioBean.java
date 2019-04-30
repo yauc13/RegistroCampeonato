@@ -64,10 +64,10 @@ public class UsuarioBean implements Serializable{
     
     
     
-    public String iniciarSesion() throws Exception{
+    public String iniciarSesion(){
         String redireccion = null;
         UsuarioDao dao;
-        try{
+
             dao = new UsuarioDao();
             Usuario u = dao.leerID(usuario);
             if(u !=null){
@@ -80,10 +80,7 @@ public class UsuarioBean implements Serializable{
             }else{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Credenciales Incorrectas"));
             }
-        }catch(Exception e){  
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Error"));
-            throw e;
-    }
+      
         return redireccion;
     }
     
