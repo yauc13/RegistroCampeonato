@@ -12,7 +12,7 @@
         
          <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
-        
+                <p:growl showDetail="true"><p:autoUpdate/></p:growl>
         <f:event type="preRenderView" listener="#{equipoBean.listarInicio()}" />
         <p:dialog modal="true" widgetVar="statusDialogEquipo" header="Cargando..." draggable="false" closable="false" resizable="false">
             <p:graphicImage value="/resources/imagen/cargando.gif"  width="80" height="80"/>
@@ -28,15 +28,21 @@
         
         <h:form id="frm">
 
-            <p:commandButton value="Nuevo Equipo" oncomplete="PF('wdgDatosE').show();" actionListener="#{equipoBean.setAccion('Registrar')}" update=":dlgDatosE"  disabled="#{equipoBean.habilitarPermisos(equipoBean.equipo,2)}"/>
-            
-            
-            <p:outputLabel value="#{equipoBean.campeonato.nombreCampeonato}/"/> 
-            
-            <p:outputLabel value="#{equipoBean.grupo.nombreGrupo}/"/>             
-            
-           
             <p:dataTable id="data" value="#{equipoBean.listaEquipo}" var="equipo" >
+                 <f:facet  name="header">
+                                <div class="row">
+                                    <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
+                                        <p:commandButton  value="Nuevo Equipo" oncomplete="PF('wdgDatosE').show();"
+                                                          actionListener="#{equipoBean.setAccion('Registrar')}"
+                                                          update=":dlgDatosE" 
+                                                          icon="fa fa-plus"
+                                                          />
+                                    </div>
+                                    <div class="col-md-10 col-xs-10 col-sm-10">
+                                        <p:outputLabel value="#{equipoBean.campeonato.nombreCampeonato}: #{equipoBean.grupo.nombreGrupo}"/>
+                                    </div>
+                                </div>
+                 </f:facet>
                 <p:column headerText="id">
                     <p:outputLabel value="#{equipo.idEquipo}"/>
                 </p:column>
@@ -51,11 +57,9 @@
                                     onclick="PrimeFaces.monitorDownload(start, stop);"
                                    />
                 </p:column>    
-                <p:column headerText="Modificar">
-                    <p:commandLink value="Modificar" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatosE').show();" update=":dlgDatosE" disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
-                </p:column>
-                <p:column headerText="Eliminar">
-                    <p:commandLink value="Eliminar" actionListener="#{equipoBean.eliminar(equipo)}" update="data"   disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
+                <p:column>
+                    <p:commandButton icon="fa fa-edit" title="Editar"   actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatosE').show();" update=":dlgDatosE"/>
+                    <p:commandButton icon="fa fa-trash" title="Eliminar"  actionListener="#{equipoBean.eliminar(equipo)}" update="data"/>
                 </p:column>
                 
             </p:dataTable>
@@ -63,7 +67,7 @@
         
         <p:dialog header="Registrar o Modificar Equipos" widgetVar="wdgDatosE" id="dlgDatosE">
             <h:form>
-                <p:growl autoUpdate="true" showDetail="true"/>
+               
                 <p:outputLabel value="Nombre Equipo" for="txtNombre"/>
                 <p:inputText id="txtNombre" required="true" value="#{equipoBean.equipo.nombreEquipo}"/>
                 

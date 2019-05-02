@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  *
- * @author DIANA G
+ * @author Yeison Urrea
  */
 public class UsuarioDao {
     
