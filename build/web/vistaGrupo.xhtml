@@ -137,18 +137,24 @@
                     </p:tab>
 
                     <p:tab title="Equipos" id="tabEquipos">
-                        <h:panelGrid columns="2" cellpadding="10">
+                        
                             <h:form id="frmEquipo">
 
-                                <p:commandButton value="Nuevo Equipo" oncomplete="PF('wdgDatosEquipo').show();" actionListener="#{equipoBean.setAccion('Registrar')}" update=":dlgDatosEquipo"  disabled="#{equipoBean.habilitarPermisos(equipoBean.equipo,2)}"/>
-
-
-                                <p:outputLabel value="#{equipoBean.campeonato.nombreCampeonato}/"/> 
-
-                                <p:outputLabel value="#{equipoBean.grupo.nombreGrupo}/"/>             
-
-
                                 <p:dataTable id="dataEquipo" value="#{equipoBean.listaEquipo}" var="equipo" >
+                                    <f:facet  name="header">
+                                        <div class="row">
+                                            <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
+                                                <p:commandButton  value="Nuevo Equipo" oncomplete="PF('wdgDatosEquipo').show();"
+                                                                  actionListener="#{equipoBean.setAccion('Registrar')}"
+                                                                  update=":dlgDatosEquipo" 
+                                                                  icon="fa fa-plus"
+                                                                  />
+                                            </div>
+                                            <div class="col-md-10 col-xs-10 col-sm-10">
+                                                <p:outputLabel value="#{equipoBean.campeonato.nombreCampeonato}: #{equipoBean.grupo.nombreGrupo}"/>
+                                            </div>
+                                        </div>
+                                    </f:facet>
                                     <p:column headerText="id">
                                         <p:outputLabel value="#{equipo.idEquipo}"/>
                                     </p:column>
@@ -163,18 +169,13 @@
                                                        onclick="PrimeFaces.monitorDownload(start, stop);"
                                                        />
                                     </p:column>    
-                                    <p:column headerText="Modificar">
-                                        <p:commandLink value="Modificar" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatosEquipo').show();" update=":dlgDatosEquipo" disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
-                                    </p:column>
-                                    <p:column headerText="Eliminar">
-                                        <p:commandLink value="Eliminar" actionListener="#{equipoBean.eliminar(equipo)}" update="dataEquipo"   disabled="#{equipoBean.habilitarPermisos(equipo,1)}"/>
+                                    <p:column >
+                                        <p:commandButton icon="fa fa-edit" title="Editar" actionListener="#{equipoBean.leerID(equipo)}"  oncomplete="PF('wdgDatosEquipo').show();" update=":dlgDatosEquipo" />                                    
+                                        <p:commandButton icon="fa fa-trash" title="Eliminar" actionListener="#{equipoBean.eliminar(equipo)}" update="dataEquipo"  />
                                     </p:column>
 
                                 </p:dataTable>
-                            </h:form>
-
-
-                        </h:panelGrid>
+                            </h:form>                       
                     </p:tab>
                 </p:tabView> 
 
