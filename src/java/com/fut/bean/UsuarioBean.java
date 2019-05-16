@@ -9,6 +9,9 @@ import com.fut.dao.UsuarioDao;
 import com.fut.model.Usuario;
 import com.fut.util.Cons;
 import com.fut.util.Util;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,7 +31,7 @@ import org.primefaces.json.JSONObject;
 @ManagedBean
 @SessionScoped
 public class UsuarioBean implements Serializable{
-    String ejex= "45,45.5,46,46.5,47,47.5,48,48.5,49,49.5,50,50.5,51,51.5,52,52.5,53,53.5,54,54.5,55,55.5,56,56.5,57,57.5,58,58.5,59,59.5,60,60.5,61,61.5,62,62.5,63,63.5,64,64.5,65,65.5,66,66.5,67,67.5,68,68.5,69,69.5,70,70.5,71,71.5,72,72.5,73,73.5,74,74.5,75,75.5,76,76.5,77,77.5,78,78.5,79,79.5,80,80.5,81,81.5,82,82.5,83,83.5,84,84.5,85,85.5,86,86.5,87,87.5,88,88.5,89,89.5,90,90.5,91,91.5,92,92.5,93,93.5,94,94.5,95,95.5,96,96.5,97,97.5,98,98.5,99,99.5,100,100.5,101,101.5,102,102.5,103,103.5,104,104.5,105,105.5,106,106.5,107,107.5,108,108.5,109,109.5,110";
+    String ejex= "";
     private Usuario usuario = new Usuario();
     private List<Usuario> listaUsuario;
     
@@ -37,37 +40,130 @@ public class UsuarioBean implements Serializable{
     private String mac;
     JSONObject  jasonObj ;
      List<double[]> listDataGrap;
+     String urlCsv;
+     int yMax;
+     int yMin;
+     
 
-    public UsuarioBean() {
-        listDataGrap= new ArrayList<>();
-        double v0[]={2.4,2.5,2.6,2.7,2.8,2.9,2.9,3,3.1,3.2,3.3,3.4,3.5,3.6,3.8,3.9,4,4.1,4.3,4.4,4.5,4.7,4.8,5,5.1,5.3,5.4,5.6,5.7,5.9,6,6.1,6.3,6.4,6.5,6.7,6.8,6.9,7,7.1,7.3,7.4,7.5,7.6,7.7,7.9,8,8.1,8.2,8.3,8.4,8.5,8.6,8.8,8.9,9,9.1,9.2,9.3,9.4,9.5,9.6,9.7,9.8,9.9,10,10.1,10.2,10.3,10.4,10.4,10.5,10.6,10.7,10.8,10.9,11,11.2,11.3,11.4,11.5,11.6,11.7,11.9,12,12.1,12.2,12.4,12.5,12.6,12.7,12.8,13,13.1,13.2,13.3,13.4,13.5,13.7,13.8,13.9,14,14.1,14.3,14.4,14.5,14.6,14.8,14.9,15,15.2,15.3,15.4,15.6,15.7,15.9,16,16.2,16.3,16.5,16.6,16.8,16.9,17.1,17.3,17.4,17.6,17.8,17.9,18.1,18.3};
-        listDataGrap.add(v0);
-        double v1[]={2.7,2.8,2.9,3,3,3.1,3.2,3.3,3.4,3.5,3.6,3.8,3.9,4,4.1,4.2,4.4,4.5,4.7,4.8,5,5.1,5.3,5.4,5.6,5.7,5.9,6.1,6.2,6.4,6.5,6.7,6.8,7,7.1,7.2,7.4,7.5,7.6,7.8,7.9,8,8.2,8.3,8.4,8.5,8.7,8.8,8.9,9,9.2,9.3,9.4,9.5,9.6,9.8,9.9,10,10.1,10.2,10.3,10.4,10.6,10.7,10.8,10.9,11,11.1,11.2,11.3,11.4,11.5,11.6,11.7,11.8,11.9,12,12.1,12.2,12.4,12.5,12.6,12.8,12.9,13,13.2,13.3,13.4,13.5,13.7,13.8,13.9,14.1,14.2,14.3,14.4,14.6,14.7,14.8,14.9,15.1,15.2,15.3,15.5,15.6,15.7,15.9,16,16.2,16.3,16.5,16.6,16.8,16.9,17.1,17.3,17.4,17.6,17.8,17.9,18.1,18.3,18.5,18.6,18.8,19,19.2,19.4,19.6,19.8,20};
-        listDataGrap.add(v1);
-        double v2[]={3,3.1,3.1,3.2,3.3,3.4,3.6,3.7,3.8,3.9,4,4.1,4.2,4.4,4.5,4.6,4.8,4.9,5.1,5.3,5.4,5.6,5.8,5.9,6.1,6.3,6.4,6.6,6.8,7,7.1,7.3,7.4,7.6,7.7,7.9,8,8.2,8.3,8.5,8.6,8.7,8.9,9,9.2,9.3,9.4,9.6,9.7,9.8,10,10.1,10.2,10.4,10.5,10.6,10.8,10.9,11,11.2,11.3,11.4,11.5,11.6,11.7,11.9,12,12.1,12.2,12.3,12.4,12.5,12.6,12.7,12.8,13,13.1,13.2,13.3,13.5,13.6,13.7,13.9,14,14.2,14.3,14.5,14.6,14.7,14.9,15,15.1,15.3,15.4,15.6,15.7,15.8,16,16.1,16.3,16.4,16.5,16.7,16.8,17,17.1,17.3,17.5,17.6,17.8,18,18.1,18.3,18.5,18.7,18.8,19,19.2,19.4,19.6,19.8,20,20.2,20.4,20.6,20.8,21,21.2,21.4,21.7,21.9};
-        listDataGrap.add(v2);
-        double v3[]={3.3,3.4,3.5,3.6,3.7,3.8,3.9,4,4.2,4.3,4.4,4.5,4.7,4.8,5,5.1,5.3,5.4,5.6,5.8,6,6.1,6.3,6.5,6.7,6.9,7.1,7.2,7.4,7.6,7.8,8,8.1,8.3,8.5,8.6,8.8,8.9,9.1,9.3,9.4,9.6,9.7,9.9,10,10.2,10.3,10.5,10.6,10.8,10.9,11.1,11.2,11.3,11.5,11.6,11.8,11.9,12.1,12.2,12.3,12.5,12.6,12.7,12.8,13,13.1,13.2,13.3,13.4,13.6,13.7,13.8,13.9,14,14.2,14.3,14.4,14.6,14.7,14.9,15,15.2,15.3,15.5,15.6,15.8,15.9,16.1,16.2,16.4,16.5,16.7,16.8,17,17.1,17.3,17.4,17.6,17.7,17.9,18,18.2,18.4,18.5,18.7,18.9,19.1,19.2,19.4,19.6,19.8,20,20.2,20.4,20.6,20.8,21,21.2,21.5,21.7,21.9,22.1,22.4,22.6,22.8,23.1,23.3,23.6,23.8,24.1};
-        listDataGrap.add(v3);
-        
-   armarJason();
+    public UsuarioBean() {  
+   viewGraphic();
+   
     }
      
+    public void viewGraphic(){
+        //listDataGrap=readCSVPatron("D:\\HORISOES\\Info\\Excel\\0_0_0_1.csv");
+        //sex+"_"+edad+"_"+ejex+"_"+ejey+".csv"
+        listDataGrap=readCSVPatron("D:\\HORISOES\\Info\\Excel\\"+urlCsv+".csv");
+        armarJason();
+    }
+    
+    private List<double[]>  readCSVPatron(String url){
+        
+        String linea="";
+        String [] vline;
+        List<String []> listV = new ArrayList<>();
+        List<double []> listPatron = new ArrayList<>();
+        double [][] mdata;
+        int colum = 0;
+        File archivo = new File(url);
+        FileReader archivoLector;
+        
+        try{
+            archivoLector = new FileReader(archivo);
+            BufferedReader buffer = new BufferedReader(archivoLector);
+            while(buffer.ready()){
+                if(!(linea = buffer.readLine()).equals("\000")){
+                   
+                    vline= linea.split(";");
+                    colum=vline.length;
+                    String [] vlined= new String[colum];
+                    for(int i=0;i<vline.length;i++){
+                        
+                        vlined[i]=(vline[i]);
+                    }
+                    listV.add(vlined);
+                }
+            }
+            
+            mdata=new double[listV.size()][colum];
+            for(String[] v: listV){
+                if(listV.indexOf(v)>0){
+                for(int i=0;i<v.length;i++){
+                    mdata[listV.indexOf(v)][i]= Double.parseDouble(v[i]); 
+                }
+                }
+            }
+            
+            for (int j = 0; j < mdata[0].length; j++) {
+                double[] vp = new double[mdata.length];
+                System.err.println("column:"+vp.length);
+                for (int i = 0; i < mdata.length; i++) {
+                    vp[i] = mdata[i][j];
+
+                }
+                listPatron.add(vp);
+            }
+            
+        }catch(Exception e){
+            System.err.println(e);
+        }
+        return listPatron;
+    }
+    
+    
+    
     private void armarJason(){
         String ag="";
         for(double[] a:listDataGrap){
+         if(listDataGrap.indexOf(a)==0){
+             String ay="";            
+            for(int i=0;i<a.length;i++){
+                ay=ay+a[i]+",";
+            }
+           ejex=ay.substring(0,ay.length()-1);
+         }else if(listDataGrap.indexOf(a)>3){
             String ay="";
-            System.err.println("[length] : "+a.length);
+            //System.err.println("[length] : "+a.length);
             for(int i=0;i<a.length;i++){
                 ay=ay+a[i]+",";
             }
             ay=ay.substring(0,ay.length()-1);
-           ag= ag+Cons.ARRAY_Y.replaceAll("arrayy", ay)+",";
+            
+           ag= ag+Cons.ARRAY_Y.replaceAll("arrayy", ay).replaceAll("arrayColor", colorLine(listDataGrap.indexOf(a)))+",";
         }
-        ag=ag.substring(0,ag.length()-1);
+        }
+        //ag=ag.substring(0,ag.length()-1);
         String par="{\"label\": \"datos\",\"showLine\":false,\"pointRadius\": 3,\"borderColor\": \"rgba(0,0,0,1)\",\"fill\": false,\"data\": [{x: 46,y: 2.5},{x: 49.5,y: 3.1},{x: 54,y: 4.1}]}";
-        ag=ag+","+par;
+        ag=ag+par;
         String strJ= Cons.ARRAY_GRAP.replaceAll("arraydataset", ag).replaceAll("arraylabel",ejex );
         jasonObj = new JSONObject(strJ);
+    }
+    
+    
+    public void loadGraphic(int sex,int edad, int ejex, int ejey){
+        String url = sex+"_"+edad+"_"+ejex+"_"+ejey+".csv";
+    }
+    
+    private String colorLine(int index){
+        String color="";
+        switch (index){
+            case 4:
+            case 10:
+                color="255,0,0";
+                break;
+            case 5:
+            case 9:
+                color="255,160,0";
+                break;
+            case 6:
+            case 8:
+                color="255,255,0";
+                break;            
+            case 7:
+                color="0,255,0";
+                break;
+        }
+    return color;
     }
      
 
@@ -287,6 +383,14 @@ public class UsuarioBean implements Serializable{
 
     public void setMac(String mac) {
         this.mac = mac;
+    }
+
+    public String getUrlCsv() {
+        return urlCsv;
+    }
+
+    public void setUrlCsv(String urlCsv) {
+        this.urlCsv = urlCsv;
     }
     
     

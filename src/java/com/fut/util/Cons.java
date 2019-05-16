@@ -18,7 +18,7 @@ public class Cons {
     public static final String MSG_ERROR = "Error";
     public static final String MSG_WARN = "Aviso";
     
-    public static final String ARRAY_Y = "{\"label\": \"Z\",\"borderWidth\":1,\"pointRadius\": 0,\"borderColor\": \"rgba(255,0,0,1)\",\"fill\": false,\"data\": [arrayy]}";
+    public static final String ARRAY_Y = "{\"label\": \"Z\",\"borderWidth\":1,\"pointRadius\": 0,\"borderColor\": \"rgba(arrayColor)\",\"fill\": false,\"data\": [arrayy]}";
     public static final String ARRAY_GRAP = "{\"labels\": [arraylabel],\"datasets\": [arraydataset]}";
     
     

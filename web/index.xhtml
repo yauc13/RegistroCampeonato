@@ -54,16 +54,23 @@
                 PF('statusDialogIndex').hide();
             }
         </script>
-                
-                
+                <h:form id="formGrap">
+                    <p:inputText id="txtUsuario" required="true" value="#{usuarioBean.urlCsv}"/>
+                    <p:commandButton value="next" update="formGrap"
+                                     actionListener="#{usuarioBean.viewGraphic()}"
+                                    oncomplete="graficar()"
+                                   />
                 <p:panel>
                     <div id="canvas-container" >
                         <canvas id="canvas" width="800" height="500"></canvas>
                     </div>
                 </p:panel>  
+                    
+                </h:form>
     <script type="text/javascript">
-        $(document).ready(function(){
+    function graficar(){
 		
+                
 		var dato = #{usuarioBean.jasonObj};
 
 
@@ -85,7 +92,7 @@
 					text : "Prueba de grafico de barras"
 				},
                                 tooltips: {
-                                    position: 'nearest',
+                                    enable: false,
 					mode: 'point',
                                         intersect: false,
 					callbacks: {
@@ -121,8 +128,7 @@
 							labelString: 'Eje x'
 						},
 						ticks: {
-							min: 45,
-							max: 120,
+							
 
 							// forces step size to be 5 units
 							stepSize: 1
@@ -135,8 +141,7 @@
 							labelString: 'eje Y'
 						},
 						ticks: {
-							min: 0,
-							max: 25,
+							
 							stepSize: 1
 						}
 					}]
@@ -145,10 +150,10 @@
 			}
 		});
 
+}
+
+
 	
-
-
-	});
 	</script>
         
     </h:body>
