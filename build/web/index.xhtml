@@ -56,11 +56,11 @@
         </script>
                 <h:form id="formGrap">
                     <p:inputText id="txtUsuario" required="true" value="#{usuarioBean.urlCsv}"/>
-                    <p:commandButton value="next" update="formGrap"
+                    <p:commandButton value="next" update="formGrap:idpanel"
                                      actionListener="#{usuarioBean.viewGraphic()}"
                                     oncomplete="graficar()"
                                    />
-                <p:panel>
+                    <p:panel id="idpanel">
                     <div id="canvas-container" >
                         <canvas id="canvas" width="800" height="500"></canvas>
                     </div>
@@ -69,11 +69,12 @@
                 </h:form>
     <script type="text/javascript">
     function graficar(){
-		
-                
 		var dato = #{usuarioBean.jasonObj};
-
-
+                //var length = dato.datasets.length-1;
+                //console.log('tamaño dataset:'+length);
+               var x=dato.datasets[7].data[0].x;
+                var y=dato.datasets[7].data[0].y;
+               
 		var canvas = document.getElementById('canvas').getContext('2d');
 		window.line = new Chart(canvas, {
 			type : "line",
@@ -97,20 +98,19 @@
                                         intersect: false,
 					callbacks: {
 						// coloca informacion en el cuadro
-						footer: function(data) {
+						footer: function() {
                                                    //var valueindex= data.datasets.;
-                                                   var ds=data;
+                                                   
+                                                   
                                                    var sum2='sum2:';
-                                                   for (var item in ds) {
-                                                       sum2=sum2+item;
-                                                    }
+                                                 
                                                    var sum = '';
                                                    var miArray = [ 2,3, 4, 6, 8, 10 ];
-                                                        miArray.forEach(function(valor,indice) {
-                                                           sum=sum+ "En el índice " + indice + " hay este valor: "+valor;
-                                                        });
+                                                       
+                                                       sum="En el índice: "+x+" , "+y;
+                                                        
 							
-							return sum+sum2;
+							return sum;
 						}
 					},
 					footerFontStyle: 'normal'

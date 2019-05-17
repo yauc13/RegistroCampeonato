@@ -46,11 +46,12 @@ public class UsuarioBean implements Serializable{
      
 
     public UsuarioBean() {  
-   viewGraphic();
+  // viewGraphic();
    
     }
      
     public void viewGraphic(){
+        listDataGrap = new ArrayList<>();
         //listDataGrap=readCSVPatron("D:\\HORISOES\\Info\\Excel\\0_0_0_1.csv");
         //sex+"_"+edad+"_"+ejex+"_"+ejey+".csv"
         listDataGrap=readCSVPatron("D:\\HORISOES\\Info\\Excel\\"+urlCsv+".csv");
@@ -86,12 +87,10 @@ public class UsuarioBean implements Serializable{
             }
             
             mdata=new double[listV.size()][colum];
-            for(String[] v: listV){
-                if(listV.indexOf(v)>0){
+            for(String[] v: listV){                
                 for(int i=0;i<v.length;i++){
                     mdata[listV.indexOf(v)][i]= Double.parseDouble(v[i]); 
-                }
-                }
+                }                
             }
             
             for (int j = 0; j < mdata[0].length; j++) {
@@ -107,6 +106,8 @@ public class UsuarioBean implements Serializable{
         }catch(Exception e){
             System.err.println(e);
         }
+        
+        
         return listPatron;
     }
     
@@ -120,7 +121,9 @@ public class UsuarioBean implements Serializable{
             for(int i=0;i<a.length;i++){
                 ay=ay+a[i]+",";
             }
+             
            ejex=ay.substring(0,ay.length()-1);
+           System.err.println("cadena x:"+ejex);
          }else if(listDataGrap.indexOf(a)>3){
             String ay="";
             //System.err.println("[length] : "+a.length);
@@ -133,7 +136,7 @@ public class UsuarioBean implements Serializable{
         }
         }
         //ag=ag.substring(0,ag.length()-1);
-        String par="{\"label\": \"datos\",\"showLine\":false,\"pointRadius\": 3,\"borderColor\": \"rgba(0,0,0,1)\",\"fill\": false,\"data\": [{x: 46,y: 2.5},{x: 49.5,y: 3.1},{x: 54,y: 4.1}]}";
+        String par="{\"label\": \"medidas\",\"showLine\":false,\"pointRadius\": 3,\"borderColor\": \"rgba(0,0,0,1)\",\"fill\": false,\"data\": [{x: 46,y: 2},{x: 49.5,y: 3.1},{x: 54,y: 4.1}]}";
         ag=ag+par;
         String strJ= Cons.ARRAY_GRAP.replaceAll("arraydataset", ag).replaceAll("arraylabel",ejex );
         jasonObj = new JSONObject(strJ);
