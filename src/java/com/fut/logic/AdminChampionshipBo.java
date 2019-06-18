@@ -22,6 +22,7 @@ import com.fut.model.TablaEquipos;
 import com.fut.util.CreateFileExcel;
 import com.fut.util.Util;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -97,7 +98,8 @@ public class AdminChampionshipBo {
    /*Metodos Jornadas*/
    
    public void generateExcelFixture(AdminChampionShipDTO dto){
-       CreateFileExcel.generateFileExcelFixture(dto.getListaJornada(), new ArrayList<String>());
+       String nameFile="Calendario_"+dto.getCampeonato().getNombreCampeonato()+"_" + new Date().getTime() ;
+       CreateFileExcel.generateFileExcelFixture(dto.getListaJornada(), new ArrayList<String>(), nameFile);
    }
     
     

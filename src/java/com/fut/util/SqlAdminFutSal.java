@@ -44,6 +44,8 @@ public class SqlAdminFutSal {
     public static final String INSERT_GRUP = "INSERT INTO public.grupo (\"nombreGrupo\",\"clasificadosGrupo\",\"idCampeonato\",\"idUsuario\") values(?,?,?,?)";
     public static final String UPDATE_GRUP = "UPDATE public.grupo SET \"nombreGrupo\" = ?, \"clasificadosGrupo\" = ? WHERE \"idGrupo\" = ?";
     public static final String SELECT_GROUP_BY_CHAMPIONSHIP = "SELECT \"idGrupo\", \"nombreGrupo\",\"clasificadosGrupo\",\"idUsuario\" FROM public.grupo WHERE \"idCampeonato\" = ? ORDER BY \"idGrupo\"";
+    public static final String TOTAL_TEAM_BY_GROUP = "SELECT count(*) FROM public.equipo WHERE \"idGrupoEquipo\" = ?";
+    
     /*DAO JORNADA*/
     public static final String INSERT_FIXTURE = "INSERT INTO public.jornada (\"nombreJornada\",\"idCampeonato\",\"fechaJornada\") values(?,?,?)";
     public static final String SELECT_FIXTURE_CAMPEONATO = "SELECT * FROM public.jornada WHERE \"idCampeonato\" = ? order by \"fechaJornada\" ";

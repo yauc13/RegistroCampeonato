@@ -36,61 +36,15 @@ public class EquipoBean implements Serializable{
     private List<Equipo> listaEquipo;
     private String accion;
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    
-    
-    public Campeonato getCampeonato() {
-        return campeonato;
-    }
-
-    public void setCampeonato(Campeonato campeonato) {
-        this.campeonato = campeonato;
+    public EquipoBean() {
+        grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
+        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
     }
     
     
 
-    public Equipo getEquipo() {
-        return equipo;
-    }
-
-    public void setEquipo(Equipo equipo) {
-        this.equipo = equipo;
-    }
-
-    public Grupo getGrupo() {
-        return grupo;
-    }
-
-    public void setGrupo(Grupo grupo) {
-        this.grupo = grupo;
-    }
-
-    public List<Equipo> getListaEquipo() {
-        return listaEquipo;
-    }
-
-    public void setListaEquipo(List<Equipo> listaEquipo) {
-        this.listaEquipo = listaEquipo;
-    }
-
-    
-
-    public String getAccion() {
-        return accion;
-    }
-
-    public void setAccion(String accion) {
-        this.limpiar();
-        this.accion = accion;
-    }
-
+   
     
     
     
@@ -146,28 +100,20 @@ public class EquipoBean implements Serializable{
     
     public void listarInicio() throws Exception{
     EquipoDao dao;
-    try{
+    
         if(this.isPostBack() == false){
         dao = new EquipoDao();
-        grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
-        campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
-        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        //Grupo camp = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
+        
         listaEquipo = dao.listarEquiposPorGrupo(grupo.getIdGrupo());
+        
         }
-    }catch(Exception e){   
-        throw e;
-    }
+  
     }
     
     public void listar() {
         EquipoDao dao;
     
         dao = new EquipoDao();
-        grupo = (Grupo) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("grupo");
-        
-        campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
-        usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         listaEquipo = dao.listarEquiposPorGrupo(grupo.getIdGrupo());
     }
     
@@ -232,4 +178,60 @@ public class EquipoBean implements Serializable{
     }
     
     
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    
+    
+    public Campeonato getCampeonato() {
+        return campeonato;
+    }
+
+    public void setCampeonato(Campeonato campeonato) {
+        this.campeonato = campeonato;
+    }
+    
+    
+
+    public Equipo getEquipo() {
+        return equipo;
+    }
+
+    public void setEquipo(Equipo equipo) {
+        this.equipo = equipo;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+
+    public List<Equipo> getListaEquipo() {
+        return listaEquipo;
+    }
+
+    public void setListaEquipo(List<Equipo> listaEquipo) {
+        this.listaEquipo = listaEquipo;
+    }
+
+    
+
+    public String getAccion() {
+        return accion;
+    }
+
+    public void setAccion(String accion) {
+        this.limpiar();
+        this.accion = accion;
+    }
+
+   
 }

@@ -24,12 +24,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class CreateFileExcel {
     
-    public static String generateFileExcelFixture(List<Jornada> data, List<String> columnsStatic) {
+    public static String generateFileExcelFixture(List<Jornada> data, List<String> columnsStatic,String nameFile) {
 
         String fileExcel = null;
 
         String ruteFile = "D:\\";
-        File fileEx = new File(ruteFile + "_" + new Date().getTime() + ".xlsx");
+        File fileEx = new File(ruteFile +nameFile+ ".xlsx");
         if (ruteFile != null) {
             try {
                 String sheetName = "Hoja 1";
@@ -61,7 +61,7 @@ public class CreateFileExcel {
                                 cell.setCellValue(data.get(i - initCel).getIdJornada());
                                 break;
                             case 1:
-                                cell.setCellValue(data.get(i - initCel).getFechaJornada());
+                                cell.setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(data.get(i - initCel).getFechaJornada()));
                                 break;
                             case 2:
                                 cell.setCellValue(data.get(i - initCel).getNombreJornada());

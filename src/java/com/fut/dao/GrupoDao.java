@@ -138,4 +138,22 @@ public class GrupoDao{
         DaoUtil.closeConection(cx, stmt, rs);
         }
     }
+    
+    public int totalTeamGroup(int idGrupo){ 
+        int totalTeam=0;
+            try{
+                cx = DaoUtil.ConectionDriveDB();                
+                stmt = cx.prepareCall(SqlAdminFutSal.TOTAL_TEAM_BY_GROUP);
+                stmt.setInt(1, idGrupo);
+                rs = stmt.executeQuery();               
+                while(rs.next()){                    
+                    totalTeam=rs.getInt("count");                      
+                }
+            }catch(SQLException e){
+                System.err.println(e);
+            }finally{
+                DaoUtil.closeConection(cx, stmt, rs);
+            }        
+        return totalTeam;   
+    }
 }

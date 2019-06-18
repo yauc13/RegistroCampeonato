@@ -206,7 +206,9 @@
                             </p:selectOneMenu>
 
                             <p:outputLabel value="Partido" for="selPartido"/>
-                            <p:selectOneMenu id="selPartido" required="true" value="#{adminChampionShipBean.dto.itemMatchSelJor}" >
+                            <p:selectOneMenu id="selPartido" required="true" 
+                                             filter="true" 
+                                             value="#{adminChampionShipBean.dto.itemMatchSelJor}" >
                                 <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>
                                 <f:selectItems value="#{adminChampionShipBean.dto.listPartidosItemJor}" var="p"
                                                itemValue="#{p.idPartido}" itemLabel="#{p.equipoA.nombreEquipo} VS #{p.equipoB.nombreEquipo}"/>

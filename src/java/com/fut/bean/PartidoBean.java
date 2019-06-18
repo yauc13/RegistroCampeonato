@@ -7,6 +7,7 @@ package com.fut.bean;
 
 import com.fut.dao.EquipoDao;
 import com.fut.dao.GolDao;
+import com.fut.dao.GrupoDao;
 import com.fut.dao.JugadorDao;
 import com.fut.dao.PartidoDao;
 import com.fut.model.Campeonato;
@@ -65,6 +66,7 @@ public class PartidoBean implements Serializable{
     private String accion;
     private Equipo equipoA;
     private Equipo equipoB;
+    private int numTotalPartidos;
 
     public PartidoBean() {
         campeonato = (Campeonato) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("campeonato");
@@ -195,14 +197,28 @@ public class PartidoBean implements Serializable{
         usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
         if(grupo!=null){
         listaPartido = dao.listarJoin(grupo.getIdGrupo());
+        GrupoDao daoGru= new GrupoDao();        
+        numTotalPartidos = getTotalMatchByGroup(daoGru.totalTeamGroup(grupo.getIdGrupo()));//numero total de partidos segun los equipos del grupo
         }
         if(playOff!=null){
             listMatchPlayOff = dao.listarPartidosPlayOff(playOff.getIdPlayOff());
         }
-       // listMatchPlayOff = 
-        
+
         }
   
+    }
+    
+    public int getTotalMatchByGroup(int totalTeam){
+        int totalMatch=0;
+        if(totalTeam>0){            
+             totalMatch=1;
+            if(totalTeam>2){
+                for(int i=0;i<=totalTeam;i++){
+                totalMatch=totalMatch+(i-1);
+                }
+            }
+        }
+        return totalMatch;
     }
     
     public void listar() {
@@ -520,6 +536,14 @@ public class PartidoBean implements Serializable{
 
     public void setListaPartidoPlayOff(List<Partido> listaPartidoPlayOff) {
         this.listaPartidoPlayOff = listaPartidoPlayOff;
+    }
+
+    public int getNumTotalPartidos() {
+        return numTotalPartidos;
+    }
+
+    public void setNumTotalPartidos(int numTotalPartidos) {
+        this.numTotalPartidos = numTotalPartidos;
     }
     
     

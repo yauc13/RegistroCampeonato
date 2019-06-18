@@ -12,8 +12,6 @@
     <h:body>
         <ui:composition template="./WEB-INF/template/plantilla.xhtml">
             <ui:define name="content">
-
-
                 <f:event type="preRenderView" listener="#{adminChampionShipBean.listarPosicionesGrupo()}" />
                 <f:event type="preRenderView" listener="#{partidoBean.listarInicio()}" />       
                 <f:event type="preRenderView" listener="#{equipoBean.listarInicio()}" />
@@ -44,9 +42,16 @@
                                              rowStyleClass="#{rowIndex lt adminChampionShipBean.grupo.numClasificados ? 'clasificadosGrupo' : ''}"
 
                                              >
-                                    <f:facet name="header">
-                                        <p:outputLabel style="color: #002752" value="Tabla de Posiciones #{partidoBean.grupo.nombreGrupo}"/>
+                                    <f:facet name="header" >
+                                        <p:outputLabel style="color: #002752" value="Tabla de Posiciones "/>
+                                        <p:commandButton ajax="false" 
+                                                     icon="fa fa-file-excel-o" 
+                                                     title="Exportar excel"  
+                                                      >                                 
+                                        <p:dataExporter type="pdf" target="data" fileName="Tabla_Posiciones_#{adminChampionShipBean.dto.campeonato.nombreCampeonato}_grupo" />
+                                    </p:commandButton>
                                     </f:facet>
+                                 
                                     <p:column headerText="pos" width="5%" >
                                         <p:outputLabel value="#{adminChampionShipBean.listaPosiciones.indexOf(tablaEquipo)+1}" />
                                     </p:column>
@@ -76,7 +81,10 @@
                                     </p:column>
                                     <p:column headerText="PP" width="6%">
                                         <p:outputLabel value="#{tablaEquipo.PP}"/>
-                                    </p:column>              
+                                    </p:column>  
+                                    <p:column headerText="Pro" width="6%">
+                                        <p:outputLabel value="#{tablaEquipo.prom}"/>
+                                    </p:column> 
                                 </p:dataTable> 
                                     </div>
                             </h:form>
@@ -98,7 +106,8 @@
                                                                   />
                                             </div>
                                             <div class="col-md-10 col-xs-10 col-sm-10">
-                                                <p:outputLabel value="Partidos #{partidoBean.grupo.nombreGrupo}"/>
+                                                <p:outputLabel value="Partidos #{partidoBean.grupo.nombreGrupo} ("/>
+                                                <p:outputLabel value=" #{partidoBean.numTotalPartidos}/#{partidoBean.listaPartido.size()})"/>
                                             </div>
                                         </div>
                                     </f:facet>

@@ -411,20 +411,16 @@ public class PartidoDao{
     }
     
     public List<TablaEquipos> listarTablaPosiciones(int idGrupo) {
-        List<TablaEquipos> lista = null;
-        
+        List<TablaEquipos> lista = null;        
         lista = new ArrayList();
         try {
             cx = DaoUtil.ConectionDriveDB();
             stmt = cx.prepareCall(SqlAdminFutSal.LIST_POSITION_TEAM_GROUP.replaceAll("\"idGru\"", idGrupo+""));
-            
-
             rs = stmt.executeQuery();
             while (rs.next()) {
                 TablaEquipos tablaEqui = new TablaEquipos();
                 int puntos = ((rs.getInt("PGL")+rs.getInt("PGV"))*3)+((rs.getInt("PEL")+rs.getInt("PEV"))*1)+((rs.getInt("PPL")+rs.getInt("PPV"))*0);
-                int DG = rs.getInt("GF")-rs.getInt("GC");
-                
+                int DG = rs.getInt("GF")-rs.getInt("GC");              
                 tablaEqui.setNombre(rs.getString("nombreEquipo"));
                 tablaEqui.setIdEquipo(rs.getInt("idEquipo"));
                 tablaEqui.setPuntos(puntos);
@@ -435,7 +431,11 @@ public class PartidoDao{
                 tablaEqui.setPG(rs.getInt("PGL")+rs.getInt("PGV"));
                 tablaEqui.setPE(rs.getInt("PEL")+rs.getInt("PEV"));
                 tablaEqui.setPP(rs.getInt("PPL")+rs.getInt("PPV"));
-                
+                Double prom=0.0;
+                if(tablaEqui.getPuntos()>0){
+                prom=(((double)tablaEqui.getPuntos()*100)/(tablaEqui.getPJ()*3)); 
+                }
+                tablaEqui.setProm(prom);
                 lista.add(tablaEqui);
             }
         } catch (SQLException e) {

@@ -344,10 +344,8 @@ public class AdminChampionShipBean implements Serializable{
     }
     
         public void  listarPosicionesGrupo(){
-        PartidoDao partidoDao= new PartidoDao();       
-            //listaPosiciones.clear();
-            
-            listaPosiciones = partidoDao.listarTablaPosiciones(grupo.getIdGrupo());        
+        PartidoDao partidoDao= new PartidoDao();                  
+        listaPosiciones = partidoDao.listarTablaPosiciones(grupo.getIdGrupo());        
     }
         
         
