@@ -55,7 +55,7 @@
                                     <p:column headerText="pos" width="5%" >
                                         <p:outputLabel value="#{adminChampionShipBean.listaPosiciones.indexOf(tablaEquipo)+1}" />
                                     </p:column>
-                                    <p:column headerText="Equipo" width="50%" >
+                                    <p:column headerText="Equipo"  >
                                         <p:outputLabel value="#{tablaEquipo.nombre}" />
                                     </p:column>
                                     <p:column headerText="Puntos" width="6%">
@@ -84,6 +84,10 @@
                                     </p:column>  
                                     <p:column headerText="Pro" width="6%">
                                         <p:outputLabel value="#{tablaEquipo.prom}"/>
+                                    </p:column> 
+                                    <p:column headerText="ver" width="6%">
+                                        <p:commandLink value="ver" actionListener="#{vistaGrupoBean.viewMatchByTeam(tablaEquipo)}"
+                                                       update=":dlgParEquipo"  oncomplete="PF('dlgParEquipo').show();" />
                                     </p:column> 
                                 </p:dataTable> 
                                     </div>
@@ -188,7 +192,71 @@
                     </p:tab>
                 </p:tabView> 
 
+                <p:dialog header="Partidos de #{vistaGrupoBean.dto.teamTableSel.nombre}" widgetVar="dlgParEquipo" id="dlgParEquipo" modal="true"
+                          height="500" width="80%"
+                          >
 
+                    <h:form>
+                        <p:dataTable id="idTableParEquipo" var="parJor" 
+                                     value="#{vistaGrupoBean.dto.listMatchByTeam}" 
+                                     style=" align-content:  center" 
+                                     rowKey="#{parJor.idPartido}"
+                                     >
+                            <f:facet  name="header">
+                                <div class="row">
+                                    <div class="tooltipBotGray col-md-1 col-xs-1 col-sm-1">
+                                        
+                                    </div>
+                                    <div class="col-md-10 col-xs-10 col-sm-10">
+                                        <p:outputLabel value="Partidos de #{vistaGrupoBean.dto.teamTableSel.nombre}"/>
+                                    </div>
+                                </div>
+                            </f:facet>
+                            <f:facet name="footer">
+                               Total Partidos: #{vistaGrupoBean.dto.listMatchByTeam.size()}
+                               Puntos: #{vistaGrupoBean.dto.teamTableSel.puntos}
+                            </f:facet>
+                            <p:column width="5%">
+                                <p:outputLabel value="#{parJor.idPartido}"/>
+                            </p:column>
+                            <p:column width="10%">
+                                <p:outputLabel value="#{parJor.fechaPartido}">
+                                    <f:convertDateTime pattern=" hh:mm a" timeZone="America/Bogota" />
+                                </p:outputLabel>
+                            </p:column>
+                            <p:column width="10%">
+                                <p:outputLabel value="#{parJor.grupo.nombreGrupo} #{parJor.playOff.namePlayOff}"/>
+                            </p:column>
+                            <p:column headerText="Equipo A">
+                                <p:outputLabel value="#{parJor.equipoA.nombreEquipo}"/>
+                            </p:column>
+                            <p:column width="8%" class="text-center">
+                                <p:outputLabel value="#{parJor.golA} - #{parJor.golB}" rendered="#{parJor.estadoPartido eq  'Finalizado' ? 'true':'false'}"/>
+                                <p:outputLabel value=" - " rendered="#{parJor.estadoPartido eq  'Por Jugar' ? 'true':'false'}"/>
+                            </p:column>
+                            <p:column headerText="Equipo B">
+                                <p:outputLabel value="#{parJor.equipoB.nombreEquipo}"/>
+                            </p:column>
+                            <p:column headerText="Estado">
+                                <p:outputLabel value="#{parJor.estadoPartido}"
+                                               styleClass="#{parJor.estadoPartido eq 'Finalizado' ? 'estParFin' : parJor.estadoPartido eq 'Por Jugar' ? 'estParPorJug' : 'estParJug'}"
+                                               />
+                            </p:column>
+                            <p:column  width="20%">
+                                
+                                <p:commandButton icon="ui-icon-eyes" value="planilla"
+                                     title="Ver Partido"                                      
+                                     action="#{partidoBean.verPartidoJornada(parJor, jor)}"
+                                     style="margin-left: 7px;"
+                                     />                              
+                            </p:column>
+                        </p:dataTable>
+                       
+                        
+                        <p:commandButton value="Atras"  immediate="True" oncomplete="PF('dlgParEquipo').hide();"/> 
+                      
+                    </h:form>
+                </p:dialog>
 
                 <p:dialog header="Registrar o Modificar Partidos" widgetVar="wdgDatos" id="dlgDatos" modal="true">
 

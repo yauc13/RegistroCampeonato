@@ -334,44 +334,54 @@ public class PartidoDao{
         
     
     
-    public List<Partido> listarPartidosEquipo(Grupo camp, int idEquipo){
-            List<Partido> lista = null;
+    public List<Partido> listarPartidosPorEquipo(int idGrupo, int idEquipo){
+           List<Partido> lista = null;
             
             
             try{
                 cx = DaoUtil.ConectionDriveDB();
-                stmt = cx.prepareCall("SELECT \"idPartido\",\"idEquipoA\",\"idEquipoB\",\"idGrupo\" FROM public.partido WHERE \"idGrupo\" = ? AND \"idEquipoA\"=? OR \"idEquipoB\"=?");
-                stmt.setInt(1, camp.getIdGrupo());
-                stmt.setInt(2, idEquipo);
-                stmt.setInt(3, idEquipo);
-                
+                stmt = cx.prepareCall(SqlAdminFutSal.SELECT_MATCH_IN_GROUP_BY_TEAM);
+                int count = 1;
+                stmt.setInt(count++, idGrupo);
+                stmt.setInt(count++, idEquipo);
+                stmt.setInt(count++, idEquipo);
                 rs = stmt.executeQuery();
                 lista = new ArrayList();
+
                 while(rs.next()){
-                    Partido cam = new Partido();
+                    Partido cam = new Partido();                    
                     cam.setIdPartido(rs.getInt("idPartido"));
+                    cam.setIdArbitro(rs.getInt("idArbitro"));
                     cam.setIdEquipoA(rs.getInt("idEquipoA"));
                     cam.setIdEquipoB(rs.getInt("idEquipoB"));
-                    
+                    cam.setGolA(rs.getInt("golEqA"));
+                    cam.setGolB(rs.getInt("golEqB"));
                     cam.setIdGrupo(rs.getInt("idGrupo"));
-                    EquipoDao equipoDao = new EquipoDao();
-                    Equipo equipo = equipoDao.leerID(rs.getInt("idEquipoA"));
-                    cam.setEquipoA(equipo);
-                    equipo = equipoDao.leerID(rs.getInt("idEquipoB"));
-                    cam.setEquipoB(equipo);
-                    GrupoDao grupoDao = new GrupoDao();
-                    Grupo grupo = grupoDao.leerID(rs.getInt("idGrupo"));
+                    cam.setEstadoPartido(rs.getString("estadoPartido"));
+                    cam.setIdJornada(rs.getInt("idJornada"));
+                    
+                    Equipo equipoA = new Equipo();
+                    equipoA.setIdEquipo(rs.getInt("idEquipoA"));
+                    equipoA.setNombreEquipo(rs.getString("nombreEquipoA"));                   
+                    cam.setEquipoA(equipoA);                    
+                    Equipo equipoB = new Equipo();
+                    equipoB.setIdEquipo(rs.getInt("idEquipoA"));
+                    equipoB.setNombreEquipo(rs.getString("nombreEquipoB"));                    
+                    cam.setEquipoB(equipoB);
+                    Grupo grupo = new Grupo();
+                    grupo.setIdGrupo(rs.getInt("idGrupo"));
+                    grupo.setNombreGrupo(rs.getString("nombreGrupo"));
                     cam.setGrupo(grupo);
                     
                     lista.add(cam);
                 
                 }
-            }catch(Exception e){
+            }catch(SQLException e){
                 System.err.println(e);
             }finally{
                 DaoUtil.closeConection(cx, stmt, rs);
             }
-        
+       
         return lista;   
     }
     

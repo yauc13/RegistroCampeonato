@@ -5,10 +5,17 @@
  */
 package com.fut.logic;
 
+import com.fut.dao.PartidoDao;
+import com.fut.dto.VistaGrupoDTO;
+
 /**
  *
  * @author YeisonUrrea
  */
 public class VistaGrupoBo {
     
+    public void viewMatchByTeam(VistaGrupoDTO dto){
+        PartidoDao daoPar=new PartidoDao();
+     dto.setListMatchByTeam(daoPar.listarPartidosPorEquipo(dto.getGrupo().getIdGrupo(), dto.getTeamTableSel().getIdEquipo()));
+    }
 }

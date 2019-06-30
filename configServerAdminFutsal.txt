@@ -1,0 +1,15 @@
+JNDI Name: adminfutsal/torneo
+User: postgres
+BinaryTransfer: true
+UnknownLength: 2147483647
+DatabaseName:
+ProtocolVersion: 0
+Ssl: false
+LogLevel: 0
+LoginTimeout:0
+PrepareThreshold:5
+ServerName:localhost
+SocketTimeout:0
+PortNumber:0
+TcpKeepAlive:false
+Password: password
