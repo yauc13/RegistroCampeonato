@@ -40,6 +40,7 @@
 
                 </h:form>
                 <h:form id="frmMarcador">
+                    
                     <div class="row fondomarcador" >
                         <div class="col-md-6  border-primary" align="right">
                             <h1>#{planillaPartidoBean.dto.listaGolesA.size()}</h1>
@@ -51,6 +52,12 @@
                             <h1>#{planillaPartidoBean.dto.listaGolesB.size()}</h1>
                             <h2>#{planillaPartidoBean.dto.partido.equipoB.nombreEquipo}</h2>
                         </div>
+                    </div>
+                    <div class="row fondomarcador text-center">
+                        <p:outputLabel value="Fecha: "/>
+                        <p:outputLabel value="#{planillaPartidoBean.dto.partido.fechaPartido}">
+                                    <f:convertDateTime pattern="dd-MM-yyyy hh:mm a" timeZone="America/Bogota" />
+                        </p:outputLabel>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -68,7 +75,7 @@
                             </p:dataTable> 
                         </div>
                     </div>
-
+                    
                     <p:outputLabel value="Arbitro" for="oneArb"/>                                               
                     <p:selectOneMenu id="oneArb" value="#{planillaPartidoBean.dto.partido.idArbitro}">                           
                         <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"/>

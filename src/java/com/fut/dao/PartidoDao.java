@@ -112,6 +112,7 @@ public class PartidoDao{
                     cam.setGolB(rs.getInt("golEqB"));
                     cam.setIdGrupo(rs.getInt("idGrupo"));
                     cam.setEstadoPartido(rs.getString("estadoPartido"));
+                    cam.setObsPartido(rs.getString("obsPartido"));
                     cam.setIdJornada(rs.getInt("idJornada"));
                     
                     Equipo equipoA = new Equipo();
@@ -159,7 +160,7 @@ public class PartidoDao{
                     cam.setIdPlayOff(rs.getInt("idPlayOff"));
                     cam.setIdArbitro(rs.getInt("idArbitro"));
                     cam.setEstadoPartido(rs.getString("estadoPartido"));
-                   
+                    cam.setObsPartido(rs.getString("obsPartido"));
                     cam.setGolA(rs.getInt("golEqA"));
                     cam.setGolB(rs.getInt("golEqB"));
                     
@@ -297,6 +298,7 @@ public class PartidoDao{
                     par.setFechaPartido(rs.getTimestamp("fechaPartido"));                    
                     par.setIdGrupo(rs.getInt("idGrupo"));
                     par.setEstadoPartido(rs.getString("estadoPartido"));
+                    par.setObsPartido(rs.getString("obsPartido"));
                     par.setIdJornada(rs.getInt("idJornada"));
                     par.setGolA(rs.getInt("golEqA"));
                     par.setGolB(rs.getInt("golEqB"));
@@ -335,9 +337,7 @@ public class PartidoDao{
     
     
     public List<Partido> listarPartidosPorEquipo(int idGrupo, int idEquipo){
-           List<Partido> lista = null;
-            
-            
+           List<Partido> lista = null;                        
             try{
                 cx = DaoUtil.ConectionDriveDB();
                 stmt = cx.prepareCall(SqlAdminFutSal.SELECT_MATCH_IN_GROUP_BY_TEAM);
@@ -357,7 +357,9 @@ public class PartidoDao{
                     cam.setGolA(rs.getInt("golEqA"));
                     cam.setGolB(rs.getInt("golEqB"));
                     cam.setIdGrupo(rs.getInt("idGrupo"));
+                    cam.setFechaPartido(rs.getTimestamp("fechaPartido")); 
                     cam.setEstadoPartido(rs.getString("estadoPartido"));
+                    cam.setObsPartido(rs.getString("obsPartido"));
                     cam.setIdJornada(rs.getInt("idJornada"));
                     
                     Equipo equipoA = new Equipo();
